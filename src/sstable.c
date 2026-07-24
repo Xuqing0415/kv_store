@@ -1,0 +1,739 @@
+#include "sstable.h"
+#include "bloom_filter.h"
+#include "crc32.h"
+#include "encoding.h"
+#include "mem.h"
+#include "skiplist.h"
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct sstable_entry {
+    size_t shared_len;
+    size_t unshared_len;
+    size_t value_len;
+    char* key;
+    char* value;
+} sstable_entry_t;
+
+static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, char* prev_key, size_t prev_len) {
+    if (!block || !iter) return -1;
+    
+    block->data = kv_malloc(SSTABLE_BLOCK_SIZE);
+    if (!block->data) return -1;
+    
+    size_t offset = 0;
+    size_t restart_count = 0;
+    uint32_t* restart_points = kv_malloc(1024 * sizeof(uint32_t));
+    if (!restart_points) {
+        kv_free(block->data);
+        return -1;
+    }
+    
+    restart_points[restart_count++] = 0;
+    
+    char* key = NULL;
+    size_t klen = 0;
+    char* value = NULL;
+    size_t vlen = 0;
+    
+    while (skiplist_iter_next(iter, &key, &klen, &value, &vlen) == 0) {
+        size_t shared_len = 0;
+        size_t min_len = prev_len < klen ? prev_len : klen;
+        while (shared_len < min_len && key[shared_len] == prev_key[shared_len]) {
+            shared_len++;
+        }
+        
+        size_t unshared_len = klen - shared_len;
+        
+        uint8_t header[12];
+        size_t header_len = 0;
+        header_len += encode_varint(shared_len, header + header_len);
+        header_len += encode_varint(unshared_len, header + header_len);
+        header_len += encode_varint(vlen, header + header_len);
+        
+        size_t entry_size = header_len + unshared_len + vlen;
+        if (offset + entry_size + 4 > SSTABLE_BLOCK_SIZE) {
+            kv_free(key);
+            kv_free(value);
+            break;
+        }
+        
+        memcpy(block->data + offset, header, header_len);
+        offset += header_len;
+        
+        memcpy(block->data + offset, key + shared_len, unshared_len);
+        offset += unshared_len;
+        
+        memcpy(block->data + offset, value, vlen);
+        offset += vlen;
+        
+        uint32_t crc = crc32((uint8_t*)block->data + (offset - entry_size), entry_size);
+        memcpy(block->data + offset, &crc, 4);
+        offset += 4;
+        
+        memcpy(prev_key, key, klen);
+        prev_len = klen;
+        
+        if (restart_count % SSTABLE_RESTART_INTERVAL == 0) {
+            restart_points = kv_realloc(restart_points, (restart_count + 1024) * sizeof(uint32_t));
+            if (!restart_points) {
+                kv_free(key);
+                kv_free(value);
+                kv_free(block->data);
+                return -1;
+            }
+            restart_points[restart_count++] = offset;
+        }
+        
+        kv_free(key);
+        kv_free(value);
+    }
+    
+    size_t restart_array_size = restart_count * sizeof(uint32_t);
+    if (offset + restart_array_size + 4 > SSTABLE_BLOCK_SIZE) {
+        restart_count--;
+        restart_array_size = restart_count * sizeof(uint32_t);
+    }
+    
+    for (size_t i = 0; i < restart_count; i++) {
+        memcpy(block->data + offset + i * 4, &restart_points[i], 4);
+    }
+    offset += restart_array_size;
+    
+    uint32_t crc = crc32((uint8_t*)restart_points, restart_array_size);
+    memcpy(block->data + offset, &crc, 4);
+    offset += 4;
+    
+    kv_free(restart_points);
+    
+    block->size = offset;
+    block->restart_count = restart_count;
+    
+    return 0;
+}
+
+static int sstable_block_decode(sstable_block_t* block, const uint8_t* data, size_t size) {
+    if (!block || !data || size == 0) return -1;
+    
+    block->data = kv_malloc(size);
+    if (!block->data) return -1;
+    memcpy(block->data, data, size);
+    block->size = size;
+    
+    size_t restart_array_size = 0;
+    if (size > 4) {
+        uint32_t crc;
+        decode_fixed32(data + size - 4, &crc);
+        
+        restart_array_size = size - 4;
+        block->restart_count = restart_array_size / 4;
+        
+        block->restart_points = kv_malloc(block->restart_count * sizeof(uint32_t));
+        if (!block->restart_points) {
+            kv_free(block->data);
+            return -1;
+        }
+        
+        for (size_t i = 0; i < block->restart_count; i++) {
+            decode_fixed32(data + i * 4, &block->restart_points[i]);
+        }
+    }
+    
+    return 0;
+}
+
+static void sstable_block_free(sstable_block_t* block) {
+    if (!block) return;
+    kv_free(block->data);
+    kv_free(block->restart_points);
+}
+
+static int sstable_entry_decode(sstable_block_t* block, size_t offset, sstable_entry_t* entry, char* prev_key, size_t* prev_len) {
+    if (!block || !entry || !prev_key) return -1;
+    
+    uint8_t* ptr = block->data + offset;
+    size_t remaining = block->size - offset - 4;
+    
+    uint64_t shared_len;
+    size_t consumed = decode_varint(ptr, remaining, &shared_len);
+    if (consumed == 0) return -1;
+    ptr += consumed;
+    remaining -= consumed;
+    
+    uint64_t unshared_len;
+    consumed = decode_varint(ptr, remaining, &unshared_len);
+    if (consumed == 0) return -1;
+    ptr += consumed;
+    remaining -= consumed;
+    
+    uint64_t value_len;
+    consumed = decode_varint(ptr, remaining, &value_len);
+    if (consumed == 0) return -1;
+    ptr += consumed;
+    remaining -= consumed;
+    
+    if (unshared_len + value_len > remaining) return -1;
+    
+    entry->shared_len = (size_t)shared_len;
+    entry->unshared_len = (size_t)unshared_len;
+    entry->value_len = (size_t)value_len;
+    
+    size_t key_len = shared_len + unshared_len;
+    entry->key = kv_malloc(key_len);
+    if (!entry->key) return -1;
+    
+    memcpy(entry->key, prev_key, shared_len);
+    memcpy(entry->key + shared_len, ptr, unshared_len);
+    ptr += unshared_len;
+    
+    entry->value = kv_malloc(value_len);
+    if (!entry->value) {
+        kv_free(entry->key);
+        return -1;
+    }
+    memcpy(entry->value, ptr, value_len);
+    
+    memcpy(prev_key, entry->key, key_len);
+    *prev_len = key_len;
+    
+    return 0;
+}
+
+static int sstable_block_lookup(sstable_block_t* block, const char* key, size_t klen, char** out_value, size_t* out_vlen) {
+    if (!block || !key || klen == 0 || !out_value || !out_vlen) return -1;
+    
+    if (block->restart_count == 0) return -1;
+    
+    char prev_key[256];
+    size_t prev_len = 0;
+    
+    int left = 0;
+    int right = (int)block->restart_count - 1;
+    
+    while (left < right) {
+        int mid = (left + right + 1) / 2;
+        size_t offset = block->restart_points[mid];
+        
+        sstable_entry_t entry;
+        if (sstable_entry_decode(block, offset, &entry, prev_key, &prev_len) != 0) {
+            right = mid - 1;
+            continue;
+        }
+        
+        int cmp = memcmp(entry.key, key, entry.shared_len + entry.unshared_len < klen ? entry.shared_len + entry.unshared_len : klen);
+        kv_free(entry.key);
+        kv_free(entry.value);
+        
+        if (cmp < 0) {
+            left = mid;
+        } else {
+            right = mid - 1;
+        }
+    }
+    
+    size_t offset = block->restart_points[left];
+    
+    while (offset < block->size - 4) {
+        sstable_entry_t entry;
+        if (sstable_entry_decode(block, offset, &entry, prev_key, &prev_len) != 0) {
+            break;
+        }
+        
+        size_t entry_key_len = entry.shared_len + entry.unshared_len;
+        int cmp = memcmp(entry.key, key, entry_key_len < klen ? entry_key_len : klen);
+        
+        if (cmp == 0 && entry_key_len == klen) {
+            *out_value = entry.value;
+            *out_vlen = entry.value_len;
+            kv_free(entry.key);
+            return 0;
+        }
+        
+        if (cmp > 0) {
+            kv_free(entry.key);
+            kv_free(entry.value);
+            break;
+        }
+        
+        offset += 0;
+        kv_free(entry.key);
+        kv_free(entry.value);
+        
+        uint8_t* ptr = block->data + offset;
+        size_t remaining = block->size - offset;
+        
+        uint64_t shared_len;
+        size_t consumed = decode_varint(ptr, remaining, &shared_len);
+        if (consumed == 0) break;
+        ptr += consumed;
+        remaining -= consumed;
+        
+        uint64_t unshared_len;
+        consumed = decode_varint(ptr, remaining, &unshared_len);
+        if (consumed == 0) break;
+        ptr += consumed;
+        remaining -= consumed;
+        
+        uint64_t value_len;
+        consumed = decode_varint(ptr, remaining, &value_len);
+        if (consumed == 0) break;
+        ptr += consumed;
+        remaining -= consumed;
+        
+        offset += (ptr - (block->data + offset)) + (size_t)value_len + 4;
+    }
+    
+    return -1;
+}
+
+typedef struct index_entry {
+    char* last_key;
+    size_t key_len;
+    uint64_t offset;
+    size_t size;
+    struct index_entry* next;
+} index_entry_t;
+
+static void index_entry_free(index_entry_t* entry) {
+    while (entry) {
+        index_entry_t* next = entry->next;
+        kv_free(entry->last_key);
+        kv_free(entry);
+        entry = next;
+    }
+}
+
+int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
+    if (!path || !memtable) return -1;
+    
+    FILE* file = fopen(path, "wb");
+    if (!file) return -1;
+    
+    skiplist_iter_t* iter = skiplist_new_iterator(memtable);
+    if (!iter) {
+        fclose(file);
+        return -1;
+    }
+    
+    char prev_key[256] = {0};
+    size_t prev_len = 0;
+    
+    index_entry_t* index_head = NULL;
+    index_entry_t** index_tail = &index_head;
+    
+    sstable_block_t block;
+    memset(&block, 0, sizeof(block));
+    
+    while (sstable_block_build(&block, iter, prev_key, prev_len) == 0 && block.size > 0) {
+        uint64_t block_offset = ftell(file);
+        fwrite(block.data, 1, block.size, file);
+        
+        index_entry_t* entry = kv_malloc(sizeof(index_entry_t));
+        if (entry) {
+            entry->last_key = kv_malloc(prev_len);
+            if (entry->last_key) {
+                memcpy(entry->last_key, prev_key, prev_len);
+                entry->key_len = prev_len;
+                entry->offset = block_offset;
+                entry->size = block.size;
+                entry->next = NULL;
+                *index_tail = entry;
+                index_tail = &entry->next;
+            } else {
+                kv_free(entry);
+            }
+        }
+        
+        sstable_block_free(&block);
+        memset(&block, 0, sizeof(block));
+    }
+    
+    skiplist_iter_free(iter);
+    
+    uint64_t index_offset = ftell(file);
+    
+    uint8_t index_buf[8192];
+    size_t index_pos = 0;
+    
+    for (index_entry_t* e = index_head; e; e = e->next) {
+        if (index_pos + 8 + 4 + 4 + e->key_len > sizeof(index_buf)) {
+            fwrite(index_buf, 1, index_pos, file);
+            index_pos = 0;
+        }
+        
+        index_pos += encode_fixed64(e->offset, index_buf + index_pos);
+        index_pos += encode_fixed32((uint32_t)e->size, index_buf + index_pos);
+        index_pos += encode_fixed32((uint32_t)e->key_len, index_buf + index_pos);
+        memcpy(index_buf + index_pos, e->last_key, e->key_len);
+        index_pos += e->key_len;
+    }
+    
+    if (index_pos > 0) {
+        fwrite(index_buf, 1, index_pos, file);
+    }
+    
+    uint64_t index_size = ftell(file) - index_offset;
+    index_entry_free(index_head);
+    
+    uint64_t filter_offset = ftell(file);
+    uint64_t filter_size = 0;
+    
+    uint8_t footer[SSTABLE_FOOTER_SIZE] = {0};
+    encode_fixed64(index_offset, footer);
+    encode_fixed64(index_size, footer + 8);
+    encode_fixed64(filter_offset, footer + 16);
+    encode_fixed64(filter_size, footer + 24);
+    
+    fwrite(footer, 1, SSTABLE_FOOTER_SIZE, file);
+    
+    fclose(file);
+    
+    return 0;
+}
+
+sstable_t* sstable_open(const char* path, uint64_t file_id) {
+    if (!path) return NULL;
+    
+    sstable_t* sst = kv_malloc(sizeof(sstable_t));
+    if (!sst) return NULL;
+    
+    sst->file = fopen(path, "rb");
+    if (!sst->file) {
+        kv_free(sst);
+        return NULL;
+    }
+    
+    sst->path = kv_strdup(path);
+    if (!sst->path) {
+        fclose(sst->file);
+        kv_free(sst);
+        return NULL;
+    }
+    
+    sst->file_id = file_id;
+    
+    if (fseek(sst->file, 0, SEEK_END) != 0) {
+        fclose(sst->file);
+        kv_free(sst->path);
+        kv_free(sst);
+        return NULL;
+    }
+    sst->file_size = ftell(sst->file);
+    
+    if (sst->file_size >= SSTABLE_FOOTER_SIZE) {
+        if (fseek(sst->file, sst->file_size - SSTABLE_FOOTER_SIZE, SEEK_SET) != 0) {
+            fclose(sst->file);
+            kv_free(sst->path);
+            kv_free(sst);
+            return NULL;
+        }
+        
+        uint8_t footer[SSTABLE_FOOTER_SIZE];
+        if (fread(footer, 1, SSTABLE_FOOTER_SIZE, sst->file) != SSTABLE_FOOTER_SIZE) {
+            fclose(sst->file);
+            kv_free(sst->path);
+            kv_free(sst);
+            return NULL;
+        }
+        
+        decode_fixed64(footer, &sst->index_offset);
+        decode_fixed64(footer + 8, (uint64_t*)&sst->index_size);
+        decode_fixed64(footer + 16, &sst->filter_offset);
+        decode_fixed64(footer + 24, (uint64_t*)&sst->filter_size);
+    }
+    
+    sst->smallest_key = NULL;
+    sst->smallest_key_len = 0;
+    sst->largest_key = NULL;
+    sst->largest_key_len = 0;
+    sst->index_cache = NULL;
+    sst->filter_cache = NULL;
+    
+    return sst;
+}
+
+void sstable_close(sstable_t* sst) {
+    if (!sst) return;
+    
+    if (sst->file) {
+        fclose(sst->file);
+    }
+    kv_free(sst->path);
+    kv_free(sst->smallest_key);
+    kv_free(sst->largest_key);
+    kv_free(sst);
+}
+
+int sstable_lookup(sstable_t* sst, const char* key, size_t klen, char** out_value, size_t* out_vlen) {
+    if (!sst || !key || klen == 0 || !out_value || !out_vlen) return -1;
+    
+    if (sst->file_size < SSTABLE_FOOTER_SIZE) return -1;
+    
+    if (sst->index_size == 0) {
+        if (fseek(sst->file, 0, SEEK_SET) != 0) return -1;
+        
+        sstable_block_t block;
+        uint8_t block_data[SSTABLE_BLOCK_SIZE];
+        size_t bytes_read = fread(block_data, 1, SSTABLE_BLOCK_SIZE, sst->file);
+        if (bytes_read == 0) return -1;
+        
+        if (sstable_block_decode(&block, block_data, bytes_read) != 0) return -1;
+        int ret = sstable_block_lookup(&block, key, klen, out_value, out_vlen);
+        sstable_block_free(&block);
+        return ret;
+    }
+    
+    uint8_t* index_data = kv_malloc((size_t)sst->index_size);
+    if (!index_data) return -1;
+    
+    if (fseek(sst->file, (long)sst->index_offset, SEEK_SET) != 0) {
+        kv_free(index_data);
+        return -1;
+    }
+    
+    if (fread(index_data, 1, (size_t)sst->index_size, sst->file) != (size_t)sst->index_size) {
+        kv_free(index_data);
+        return -1;
+    }
+    
+    uint64_t target_offset = 0;
+    size_t target_size = 0;
+    size_t pos = 0;
+    
+    while (pos < sst->index_size) {
+        uint64_t offset;
+        size_t consumed = decode_fixed64(index_data + pos, &offset);
+        if (consumed != 8) break;
+        pos += 8;
+        
+        uint32_t size;
+        consumed = decode_fixed32(index_data + pos, &size);
+        if (consumed != 4) break;
+        pos += 4;
+        
+        uint32_t key_len;
+        if (pos + 4 > sst->index_size) break;
+        decode_fixed32(index_data + pos, &key_len);
+        pos += 4;
+        
+        if (pos + key_len > sst->index_size) break;
+        
+        int cmp = memcmp(index_data + pos, key, key_len < klen ? key_len : klen);
+        if (cmp >= 0) {
+            target_offset = offset;
+            target_size = (size_t)size;
+            break;
+        }
+        
+        target_offset = offset;
+        target_size = (size_t)size;
+        pos += key_len;
+    }
+    
+    kv_free(index_data);
+    
+    uint8_t* block_data = kv_malloc(target_size);
+    if (!block_data) return -1;
+    
+    if (fseek(sst->file, (long)target_offset, SEEK_SET) != 0) {
+        kv_free(block_data);
+        return -1;
+    }
+    
+    if (fread(block_data, 1, target_size, sst->file) != target_size) {
+        kv_free(block_data);
+        return -1;
+    }
+    
+    sstable_block_t block;
+    if (sstable_block_decode(&block, block_data, target_size) != 0) {
+        kv_free(block_data);
+        return -1;
+    }
+    
+    int ret = sstable_block_lookup(&block, key, klen, out_value, out_vlen);
+    sstable_block_free(&block);
+    kv_free(block_data);
+    
+    return ret;
+}
+
+sstable_iter_t* sstable_new_iterator(sstable_t* sst) {
+    if (!sst) return NULL;
+    
+    sstable_iter_t* iter = kv_malloc(sizeof(sstable_iter_t));
+    if (!iter) return NULL;
+    
+    iter->sst = sst;
+    iter->current_block = NULL;
+    iter->block_offset = 0;
+    iter->entry_offset = 0;
+    iter->eof = 0;
+    
+    if (fseek(sst->file, 0, SEEK_SET) != 0) {
+        kv_free(iter);
+        return NULL;
+    }
+    
+    return iter;
+}
+
+void sstable_iter_free(sstable_iter_t* iter) {
+    if (!iter) return;
+    
+    if (iter->current_block) {
+        sstable_block_free(iter->current_block);
+        kv_free(iter->current_block);
+    }
+    kv_free(iter);
+}
+
+int sstable_iter_next(sstable_iter_t* iter, char** key, size_t* klen, char** value, size_t* vlen) {
+    if (!iter || !key || !klen || !value || !vlen) return -1;
+    
+    if (iter->eof) return -1;
+    
+    if (!iter->current_block) {
+        uint8_t block_data[SSTABLE_BLOCK_SIZE];
+        size_t bytes_read = fread(block_data, 1, SSTABLE_BLOCK_SIZE, iter->sst->file);
+        if (bytes_read == 0) {
+            iter->eof = 1;
+            return -1;
+        }
+        
+        iter->current_block = kv_malloc(sizeof(sstable_block_t));
+        if (!iter->current_block) {
+            iter->eof = 1;
+            return -1;
+        }
+        
+        if (sstable_block_decode(iter->current_block, block_data, bytes_read) != 0) {
+            kv_free(iter->current_block);
+            iter->current_block = NULL;
+            iter->eof = 1;
+            return -1;
+        }
+        
+        iter->entry_offset = 0;
+    }
+    
+    static char prev_key[256];
+    static size_t prev_len = 0;
+    
+    if (iter->entry_offset >= iter->current_block->size - 4) {
+        sstable_block_free(iter->current_block);
+        kv_free(iter->current_block);
+        iter->current_block = NULL;
+        
+        if (ftell(iter->sst->file) >= (long)iter->sst->index_offset) {
+            iter->eof = 1;
+            return -1;
+        }
+        
+        uint8_t block_data[SSTABLE_BLOCK_SIZE];
+        size_t bytes_read = fread(block_data, 1, SSTABLE_BLOCK_SIZE, iter->sst->file);
+        if (bytes_read == 0) {
+            iter->eof = 1;
+            return -1;
+        }
+        
+        iter->current_block = kv_malloc(sizeof(sstable_block_t));
+        if (!iter->current_block) {
+            iter->eof = 1;
+            return -1;
+        }
+        
+        if (sstable_block_decode(iter->current_block, block_data, bytes_read) != 0) {
+            kv_free(iter->current_block);
+            iter->current_block = NULL;
+            iter->eof = 1;
+            return -1;
+        }
+        
+        iter->entry_offset = 0;
+        prev_len = 0;
+    }
+    
+    sstable_entry_t entry;
+    if (sstable_entry_decode(iter->current_block, iter->entry_offset, &entry, prev_key, &prev_len) != 0) {
+        iter->eof = 1;
+        return -1;
+    }
+    
+    *key = entry.key;
+    *klen = entry.shared_len + entry.unshared_len;
+    *value = entry.value;
+    *vlen = entry.value_len;
+    
+    uint8_t* ptr = iter->current_block->data + iter->entry_offset;
+    size_t remaining = iter->current_block->size - iter->entry_offset;
+    
+    uint64_t shared_len;
+    size_t consumed = decode_varint(ptr, remaining, &shared_len);
+    ptr += consumed;
+    remaining -= consumed;
+    
+    uint64_t unshared_len;
+    consumed = decode_varint(ptr, remaining, &unshared_len);
+    ptr += consumed;
+    remaining -= consumed;
+    
+    uint64_t value_len;
+    consumed = decode_varint(ptr, remaining, &value_len);
+    ptr += consumed;
+    remaining -= consumed;
+    
+    iter->entry_offset += (ptr - (iter->current_block->data + iter->entry_offset)) + (size_t)unshared_len + (size_t)value_len + 4;
+    
+    return 0;
+}
+
+const char* sstable_smallest_key(sstable_t* sst, size_t* out_len) {
+    if (!sst || !out_len) return NULL;
+    
+    if (!sst->smallest_key) {
+        sstable_iter_t* iter = sstable_new_iterator(sst);
+        if (!iter) return NULL;
+        
+        char* key = NULL;
+        size_t klen = 0;
+        char* value = NULL;
+        size_t vlen = 0;
+        
+        if (sstable_iter_next(iter, &key, &klen, &value, &vlen) == 0) {
+            sst->smallest_key = key;
+            sst->smallest_key_len = klen;
+        }
+        kv_free(value);
+        sstable_iter_free(iter);
+    }
+    
+    *out_len = sst->smallest_key_len;
+    return sst->smallest_key;
+}
+
+const char* sstable_largest_key(sstable_t* sst, size_t* out_len) {
+    if (!sst || !out_len) return NULL;
+    
+    if (!sst->largest_key) {
+        sstable_iter_t* iter = sstable_new_iterator(sst);
+        if (!iter) return NULL;
+        
+        char* key = NULL;
+        size_t klen = 0;
+        char* value = NULL;
+        size_t vlen = 0;
+        
+        while (sstable_iter_next(iter, &key, &klen, &value, &vlen) == 0) {
+            kv_free(sst->largest_key);
+            sst->largest_key = key;
+            sst->largest_key_len = klen;
+            kv_free(value);
+        }
+        
+        sstable_iter_free(iter);
+    }
+    
+    *out_len = sst->largest_key_len;
+    return sst->largest_key;
+}
