@@ -61,8 +61,26 @@ static int skiplist_key_compare(const char* a, size_t a_len, const char* b, size
     return 0;
 }
 
-skiplist_t* skiplist_new(void) {
+#ifdef _WIN32
+#include <windows.h>
+static LONG skiplist_srand_done = 0;
+#else
+#include <pthread.h>
+static pthread_once_t skiplist_srand_once = PTHREAD_ONCE_INIT;
+#endif
+
+static void skiplist_init_random(void) {
     srand((unsigned int)time(NULL));
+}
+
+skiplist_t* skiplist_new(void) {
+    #ifdef _WIN32
+    if (InterlockedCompareExchange(&skiplist_srand_done, 1, 0) == 0) {
+        srand((unsigned int)time(NULL));
+    }
+    #else
+    pthread_once(&skiplist_srand_once, skiplist_init_random);
+    #endif
     
     skiplist_t* sl = kv_malloc(sizeof(skiplist_t));
     if (!sl) return NULL;

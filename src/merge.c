@@ -30,7 +30,17 @@
 static THREAD_RET merge_worker(void* arg) {
     merge_context_t* ctx = (merge_context_t*)arg;
     
-    while (!ctx->stop) {
+    while (1) {
+        #ifdef _WIN32
+        LONG stop_flag = InterlockedCompareExchange(&ctx->stop, 0, 0);
+        #else
+        volatile int stop_flag = ctx->stop;
+        #endif
+        
+        if (stop_flag) {
+            break;
+        }
+        
         if (merge_should_trigger(ctx->manifest)) {
             for (int level = 0; level < MAX_LEVELS - 1; level++) {
                 merge_execute(ctx, level);

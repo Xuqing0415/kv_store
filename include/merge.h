@@ -12,7 +12,11 @@ typedef struct merge_context {
     char* dir_path;
     void* manifest;
     void* cache;
-    int stop;
+    #ifdef _WIN32
+    volatile LONG stop;
+    #else
+    volatile int stop;
+    #endif
 } merge_context_t;
 
 void merge_scheduler_start(merge_context_t* ctx);

@@ -41,6 +41,11 @@ typedef struct kv_store {
     lru_cache_t* block_cache;
     merge_context_t merge_ctx;
     RWLOCK rwlock;
+    #ifdef _WIN32
+    CRITICAL_SECTION manifest_lock;
+    #else
+    pthread_mutex_t manifest_lock;
+    #endif
     size_t memtable_size;
 } kv_store_t;
 
@@ -48,6 +53,7 @@ typedef struct kv_iter {
     kv_store_t* db;
     skiplist_iter_t* mem_iter;
     skiplist_iter_t* imm_iter;
+    sstable_t** sstables;
     sstable_iter_t** sst_iters;
     size_t sst_iter_count;
     char* start_key;
@@ -207,6 +213,12 @@ kv_store_t* kv_open(const char* dir_path) {
     
     RWLOCK_INIT(&db->rwlock);
     
+    #ifdef _WIN32
+    InitializeCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_init(&db->manifest_lock, NULL);
+    #endif
+    
     merge_scheduler_start(&db->merge_ctx);
     
     return db;
@@ -236,6 +248,12 @@ void kv_close(kv_store_t* db) {
     lru_cache_free(db->block_cache);
     
     RWLOCK_DESTROY(&db->rwlock);
+    
+    #ifdef _WIN32
+    DeleteCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_destroy(&db->manifest_lock);
+    #endif
     
     kv_free(db->dir_path);
     kv_free(db);
@@ -288,29 +306,60 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
         }
     }
     
-    RWLOCK_UNLOCK(&db->rwlock);
+    skiplist_t* memtable_snapshot = db->memtable;
+    skiplist_t* immutable_snapshot = db->immutable_memtable;
+    
+    #ifdef _WIN32
+    EnterCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_lock(&db->manifest_lock);
+    #endif
     
     manifest_file_t** files = NULL;
     size_t count = 0;
     
     if (manifest_list_files(db->manifest, -1, &files, &count) != 0) {
+        #ifdef _WIN32
+        LeaveCriticalSection(&db->manifest_lock);
+        #else
+        pthread_mutex_unlock(&db->manifest_lock);
+        #endif
+        RWLOCK_UNLOCK(&db->rwlock);
         return -1;
     }
+    
+    manifest_file_t** files_copy = kv_malloc(count * sizeof(manifest_file_t*));
+    for (size_t i = 0; i < count; i++) {
+        files_copy[i] = kv_malloc(sizeof(manifest_file_t));
+        memcpy(files_copy[i], files[i], sizeof(manifest_file_t));
+    }
+    
+    #ifdef _WIN32
+    LeaveCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_unlock(&db->manifest_lock);
+    #endif
+    
+    RWLOCK_UNLOCK(&db->rwlock);
     
     char path[512];
     
     for (int level = 0; level < MAX_LEVELS; level++) {
         for (size_t i = 0; i < count; i++) {
-            if (files[i]->level != level) continue;
+            if (files_copy[i]->level != level) continue;
             
-            snprintf(path, sizeof(path), "%s/%llu.sst", db->dir_path, (unsigned long long)files[i]->file_id);
-            sstable_t* sst = sstable_open(path, files[i]->file_id);
+            snprintf(path, sizeof(path), "%s/%llu.sst", db->dir_path, (unsigned long long)files_copy[i]->file_id);
+            sstable_t* sst = sstable_open(path, files_copy[i]->file_id);
             if (!sst) continue;
             
             if (sstable_lookup(sst, key, klen, &value, &vlen) == 0) {
                 *out_val = value;
                 *out_vlen = vlen;
                 sstable_close(sst);
+                for (size_t j = 0; j < count; j++) {
+                    kv_free(files_copy[j]);
+                }
+                kv_free(files_copy);
                 kv_free(files);
                 return 0;
             }
@@ -319,6 +368,10 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
         }
     }
     
+    for (size_t i = 0; i < count; i++) {
+        kv_free(files_copy[i]);
+    }
+    kv_free(files_copy);
     kv_free(files);
     
     return -1;
@@ -354,15 +407,24 @@ kv_iter_t* kv_scan(kv_store_t* db, const char* start, size_t slen, const char* e
     
     iter->db = db;
     
+    RWLOCK_RDLOCK(&db->rwlock);
+    
     iter->mem_iter = skiplist_new_iterator(db->memtable);
     iter->imm_iter = db->immutable_memtable ? skiplist_new_iterator(db->immutable_memtable) : NULL;
+    
+    #ifdef _WIN32
+    EnterCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_lock(&db->manifest_lock);
+    #endif
     
     manifest_file_t** files = NULL;
     size_t count = 0;
     
     if (manifest_list_files(db->manifest, -1, &files, &count) == 0) {
+        iter->sstables = kv_malloc(count * sizeof(sstable_t*));
         iter->sst_iters = kv_malloc(count * sizeof(sstable_iter_t*));
-        if (iter->sst_iters) {
+        if (iter->sstables && iter->sst_iters) {
             char path[512];
             iter->sst_iter_count = 0;
             
@@ -370,16 +432,25 @@ kv_iter_t* kv_scan(kv_store_t* db, const char* start, size_t slen, const char* e
                 snprintf(path, sizeof(path), "%s/%llu.sst", db->dir_path, (unsigned long long)files[i]->file_id);
                 sstable_t* sst = sstable_open(path, files[i]->file_id);
                 if (sst) {
+                    iter->sstables[iter->sst_iter_count] = sst;
                     iter->sst_iters[iter->sst_iter_count++] = sstable_new_iterator(sst);
-                    sstable_close(sst);
                 }
             }
         }
         kv_free(files);
     } else {
+        iter->sstables = NULL;
         iter->sst_iters = NULL;
         iter->sst_iter_count = 0;
     }
+    
+    #ifdef _WIN32
+    LeaveCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_unlock(&db->manifest_lock);
+    #endif
+    
+    RWLOCK_UNLOCK(&db->rwlock);
     
     if (start) {
         iter->start_key = kv_malloc(slen);
@@ -527,6 +598,13 @@ void kv_iter_free(kv_iter_t* iter) {
             sstable_iter_free(iter->sst_iters[i]);
         }
         kv_free(iter->sst_iters);
+    }
+    
+    if (iter->sstables) {
+        for (size_t i = 0; i < iter->sst_iter_count; i++) {
+            sstable_close(iter->sstables[i]);
+        }
+        kv_free(iter->sstables);
     }
     
     kv_free(iter->start_key);
