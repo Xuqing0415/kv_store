@@ -1,0 +1,11 @@
+build/
+*.o
+*.a
+*.exe
+*.dll
+*.so
+*.dylib
+.DS_Store
+test_db/
+*.log
+*.tmp
