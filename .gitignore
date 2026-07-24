@@ -1,4 +1,6 @@
 build/
+cmake-build-debug/
+cmake-build-release/
 *.o
 *.a
 *.exe
@@ -7,5 +9,7 @@ build/
 *.dylib
 .DS_Store
 test_db/
+test_kv_*/
 *.log
 *.tmp
+*.sst
