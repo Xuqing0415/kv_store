@@ -4,6 +4,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #define MAX_LEVELS 7
 #define L0_FILE_LIMIT 4
 #define L1_SIZE_LIMIT (10 * 1024 * 1024)

@@ -12,7 +12,7 @@
 #include <process.h>
 #define THREAD_TYPE unsigned(__stdcall*)(void*)
 #define THREAD_RET unsigned
-#define THREAD_CREATE(h, a, f, d) ((*(h) = (HANDLE)_beginthreadex(NULL, 0, (f), (d), 0, NULL)) != 0)
+#define THREAD_CREATE(h, a, f, d) ((void)(*(h) = (HANDLE)_beginthreadex(NULL, 0, (f), (d), 0, NULL)))
 #define THREAD_JOIN(h) WaitForSingleObject((h), INFINITE)
 #define THREAD_CLOSE(h) CloseHandle((h))
 #define SLEEP_MS(ms) Sleep((ms))
