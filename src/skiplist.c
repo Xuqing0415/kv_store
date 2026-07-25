@@ -1,27 +1,35 @@
 #include "skiplist.h"
 #include "mem.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
 static int skiplist_random_level(void) {
     int level = 1;
-    while ((rand() & 0xFFFF) < (SKIPLIST_P * 0xFFFF)) {
+    unsigned int r = rand();
+    while ((r & 0x1) && level < SKIPLIST_MAX_LEVEL) {
         level++;
+        r = rand();
     }
-    return (level < SKIPLIST_MAX_LEVEL) ? level : SKIPLIST_MAX_LEVEL;
+    return level;
 }
 
 static skiplist_node_t* skiplist_node_new(const char* key, size_t klen, const char* value, size_t vlen, int level) {
-    skiplist_node_t* node = kv_malloc(sizeof(skiplist_node_t) + (level - 1) * sizeof(skiplist_node_t*));
+    (void)level;
+    skiplist_node_t* node = kv_malloc(sizeof(skiplist_node_t));
     if (!node) return NULL;
     
-    node->key = kv_malloc(klen);
-    if (!node->key) {
-        kv_free(node);
-        return NULL;
+    if (klen > 0) {
+        node->key = kv_malloc(klen);
+        if (!node->key) {
+            kv_free(node);
+            return NULL;
+        }
+        memcpy(node->key, key, klen);
+    } else {
+        node->key = NULL;
     }
-    memcpy(node->key, key, klen);
     node->key_len = klen;
     
     if (value) {
@@ -38,7 +46,7 @@ static skiplist_node_t* skiplist_node_new(const char* key, size_t klen, const ch
     node->value_len = vlen;
     node->deleted = 0;
     
-    for (int i = 0; i < level; i++) {
+    for (int i = 0; i < SKIPLIST_MAX_LEVEL; i++) {
         node->forward[i] = NULL;
     }
     
@@ -53,6 +61,9 @@ static void skiplist_node_free(skiplist_node_t* node) {
 }
 
 static int skiplist_key_compare(const char* a, size_t a_len, const char* b, size_t b_len) {
+    if (a_len == 0 && b_len == 0) return 0;
+    if (a_len == 0) return -1;
+    if (b_len == 0) return 1;
     size_t min_len = a_len < b_len ? a_len : b_len;
     int cmp = memcmp(a, b, min_len);
     if (cmp != 0) return cmp;
@@ -69,17 +80,16 @@ static LONG skiplist_srand_done = 0;
 static pthread_once_t skiplist_srand_once = PTHREAD_ONCE_INIT;
 #endif
 
-static void skiplist_init_random(void) {
-    srand((unsigned int)time(NULL));
-}
-
 skiplist_t* skiplist_new(void) {
     #ifdef _WIN32
     if (InterlockedCompareExchange(&skiplist_srand_done, 1, 0) == 0) {
         srand((unsigned int)time(NULL));
     }
     #else
-    pthread_once(&skiplist_srand_once, skiplist_init_random);
+    static int srand_done = 0;
+    if (__sync_bool_compare_and_swap(&srand_done, 0, 1)) {
+        srand((unsigned int)time(NULL));
+    }
     #endif
     
     skiplist_t* sl = kv_malloc(sizeof(skiplist_t));
@@ -197,14 +207,12 @@ int skiplist_lookup(skiplist_t* sl, const char* key, size_t klen, char** out_val
 int skiplist_delete(skiplist_t* sl, const char* key, size_t klen) {
     if (!sl || !key || klen == 0) return -1;
     
-    skiplist_node_t* update[SKIPLIST_MAX_LEVEL];
     skiplist_node_t* x = sl->header;
     
     for (int i = sl->level - 1; i >= 0; i--) {
         while (x->forward[i] && skiplist_key_compare(x->forward[i]->key, x->forward[i]->key_len, key, klen) < 0) {
             x = x->forward[i];
         }
-        update[i] = x;
     }
     
     x = x->forward[0];

@@ -19,12 +19,16 @@ typedef struct skiplist_iter {
     skiplist_node_t* current;
 } skiplist_iter_t;
 
+#include "mutex.h"
+
 typedef struct skiplist {
     skiplist_node_t* header;
     skiplist_node_t* tail;
     int level;
     size_t count;
     size_t memory_usage;
+    MUTEX_T mutex;
+    RWLOCK_T rwlock;
 } skiplist_t;
 
 skiplist_t* skiplist_new(void);
