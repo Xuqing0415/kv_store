@@ -21,7 +21,7 @@ static int test_fail = 0;
 
 static int replay_count = 0;
 
-static int replay_callback(wal_record_t* record, void* arg) {
+static int replay_callback_verify(wal_record_t* record, void* arg) {
     (void)arg;
     replay_count++;
     
@@ -33,6 +33,29 @@ static int replay_callback(wal_record_t* record, void* arg) {
         ASSERT(record->type == WAL_PUT);
         ASSERT(memcmp(record->key, "key2", 4) == 0);
         ASSERT(memcmp(record->value, "value2", 6) == 0);
+    }
+    
+    return 0;
+}
+
+static int replay_callback_count(wal_record_t* record, void* arg) {
+    (void)record;
+    (void)arg;
+    replay_count++;
+    return 0;
+}
+
+static int replay_callback_delete(wal_record_t* record, void* arg) {
+    (void)arg;
+    replay_count++;
+    
+    if (replay_count == 1) {
+        ASSERT(record->type == WAL_PUT);
+        ASSERT(memcmp(record->key, "key1", 4) == 0);
+        ASSERT(memcmp(record->value, "value1", 6) == 0);
+    } else if (replay_count == 2) {
+        ASSERT(record->type == WAL_DELETE);
+        ASSERT(memcmp(record->key, "key1", 4) == 0);
     }
     
     return 0;
@@ -54,7 +77,7 @@ TEST(wal_basic) {
     ASSERT(wal != NULL);
     
     replay_count = 0;
-    ASSERT_EQ(wal_replay(wal, replay_callback, NULL), 0);
+    ASSERT_EQ(wal_replay(wal, replay_callback_verify, NULL), 0);
     ASSERT_EQ(replay_count, 2);
     
     wal_close(wal);
@@ -82,7 +105,7 @@ TEST(wal_recovery) {
     ASSERT(wal != NULL);
     
     replay_count = 0;
-    ASSERT_EQ(wal_replay(wal, replay_callback, NULL), 0);
+    ASSERT_EQ(wal_replay(wal, replay_callback_count, NULL), 0);
     ASSERT_EQ(replay_count, 100);
     
     wal_close(wal);
@@ -105,7 +128,7 @@ TEST(wal_delete) {
     ASSERT(wal != NULL);
     
     replay_count = 0;
-    ASSERT_EQ(wal_replay(wal, replay_callback, NULL), 0);
+    ASSERT_EQ(wal_replay(wal, replay_callback_delete, NULL), 0);
     ASSERT_EQ(replay_count, 2);
     
     wal_close(wal);

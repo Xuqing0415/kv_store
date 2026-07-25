@@ -8,8 +8,11 @@ cmake-build-release/
 *.so
 *.dylib
 .DS_Store
+.idea/
 test_db/
 test_kv_*/
 *.log
 *.tmp
 *.sst
+*.txt
+debug_*.c
