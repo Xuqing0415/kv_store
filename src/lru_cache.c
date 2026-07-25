@@ -1,5 +1,6 @@
 #include "lru_cache.h"
 #include "mem.h"
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 

@@ -306,8 +306,8 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
         }
     }
     
-    skiplist_t* memtable_snapshot = db->memtable;
-    skiplist_t* immutable_snapshot = db->immutable_memtable;
+    (void)db->memtable;
+    (void)db->immutable_memtable;
     
     #ifdef _WIN32
     EnterCriticalSection(&db->manifest_lock);
