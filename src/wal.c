@@ -2,12 +2,27 @@
 #include "crc32.h"
 #include "encoding.h"
 #include "mem.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #ifdef _WIN32
 #include <windows.h>
-#define fsync(fd) FlushFileBuffers((HANDLE)_get_osfhandle(fd))
+#include <io.h>
+static int fsync_win(int fd) {
+    HANDLE h = (HANDLE)_get_osfhandle(fd);
+    if (h == INVALID_HANDLE_VALUE) return -1;
+    return FlushFileBuffers(h) ? 0 : -1;
+}
+#define fsync(fd) fsync_win(fd)
+
+static int ftruncate_win(int fd, off_t length) {
+    HANDLE h = (HANDLE)_get_osfhandle(fd);
+    if (h == INVALID_HANDLE_VALUE) return -1;
+    if (SetFilePointer(h, (LONG)length, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER) return -1;
+    return SetEndOfFile(h) ? 0 : -1;
+}
+#define ftruncate(fd, len) ftruncate_win(fd, len)
 #else
 #include <unistd.h>
 #endif
