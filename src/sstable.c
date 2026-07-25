@@ -100,7 +100,11 @@ static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, ch
     }
     offset += restart_array_size;
     
-    uint32_t crc = crc32((uint8_t*)restart_points, restart_array_size);
+    uint32_t rc_le = (uint32_t)restart_count;
+    memcpy(block->data + offset, &rc_le, 4);
+    offset += 4;
+    
+    uint32_t crc = crc32((uint8_t*)restart_points, restart_array_size + 4);
     memcpy(block->data + offset, &crc, 4);
     offset += 4;
     
@@ -120,22 +124,33 @@ static int sstable_block_decode(sstable_block_t* block, const uint8_t* data, siz
     memcpy(block->data, data, size);
     block->size = size;
     
-    size_t restart_array_size = 0;
-    if (size > 4) {
-        uint32_t crc;
-        decode_fixed32(data + size - 4, &crc);
+    block->restart_points = NULL;
+    block->restart_count = 0;
+    
+    // Format: [entries][restart_points][restart_count(4B)][CRC(4B)]
+    // Need at least 8 bytes for restart_count + CRC
+    if (size > 8) {
+        uint32_t rc;
+        decode_fixed32(data + size - 8, &rc);
+        block->restart_count = (size_t)rc;
         
-        restart_array_size = size - 4;
-        block->restart_count = restart_array_size / 4;
+        size_t restart_array_size = block->restart_count * sizeof(uint32_t);
         
-        block->restart_points = kv_malloc(block->restart_count * sizeof(uint32_t));
-        if (!block->restart_points) {
-            kv_free(block->data);
+        if (restart_array_size + 8 > size) {
+            block->restart_count = 0;
             return -1;
         }
         
+        block->restart_points = kv_malloc(restart_array_size);
+        if (!block->restart_points) {
+            kv_free(block->data);
+            block->data = NULL;
+            return -1;
+        }
+        
+        size_t restart_offset = size - 8 - restart_array_size;
         for (size_t i = 0; i < block->restart_count; i++) {
-            decode_fixed32(data + i * 4, &block->restart_points[i]);
+            decode_fixed32(data + restart_offset + i * 4, &block->restart_points[i]);
         }
     }
     
@@ -255,7 +270,7 @@ static int sstable_block_lookup(sstable_block_t* block, const char* key, size_t 
             break;
         }
         
-        offset += 0;
+        size_t entry_offset = offset;
         kv_free(entry.key);
         kv_free(entry.value);
         
@@ -280,7 +295,7 @@ static int sstable_block_lookup(sstable_block_t* block, const char* key, size_t 
         ptr += consumed;
         remaining -= consumed;
         
-        offset += (ptr - (block->data + offset)) + (size_t)value_len + 4;
+        offset = entry_offset + (ptr - (block->data + entry_offset)) + (size_t)value_len + 4;
     }
     
     return -1;
@@ -304,6 +319,7 @@ static void index_entry_free(index_entry_t* entry) {
 }
 
 int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
+    (void)file_id;
     if (!path || !memtable) return -1;
     
     FILE* file = fopen(path, "wb");

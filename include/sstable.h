@@ -2,7 +2,10 @@
 #define SSTABLE_H
 
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
+
+#include "skiplist.h"
 
 #define SSTABLE_BLOCK_SIZE 4096
 #define SSTABLE_FOOTER_SIZE 48
