@@ -3,13 +3,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
 
 #ifdef _WIN32
 #include <windows.h>
-#define rmdir(path) RemoveDirectoryA(path)
+
+/* 纯 Win32 递归删除目录，避免依赖 CRT 文件系统 DLL */
+static void rmrf_win32(const char* dir) {
+    char search_path[MAX_PATH + 4];
+    char file_path[MAX_PATH * 2];  /* 足够容纳 dir + \\ + filename */
+    WIN32_FIND_DATAA fd;
+    
+    /* 使用 strcpy+strcat 避免 snprintf 截断警告 */
+    strcpy(search_path, dir);
+    strcat(search_path, "\\*");
+    HANDLE hFind = FindFirstFileA(search_path, &fd);
+    if (hFind == INVALID_HANDLE_VALUE) {
+        RemoveDirectoryA(dir);
+        return;
+    }
+    
+    do {
+        if (strcmp(fd.cFileName, ".") == 0 || strcmp(fd.cFileName, "..") == 0) {
+            continue;
+        }
+        
+        snprintf(file_path, sizeof(file_path), "%s\\%s", dir, fd.cFileName);
+        
+        if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+            rmrf_win32(file_path);
+        } else {
+            SetFileAttributesA(file_path, FILE_ATTRIBUTE_NORMAL);
+            DeleteFileA(file_path);
+        }
+    } while (FindNextFileA(hFind, &fd));
+    
+    FindClose(hFind);
+    RemoveDirectoryA(dir);
+}
+
+#define rmrf(dir) rmrf_win32(dir)
 #else
 #include <unistd.h>
+
+static void rmrf(const char* dir) {
+    char cmd[512];
+    snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", dir);
+    system(cmd);
+}
 #endif
 
 static int test_pass = 0;
@@ -18,18 +58,6 @@ static int test_fail = 0;
 #define TEST(name) static void test_##name(void)
 #define ASSERT(cond) do { if (!(cond)) { printf("FAIL: %s at line %d\n", #cond, __LINE__); test_fail++; } else { test_pass++; } } while (0)
 #define ASSERT_EQ(a, b) ASSERT((a) == (b))
-
-static void rmrf(const char* dir) {
-#ifdef _WIN32
-    char cmd[512];
-    snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\"", dir);
-    system(cmd);
-#else
-    char cmd[512];
-    snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", dir);
-    system(cmd);
-#endif
-}
 
 TEST(kv_basic) {
     const char* dir = "./test_kv_basic";
@@ -192,6 +220,8 @@ TEST(kv_update) {
 }
 
 int main() {
+    setbuf(stdout, NULL);
+    setbuf(stderr, NULL);
     printf("Running KV Store tests...\n");
     
     test_kv_basic();
