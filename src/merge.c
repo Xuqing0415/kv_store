@@ -16,6 +16,8 @@
 #define THREAD_JOIN(h) WaitForSingleObject((h), INFINITE)
 #define THREAD_CLOSE(h) CloseHandle((h))
 #define SLEEP_MS(ms) Sleep((ms))
+#define MANIFEST_LOCK(ctx) EnterCriticalSection((CRITICAL_SECTION*)(ctx)->manifest_lock)
+#define MANIFEST_UNLOCK(ctx) LeaveCriticalSection((CRITICAL_SECTION*)(ctx)->manifest_lock)
 #else
 #include <pthread.h>
 #include <unistd.h>
@@ -25,6 +27,8 @@
 #define THREAD_JOIN(h) pthread_join((h), NULL)
 #define THREAD_CLOSE(h) ((void)(h))
 #define SLEEP_MS(ms) usleep((ms) * 1000)
+#define MANIFEST_LOCK(ctx) pthread_mutex_lock((pthread_mutex_t*)(ctx)->manifest_lock)
+#define MANIFEST_UNLOCK(ctx) pthread_mutex_unlock((pthread_mutex_t*)(ctx)->manifest_lock)
 #endif
 
 static THREAD_RET merge_worker(void* arg) {
@@ -41,7 +45,7 @@ static THREAD_RET merge_worker(void* arg) {
             break;
         }
         
-        if (merge_should_trigger(ctx->manifest)) {
+        if (merge_should_trigger(ctx)) {
             for (int level = 0; level < MAX_LEVELS - 1; level++) {
                 merge_execute(ctx, level);
             }
@@ -55,13 +59,10 @@ static THREAD_RET merge_worker(void* arg) {
 void merge_scheduler_start(merge_context_t* ctx) {
     if (!ctx) return;
     
-#ifdef _WIN32
-    HANDLE thread;
-#else
-    pthread_t thread;
-#endif
+    ctx->stop = 0;
+    ctx->thread_started = 1;
     
-    THREAD_CREATE(&thread, NULL, (THREAD_TYPE)merge_worker, ctx);
+    THREAD_CREATE(&ctx->thread, NULL, (THREAD_TYPE)merge_worker, ctx);
 }
 
 void merge_scheduler_stop(merge_context_t* ctx) {
@@ -70,10 +71,21 @@ void merge_scheduler_stop(merge_context_t* ctx) {
     ctx->stop = 1;
 }
 
-int merge_should_trigger(void* manifest) {
-    if (!manifest) return 0;
+void merge_scheduler_join(merge_context_t* ctx) {
+    if (!ctx || !ctx->thread_started) return;
     
-    manifest_t* m = (manifest_t*)manifest;
+    ctx->stop = 1;
+    THREAD_JOIN(ctx->thread);
+    THREAD_CLOSE(ctx->thread);
+    ctx->thread_started = 0;
+}
+
+int merge_should_trigger(merge_context_t* ctx) {
+    if (!ctx || !ctx->manifest) return 0;
+    
+    manifest_t* m = (manifest_t*)ctx->manifest;
+    
+    MANIFEST_LOCK(ctx);
     
     manifest_file_t** files = NULL;
     size_t count = 0;
@@ -81,6 +93,7 @@ int merge_should_trigger(void* manifest) {
     if (manifest_list_files(m, 0, &files, &count) == 0) {
         if (count >= L0_FILE_LIMIT) {
             kv_free(files);
+            MANIFEST_UNLOCK(ctx);
             return 1;
         }
         kv_free(files);
@@ -100,12 +113,14 @@ int merge_should_trigger(void* manifest) {
             
             if (total_size >= limit) {
                 kv_free(files);
+                MANIFEST_UNLOCK(ctx);
                 return 1;
             }
             kv_free(files);
         }
     }
     
+    MANIFEST_UNLOCK(ctx);
     return 0;
 }
 
@@ -190,11 +205,20 @@ static int merge_files(merge_context_t* ctx, manifest_file_t** l0_files, size_t 
     
     if (skiplist_iter_next(iter, &smallest_key, &sklen, &value, &vlen) == 0) {
         kv_free(value);
-        while (skiplist_iter_next(iter, &largest_key, &lklen, &value, &vlen) == 0) {
-            kv_free(smallest_key);
-            smallest_key = largest_key;
-            sklen = lklen;
+        /* 复制 smallest_key 作为 largest_key 的初始值（处理单条目情况） */
+        largest_key = kv_malloc(sklen);
+        if (largest_key) {
+            memcpy(largest_key, smallest_key, sklen);
+            lklen = sklen;
+        }
+        char* next_key = NULL;
+        size_t next_klen = 0;
+        while (skiplist_iter_next(iter, &next_key, &next_klen, &value, &vlen) == 0) {
             kv_free(value);
+            kv_free(largest_key);
+            largest_key = next_key;
+            lklen = next_klen;
+            next_key = NULL;
         }
     }
     
@@ -236,15 +260,19 @@ int merge_execute(merge_context_t* ctx, int level) {
     
     manifest_t* m = (manifest_t*)ctx->manifest;
     
+    MANIFEST_LOCK(ctx);
+    
     manifest_file_t** l0_files = NULL;
     size_t l0_count = 0;
     
     if (manifest_list_files(m, level, &l0_files, &l0_count) != 0 || l0_count == 0) {
+        MANIFEST_UNLOCK(ctx);
         return -1;
     }
     
     if (level == 0 && l0_count < L0_FILE_LIMIT) {
         kv_free(l0_files);
+        MANIFEST_UNLOCK(ctx);
         return 0;
     }
     
@@ -260,5 +288,6 @@ int merge_execute(merge_context_t* ctx, int level) {
     kv_free(l0_files);
     kv_free(l1_files);
     
+    MANIFEST_UNLOCK(ctx);
     return ret;
 }
