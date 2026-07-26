@@ -15,7 +15,7 @@ typedef struct sstable_entry {
     char* value;
 } sstable_entry_t;
 
-static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, char* prev_key, size_t prev_len) {
+static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, char* prev_key, size_t* prev_len) {
     if (!block || !iter) return -1;
     
     block->data = kv_malloc(SSTABLE_BLOCK_SIZE);
@@ -23,25 +23,34 @@ static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, ch
     
     size_t offset = 0;
     size_t restart_count = 0;
+    /* 初始分配足够 1024 个重启点 */
     uint32_t* restart_points = kv_malloc(1024 * sizeof(uint32_t));
     if (!restart_points) {
         kv_free(block->data);
+        block->data = NULL;
         return -1;
     }
+    size_t restart_capacity = 1024;
     
+    /* 第一个重启点总在 offset 0 */
     restart_points[restart_count++] = 0;
     
     char* key = NULL;
     size_t klen = 0;
     char* value = NULL;
     size_t vlen = 0;
+    int first_entry = 1;
+    int entries_in_block = 0;
     
     while (skiplist_iter_next(iter, &key, &klen, &value, &vlen) == 0) {
         size_t shared_len = 0;
-        size_t min_len = prev_len < klen ? prev_len : klen;
-        while (shared_len < min_len && key[shared_len] == prev_key[shared_len]) {
-            shared_len++;
+        if (!first_entry) {
+            size_t min_len = *prev_len < klen ? *prev_len : klen;
+            while (shared_len < min_len && key[shared_len] == prev_key[shared_len]) {
+                shared_len++;
+            }
         }
+        first_entry = 0;
         
         size_t unshared_len = klen - shared_len;
         
@@ -52,7 +61,8 @@ static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, ch
         header_len += encode_varint(vlen, header + header_len);
         
         size_t entry_size = header_len + unshared_len + vlen;
-        if (offset + entry_size + 4 > SSTABLE_BLOCK_SIZE) {
+        if (offset + entry_size + 8 > SSTABLE_BLOCK_SIZE) {
+            /* 当前条目放不下，回退到上一迭代状态 */
             kv_free(key);
             kv_free(value);
             break;
@@ -71,30 +81,59 @@ static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, ch
         memcpy(block->data + offset, &crc, 4);
         offset += 4;
         
-        memcpy(prev_key, key, klen);
-        prev_len = klen;
+        /* 更新 prev_key */
+        if (klen < SSTABLE_PREV_KEY_CAPACITY) {
+            memcpy(prev_key, key, klen);
+            *prev_len = klen;
+        } else {
+            /* key 太长，截断处理 */
+            memcpy(prev_key, key, SSTABLE_PREV_KEY_CAPACITY - 1);
+            *prev_len = SSTABLE_PREV_KEY_CAPACITY - 1;
+        }
         
-        if (restart_count % SSTABLE_RESTART_INTERVAL == 0) {
-            restart_points = kv_realloc(restart_points, (restart_count + 1024) * sizeof(uint32_t));
-            if (!restart_points) {
-                kv_free(key);
-                kv_free(value);
-                kv_free(block->data);
-                return -1;
+        entries_in_block++;
+        
+        /* 每隔 SSTABLE_RESTART_INTERVAL 条记录一个重启点 */
+        if (entries_in_block % SSTABLE_RESTART_INTERVAL == 0) {
+            if (restart_count >= restart_capacity) {
+                size_t new_cap = restart_capacity + 1024;
+                uint32_t* new_rp = kv_realloc(restart_points, new_cap * sizeof(uint32_t));
+                if (!new_rp) {
+                    kv_free(key);
+                    kv_free(value);
+                    kv_free(block->data);
+                    block->data = NULL;
+                    kv_free(restart_points);
+                    return -1;
+                }
+                restart_points = new_rp;
+                restart_capacity = new_cap;
             }
-            restart_points[restart_count++] = offset;
+            restart_points[restart_count++] = (uint32_t)offset;
         }
         
         kv_free(key);
         kv_free(value);
     }
     
+    /* 如果没有写入任何条目，释放资源并返回 -1 */
+    if (entries_in_block == 0) {
+        kv_free(block->data);
+        block->data = NULL;
+        kv_free(restart_points);
+        block->size = 0;
+        block->restart_count = 0;
+        return -1;
+    }
+    
+    /* 确保重启数组不超出 block 大小 */
     size_t restart_array_size = restart_count * sizeof(uint32_t);
-    if (offset + restart_array_size + 4 > SSTABLE_BLOCK_SIZE) {
+    while (offset + restart_array_size + 8 > SSTABLE_BLOCK_SIZE && restart_count > 1) {
         restart_count--;
         restart_array_size = restart_count * sizeof(uint32_t);
     }
     
+    /* 写入重启点数组（密集的，每个索引都有有效值） */
     for (size_t i = 0; i < restart_count; i++) {
         memcpy(block->data + offset + i * 4, &restart_points[i], 4);
     }
@@ -189,11 +228,17 @@ static int sstable_entry_decode(sstable_block_t* block, size_t offset, sstable_e
     
     if (unshared_len + value_len > remaining) return -1;
     
+    /* 安全检查：shared_len 不能超过已解码的 prev_key 长度 */
+    if (shared_len > *prev_len) return -1;
+    
     entry->shared_len = (size_t)shared_len;
     entry->unshared_len = (size_t)unshared_len;
     entry->value_len = (size_t)value_len;
     
     size_t key_len = shared_len + unshared_len;
+    
+    /* 安全检查：key_len 不能超过 prev_key 缓冲区大小 */
+    if (key_len > SSTABLE_PREV_KEY_CAPACITY) return -1;
     entry->key = kv_malloc(key_len);
     if (!entry->key) return -1;
     
@@ -219,7 +264,7 @@ static int sstable_block_lookup(sstable_block_t* block, const char* key, size_t 
     
     if (block->restart_count == 0) return -1;
     
-    char prev_key[256];
+    char prev_key[SSTABLE_PREV_KEY_CAPACITY];
     size_t prev_len = 0;
     
     int left = 0;
@@ -229,13 +274,22 @@ static int sstable_block_lookup(sstable_block_t* block, const char* key, size_t 
         int mid = (left + right + 1) / 2;
         size_t offset = block->restart_points[mid];
         
+        /* 每次二分探测都重置 prev_key，避免前缀解码状态污染 */
+        memset(prev_key, 0, sizeof(prev_key));
+        prev_len = 0;
+        
         sstable_entry_t entry;
         if (sstable_entry_decode(block, offset, &entry, prev_key, &prev_len) != 0) {
             right = mid - 1;
             continue;
         }
         
-        int cmp = memcmp(entry.key, key, entry.shared_len + entry.unshared_len < klen ? entry.shared_len + entry.unshared_len : klen);
+        size_t entry_key_len = entry.shared_len + entry.unshared_len;
+        size_t min_cmp = entry_key_len < klen ? entry_key_len : klen;
+        int cmp = memcmp(entry.key, key, min_cmp);
+        if (cmp == 0) {
+            cmp = (entry_key_len < klen) ? -1 : (entry_key_len > klen) ? 1 : 0;
+        }
         kv_free(entry.key);
         kv_free(entry.value);
         
@@ -247,8 +301,14 @@ static int sstable_block_lookup(sstable_block_t* block, const char* key, size_t 
     }
     
     size_t offset = block->restart_points[left];
+    /* 重置 prev_key 用于线性扫描 */
+    memset(prev_key, 0, sizeof(prev_key));
+    prev_len = 0;
     
-    while (offset < block->size - 4) {
+    /* 计算条目区的结束位置（排除重启点数组和尾部 CRC） */
+    size_t entries_end = block->size - block->restart_count * 4 - 8;
+    
+    while (offset < entries_end) {
         sstable_entry_t entry;
         if (sstable_entry_decode(block, offset, &entry, prev_key, &prev_len) != 0) {
             break;
@@ -295,7 +355,7 @@ static int sstable_block_lookup(sstable_block_t* block, const char* key, size_t 
         ptr += consumed;
         remaining -= consumed;
         
-        offset = entry_offset + (ptr - (block->data + entry_offset)) + (size_t)value_len + 4;
+        offset = entry_offset + (ptr - (block->data + entry_offset)) + (size_t)unshared_len + (size_t)value_len + 4;
     }
     
     return -1;
@@ -331,7 +391,7 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
         return -1;
     }
     
-    char prev_key[256] = {0};
+    char prev_key[SSTABLE_PREV_KEY_CAPACITY] = {0};
     size_t prev_len = 0;
     
     index_entry_t* index_head = NULL;
@@ -340,8 +400,13 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
     sstable_block_t block;
     memset(&block, 0, sizeof(block));
     
-    while (sstable_block_build(&block, iter, prev_key, prev_len) == 0 && block.size > 0) {
+    while (sstable_block_build(&block, iter, prev_key, &prev_len) == 0) {
         uint64_t block_offset = ftell(file);
+        
+        /* 写入 4 字节块大小前缀（小端序），使读取端能精确知道块大小 */
+        uint32_t data_size_le = (uint32_t)block.size;
+        fwrite(&data_size_le, 4, 1, file);
+        
         fwrite(block.data, 1, block.size, file);
         
         index_entry_t* entry = kv_malloc(sizeof(index_entry_t));
@@ -351,7 +416,7 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
                 memcpy(entry->last_key, prev_key, prev_len);
                 entry->key_len = prev_len;
                 entry->offset = block_offset;
-                entry->size = block.size;
+                entry->size = block.size + 4;  /* 总大小 = 4字节前缀 + 数据 */
                 entry->next = NULL;
                 *index_tail = entry;
                 index_tail = &entry->next;
@@ -488,14 +553,27 @@ int sstable_lookup(sstable_t* sst, const char* key, size_t klen, char** out_valu
     if (sst->index_size == 0) {
         if (fseek(sst->file, 0, SEEK_SET) != 0) return -1;
         
-        sstable_block_t block;
-        uint8_t block_data[SSTABLE_BLOCK_SIZE];
-        size_t bytes_read = fread(block_data, 1, SSTABLE_BLOCK_SIZE, sst->file);
-        if (bytes_read == 0) return -1;
+        /* 读取 4 字节块大小前缀 */
+        uint32_t data_size;
+        if (fread(&data_size, 4, 1, sst->file) != 1) return -1;
         
-        if (sstable_block_decode(&block, block_data, bytes_read) != 0) return -1;
+        uint8_t* block_data = kv_malloc(data_size);
+        if (!block_data) return -1;
+        
+        size_t bytes_read = fread(block_data, 1, data_size, sst->file);
+        if (bytes_read != data_size) {
+            kv_free(block_data);
+            return -1;
+        }
+        
+        sstable_block_t block;
+        if (sstable_block_decode(&block, block_data, data_size) != 0) {
+            kv_free(block_data);
+            return -1;
+        }
         int ret = sstable_block_lookup(&block, key, klen, out_value, out_vlen);
         sstable_block_free(&block);
+        kv_free(block_data);
         return ret;
     }
     
@@ -513,7 +591,6 @@ int sstable_lookup(sstable_t* sst, const char* key, size_t klen, char** out_valu
     }
     
     uint64_t target_offset = 0;
-    size_t target_size = 0;
     size_t pos = 0;
     
     while (pos < sst->index_size) {
@@ -537,32 +614,38 @@ int sstable_lookup(sstable_t* sst, const char* key, size_t klen, char** out_valu
         int cmp = memcmp(index_data + pos, key, key_len < klen ? key_len : klen);
         if (cmp >= 0) {
             target_offset = offset;
-            target_size = (size_t)size;
             break;
         }
         
         target_offset = offset;
-        target_size = (size_t)size;
         pos += key_len;
     }
     
     kv_free(index_data);
-    
-    uint8_t* block_data = kv_malloc(target_size);
-    if (!block_data) return -1;
+    index_data = NULL;
     
     if (fseek(sst->file, (long)target_offset, SEEK_SET) != 0) {
-        kv_free(block_data);
         return -1;
     }
     
-    if (fread(block_data, 1, target_size, sst->file) != target_size) {
+    /* 读取 4 字节块大小前缀 */
+    uint32_t data_size;
+    if (fread(&data_size, 4, 1, sst->file) != 1) {
+        return -1;
+    }
+    
+    uint8_t* block_data = kv_malloc(data_size);
+    if (!block_data) {
+        return -1;
+    }
+    
+    if (fread(block_data, 1, data_size, sst->file) != data_size) {
         kv_free(block_data);
         return -1;
     }
     
     sstable_block_t block;
-    if (sstable_block_decode(&block, block_data, target_size) != 0) {
+    if (sstable_block_decode(&block, block_data, data_size) != 0) {
         kv_free(block_data);
         return -1;
     }
@@ -585,6 +668,8 @@ sstable_iter_t* sstable_new_iterator(sstable_t* sst) {
     iter->block_offset = 0;
     iter->entry_offset = 0;
     iter->eof = 0;
+    memset(iter->prev_key, 0, sizeof(iter->prev_key));
+    iter->prev_len = 0;
     
     if (fseek(sst->file, 0, SEEK_SET) != 0) {
         kv_free(iter);
@@ -610,33 +695,46 @@ int sstable_iter_next(sstable_iter_t* iter, char** key, size_t* klen, char** val
     if (iter->eof) return -1;
     
     if (!iter->current_block) {
-        uint8_t block_data[SSTABLE_BLOCK_SIZE];
-        size_t bytes_read = fread(block_data, 1, SSTABLE_BLOCK_SIZE, iter->sst->file);
-        if (bytes_read == 0) {
+        /* 读取 4 字节块大小前缀 */
+        uint32_t data_size;
+        if (fread(&data_size, 4, 1, iter->sst->file) != 1) {
+            iter->eof = 1;
+            return -1;
+        }
+        
+        uint8_t* block_data = kv_malloc(data_size);
+        if (!block_data) {
+            iter->eof = 1;
+            return -1;
+        }
+        
+        size_t bytes_read = fread(block_data, 1, data_size, iter->sst->file);
+        if (bytes_read != data_size) {
+            kv_free(block_data);
             iter->eof = 1;
             return -1;
         }
         
         iter->current_block = kv_malloc(sizeof(sstable_block_t));
         if (!iter->current_block) {
+            kv_free(block_data);
             iter->eof = 1;
             return -1;
         }
         
-        if (sstable_block_decode(iter->current_block, block_data, bytes_read) != 0) {
+        if (sstable_block_decode(iter->current_block, block_data, data_size) != 0) {
+            kv_free(block_data);
             kv_free(iter->current_block);
             iter->current_block = NULL;
             iter->eof = 1;
             return -1;
         }
+        kv_free(block_data);
         
         iter->entry_offset = 0;
     }
     
-    static char prev_key[256];
-    static size_t prev_len = 0;
-    
-    if (iter->entry_offset >= iter->current_block->size - 4) {
+    if (iter->entry_offset >= iter->current_block->size - iter->current_block->restart_count * 4 - 8) {
         sstable_block_free(iter->current_block);
         kv_free(iter->current_block);
         iter->current_block = NULL;
@@ -646,32 +744,48 @@ int sstable_iter_next(sstable_iter_t* iter, char** key, size_t* klen, char** val
             return -1;
         }
         
-        uint8_t block_data[SSTABLE_BLOCK_SIZE];
-        size_t bytes_read = fread(block_data, 1, SSTABLE_BLOCK_SIZE, iter->sst->file);
-        if (bytes_read == 0) {
+        /* 读取 4 字节块大小前缀 */
+        uint32_t data_size;
+        if (fread(&data_size, 4, 1, iter->sst->file) != 1) {
+            iter->eof = 1;
+            return -1;
+        }
+        
+        uint8_t* block_data = kv_malloc(data_size);
+        if (!block_data) {
+            iter->eof = 1;
+            return -1;
+        }
+        
+        size_t bytes_read = fread(block_data, 1, data_size, iter->sst->file);
+        if (bytes_read != data_size) {
+            kv_free(block_data);
             iter->eof = 1;
             return -1;
         }
         
         iter->current_block = kv_malloc(sizeof(sstable_block_t));
         if (!iter->current_block) {
+            kv_free(block_data);
             iter->eof = 1;
             return -1;
         }
         
-        if (sstable_block_decode(iter->current_block, block_data, bytes_read) != 0) {
+        if (sstable_block_decode(iter->current_block, block_data, data_size) != 0) {
+            kv_free(block_data);
             kv_free(iter->current_block);
             iter->current_block = NULL;
             iter->eof = 1;
             return -1;
         }
+        kv_free(block_data);
         
         iter->entry_offset = 0;
-        prev_len = 0;
+        iter->prev_len = 0;
     }
     
     sstable_entry_t entry;
-    if (sstable_entry_decode(iter->current_block, iter->entry_offset, &entry, prev_key, &prev_len) != 0) {
+    if (sstable_entry_decode(iter->current_block, iter->entry_offset, &entry, iter->prev_key, &iter->prev_len) != 0) {
         iter->eof = 1;
         return -1;
     }
