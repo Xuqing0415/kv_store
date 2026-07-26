@@ -10,6 +10,7 @@
 #define SSTABLE_BLOCK_SIZE 4096
 #define SSTABLE_FOOTER_SIZE 48
 #define SSTABLE_RESTART_INTERVAL 16
+#define SSTABLE_PREV_KEY_CAPACITY 4096
 
 typedef struct sstable_block {
     uint8_t* data;
@@ -41,6 +42,8 @@ typedef struct sstable_iter {
     size_t block_offset;
     size_t entry_offset;
     int eof;
+    char prev_key[SSTABLE_PREV_KEY_CAPACITY];
+    size_t prev_len;
 } sstable_iter_t;
 
 sstable_t* sstable_open(const char* path, uint64_t file_id);

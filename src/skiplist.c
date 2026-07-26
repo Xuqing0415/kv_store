@@ -32,7 +32,7 @@ static skiplist_node_t* skiplist_node_new(const char* key, size_t klen, const ch
     }
     node->key_len = klen;
     
-    if (value) {
+    if (value && vlen > 0) {
         node->value = kv_malloc(vlen);
         if (!node->value) {
             kv_free(node->key);
@@ -142,7 +142,7 @@ int skiplist_insert(skiplist_t* sl, const char* key, size_t klen, const char* va
     if (x && skiplist_key_compare(x->key, x->key_len, key, klen) == 0) {
         sl->memory_usage -= x->value_len;
         kv_free(x->value);
-        if (value) {
+        if (value && vlen > 0) {
             x->value = kv_malloc(vlen);
             if (!x->value) return -1;
             memcpy(x->value, value, vlen);

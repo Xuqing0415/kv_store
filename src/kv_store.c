@@ -106,11 +106,20 @@ static int kv_flush_memtable(kv_store_t* db) {
     
     if (skiplist_iter_next(iter, &smallest_key, &sklen, &value, &vlen) == 0) {
         kv_free(value);
-        while (skiplist_iter_next(iter, &largest_key, &lklen, &value, &vlen) == 0) {
-            kv_free(smallest_key);
-            smallest_key = largest_key;
-            sklen = lklen;
+        /* 复制 smallest_key 作为 largest_key 的初始值（处理单条目情况） */
+        largest_key = kv_malloc(sklen);
+        if (largest_key) {
+            memcpy(largest_key, smallest_key, sklen);
+            lklen = sklen;
+        }
+        char* next_key = NULL;
+        size_t next_klen = 0;
+        while (skiplist_iter_next(iter, &next_key, &next_klen, &value, &vlen) == 0) {
             kv_free(value);
+            kv_free(largest_key);
+            largest_key = next_key;
+            lklen = next_klen;
+            next_key = NULL;
         }
     }
     
@@ -209,7 +218,9 @@ kv_store_t* kv_open(const char* dir_path) {
     db->merge_ctx.dir_path = db->dir_path;
     db->merge_ctx.manifest = db->manifest;
     db->merge_ctx.cache = db->block_cache;
+    db->merge_ctx.manifest_lock = &db->manifest_lock;
     db->merge_ctx.stop = 0;
+    db->merge_ctx.thread_started = 0;
     
     RWLOCK_INIT(&db->rwlock);
     
@@ -227,7 +238,8 @@ kv_store_t* kv_open(const char* dir_path) {
 void kv_close(kv_store_t* db) {
     if (!db) return;
     
-    db->merge_ctx.stop = 1;
+    /* 先停止并等待 merge 后台线程退出，防止 use-after-free */
+    merge_scheduler_join(&db->merge_ctx);
     
     if (db->immutable_memtable) {
         kv_flush_memtable(db);
@@ -236,9 +248,13 @@ void kv_close(kv_store_t* db) {
     if (db->memtable && skiplist_count(db->memtable) > 0) {
         db->immutable_memtable = db->memtable;
         kv_flush_memtable(db);
+        /* kv_flush_memtable 已释放 immutable_memtable，避免 double-free */
+        db->memtable = NULL;
     }
     
-    skiplist_free(db->memtable);
+    if (db->memtable) {
+        skiplist_free(db->memtable);
+    }
     
     if (db->wal) {
         wal_close(db->wal);
@@ -418,10 +434,15 @@ kv_iter_t* kv_scan(kv_store_t* db, const char* start, size_t slen, const char* e
     pthread_mutex_lock(&db->manifest_lock);
     #endif
     
+    /* 先初始化为安全默认值，防止 kv_malloc(0) 返回 NULL 时出现未初始化变量 */
+    iter->sstables = NULL;
+    iter->sst_iters = NULL;
+    iter->sst_iter_count = 0;
+    
     manifest_file_t** files = NULL;
     size_t count = 0;
     
-    if (manifest_list_files(db->manifest, -1, &files, &count) == 0) {
+    if (manifest_list_files(db->manifest, -1, &files, &count) == 0 && count > 0) {
         iter->sstables = kv_malloc(count * sizeof(sstable_t*));
         iter->sst_iters = kv_malloc(count * sizeof(sstable_iter_t*));
         if (iter->sstables && iter->sst_iters) {
@@ -436,12 +457,15 @@ kv_iter_t* kv_scan(kv_store_t* db, const char* start, size_t slen, const char* e
                     iter->sst_iters[iter->sst_iter_count++] = sstable_new_iterator(sst);
                 }
             }
+        } else {
+            /* 分配失败，回退到安全默认值 */
+            kv_free(iter->sstables);
+            kv_free(iter->sst_iters);
+            iter->sstables = NULL;
+            iter->sst_iters = NULL;
+            iter->sst_iter_count = 0;
         }
         kv_free(files);
-    } else {
-        iter->sstables = NULL;
-        iter->sst_iters = NULL;
-        iter->sst_iter_count = 0;
     }
     
     #ifdef _WIN32
@@ -498,7 +522,7 @@ int kv_iter_next(kv_iter_t* iter, char** key, size_t* klen, char** val, size_t* 
             
             if (iter->end_key) {
                 cmp = kv_compare_keys(k, kl, iter->end_key, iter->end_len);
-                if (cmp >= 0) {
+                if (cmp > 0) {
                     kv_free(k);
                     kv_free(v);
                     continue;
@@ -531,7 +555,7 @@ int kv_iter_next(kv_iter_t* iter, char** key, size_t* klen, char** val, size_t* 
             
             if (iter->end_key) {
                 cmp = kv_compare_keys(k, kl, iter->end_key, iter->end_len);
-                if (cmp >= 0) {
+                if (cmp > 0) {
                     kv_free(k);
                     kv_free(v);
                     continue;
@@ -564,7 +588,7 @@ int kv_iter_next(kv_iter_t* iter, char** key, size_t* klen, char** val, size_t* 
             
             if (iter->end_key) {
                 cmp = kv_compare_keys(k, kl, iter->end_key, iter->end_len);
-                if (cmp >= 0) {
+                if (cmp > 0) {
                     kv_free(k);
                     kv_free(v);
                     continue;

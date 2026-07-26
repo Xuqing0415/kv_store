@@ -16,16 +16,21 @@ typedef struct merge_context {
     char* dir_path;
     void* manifest;
     void* cache;
+    void* manifest_lock;
     #ifdef _WIN32
     volatile LONG stop;
+    HANDLE thread;
     #else
     volatile int stop;
+    pthread_t thread;
     #endif
+    int thread_started;
 } merge_context_t;
 
 void merge_scheduler_start(merge_context_t* ctx);
 void merge_scheduler_stop(merge_context_t* ctx);
-int merge_should_trigger(void* manifest);
+void merge_scheduler_join(merge_context_t* ctx);
+int merge_should_trigger(merge_context_t* ctx);
 int merge_execute(merge_context_t* ctx, int level);
 
 #endif

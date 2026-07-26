@@ -10,6 +10,11 @@ else()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -O2 -march=native")
 endif()
 
+# Static link to avoid runtime DLL dependencies
+if(MINGW)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+endif()
+
 option(BUILD_TESTS "Build tests" ON)
 
 add_definitions(-D_FILE_OFFSET_BITS=64)
