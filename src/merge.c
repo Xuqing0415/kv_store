@@ -34,6 +34,9 @@
 static THREAD_RET merge_worker(void* arg) {
     merge_context_t* ctx = (merge_context_t*)arg;
     
+    printf("[MERGE] Background worker thread started\n");
+    int loop_count = 0;
+    
     while (1) {
         #ifdef _WIN32
         LONG stop_flag = InterlockedCompareExchange(&ctx->stop, 0, 0);
@@ -42,10 +45,17 @@ static THREAD_RET merge_worker(void* arg) {
         #endif
         
         if (stop_flag) {
+            printf("[MERGE] Worker received stop signal, exiting\n");
             break;
         }
         
+        loop_count++;
+        if (loop_count % 5 == 0) {
+            printf("[MERGE] Worker alive, loop #%d\n", loop_count);
+        }
+        
         if (merge_should_trigger(ctx)) {
+            printf("[MERGE] Compaction triggered, running levels 0..%d\n", MAX_LEVELS - 2);
             for (int level = 0; level < MAX_LEVELS - 1; level++) {
                 merge_execute(ctx, level);
             }
@@ -91,9 +101,11 @@ int merge_should_trigger(merge_context_t* ctx) {
     size_t count = 0;
     
     if (manifest_list_files(m, 0, &files, &count) == 0) {
+        printf("[MERGE] Level 0 has %zu files (limit=%d)\n", count, L0_FILE_LIMIT);
         if (count >= L0_FILE_LIMIT) {
             kv_free(files);
             MANIFEST_UNLOCK(ctx);
+            printf("[MERGE] L0 file count %zu >= limit %d, triggering compaction\n", count, L0_FILE_LIMIT);
             return 1;
         }
         kv_free(files);
@@ -124,18 +136,21 @@ int merge_should_trigger(merge_context_t* ctx) {
     return 0;
 }
 
-static int merge_files(merge_context_t* ctx, manifest_file_t** l0_files, size_t l0_count, 
-                       manifest_file_t** l1_files, size_t l1_count, int target_level) {
-    if (!ctx || l0_count == 0) return -1;
+static int merge_files(merge_context_t* ctx, manifest_file_t** src_files, size_t src_count, 
+                       manifest_file_t** dst_files, size_t dst_count, int src_level, int target_level) {
+    if (!ctx || src_count == 0) return -1;
+    
+    printf("[MERGE] Merging %zu L%d files + %zu L%d files into level %d\n", 
+           src_count, src_level, dst_count, target_level, target_level);
     
     skiplist_t* merged = skiplist_new();
     if (!merged) return -1;
     
     char path[512];
     
-    for (size_t i = 0; i < l0_count; i++) {
-        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)l0_files[i]->file_id);
-        sstable_t* sst = sstable_open(path, l0_files[i]->file_id);
+    for (size_t i = 0; i < src_count; i++) {
+        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)src_files[i]->file_id);
+        sstable_t* sst = sstable_open(path, src_files[i]->file_id);
         if (!sst) continue;
         
         sstable_iter_t* iter = sstable_new_iterator(sst);
@@ -159,9 +174,9 @@ static int merge_files(merge_context_t* ctx, manifest_file_t** l0_files, size_t 
         sstable_close(sst);
     }
     
-    for (size_t i = 0; i < l1_count; i++) {
-        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)l1_files[i]->file_id);
-        sstable_t* sst = sstable_open(path, l1_files[i]->file_id);
+    for (size_t i = 0; i < dst_count; i++) {
+        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)dst_files[i]->file_id);
+        sstable_t* sst = sstable_open(path, dst_files[i]->file_id);
         if (!sst) continue;
         
         sstable_iter_t* iter = sstable_new_iterator(sst);
@@ -191,9 +206,11 @@ static int merge_files(merge_context_t* ctx, manifest_file_t** l0_files, size_t 
     snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)new_file_id);
     
     if (sstable_write(path, new_file_id, merged) != 0) {
+        printf("[MERGE] ERROR: Failed to write merged SSTable %s\n", path);
         skiplist_free(merged);
         return -1;
     }
+    printf("[MERGE] Merged SSTable written: %s\n", path);
     
     skiplist_iter_t* iter = skiplist_new_iterator(merged);
     char* smallest_key = NULL;
@@ -238,20 +255,22 @@ static int merge_files(merge_context_t* ctx, manifest_file_t** l0_files, size_t 
     kv_free(largest_key);
     skiplist_free(merged);
     
-    for (size_t i = 0; i < l0_count; i++) {
-        manifest_remove_file(m, l0_files[i]->file_id);
-        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)l0_files[i]->file_id);
+    for (size_t i = 0; i < src_count; i++) {
+        manifest_remove_file(m, src_files[i]->file_id);
+        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)src_files[i]->file_id);
         remove(path);
     }
     
-    for (size_t i = 0; i < l1_count; i++) {
-        manifest_remove_file(m, l1_files[i]->file_id);
-        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)l1_files[i]->file_id);
+    for (size_t i = 0; i < dst_count; i++) {
+        manifest_remove_file(m, dst_files[i]->file_id);
+        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)dst_files[i]->file_id);
         remove(path);
     }
     
     manifest_sync(m);
     
+    printf("[MERGE] Compaction complete: removed %zu old files, created new SSTable\n", 
+           src_count + dst_count);
     return 0;
 }
 
@@ -283,7 +302,7 @@ int merge_execute(merge_context_t* ctx, int level) {
         manifest_list_files(m, level + 1, &l1_files, &l1_count);
     }
     
-    int ret = merge_files(ctx, l0_files, l0_count, l1_files, l1_count, level + 1);
+    int ret = merge_files(ctx, l0_files, l0_count, l1_files, l1_count, level, level + 1);
     
     kv_free(l0_files);
     kv_free(l1_files);
