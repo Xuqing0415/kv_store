@@ -194,6 +194,10 @@ int skiplist_lookup(skiplist_t* sl, const char* key, size_t klen, char** out_val
         if (x->deleted) {
             return -1;
         }
+        /* tombstone: value_len == 0 表示已删除，返回 -2 以区分 "未找到" */
+        if (x->value_len == 0 || !x->value) {
+            return -2;
+        }
         *out_value = kv_malloc(x->value_len);
         if (!*out_value) return -1;
         memcpy(*out_value, x->value, x->value_len);
@@ -268,13 +272,19 @@ int skiplist_iter_next(skiplist_iter_t* iter, char** key, size_t* klen, char** v
     memcpy(*key, node->key, node->key_len);
     *klen = node->key_len;
     
-    *value = kv_malloc(node->value_len);
-    if (!*value) {
-        kv_free(*key);
-        return -1;
+    /* tombstone: value_len == 0，返回 NULL 值和 0 长度 */
+    if (node->value_len == 0 || !node->value) {
+        *value = NULL;
+        *vlen = 0;
+    } else {
+        *value = kv_malloc(node->value_len);
+        if (!*value) {
+            kv_free(*key);
+            return -1;
+        }
+        memcpy(*value, node->value, node->value_len);
+        *vlen = node->value_len;
     }
-    memcpy(*value, node->value, node->value_len);
-    *vlen = node->value_len;
     
     return 0;
 }
