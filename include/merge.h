@@ -9,7 +9,7 @@
 #endif
 
 #define MAX_LEVELS 7
-#define L0_FILE_LIMIT 4
+#define L0_FILE_LIMIT 2  /* 降低到2，便于快速触发合并测试 */
 #define L1_SIZE_LIMIT (10 * 1024 * 1024)
 
 typedef struct merge_context {

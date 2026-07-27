@@ -54,7 +54,7 @@ static void rmrf(const char* dir) {
 #endif
 }
 
-#define NUM_KEYS 10000
+#define NUM_KEYS 30000
 #define VALUE_SIZE 256
 
 int main() {
@@ -104,6 +104,15 @@ int main() {
     printf("  Wrote %d entries in %.3f sec\n", NUM_KEYS, elapsed);
     printf("  Throughput: %.0f ops/sec\n", NUM_KEYS / elapsed);
     printf("  Data size: %.1f MB\n", (double)(NUM_KEYS * (12 + VALUE_SIZE)) / (1024 * 1024));
+    
+    /* 等待后台 compaction 完成，避免并发删除 SSTable 导致读 miss */
+    printf("\n  Waiting for compaction to settle...\n");
+    #ifdef _WIN32
+    Sleep(5000);
+    #else
+    sleep(5);
+    #endif
+    printf("  Compaction wait complete\n");
     
     /* 2. 随机读取测试 */
     printf("\n--- Random Read ---\n");
@@ -187,6 +196,54 @@ int main() {
         }
     }
     printf("  Verified: hits=%d, misses=%d (expected %d deleted)\n", hits, misses, del_count);
+    
+    /* 随机抽查 200 个 key 的值是否正确 */
+    printf("\n--- Random Spot Check ---\n");
+    int verify_errors = 0;
+    srand(12345);
+    for (int i = 0; i < 200; i++) {
+        int idx = rand() % NUM_KEYS;
+        char* value = NULL;
+        size_t vlen = 0;
+        int ret = kv_get(db, keys[idx], strlen(keys[idx]), &value, &vlen);
+        if (ret == 0) {
+            if (idx < del_count) {
+                printf("  ERROR: Deleted key %s should NOT be found!\n", keys[idx]);
+                verify_errors++;
+            }
+            if (vlen != VALUE_SIZE) {
+                printf("  ERROR: Key %s has wrong value size %zu (expected %d)\n", keys[idx], vlen, VALUE_SIZE);
+                verify_errors++;
+            } else if (memcmp(value, values[idx], VALUE_SIZE) != 0) {
+                printf("  ERROR: Key %s has wrong value\n", keys[idx]);
+                verify_errors++;
+            }
+            kv_free(value);
+        } else {
+            /* 被删除的 key 应该 miss，未删除的 key 不应该 miss */
+            if (idx >= del_count) {
+                printf("  ERROR: Key %s should exist but was not found!\n", keys[idx]);
+                verify_errors++;
+            }
+        }
+    }
+    printf("  Spot check: %d errors\n", verify_errors);
+    
+    /* 扫描所有 key 确认总数 */
+    printf("\n--- Total Scan ---\n");
+    kv_iter_t* scan_iter = kv_scan(db, NULL, 0, NULL, 0);
+    int scan_count = 0;
+    if (scan_iter) {
+        char* k = NULL; size_t kl = 0;
+        char* v = NULL; size_t vl = 0;
+        while (kv_iter_next(scan_iter, &k, &kl, &v, &vl) == 0) {
+            scan_count++;
+            kv_free(k); kv_free(v);
+        }
+        kv_iter_free(scan_iter);
+    }
+    printf("  Total keys in DB: %d (expected ~%d after %d deletes)\n", 
+           scan_count, NUM_KEYS - del_count, del_count);
     
     kv_close(db);
     rmrf(dir);

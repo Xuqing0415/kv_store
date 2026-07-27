@@ -39,7 +39,7 @@ int main() {
     
     char* value = NULL;
     size_t vlen = 0;
-    ret = sstable_lookup(sst, "banana", 6, &value, &vlen);
+    ret = sstable_lookup(sst, "banana", 6, &value, &vlen, NULL);
     printf("sstable_lookup returned: %d\n", ret);
     if (ret == 0) {
         printf("Value: %.*s, len: %zu\n", (int)vlen, value, vlen);

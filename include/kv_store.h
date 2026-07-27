@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-#define MEMTABLE_SIZE_LIMIT (4 * 1024 * 1024)
+#define MEMTABLE_SIZE_LIMIT (256 * 1024)  /* 256KB，便于快速触发刷盘测试 */
 
 typedef struct kv_store kv_store_t;
 typedef struct kv_iter kv_iter_t;

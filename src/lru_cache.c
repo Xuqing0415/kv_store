@@ -72,7 +72,9 @@ static void lru_remove(lru_cache_t* cache, lru_node_t* node) {
     }
     
     size_t idx = lru_hash(node->key, node->key_len, cache->hash_mask);
-    cache->table[idx] = NULL;
+    if (cache->table[idx] == node) {
+        cache->table[idx] = NULL;
+    }
 }
 
 static void lru_add_to_head(lru_cache_t* cache, lru_node_t* node) {
@@ -89,7 +91,9 @@ static void lru_add_to_head(lru_cache_t* cache, lru_node_t* node) {
     }
     
     size_t idx = lru_hash(node->key, node->key_len, cache->hash_mask);
-    cache->table[idx] = node;
+    if (cache->table[idx] == NULL) {
+        cache->table[idx] = node;
+    }
 }
 
 lru_cache_t* lru_cache_new(size_t capacity) {
