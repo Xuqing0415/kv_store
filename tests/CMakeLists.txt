@@ -18,3 +18,9 @@ target_link_libraries(test_minimal2 kv_store)
 
 add_executable(benchmark benchmark.c)
 target_link_libraries(benchmark kv_store)
+
+add_executable(test_crash test_crash.c)
+target_link_libraries(test_crash kv_store)
+
+add_executable(test_iter_debug test_iter_debug.c)
+target_link_libraries(test_iter_debug kv_store)

@@ -32,12 +32,12 @@ TEST(sstable_write_read) {
     char* value = NULL;
     size_t vlen = 0;
     
-    ASSERT_EQ(sstable_lookup(sst, "banana", 6, &value, &vlen), 0);
+    ASSERT_EQ(sstable_lookup(sst, "banana", 6, &value, &vlen, NULL), 0);
     ASSERT_EQ(vlen, 5);
     ASSERT(memcmp(value, "fruit", 5) == 0);
     kv_free(value);
     
-    ASSERT_EQ(sstable_lookup(sst, "nonexistent", 11, &value, &vlen), -1);
+    ASSERT_EQ(sstable_lookup(sst, "nonexistent", 11, &value, &vlen, NULL), -1);
     
     sstable_close(sst);
     remove(path);
@@ -119,7 +119,7 @@ TEST(sstable_multiple_entries) {
         
         char* value = NULL;
         size_t vlen = 0;
-        ASSERT_EQ(sstable_lookup(sst, key, strlen(key), &value, &vlen), 0);
+        ASSERT_EQ(sstable_lookup(sst, key, strlen(key), &value, &vlen, NULL), 0);
         ASSERT(memcmp(value, expected, strlen(expected)) == 0);
         kv_free(value);
     }
