@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "lru_cache.h"
 #include "skiplist.h"
 
 #define SSTABLE_BLOCK_SIZE 4096
@@ -34,6 +35,8 @@ typedef struct sstable {
     size_t largest_key_len;
     void* index_cache;
     void* filter_cache;
+    uint8_t* cached_index_data;    /* 缓存的索引块原始数据 */
+    size_t cached_index_data_len;
 } sstable_t;
 
 typedef struct sstable_iter {
@@ -49,7 +52,7 @@ typedef struct sstable_iter {
 sstable_t* sstable_open(const char* path, uint64_t file_id);
 void sstable_close(sstable_t* sst);
 int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable);
-int sstable_lookup(sstable_t* sst, const char* key, size_t klen, char** out_value, size_t* out_vlen);
+int sstable_lookup(sstable_t* sst, const char* key, size_t klen, char** out_value, size_t* out_vlen, lru_cache_t* block_cache);
 sstable_iter_t* sstable_new_iterator(sstable_t* sst);
 void sstable_iter_free(sstable_iter_t* iter);
 int sstable_iter_next(sstable_iter_t* iter, char** key, size_t* klen, char** value, size_t* vlen);
