@@ -115,11 +115,23 @@ lru_cache_t* lru_cache_new(size_t capacity) {
         return NULL;
     }
     
+#ifdef _WIN32
+    InitializeCriticalSection(&cache->lock);
+#else
+    pthread_mutex_init(&cache->lock, NULL);
+#endif
+    
     return cache;
 }
 
 void lru_cache_free(lru_cache_t* cache) {
     if (!cache) return;
+    
+#ifdef _WIN32
+    DeleteCriticalSection(&cache->lock);
+#else
+    pthread_mutex_destroy(&cache->lock);
+#endif
     
     lru_node_t* node = cache->head;
     while (node) {
@@ -135,28 +147,88 @@ void lru_cache_free(lru_cache_t* cache) {
 int lru_cache_lookup(lru_cache_t* cache, const char* key, size_t klen, void** out_value, size_t* out_vlen) {
     if (!cache || !key || klen == 0 || !out_value || !out_vlen) return -1;
     
+#ifdef _WIN32
+    EnterCriticalSection(&cache->lock);
+#else
+    pthread_mutex_lock(&cache->lock);
+#endif
+    
     size_t idx = lru_hash(key, klen, cache->hash_mask);
     lru_node_t* node = cache->table[idx];
     
-    if (!node) return -1;
-    
-    if (node->key_len != klen || memcmp(node->key, key, klen) != 0) {
-        return -1;
+    /* 先检查哈希表直接命中的节点 */
+    if (node && node->key_len == klen && memcmp(node->key, key, klen) == 0) {
+        lru_remove(cache, node);
+        lru_add_to_head(cache, node);
+        
+        *out_value = kv_malloc(node->value_len);
+        if (!*out_value) {
+#ifdef _WIN32
+            LeaveCriticalSection(&cache->lock);
+#else
+            pthread_mutex_unlock(&cache->lock);
+#endif
+            return -1;
+        }
+        memcpy(*out_value, node->value, node->value_len);
+        *out_vlen = node->value_len;
+        
+#ifdef _WIN32
+        LeaveCriticalSection(&cache->lock);
+#else
+        pthread_mutex_unlock(&cache->lock);
+#endif
+        return 0;
     }
     
-    lru_remove(cache, node);
-    lru_add_to_head(cache, node);
+    /* 哈希冲突：遍历链表查找匹配节点 */
+    node = cache->head;
+    while (node) {
+        if (node->key_len == klen && memcmp(node->key, key, klen) == 0) {
+            lru_remove(cache, node);
+            lru_add_to_head(cache, node);
+            /* 更新哈希表指向该节点 */
+            cache->table[idx] = node;
+            
+            *out_value = kv_malloc(node->value_len);
+            if (!*out_value) {
+#ifdef _WIN32
+                LeaveCriticalSection(&cache->lock);
+#else
+                pthread_mutex_unlock(&cache->lock);
+#endif
+                return -1;
+            }
+            memcpy(*out_value, node->value, node->value_len);
+            *out_vlen = node->value_len;
+            
+#ifdef _WIN32
+            LeaveCriticalSection(&cache->lock);
+#else
+            pthread_mutex_unlock(&cache->lock);
+#endif
+            return 0;
+        }
+        node = node->next;
+    }
     
-    *out_value = kv_malloc(node->value_len);
-    if (!*out_value) return -1;
-    memcpy(*out_value, node->value, node->value_len);
-    *out_vlen = node->value_len;
+#ifdef _WIN32
+    LeaveCriticalSection(&cache->lock);
+#else
+    pthread_mutex_unlock(&cache->lock);
+#endif
     
-    return 0;
+    return -1;
 }
 
 int lru_cache_insert(lru_cache_t* cache, const char* key, size_t klen, const void* value, size_t vlen) {
     if (!cache || !key || klen == 0 || !value) return -1;
+    
+#ifdef _WIN32
+    EnterCriticalSection(&cache->lock);
+#else
+    pthread_mutex_lock(&cache->lock);
+#endif
     
     size_t idx = lru_hash(key, klen, cache->hash_mask);
     lru_node_t* node = cache->table[idx];
@@ -175,10 +247,23 @@ int lru_cache_insert(lru_cache_t* cache, const char* key, size_t klen, const voi
     }
     
     node = lru_node_new(key, klen, value, vlen);
-    if (!node) return -1;
+    if (!node) {
+#ifdef _WIN32
+        LeaveCriticalSection(&cache->lock);
+#else
+        pthread_mutex_unlock(&cache->lock);
+#endif
+        return -1;
+    }
     
     lru_add_to_head(cache, node);
     cache->size++;
+    
+#ifdef _WIN32
+    LeaveCriticalSection(&cache->lock);
+#else
+    pthread_mutex_unlock(&cache->lock);
+#endif
     
     return 0;
 }
@@ -186,18 +271,42 @@ int lru_cache_insert(lru_cache_t* cache, const char* key, size_t klen, const voi
 void lru_cache_remove(lru_cache_t* cache, const char* key, size_t klen) {
     if (!cache || !key || klen == 0) return;
     
+#ifdef _WIN32
+    EnterCriticalSection(&cache->lock);
+#else
+    pthread_mutex_lock(&cache->lock);
+#endif
+    
     size_t idx = lru_hash(key, klen, cache->hash_mask);
     lru_node_t* node = cache->table[idx];
     
-    if (!node) return;
+    if (!node) {
+#ifdef _WIN32
+        LeaveCriticalSection(&cache->lock);
+#else
+        pthread_mutex_unlock(&cache->lock);
+#endif
+        return;
+    }
     
     if (node->key_len != klen || memcmp(node->key, key, klen) != 0) {
+#ifdef _WIN32
+        LeaveCriticalSection(&cache->lock);
+#else
+        pthread_mutex_unlock(&cache->lock);
+#endif
         return;
     }
     
     lru_remove(cache, node);
     lru_node_free(node);
     cache->size--;
+    
+#ifdef _WIN32
+    LeaveCriticalSection(&cache->lock);
+#else
+    pthread_mutex_unlock(&cache->lock);
+#endif
 }
 
 size_t lru_cache_size(lru_cache_t* cache) {

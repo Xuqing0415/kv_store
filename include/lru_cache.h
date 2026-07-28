@@ -3,6 +3,12 @@
 
 #include <stddef.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <pthread.h>
+#endif
+
 typedef struct lru_node {
     char* key;
     size_t key_len;
@@ -19,6 +25,11 @@ typedef struct lru_cache {
     size_t capacity;
     size_t size;
     size_t hash_mask;
+#ifdef _WIN32
+    CRITICAL_SECTION lock;
+#else
+    pthread_mutex_t lock;
+#endif
 } lru_cache_t;
 
 lru_cache_t* lru_cache_new(size_t capacity);
