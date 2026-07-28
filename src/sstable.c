@@ -1,5 +1,6 @@
 #include "sstable.h"
 #include "bloom_filter.h"
+#include "compression.h"
 #include "crc32.h"
 #include "encoding.h"
 #include "lru_cache.h"
@@ -15,6 +16,76 @@ typedef struct sstable_entry {
     char* key;
     char* value;
 } sstable_entry_t;
+
+/* 前向声明 */
+static int sstable_block_decode(sstable_block_t* block, const uint8_t* data, size_t size);
+
+/* ===== 辅助函数：读取并解压一个数据块 ===== */
+static int sstable_read_block(sstable_t* sst, size_t* out_offset, sstable_block_t* block, lru_cache_t* block_cache) {
+    uint64_t block_offset = ftell(sst->file);
+
+    /* 读取 4 字节块大小前缀（压缩后大小） */
+    uint32_t compressed_size;
+    if (fread(&compressed_size, 4, 1, sst->file) != 1) return -1;
+
+    /* 尝试从缓存读取（缓存存储的是解压后的数据） */
+    if (block_cache) {
+        char cache_key[16];
+        memcpy(cache_key, &sst->file_id, 8);
+        memcpy(cache_key + 8, &block_offset, 8);
+        void* cached_data = NULL;
+        size_t cached_len = 0;
+        if (lru_cache_lookup(block_cache, cache_key, 16, &cached_data, &cached_len) == 0) {
+            int ret = sstable_block_decode(block, (uint8_t*)cached_data, cached_len);
+            kv_free(cached_data);  /* lru_cache_lookup 分配了副本，需要释放 */
+            return ret;
+        }
+    }
+
+    /* 读取压缩数据 */
+    uint8_t* compressed_data = kv_malloc(compressed_size);
+    if (!compressed_data) return -1;
+
+    size_t bytes_read = fread(compressed_data, 1, compressed_size, sst->file);
+    if (bytes_read != compressed_size) {
+        kv_free(compressed_data);
+        return -1;
+    }
+
+    /* 解压 */
+    uint8_t* decompressed_data = NULL;
+    size_t decompressed_size = 0;
+
+    if (sst->compression_type == COMPRESSION_NONE) {
+        decompressed_data = compressed_data;
+        decompressed_size = compressed_size;
+    } else {
+        if (compression_decompress(sst->compression_type, compressed_data, compressed_size,
+                                   &decompressed_data, &decompressed_size) != 0) {
+            kv_free(compressed_data);
+            return -1;
+        }
+        kv_free(compressed_data);
+    }
+
+    /* 缓存解压后的数据 */
+    if (block_cache) {
+        char cache_key[16];
+        memcpy(cache_key, &sst->file_id, 8);
+        memcpy(cache_key + 8, &block_offset, 8);
+        /* 缓存一份副本 */
+        uint8_t* cache_copy = kv_malloc(decompressed_size);
+        if (cache_copy) {
+            memcpy(cache_copy, decompressed_data, decompressed_size);
+            lru_cache_insert(block_cache, cache_key, 16, cache_copy, decompressed_size);
+        }
+    }
+
+    int ret = sstable_block_decode(block, decompressed_data, decompressed_size);
+    kv_free(decompressed_data);
+    if (out_offset) *out_offset = block_offset;
+    return ret;
+}
 
 static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, char* prev_key, size_t* prev_len,
     char** overflow_key, size_t* overflow_klen, char** overflow_value, size_t* overflow_vlen) {
@@ -438,16 +509,34 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
     size_t overflow_klen = 0;
     char* overflow_value = NULL;
     size_t overflow_vlen = 0;
+
+    compression_type_t comp_type = COMPRESSION_ZSTD;
+    size_t total_uncompressed = 0;
+    size_t total_compressed = 0;
     
     while (sstable_block_build(&block, iter, prev_key, &prev_len,
                                 &overflow_key, &overflow_klen, &overflow_value, &overflow_vlen) == 0) {
         uint64_t block_offset = ftell(file);
+        total_uncompressed += block.size;
+
+        /* 压缩块数据 */
+        uint8_t* compressed_data = NULL;
+        size_t compressed_size = 0;
+        if (compression_compress(comp_type, block.data, block.size,
+                                 &compressed_data, &compressed_size,
+                                 SSTABLE_DEFAULT_COMPRESSION_LEVEL) != 0) {
+            /* 压缩失败，回退到不压缩 */
+            compressed_data = block.data;
+            compressed_size = block.size;
+            comp_type = COMPRESSION_NONE;
+        }
+        total_compressed += compressed_size;
         
-        /* 写入 4 字节块大小前缀（小端序），使读取端能精确知道块大小 */
-        uint32_t data_size_le = (uint32_t)block.size;
+        /* 写入 4 字节块大小前缀（压缩后大小，小端序） */
+        uint32_t data_size_le = (uint32_t)compressed_size;
         fwrite(&data_size_le, 4, 1, file);
         
-        fwrite(block.data, 1, block.size, file);
+        fwrite(compressed_data, 1, compressed_size, file);
         
         index_entry_t* entry = kv_malloc(sizeof(index_entry_t));
         if (entry) {
@@ -456,7 +545,7 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
                 memcpy(entry->last_key, prev_key, prev_len);
                 entry->key_len = prev_len;
                 entry->offset = block_offset;
-                entry->size = block.size + 4;  /* 总大小 = 4字节前缀 + 数据 */
+                entry->size = compressed_size + 4;  /* 总大小 = 4字节前缀 + 压缩数据 */
                 entry->next = NULL;
                 *index_tail = entry;
                 index_tail = &entry->next;
@@ -465,6 +554,9 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
             }
         }
         
+        if (compressed_data != block.data) {
+            kv_free(compressed_data);
+        }
         sstable_block_free(&block);
         memset(&block, 0, sizeof(block));
         /* 重置 prev_key 确保每个块独立：块首条记录 shared_len=0 */
@@ -476,6 +568,10 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
     if (overflow_value) kv_free(overflow_value);
     
     skiplist_iter_free(iter);
+    
+    printf("[SSTABLE] Compression: %s, %zu -> %zu bytes (%.1f%%)\n",
+           compression_type_name(comp_type), total_uncompressed, total_compressed,
+           total_uncompressed > 0 ? (100.0 * total_compressed / total_uncompressed) : 0.0);
     
     uint64_t index_offset = ftell(file);
     
@@ -505,11 +601,21 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
     uint64_t filter_offset = ftell(file);
     uint64_t filter_size = 0;
     
-    uint8_t footer[SSTABLE_FOOTER_SIZE] = {0};
+    /* Footer 格式:
+     *  0-7:   index_offset
+     *  8-15:  index_size
+     *  16-23: filter_offset
+     *  24-31: filter_size
+     *  32:     compression_type (1 byte)
+     *  33-47:  reserved (15 bytes)
+     */
+    uint8_t footer[SSTABLE_FOOTER_SIZE];
+    memset(footer, 0, SSTABLE_FOOTER_SIZE);
     encode_fixed64(index_offset, footer);
     encode_fixed64(index_size, footer + 8);
     encode_fixed64(filter_offset, footer + 16);
     encode_fixed64(filter_size, footer + 24);
+    footer[32] = (uint8_t)comp_type;
     
     fwrite(footer, 1, SSTABLE_FOOTER_SIZE, file);
     
@@ -538,6 +644,7 @@ sstable_t* sstable_open(const char* path, uint64_t file_id) {
     }
     
     sst->file_id = file_id;
+    sst->compression_type = COMPRESSION_NONE;  /* 默认不压缩（兼容旧格式） */
     
     if (fseek(sst->file, 0, SEEK_END) != 0) {
         fclose(sst->file);
@@ -567,6 +674,9 @@ sstable_t* sstable_open(const char* path, uint64_t file_id) {
         decode_fixed64(footer + 8, (uint64_t*)&sst->index_size);
         decode_fixed64(footer + 16, &sst->filter_offset);
         decode_fixed64(footer + 24, (uint64_t*)&sst->filter_size);
+        
+        /* 读取压缩类型（向后兼容：旧格式 footer[32] 为 0，即 COMPRESSION_NONE） */
+        sst->compression_type = (compression_type_t)footer[32];
     }
     
     sst->smallest_key = NULL;
@@ -600,62 +710,18 @@ int sstable_lookup(sstable_t* sst, const char* key, size_t klen, char** out_valu
     if (sst->file_size < SSTABLE_FOOTER_SIZE) return -1;
     
     if (sst->index_size == 0) {
-        uint64_t block_offset = 0;
-        
-        /* 尝试从缓存读取 */
-        if (block_cache) {
-            char cache_key[16];
-            memcpy(cache_key, &sst->file_id, 8);
-            memcpy(cache_key + 8, &block_offset, 8);
-            void* cached_data = NULL;
-            size_t cached_len = 0;
-            if (lru_cache_lookup(block_cache, cache_key, 16, &cached_data, &cached_len) == 0) {
-                sstable_block_t block;
-                if (sstable_block_decode(&block, (uint8_t*)cached_data, cached_len) == 0) {
-                    int ret = sstable_block_lookup(&block, key, klen, out_value, out_vlen);
-                    sstable_block_free(&block);
-                    kv_free(cached_data);
-                    return ret;
-                }
-                kv_free(cached_data);
-            }
-        }
-        
+        /* 单块 SSTable：直接从文件开头读取 */
         if (fseek(sst->file, 0, SEEK_SET) != 0) return -1;
         
-        /* 读取 4 字节块大小前缀 */
-        uint32_t data_size;
-        if (fread(&data_size, 4, 1, sst->file) != 1) return -1;
-        
-        uint8_t* block_data = kv_malloc(data_size);
-        if (!block_data) return -1;
-        
-        size_t bytes_read = fread(block_data, 1, data_size, sst->file);
-        if (bytes_read != data_size) {
-            kv_free(block_data);
-            return -1;
-        }
-        
         sstable_block_t block;
-        if (sstable_block_decode(&block, block_data, data_size) != 0) {
-            kv_free(block_data);
-            return -1;
-        }
-        
-        /* 缓存块数据 */
-        if (block_cache) {
-            char cache_key[16];
-            memcpy(cache_key, &sst->file_id, 8);
-            memcpy(cache_key + 8, &block_offset, 8);
-            lru_cache_insert(block_cache, cache_key, 16, block_data, data_size);
-        }
+        if (sstable_read_block(sst, NULL, &block, block_cache) != 0) return -1;
         
         int ret = sstable_block_lookup(&block, key, klen, out_value, out_vlen);
         sstable_block_free(&block);
-        kv_free(block_data);
         return ret;
     }
     
+    /* 多块 SSTable：通过索引定位目标块 */
     uint8_t* index_data = NULL;
     
     if (sst->cached_index_data) {
@@ -709,68 +775,20 @@ int sstable_lookup(sstable_t* sst, const char* key, size_t klen, char** out_valu
         pos += key_len;
     }
     
-    /* 不再 free index_data，因为它可能已被缓存 */
     if (index_data != sst->cached_index_data) {
         kv_free(index_data);
     }
     index_data = NULL;
     
-    /* 尝试从缓存读取目标块 */
-    if (block_cache) {
-        char cache_key[16];
-        memcpy(cache_key, &sst->file_id, 8);
-        memcpy(cache_key + 8, &target_offset, 8);
-        void* cached_data = NULL;
-        size_t cached_len = 0;
-        if (lru_cache_lookup(block_cache, cache_key, 16, &cached_data, &cached_len) == 0) {
-            sstable_block_t block;
-            if (sstable_block_decode(&block, (uint8_t*)cached_data, cached_len) == 0) {
-                int ret = sstable_block_lookup(&block, key, klen, out_value, out_vlen);
-                sstable_block_free(&block);
-                kv_free(cached_data);
-                return ret;
-            }
-            kv_free(cached_data);
-        }
-    }
-    
     if (fseek(sst->file, (long)target_offset, SEEK_SET) != 0) {
         return -1;
     }
     
-    /* 读取 4 字节块大小前缀 */
-    uint32_t data_size;
-    if (fread(&data_size, 4, 1, sst->file) != 1) {
-        return -1;
-    }
-    
-    uint8_t* block_data = kv_malloc(data_size);
-    if (!block_data) {
-        return -1;
-    }
-    
-    if (fread(block_data, 1, data_size, sst->file) != data_size) {
-        kv_free(block_data);
-        return -1;
-    }
-    
     sstable_block_t block;
-    if (sstable_block_decode(&block, block_data, data_size) != 0) {
-        kv_free(block_data);
-        return -1;
-    }
-    
-    /* 缓存块数据 */
-    if (block_cache) {
-        char cache_key[16];
-        memcpy(cache_key, &sst->file_id, 8);
-        memcpy(cache_key + 8, &target_offset, 8);
-        lru_cache_insert(block_cache, cache_key, 16, block_data, data_size);
-    }
+    if (sstable_read_block(sst, NULL, &block, block_cache) != 0) return -1;
     
     int ret = sstable_block_lookup(&block, key, klen, out_value, out_vlen);
     sstable_block_free(&block);
-    kv_free(block_data);
     
     return ret;
 }
@@ -813,41 +831,19 @@ int sstable_iter_next(sstable_iter_t* iter, char** key, size_t* klen, char** val
     if (iter->eof) return -1;
     
     if (!iter->current_block) {
-        /* 读取 4 字节块大小前缀 */
-        uint32_t data_size;
-        if (fread(&data_size, 4, 1, iter->sst->file) != 1) {
-            iter->eof = 1;
-            return -1;
-        }
-        
-        uint8_t* block_data = kv_malloc(data_size);
-        if (!block_data) {
-            iter->eof = 1;
-            return -1;
-        }
-        
-        size_t bytes_read = fread(block_data, 1, data_size, iter->sst->file);
-        if (bytes_read != data_size) {
-            kv_free(block_data);
-            iter->eof = 1;
-            return -1;
-        }
-        
+        /* 读取并解压第一个数据块 */
         iter->current_block = kv_malloc(sizeof(sstable_block_t));
         if (!iter->current_block) {
-            kv_free(block_data);
             iter->eof = 1;
             return -1;
         }
         
-        if (sstable_block_decode(iter->current_block, block_data, data_size) != 0) {
-            kv_free(block_data);
+        if (sstable_read_block(iter->sst, NULL, iter->current_block, NULL) != 0) {
             kv_free(iter->current_block);
             iter->current_block = NULL;
             iter->eof = 1;
             return -1;
         }
-        kv_free(block_data);
         
         iter->entry_offset = 0;
     }
@@ -862,41 +858,19 @@ int sstable_iter_next(sstable_iter_t* iter, char** key, size_t* klen, char** val
             return -1;
         }
         
-        /* 读取 4 字节块大小前缀 */
-        uint32_t data_size;
-        if (fread(&data_size, 4, 1, iter->sst->file) != 1) {
-            iter->eof = 1;
-            return -1;
-        }
-        
-        uint8_t* block_data = kv_malloc(data_size);
-        if (!block_data) {
-            iter->eof = 1;
-            return -1;
-        }
-        
-        size_t bytes_read = fread(block_data, 1, data_size, iter->sst->file);
-        if (bytes_read != data_size) {
-            kv_free(block_data);
-            iter->eof = 1;
-            return -1;
-        }
-        
+        /* 读取并解压下一个数据块 */
         iter->current_block = kv_malloc(sizeof(sstable_block_t));
         if (!iter->current_block) {
-            kv_free(block_data);
             iter->eof = 1;
             return -1;
         }
         
-        if (sstable_block_decode(iter->current_block, block_data, data_size) != 0) {
-            kv_free(block_data);
+        if (sstable_read_block(iter->sst, NULL, iter->current_block, NULL) != 0) {
             kv_free(iter->current_block);
             iter->current_block = NULL;
             iter->eof = 1;
             return -1;
         }
-        kv_free(block_data);
         
         iter->entry_offset = 0;
         /* 不重置 prev_len：块间共享 prev_key，确保跨块前缀解码正确 */

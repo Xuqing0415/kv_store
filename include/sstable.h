@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "compression.h"
 #include "lru_cache.h"
 #include "skiplist.h"
 
@@ -12,6 +13,9 @@
 #define SSTABLE_FOOTER_SIZE 48
 #define SSTABLE_RESTART_INTERVAL 16
 #define SSTABLE_PREV_KEY_CAPACITY 4096
+
+/* 默认压缩级别：1=快速压缩，兼顾速度和压缩比 */
+#define SSTABLE_DEFAULT_COMPRESSION_LEVEL 1
 
 typedef struct sstable_block {
     uint8_t* data;
@@ -29,6 +33,7 @@ typedef struct sstable {
     size_t index_size;
     uint64_t filter_offset;
     size_t filter_size;
+    compression_type_t compression_type;  /* 压缩算法类型 */
     char* smallest_key;
     size_t smallest_key_len;
     char* largest_key;
