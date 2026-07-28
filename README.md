@@ -1,0 +1,340 @@
+# KV Store — 基于 LSM-Tree 的嵌入式键值存储引擎
+
+KV Store 是一个用 C11 编写的轻量级嵌入式键值存储引擎，采用 LSM-Tree (Log-Structured Merge-Tree) 架构，支持快照、压缩、Redis 兼容网络协议等特性。
+
+## 特性
+
+- **LSM-Tree 存储架构**：MemTable（跳表） + SSTable（Sorted String Table）多层存储，写入性能优异
+- **WAL 日志**：Write-Ahead Log 保证数据持久性，支持崩溃恢复
+- **Bloom Filter**：SSTable 级布隆过滤器，加速键不存在时的查找
+- **LRU 块缓存**：SSTable 数据块缓存，减少磁盘 I/O
+- **后台 Compaction**：自动多层合并，消除冗余数据和 Tombstone
+- **快照支持**：固定时间点的只读视图，适用于备份、一致性读等场景
+- **数据压缩**：SSTable 块级 Zstd 压缩，实测压缩率约 40%
+- **范围扫描**：支持按键范围有序遍历
+- **Redis RESP 协议服务器**：可以通过 redis-cli 直接访问，支持 SET/GET/DEL 等核心命令
+- **混沌测试**：多线程混合负载长时间运行，验证系统稳定性
+- **跨平台**：支持 Linux、macOS、Windows (MinGW/MSVC)
+
+## 构建
+
+### 依赖
+
+- CMake >= 3.15
+- C11 编译器（GCC、Clang、MSVC 或 MinGW）
+- Zstd（已内置，自动编译）
+
+### Linux / macOS
+
+```bash
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j$(nproc)
+```
+
+### Windows (MinGW)
+
+```bash
+mkdir build && cd build
+cmake .. -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j8
+```
+
+### Windows (MSVC)
+
+```bash
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . --config Release
+```
+
+### 构建产物
+
+| 目标 | 说明 |
+|------|------|
+| `kv_test` | 集成测试（写入、读取、持久化验证） |
+| `kv_server` | Redis RESP 协议兼容服务器 |
+| `kv_chaos` | 混沌测试（多线程混合负载） |
+| `libkv_store.a` | 静态库，可嵌入其他项目 |
+
+### 运行测试
+
+```bash
+# 集成测试
+./kv_test
+
+# 单元测试
+cd build && ctest --output-on-failure
+
+# 混沌测试
+./kv_chaos
+```
+
+## API 用法
+
+### 基本读写
+
+```c
+#include "kv_store.h"
+
+int main() {
+    // 打开数据库
+    kv_store_t* db = kv_open("./mydb");
+    if (!db) return 1;
+
+    // 写入键值
+    kv_put(db, "hello", 5, "world", 5);
+
+    // 读取键值
+    char* value = NULL;
+    size_t vlen = 0;
+    if (kv_get(db, "hello", 5, &value, &vlen) == 0) {
+        printf("hello = %.*s\n", (int)vlen, value);
+        kv_free(value);  // 释放读取结果
+    }
+
+    // 删除键
+    kv_delete(db, "hello", 5);
+
+    // 关闭数据库
+    kv_close(db);
+    return 0;
+}
+```
+
+### 范围扫描
+
+```c
+// 扫描所有键
+kv_iter_t* iter = kv_scan(db, NULL, 0, NULL, 0);
+if (iter) {
+    char* key = NULL, *value = NULL;
+    size_t klen = 0, vlen = 0;
+    while (kv_iter_next(iter, &key, &klen, &value, &vlen) == 0) {
+        printf("%.*s => %.*s\n", (int)klen, key, (int)vlen, value);
+        kv_free(key);
+        kv_free(value);
+    }
+    kv_iter_free(iter);
+}
+
+// 按范围扫描 ["user_100", "user_200")
+kv_iter_t* iter = kv_scan(db, "user_100", 8, "user_200", 8);
+```
+
+### 快照
+
+```c
+// 创建快照
+kv_snapshot_t* snap = kv_snapshot_create(db);
+if (!snap) { /* 处理错误 */ }
+
+// 从快照中读取（快照创建时间点的数据）
+char* value = NULL;
+size_t vlen = 0;
+if (kv_snapshot_get(snap, "key", 3, &value, &vlen) == 0) {
+    printf("snapshot: key = %.*s\n", (int)vlen, value);
+    kv_free(value);
+}
+
+// 快照范围扫描
+kv_iter_t* iter = kv_snapshot_scan(snap, NULL, 0, NULL, 0);
+
+// 释放快照
+kv_snapshot_free(snap);
+```
+
+### 强制合并
+
+```c
+// 手动触发 Compaction，合并所有层级
+kv_force_merge(db);
+```
+
+### 数据同步
+
+```c
+// 强制将 WAL 刷入磁盘
+kv_sync(db);
+```
+
+## Redis RESP 服务器
+
+启动 Redis 兼容服务器，使用 redis-cli 或任意 Redis 客户端直接连接：
+
+```bash
+# 默认监听 127.0.0.1:6379，数据目录 ./data
+./kv_server
+
+# 自定义参数
+./kv_server -h 0.0.0.0 -p 6380 -d /var/lib/kvstore
+
+# 连接
+redis-cli -h 127.0.0.1 -p 6379
+```
+
+### 支持的命令
+
+| 命令 | 说明 |
+|------|------|
+| `SET key value` | 写入键值对 |
+| `GET key` | 读取键值 |
+| `DEL key [key ...]` | 删除一个或多个键 |
+| `EXISTS key [key ...]` | 检查键是否存在 |
+| `KEYS pattern` | 按模式匹配键（仅支持 `*` 通配符） |
+| `SCAN cursor` | 游标式遍历键空间 |
+| `DBSIZE` | 返回数据库键总数 |
+| `FLUSHDB` | 清空当前数据库 |
+| `PING` | 连接测试 |
+
+## 混沌测试
+
+混沌测试通过多线程混合负载（50% PUT + 35% GET + 10% DELETE + 5% SCAN）长时间运行，验证系统稳定性：
+
+```bash
+# 默认运行 300 秒（5 分钟）
+./kv_chaos
+
+# 自定义运行时间（秒）
+./kv_chaos -d 3600
+```
+
+测试期间会定期创建快照并验证快照与主数据库的一致性，最终输出详细的统计报告。
+
+## 架构
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Redis RESP Server                     │
+│              (SET / GET / DEL / SCAN / ...)              │
+├─────────────────────────────────────────────────────────┤
+│                    Public API Layer                      │
+│         kv_put / kv_get / kv_delete / kv_scan           │
+│         kv_snapshot_create / kv_snapshot_get            │
+├─────────────────────────────────────────────────────────┤
+│                  LSM-Tree Storage Engine                │
+│                                                         │
+│   ┌──────────┐    ┌──────────────────────┐              │
+│   │  WAL 日志  │───▶│  MemTable (跳表)      │              │
+│   └──────────┘    └──────────┬───────────┘              │
+│                              │ flush                     │
+│                              ▼                           │
+│                    ┌──────────────────┐                  │
+│                    │ Immutable MemTable │                  │
+│                    └────────┬─────────┘                  │
+│                             │ SSTable write               │
+│                             ▼                             │
+│   ┌──────────────────────────────────────────────┐       │
+│   │  Level 0: SSTable-1, SSTable-2, ...          │       │
+│   │  Level 1: SSTable-3, SSTable-4, ... (merged) │       │
+│   │  Level 2: ... (merged)                       │       │
+│   └──────────────────────────────────────────────┘       │
+│                                                         │
+│   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│   │ Bloom Filter │  │  LRU Cache   │  │ Zstd 压缩     │  │
+│   └──────────────┘  └──────────────┘  └──────────────┘  │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 写入路径
+
+1. 写入 WAL 日志，保证崩溃后可恢复
+2. 插入 MemTable（跳表），O(log n) 复杂度
+3. MemTable 达到阈值（256KB）后切换为 Immutable MemTable
+4. 后台将 Immutable MemTable 刷入 Level 0 SSTable
+5. 后台 Compaction 线程合并各层 SSTable，消除冗余
+
+### 读取路径
+
+1. 查询 MemTable
+2. 查询 Immutable MemTable（如果存在）
+3. 从 Level 0 到 Level N 依次查询 SSTable（先经过 Bloom Filter 过滤）
+4. 数据块通过 LRU 缓存减少磁盘 I/O
+
+## 项目结构
+
+```
+kv_store/
+├── include/              # 公共头文件
+│   ├── kv_store.h        #   主 API 定义
+│   ├── sstable.h         #   SSTable 读写接口
+│   ├── skiplist.h        #   跳表数据结构
+│   ├── wal.h             #   WAL 日志接口
+│   ├── manifest.h        #   文件清单管理
+│   ├── bloom_filter.h    #   布隆过滤器
+│   ├── lru_cache.h       #   LRU 缓存
+│   ├── merge.h           #   Compaction 合并
+│   ├── compression.h     #   压缩/解压接口
+│   └── resp_server.h     #   Redis RESP 服务器
+├── src/                  # 源文件
+│   ├── kv_store.c        #   核心存储引擎实现
+│   ├── sstable.c         #   SSTable 读写与压缩
+│   ├── skiplist.c        #   跳表实现
+│   ├── wal.c             #   WAL 日志实现
+│   ├── manifest.c        #   文件清单实现
+│   ├── bloom_filter.c    #   布隆过滤器实现
+│   ├── lru_cache.c       #   LRU 缓存实现
+│   ├── merge.c           #   Compaction 实现
+│   ├── compression.c     #   压缩/解压封装
+│   ├── resp_server.c     #   RESP 协议服务器
+│   ├── server_main.c     #   服务器入口
+│   ├── main.c            #   集成测试入口
+│   └── chaos_test.c      #   混沌测试
+├── util/                 # 工具库
+│   ├── mem.h / mem.c     #   内存管理
+│   ├── crc32.h / crc32.c #   CRC32 校验
+│   ├── encoding.h / .c   #   二进制编码
+│   └── mutex.h           #   跨平台互斥锁
+├── tests/                # 测试
+│   ├── test_kv_store.c   #   核心功能测试
+│   ├── test_sstable.c    #   SSTable 测试
+│   ├── test_skiplist.c   #   跳表测试
+│   ├── test_wal.c        #   WAL 测试
+│   ├── test_crash.c      #   崩溃恢复测试
+│   ├── test_concurrent.c #   并发测试
+│   ├── benchmark.c       #   性能基准测试
+│   └── ...
+├── third_party/zstd/     # 内置 Zstd 压缩库
+└── CMakeLists.txt
+```
+
+## 数据格式
+
+### SSTable 文件布局
+
+```
+┌─────────────────────────────────┐
+│  Data Block 1                   │
+│  ┌───────────────────────────┐  │
+│  │ Compressed + Restart Points│  │
+│  └───────────────────────────┘  │
+├─────────────────────────────────┤
+│  Data Block 2                   │
+├─────────────────────────────────┤
+│  ...                            │
+├─────────────────────────────────┤
+│  Filter Block (Bloom Filter)    │
+├─────────────────────────────────┤
+│  Index Block                    │
+├─────────────────────────────────┤
+│  Footer (48 bytes)              │
+│  - index_offset / index_size    │
+│  - filter_offset / filter_size  │
+│  - compression_type             │
+│  - magic number                 │
+└─────────────────────────────────┘
+```
+
+### WAL 记录格式
+
+```
+┌──────┬──────────┬──────────┬──────────┬──────────┐
+│ CRC32│ Type (1) │ Key Len  │ Val Len  │ Key/Val  │
+│ (4B) │ PUT=0    │ (varint) │ (varint) │ (binary) │
+│      │ DEL=1    │          │          │          │
+└──────┴──────────┴──────────┴──────────┴──────────┘
+```
+
+## 许可
+
+MIT License

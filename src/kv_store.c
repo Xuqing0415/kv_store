@@ -159,10 +159,23 @@ static int kv_flush_memtable(kv_store_t* db) {
 static int kv_switch_memtable(kv_store_t* db) {
     if (!db) return -1;
     
+    RWLOCK_WRLOCK(&db->rwlock);
+    
+    /* 检查是否有其他线程已经触发了切换 */
+    if (db->immutable_memtable) {
+        /* 已有线程在刷盘，无需重复切换 */
+        RWLOCK_UNLOCK_W(&db->rwlock);
+        return 0;
+    }
+    
+    /* 重新检查 memtable 大小（可能已被其他线程切换） */
+    if (db->memtable_size < MEMTABLE_SIZE_LIMIT && skiplist_count(db->memtable) > 0) {
+        RWLOCK_UNLOCK_W(&db->rwlock);
+        return 0;
+    }
+    
     printf("[SWITCH] MemTable size %zu >= limit %d, switching...\n", 
            db->memtable_size, MEMTABLE_SIZE_LIMIT);
-    
-    RWLOCK_WRLOCK(&db->rwlock);
     
     db->immutable_memtable = db->memtable;
     db->memtable = skiplist_new();
@@ -346,6 +359,11 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
     (void)db->memtable;
     (void)db->immutable_memtable;
     
+    /* 释放 RDLOCK 再获取 manifest_lock，避免活锁：
+     * 如果 reader 持有 RDLOCK 时等待 manifest_lock（被 merge 线程持有），
+     * 所有 writer 都会被阻塞，导致系统卡死。 */
+    RWLOCK_UNLOCK(&db->rwlock);
+    
     #ifdef _WIN32
     EnterCriticalSection(&db->manifest_lock);
     #else
@@ -361,7 +379,6 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
         #else
         pthread_mutex_unlock(&db->manifest_lock);
         #endif
-        RWLOCK_UNLOCK(&db->rwlock);
         return -1;
     }
     
@@ -376,8 +393,6 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
     #else
     pthread_mutex_unlock(&db->manifest_lock);
     #endif
-    
-    RWLOCK_UNLOCK(&db->rwlock);
     
     char path[512];
     
@@ -423,6 +438,29 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
     kv_free(files);
     
     return -1;
+}
+
+int kv_sync(kv_store_t* db) {
+    if (!db) return -1;
+    if (db->wal) {
+        return wal_sync(db->wal);
+    }
+    return -1;
+}
+
+int kv_force_merge(kv_store_t* db) {
+    if (!db) return -1;
+    
+    printf("[MERGE] Force merge triggered by user, running levels 0..%d\n", MAX_LEVELS - 2);
+    fflush(stdout);
+    
+    for (int level = 0; level < MAX_LEVELS - 1; level++) {
+        merge_execute(&db->merge_ctx, level);
+    }
+    
+    printf("[MERGE] Force merge complete\n");
+    fflush(stdout);
+    return 0;
 }
 
 int kv_delete(kv_store_t* db, const char* key, size_t klen) {
@@ -633,4 +671,204 @@ void kv_iter_free(kv_iter_t* iter) {
     kv_free(iter->start_key);
     kv_free(iter->end_key);
     kv_free(iter);
+}
+
+/* ================================================================
+ * 快照实现
+ *
+ * 快照在创建时捕获当前 MANIFEST 中的 SSTable 文件列表，
+ * 后续所有读取操作基于该快照的文件列表，不受后续写入/合并影响。
+ *
+ * 设计要点：
+ *   - 快照是只读的，不包含 MemTable（仅 SSTable 层）
+ *   - 创建快照前建议先 kv_sync() + kv_force_merge() 确保数据落盘
+ *   - 如果快照引用的 SSTable 被合并删除，读取会返回 -1
+ *   - 快照持有独立的 LRU 缓存，避免与主库竞争
+ * ================================================================ */
+
+typedef struct kv_snapshot {
+    char* dir_path;
+    manifest_file_t** files;
+    size_t file_count;
+    lru_cache_t* block_cache;
+} kv_snapshot_t;
+
+static int snap_compare_keys(const char* a, size_t a_len, const char* b, size_t b_len) {
+    size_t min_len = a_len < b_len ? a_len : b_len;
+    int cmp = memcmp(a, b, min_len);
+    if (cmp != 0) return cmp;
+    if (a_len < b_len) return -1;
+    if (a_len > b_len) return 1;
+    return 0;
+}
+
+kv_snapshot_t* kv_snapshot_create(kv_store_t* db) {
+    if (!db) return NULL;
+
+    kv_snapshot_t* snap = kv_malloc(sizeof(kv_snapshot_t));
+    if (!snap) return NULL;
+
+    snap->dir_path = kv_strdup(db->dir_path);
+    if (!snap->dir_path) {
+        kv_free(snap);
+        return NULL;
+    }
+
+    snap->files = NULL;
+    snap->file_count = 0;
+    snap->block_cache = lru_cache_new(512);
+
+    /* 在 manifest_lock 下复制文件列表 */
+    #ifdef _WIN32
+    EnterCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_lock(&db->manifest_lock);
+    #endif
+
+    manifest_file_t** raw_files = NULL;
+    size_t raw_count = 0;
+    if (manifest_list_files(db->manifest, -1, &raw_files, &raw_count) == 0 && raw_count > 0) {
+        snap->files = kv_malloc(raw_count * sizeof(manifest_file_t*));
+        if (snap->files) {
+            for (size_t i = 0; i < raw_count; i++) {
+                snap->files[i] = kv_malloc(sizeof(manifest_file_t));
+                if (snap->files[i]) {
+                    memcpy(snap->files[i], raw_files[i], sizeof(manifest_file_t));
+                    /* 深拷贝 key 字段 */
+                    snap->files[i]->smallest_key = kv_malloc(raw_files[i]->smallest_key_len);
+                    snap->files[i]->largest_key = kv_malloc(raw_files[i]->largest_key_len);
+                    if (snap->files[i]->smallest_key && snap->files[i]->largest_key) {
+                        memcpy(snap->files[i]->smallest_key, raw_files[i]->smallest_key, raw_files[i]->smallest_key_len);
+                        memcpy(snap->files[i]->largest_key, raw_files[i]->largest_key, raw_files[i]->largest_key_len);
+                        snap->file_count++;
+                    } else {
+                        kv_free(snap->files[i]->smallest_key);
+                        kv_free(snap->files[i]->largest_key);
+                        kv_free(snap->files[i]);
+                        snap->files[i] = NULL;
+                    }
+                }
+            }
+        }
+        kv_free(raw_files);
+    }
+
+    #ifdef _WIN32
+    LeaveCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_unlock(&db->manifest_lock);
+    #endif
+
+    printf("[SNAPSHOT] Created with %zu SSTable files\n", snap->file_count);
+    return snap;
+}
+
+void kv_snapshot_free(kv_snapshot_t* snap) {
+    if (!snap) return;
+
+    for (size_t i = 0; i < snap->file_count; i++) {
+        if (snap->files[i]) {
+            kv_free(snap->files[i]->smallest_key);
+            kv_free(snap->files[i]->largest_key);
+            kv_free(snap->files[i]);
+        }
+    }
+    kv_free(snap->files);
+    lru_cache_free(snap->block_cache);
+    kv_free(snap->dir_path);
+    kv_free(snap);
+}
+
+int kv_snapshot_get(kv_snapshot_t* snap, const char* key, size_t klen, char** out_val, size_t* out_vlen) {
+    if (!snap || !key || klen == 0 || !out_val || !out_vlen) return -1;
+
+    char path[512];
+    char* value = NULL;
+    size_t vlen = 0;
+
+    /* 按 level 从低到高查找（L0 最新，优先匹配） */
+    for (int level = 0; level < MAX_LEVELS; level++) {
+        for (size_t i = 0; i < snap->file_count; i++) {
+            if (!snap->files[i] || snap->files[i]->level != level) continue;
+
+            /* 范围检查：key 是否在该 SSTable 的 key 范围内 */
+            if (snap->files[i]->smallest_key && snap->files[i]->largest_key) {
+                if (snap_compare_keys(key, klen, snap->files[i]->smallest_key, snap->files[i]->smallest_key_len) < 0) continue;
+                if (snap_compare_keys(key, klen, snap->files[i]->largest_key, snap->files[i]->largest_key_len) > 0) continue;
+            }
+
+            snprintf(path, sizeof(path), "%s/%llu.sst", snap->dir_path, (unsigned long long)snap->files[i]->file_id);
+            sstable_t* sst = sstable_open(path, snap->files[i]->file_id);
+            if (!sst) continue;
+
+            int sst_ret = sstable_lookup(sst, key, klen, &value, &vlen, snap->block_cache);
+            if (sst_ret == 0) {
+                *out_val = value;
+                *out_vlen = vlen;
+                sstable_close(sst);
+                return 0;
+            }
+            if (sst_ret == -2) {
+                /* tombstone */
+                sstable_close(sst);
+                return -1;
+            }
+            sstable_close(sst);
+        }
+    }
+
+    return -1;
+}
+
+kv_iter_t* kv_snapshot_scan(kv_snapshot_t* snap, const char* start, size_t slen, const char* end, size_t elen) {
+    if (!snap) return NULL;
+
+    kv_iter_t* iter = kv_malloc(sizeof(kv_iter_t));
+    if (!iter) return NULL;
+
+    iter->db = NULL;  /* 快照不关联 db */
+    iter->merged = NULL;
+    iter->merged_iter = NULL;
+
+    if (start) {
+        iter->start_key = kv_malloc(slen);
+        memcpy(iter->start_key, start, slen);
+        iter->start_len = slen;
+    } else {
+        iter->start_key = NULL;
+        iter->start_len = 0;
+    }
+
+    if (end) {
+        iter->end_key = kv_malloc(elen);
+        memcpy(iter->end_key, end, elen);
+        iter->end_len = elen;
+    } else {
+        iter->end_key = NULL;
+        iter->end_len = 0;
+    }
+
+    iter->merged = skiplist_new();
+    if (!iter->merged) {
+        kv_iter_free(iter);
+        return NULL;
+    }
+
+    /* 合并 SSTable：从高层级到低层级（旧→新） */
+    char path[512];
+    for (int level = MAX_LEVELS - 1; level >= 0; level--) {
+        for (size_t i = 0; i < snap->file_count; i++) {
+            if (!snap->files[i] || snap->files[i]->level != level) continue;
+
+            snprintf(path, sizeof(path), "%s/%llu.sst", snap->dir_path, (unsigned long long)snap->files[i]->file_id);
+            sstable_t* sst = sstable_open(path, snap->files[i]->file_id);
+            if (sst) {
+                merge_sstable_into(iter->merged, sst, start, slen, end, elen);
+                sstable_close(sst);
+            }
+        }
+    }
+
+    iter->merged_iter = skiplist_new_iterator(iter->merged);
+    return iter;
 }

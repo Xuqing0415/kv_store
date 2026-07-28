@@ -24,3 +24,18 @@ target_link_libraries(test_crash kv_store)
 
 add_executable(test_iter_debug test_iter_debug.c)
 target_link_libraries(test_iter_debug kv_store)
+
+add_executable(test_wal_crash test_wal_crash.c)
+target_link_libraries(test_wal_crash kv_store)
+
+add_executable(test_tombstone_scan test_tombstone_scan.c)
+target_link_libraries(test_tombstone_scan kv_store)
+
+add_executable(test_concurrent test_concurrent.c)
+target_link_libraries(test_concurrent kv_store)
+
+add_executable(test_crash_recovery test_crash_recovery.c)
+target_link_libraries(test_crash_recovery kv_store)
+
+add_executable(test_memcheck test_memcheck.c)
+target_link_libraries(test_memcheck kv_store)
