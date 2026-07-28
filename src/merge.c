@@ -148,9 +148,13 @@ static int merge_files(merge_context_t* ctx, manifest_file_t** src_files, size_t
     
     char path[512];
     
-    for (size_t i = 0; i < src_count; i++) {
-        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)src_files[i]->file_id);
-        sstable_t* sst = sstable_open(path, src_files[i]->file_id);
+    /* 关键：先处理目标层（旧数据），再处理源层（新数据） */
+    /* skiplist_insert 会覆盖同 key，确保新数据（含墓碑）优先 */
+    
+    /* 1. 先合并目标层文件（较旧的数据，会被新数据覆盖） */
+    for (size_t i = 0; i < dst_count; i++) {
+        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)dst_files[i]->file_id);
+        sstable_t* sst = sstable_open(path, dst_files[i]->file_id);
         if (!sst) continue;
         
         sstable_iter_t* iter = sstable_new_iterator(sst);
@@ -174,9 +178,10 @@ static int merge_files(merge_context_t* ctx, manifest_file_t** src_files, size_t
         sstable_close(sst);
     }
     
-    for (size_t i = 0; i < dst_count; i++) {
-        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)dst_files[i]->file_id);
-        sstable_t* sst = sstable_open(path, dst_files[i]->file_id);
+    /* 2. 再合并源层文件（较新的数据，覆盖旧数据，包括墓碑标记） */
+    for (size_t i = 0; i < src_count; i++) {
+        snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)src_files[i]->file_id);
+        sstable_t* sst = sstable_open(path, src_files[i]->file_id);
         if (!sst) continue;
         
         sstable_iter_t* iter = sstable_new_iterator(sst);
