@@ -114,6 +114,44 @@ int main() {
     #endif
     printf("  Compaction wait complete\n");
     
+    /* 1.5 合并后全量扫描验证：遍历所有 key 检查值是否正确 */
+    printf("\n--- Post-Compaction Full Scan Verification ---\n");
+    {
+        int scan_errors = 0;
+        int scan_count = 0;
+        kv_iter_t* scan_iter = kv_scan(db, NULL, 0, NULL, 0);
+        if (scan_iter) {
+            char* k = NULL; size_t kl = 0;
+            char* v = NULL; size_t vl = 0;
+            while (kv_iter_next(scan_iter, &k, &kl, &v, &vl) == 0) {
+                /* 找到对应的 key index */
+                int idx = -1;
+                for (int j = 0; j < NUM_KEYS; j++) {
+                    if (strlen(keys[j]) == kl && memcmp(keys[j], k, kl) == 0) {
+                        idx = j;
+                        break;
+                    }
+                }
+                if (idx < 0) {
+                    printf("  ERROR: Unknown key in scan: %.*s\n", (int)kl, k);
+                    scan_errors++;
+                } else if (vl != VALUE_SIZE || memcmp(v, values[idx], VALUE_SIZE) != 0) {
+                    printf("  ERROR: Key %.*s has wrong value after compaction\n", (int)kl, k);
+                    scan_errors++;
+                }
+                scan_count++;
+                kv_free(k); kv_free(v);
+            }
+            kv_iter_free(scan_iter);
+        }
+        printf("  Scanned %d entries, %d errors (expected %d)\n", scan_count, scan_errors, NUM_KEYS);
+        if (scan_errors > 0) {
+            printf("  *** COMPACTION VERIFICATION FAILED ***\n");
+        } else {
+            printf("  Compaction verification: ALL OK\n");
+        }
+    }
+    
     /* 2. 随机读取测试 */
     printf("\n--- Random Read ---\n");
     srand(42);

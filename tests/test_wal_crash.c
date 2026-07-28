@@ -8,6 +8,17 @@
 #include <windows.h>
 #endif
 
+/*
+ * WAL-Only 崩溃恢复测试
+ *
+ * 场景：数据仅存在于 WAL（MemTable 未达到刷盘阈值），进程崩溃后
+ * 验证是否能从 WAL 完整恢复所有数据。
+ *
+ * 每条记录 key=32 + value=64 ≈ 96 bytes
+ * MEMTABLE_SIZE_LIMIT=256KB → 最多约 2700 条才触发刷盘
+ * 我们写入 1000 条，abort 在 500，确保全程无 SSTable 落盘
+ */
+
 static void rmrf(const char* dir) {
 #ifdef _WIN32
     char search_path[MAX_PATH + 4];
@@ -28,17 +39,28 @@ static void rmrf(const char* dir) {
 #endif
 }
 
-#define NUM_KEYS 5000
-#define VALUE_SIZE 128
+#define NUM_KEYS 1000
+#define VALUE_SIZE 64
+#define CRASH_POINT 500
+
+static void make_key(int idx, char* buf) {
+    snprintf(buf, 32, "wal_key_%06d", idx);
+}
+
+static void make_value(int idx, char* buf) {
+    memset(buf, 'W', VALUE_SIZE);
+    snprintf(buf + VALUE_SIZE - 16, 16, "_%06d", idx);
+}
 
 int main(int argc, char** argv) {
     setbuf(stdout, NULL);
     
-    const char* dir = "./crash_test_db";
+    const char* dir = "./test_wal_crash_db";
     
-    /* 模式1：恢复模式（带参数 "recover"） */
+    /* 模式1：恢复验证 */
     if (argc > 1 && strcmp(argv[1], "recover") == 0) {
-        printf("=== Crash Recovery Verification ===\n");
+        printf("=== WAL-Only Crash Recovery Verification ===\n");
+        
         kv_store_t* db = kv_open(dir);
         if (!db) { printf("FAIL: Cannot open DB\n"); return 1; }
         
@@ -48,14 +70,12 @@ int main(int argc, char** argv) {
         
         for (int i = 0; i < NUM_KEYS; i++) {
             char key[32];
-            snprintf(key, sizeof(key), "crash_key_%06d", i);
+            make_key(i, key);
             char* val = NULL; size_t vlen = 0;
             if (kv_get(db, key, strlen(key), &val, &vlen) == 0) {
                 found++;
-                /* 验证值正确性 */
                 char expected[VALUE_SIZE];
-                memset(expected, 'V', VALUE_SIZE);
-                snprintf(expected + VALUE_SIZE - 16, 16, "_%06d", i);
+                make_value(i, expected);
                 if (vlen != VALUE_SIZE || memcmp(val, expected, VALUE_SIZE) != 0) {
                     value_errors++;
                     if (value_errors <= 3) {
@@ -68,24 +88,31 @@ int main(int argc, char** argv) {
                 if (first_missing < 0) first_missing = i;
             }
         }
+        
         printf("Result: found=%d, missing=%d / %d total\n", found, missing, NUM_KEYS);
         printf("Recovery rate: %.1f%%\n", 100.0 * found / NUM_KEYS);
         if (first_missing >= 0) {
-            printf("First missing key index: %d (approx crash point)\n", first_missing);
-        }
-        if (value_errors > 0) {
-            printf("VALUE ERRORS: %d keys have wrong values!\n", value_errors);
+            printf("First missing key index: %d (crash point was %d)\n", first_missing, CRASH_POINT);
         }
         printf("Value integrity: %s\n", value_errors == 0 ? "ALL OK" : "CORRUPTED!");
+        
+        int expected_found = CRASH_POINT + 1;  /* 0..500 = 501 entries */
+        if (found >= expected_found) {
+            printf("PASS: All %d entries up to crash point recovered\n", expected_found);
+        } else {
+            printf("WARN: Only %d/%d entries recovered (lost %d)\n", found, expected_found, expected_found - found);
+        }
         
         kv_close(db);
         return (value_errors > 0) ? 1 : 0;
     }
     
-    /* 模式2：崩溃模式（带参数 "crash"） */
+    /* 模式2：崩溃模拟 */
     if (argc > 1 && strcmp(argv[1], "crash") == 0) {
-        printf("=== Simulated Crash Test ===\n");
-        printf("Writing %d entries, will abort() at key #%d...\n", NUM_KEYS, NUM_KEYS / 2);
+        printf("=== WAL-Only Simulated Crash Test ===\n");
+        printf("Writing %d entries, will abort() at key #%d\n", NUM_KEYS, CRASH_POINT);
+        printf("(MemTable limit is 256KB, ~96 bytes/entry → ~2700 entries before flush)\n");
+        printf("(So all %d entries stay in MemTable+WAL only, no SSTable)\n\n", NUM_KEYS);
         rmrf(dir);
         
         kv_store_t* db = kv_open(dir);
@@ -93,27 +120,24 @@ int main(int argc, char** argv) {
         
         for (int i = 0; i < NUM_KEYS; i++) {
             char key[32], value[VALUE_SIZE];
-            snprintf(key, sizeof(key), "crash_key_%06d", i);
-            memset(value, 'V', VALUE_SIZE);
-            snprintf(value + VALUE_SIZE - 16, 16, "_%06d", i);
+            make_key(i, key);
+            make_value(i, value);
             
             kv_put(db, key, strlen(key), value, VALUE_SIZE);
             
             /* 每 50 条刷盘一次，确保 WAL 数据落盘 */
             if (i % 50 == 0) {
                 kv_sync(db);
-                if (i % 500 == 0) {
-                    printf("  Written %d entries, synced...\n", i);
+                if (i % 200 == 0) {
+                    printf("  Written %d entries, WAL synced...\n", i);
                 }
             }
             
-            /* 在中间点模拟崩溃 */
-            if (i == NUM_KEYS / 2) {
+            if (i == CRASH_POINT) {
                 printf("  Written %d entries, simulating crash with abort()...\n", i);
-                kv_sync(db);  /* 最后刷盘一次 */
+                kv_sync(db);
                 fflush(stdout);
                 fflush(stderr);
-                /* 不调用 kv_close，直接 abort 模拟崩溃 */
                 abort();
             }
         }
@@ -122,12 +146,12 @@ int main(int argc, char** argv) {
         return 0;
     }
     
-    /* 模式3：正常写入模式（默认，无参数） */
-    printf("=== Crash Recovery Test: Writing %d entries ===\n", NUM_KEYS);
+    /* 模式3：正常写入+验证（无崩溃） */
+    printf("=== WAL-Only Crash Recovery Test ===\n");
     printf("Usage:\n");
-    printf("  test_crash.exe crash    - Write and abort() at mid-point\n");
-    printf("  test_crash.exe recover  - Recover and verify data integrity\n");
-    printf("  test_crash.exe          - Normal write + verify (no crash)\n\n");
+    printf("  test_wal_crash.exe crash    - Write and abort() at entry #%d\n", CRASH_POINT);
+    printf("  test_wal_crash.exe recover  - Recover from WAL and verify\n");
+    printf("  test_wal_crash.exe          - Normal write + verify (no crash)\n\n");
     
     printf("Running normal mode (no crash)...\n");
     rmrf(dir);
@@ -135,37 +159,35 @@ int main(int argc, char** argv) {
     kv_store_t* db = kv_open(dir);
     if (!db) { printf("FAIL: Cannot open DB\n"); return 1; }
     
-    putchar('[');
     for (int i = 0; i < NUM_KEYS; i++) {
         char key[32], value[VALUE_SIZE];
-        snprintf(key, sizeof(key), "crash_key_%06d", i);
-        memset(value, 'V', VALUE_SIZE);
-        snprintf(value + VALUE_SIZE - 16, 16, "_%06d", i);
-        
+        make_key(i, key);
+        make_value(i, value);
         kv_put(db, key, strlen(key), value, VALUE_SIZE);
-        
-        if (i % 100 == 0) {
-            putchar('.');
-            fflush(stdout);
-        }
     }
-    printf("] 100%%\n");
     
-    /* 扫描确认 */
-    int count = 0;
-    kv_iter_t* iter = kv_scan(db, NULL, 0, NULL, 0);
-    if (iter) {
-        char* k = NULL; size_t kl = 0;
-        char* v = NULL; size_t vl = 0;
-        while (kv_iter_next(iter, &k, &kl, &v, &vl) == 0) {
-            count++;
-            kv_free(k); kv_free(v);
+    /* 验证全部可读 */
+    int errors = 0;
+    for (int i = 0; i < NUM_KEYS; i++) {
+        char key[32];
+        make_key(i, key);
+        char* val = NULL; size_t vlen = 0;
+        if (kv_get(db, key, strlen(key), &val, &vlen) != 0) {
+            printf("  ERROR: Key %s not found!\n", key);
+            errors++;
+        } else {
+            char expected[VALUE_SIZE];
+            make_value(i, expected);
+            if (vlen != VALUE_SIZE || memcmp(val, expected, VALUE_SIZE) != 0) {
+                printf("  ERROR: Key %s value mismatch!\n", key);
+                errors++;
+            }
+            kv_free(val);
         }
-        kv_iter_free(iter);
     }
-    printf("Total keys: %d\n", count);
+    printf("Normal mode: %d errors\n", errors);
     
     kv_close(db);
     printf("Done. All %d entries written and verified.\n", NUM_KEYS);
-    return 0;
+    return errors > 0 ? 1 : 0;
 }
