@@ -81,6 +81,7 @@ static void raft_handle_snapshot_request(raft_t* r, SOCKET fd, uint8_t* data, si
 static void raft_handle_snapshot_response(raft_t* r, int peer_index, uint8_t* data, size_t data_len);
 static void raft_handle_snapshot_chunk(raft_t* r, SOCKET fd, uint8_t* data, size_t data_len);
 static void raft_leader_send_snapshot(raft_t* r, int peer_index);
+static void raft_update_election_timeout(raft_t* r, int election_succeeded);
 int raft_snapshot_create(raft_t* r);
 
 /* --- 简单网络字节序辅助 --- */
@@ -420,8 +421,26 @@ static int raft_log_load(raft_t* r) {
         }
     }
 
+    /* 过滤掉 ≤ snapshot_index 的日志条目（防止残留旧条目被重复应用） */
+    if (r->snapshot_index > 0) {
+        size_t new_count = 0;
+        for (size_t i = 0; i < r->log_count; i++) {
+            if (r->log[i].index > r->snapshot_index) {
+                if (i != new_count) {
+                    r->log[new_count] = r->log[i];
+                }
+                new_count++;
+            } else {
+                /* 丢弃已被快照覆盖的条目 */
+                r->log_size_bytes -= raft_log_entry_size(&r->log[i]);
+                kv_free(r->log[i].key);
+                kv_free(r->log[i].value);
+            }
+        }
+        r->log_count = new_count;
+    }
+
     /* 初始化 commit_index 和 last_applied */
-    /* 如果存在快照，起始索引为快照索引 */
     uint64_t base_index = r->snapshot_index;
     if (r->log_count > 0) {
         r->commit_index = r->log[r->log_count - 1].index;
@@ -608,6 +627,7 @@ static void raft_become_candidate(raft_t* r) {
 static void raft_become_leader(raft_t* r) {
     r->role = RAFT_LEADER;
     int self_idx = raft_self_index(r);
+    raft_update_election_timeout(r, 1);  /* 选举成功，重置超时 */
     printf("[RAFT] %s -> LEADER (term=%llu)\n", r->cfg.node_id,
            (unsigned long long)r->current_term);
 
@@ -649,6 +669,45 @@ static int raft_log_is_up_to_date(raft_t* r, uint64_t last_idx, uint64_t last_te
     uint64_t my_last_idx = r->log[r->log_count - 1].index;
     if (last_term != my_last_term) return last_term > my_last_term;
     return last_idx >= my_last_idx;
+}
+
+/* 动态调整选举超时：连续选举失败时扩大超时范围，避免频繁选举 */
+static void raft_update_election_timeout(raft_t* r, int election_succeeded) {
+    static int consecutive_timeouts = 0;
+    static uint64_t last_election_reset_ms = 0;
+
+    uint64_t now = thread_time_ms();
+
+    if (election_succeeded) {
+        consecutive_timeouts = 0;
+        last_election_reset_ms = now;
+        r->election_timeout_ms = RAFT_ELECTION_TIMEOUT_MIN_MS +
+            (rand() % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
+        return;
+    }
+
+    /* 如果距上次成功选举超过 30 秒，重置计数器 */
+    if (last_election_reset_ms > 0 && (now - last_election_reset_ms) > 30000) {
+        consecutive_timeouts = 0;
+        last_election_reset_ms = now;
+    }
+
+    consecutive_timeouts++;
+
+    /* 连续超时 3 次以上，每次扩大 50% 超时范围 */
+    if (consecutive_timeouts >= 3) {
+        int base_min = RAFT_ELECTION_TIMEOUT_MIN_MS;
+        int base_max = RAFT_ELECTION_TIMEOUT_MAX_MS;
+        int scale = consecutive_timeouts - 2;  /* 第3次 scale=1, 第4次 scale=2, ... */
+        if (scale > 5) scale = 5;  /* 最大 5 倍 */
+        int adj_min = base_min * scale;
+        int adj_max = base_max * scale;
+        if (adj_max > 5000) adj_max = 5000;  /* 上限 5 秒 */
+        r->election_timeout_ms = adj_min + (rand() % (adj_max - adj_min));
+    } else {
+        r->election_timeout_ms = RAFT_ELECTION_TIMEOUT_MIN_MS +
+            (rand() % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
+    }
 }
 
 /* 将已提交的日志应用到状态机 */
@@ -1279,6 +1338,7 @@ static void* raft_event_loop(void* arg) {
         /* --- 选举超时检查 --- */
         if (r->role != RAFT_LEADER) {
             if (now - r->last_heartbeat_ms >= r->election_timeout_ms) {
+                raft_update_election_timeout(r, 0);  /* 选举超时，动态调整 */
                 raft_become_candidate(r);
                 raft_log_save(r);
             }
@@ -1732,17 +1792,36 @@ static void raft_handle_snapshot_request(raft_t* r, SOCKET fd, uint8_t* data, si
 
     /* 如果快照比当前日志新，则接受 */
     if (last_included_index > r->commit_index) {
-        /* 保存快照到文件 */
+        /* 原子替换：先写入临时文件，校验完整后再 rename 到最终路径 */
         char snap_path[512];
+        char tmp_path[512];
         snprintf(snap_path, sizeof(snap_path), "%s/snapshot.dat", r->cfg.data_dir);
+        snprintf(tmp_path, sizeof(tmp_path), "%s/snapshot.tmp", r->cfg.data_dir);
 
-        FILE* f = fopen(snap_path, "wb");
+        FILE* f = fopen(tmp_path, "wb");
         if (f) {
             /* 写入快照头部 */
-            fwrite(&last_included_index, 8, 1, f);
-            fwrite(&last_included_term, 8, 1, f);
-            fwrite(data + off, 1, (size_t)snap_data_len, f);
+            if (fwrite(&last_included_index, 8, 1, f) != 1 ||
+                fwrite(&last_included_term, 8, 1, f) != 1 ||
+                fwrite(data + off, 1, (size_t)snap_data_len, f) != (size_t)snap_data_len) {
+                printf("[RAFT] ERROR: Failed to write snapshot temp file\n");
+                fclose(f);
+                remove(tmp_path);
+                MUTEX_UNLOCK(&r->mutex);
+                rpc_send_snapshot_response(fd, r->current_term, 0);
+                return;
+            }
             fclose(f);
+
+            /* 原子替换：删除旧快照，rename 临时文件 */
+            remove(snap_path);
+            if (rename(tmp_path, snap_path) != 0) {
+                printf("[RAFT] ERROR: Failed to rename snapshot temp file\n");
+                remove(tmp_path);
+                MUTEX_UNLOCK(&r->mutex);
+                rpc_send_snapshot_response(fd, r->current_term, 0);
+                return;
+            }
 
             /* 恢复快照到状态机 */
             if (r->cfg.restore_fn) {
@@ -1779,6 +1858,8 @@ static void raft_handle_snapshot_request(raft_t* r, SOCKET fd, uint8_t* data, si
             printf("[RAFT] Snapshot installed: index=%llu, term=%llu\n",
                    (unsigned long long)last_included_index,
                    (unsigned long long)last_included_term);
+        } else {
+            printf("[RAFT] ERROR: Cannot create snapshot temp file %s\n", tmp_path);
         }
 
         raft_log_save(r);
