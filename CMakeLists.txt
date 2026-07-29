@@ -60,7 +60,7 @@ add_executable(kv_test src/main.c)
 target_link_libraries(kv_test kv_store)
 
 # Redis RESP Server (with Prometheus metrics)
-add_executable(kv_server src/server_main.c src/resp_server.c src/metrics_server.c)
+add_executable(kv_server src/server_main.c src/resp_server.c src/metrics_server.c src/raft.c)
 target_link_libraries(kv_server kv_store)
 if(WIN32)
     target_link_libraries(kv_server ws2_32)

@@ -1,4 +1,5 @@
 #include "metrics_server.h"
+#include "raft.h"
 #include "mem.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,11 +32,12 @@
 #define HTTP_BUF_SIZE (16 * 1024)
 
 /* 指标响应缓冲区大小 */
-#define METRICS_BUF_SIZE (8 * 1024)
+#define METRICS_BUF_SIZE (16 * 1024)
 
 struct metrics_server {
     SOCKET listen_fd;
     kv_store_t* db;
+    raft_t*     raft;
     int running;
     char* host;
     int port;
@@ -108,12 +110,35 @@ static int http_parse_request(const char* buf, size_t buf_len,
 }
 
 /* 构建 Prometheus 文本格式的指标响应 */
-static int metrics_build_response(kv_store_t* db, time_t start_time, char* buf, size_t buf_capacity, size_t* out_len) {
+static int metrics_build_response(metrics_server_t* server, time_t start_time,
+                                   char* buf, size_t buf_capacity, size_t* out_len) {
     kv_metrics_snapshot_t snap;
-    kv_metrics_snapshot(db, &snap);
+    kv_metrics_snapshot(server->db, &snap);
 
     time_t now = time(NULL);
     long long uptime = (long long)(now - start_time);
+
+    /* 获取 Raft 状态（如果可用） */
+    uint64_t raft_term = 0;
+    int raft_role = -1;  /* -1 = unknown */
+    uint64_t raft_commit = 0;
+    uint64_t raft_applied = 0;
+    size_t raft_log_count = 0;
+    int raft_is_leader = 0;
+    uint64_t raft_snapshot_idx = 0;
+
+    if (server->raft) {
+        raft_role_t role;
+        raft_status(server->raft, &raft_term, &role, &raft_commit, &raft_applied, &raft_log_count, NULL);
+        raft_role = (int)role;
+        raft_is_leader = (role == RAFT_LEADER) ? 1 : 0;
+
+        /* 获取快照信息 */
+        raft_snapshot_info_t snap_info;
+        if (raft_get_snapshot_info(server->raft, &snap_info) == 0) {
+            raft_snapshot_idx = snap_info.last_included_index;
+        }
+    }
 
     /* 使用 snprintf 构建完整响应 */
     int written = snprintf(buf, buf_capacity,
@@ -148,14 +173,50 @@ static int metrics_build_response(kv_store_t* db, time_t start_time, char* buf, 
         "\n"
         "# HELP kv_compactions_total Total number of compaction runs\n"
         "# TYPE kv_compactions_total counter\n"
-        "kv_compactions_total %lld\n",
+        "kv_compactions_total %lld\n"
+        "\n"
+        /* Raft metrics */
+        "# HELP raft_state Current Raft state (0=Follower, 1=Candidate, 2=Leader, -1=unknown)\n"
+        "# TYPE raft_state gauge\n"
+        "raft_state %d\n"
+        "\n"
+        "# HELP raft_term Current Raft term\n"
+        "# TYPE raft_term gauge\n"
+        "raft_term %llu\n"
+        "\n"
+        "# HELP raft_commit_index Raft commit index\n"
+        "# TYPE raft_commit_index gauge\n"
+        "raft_commit_index %llu\n"
+        "\n"
+        "# HELP raft_last_applied Raft last applied index\n"
+        "# TYPE raft_last_applied gauge\n"
+        "raft_last_applied %llu\n"
+        "\n"
+        "# HELP raft_is_leader 1 if this node is the leader\n"
+        "# TYPE raft_is_leader gauge\n"
+        "raft_is_leader %d\n"
+        "\n"
+        "# HELP raft_log_count Number of committed log entries\n"
+        "# TYPE raft_log_count gauge\n"
+        "raft_log_count %zu\n"
+        "\n"
+        "# HELP raft_snapshot_index Last included index in snapshot (0=no snapshot)\n"
+        "# TYPE raft_snapshot_index gauge\n"
+        "raft_snapshot_index %llu\n",
         uptime,
         snap.puts_total,
         snap.gets_total,
         snap.get_misses_total,
         snap.deletes_total,
         snap.scans_total,
-        snap.compactions_total
+        snap.compactions_total,
+        raft_role,
+        (unsigned long long)raft_term,
+        (unsigned long long)raft_commit,
+        (unsigned long long)raft_applied,
+        raft_is_leader,
+        raft_log_count,
+        (unsigned long long)raft_snapshot_idx
     );
 
     if (written < 0 || (size_t)written >= buf_capacity) {
@@ -208,7 +269,7 @@ static void metrics_handle_connection(metrics_server_t* server, SOCKET client_fd
 
     /* 只处理 GET /metrics */
     if (strcmp(method, "GET") == 0 && strcmp(path, "/metrics") == 0) {
-        if (metrics_build_response(server->db, server->start_time, resp, sizeof(resp), &resp_len) != 0) {
+        if (metrics_build_response(server, server->start_time, resp, sizeof(resp), &resp_len) != 0) {
             close_socket(client_fd);
             return;
         }
@@ -228,7 +289,8 @@ static void metrics_handle_connection(metrics_server_t* server, SOCKET client_fd
  * 公共 API
  * ================================================================ */
 
-int metrics_server_start(metrics_server_t** out_server, const char* host, int port, kv_store_t* db) {
+int metrics_server_start(metrics_server_t** out_server, const char* host, int port,
+                         kv_store_t* db, raft_t* raft) {
     if (!out_server || !db) return -1;
 
     metrics_server_t* server = kv_malloc(sizeof(metrics_server_t));
@@ -236,6 +298,7 @@ int metrics_server_start(metrics_server_t** out_server, const char* host, int po
     memset(server, 0, sizeof(metrics_server_t));
 
     server->db = db;
+    server->raft = raft;
     server->running = 0;
     server->host = kv_strdup(host ? host : "127.0.0.1");
     server->port = port;
