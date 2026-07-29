@@ -21,8 +21,19 @@ typedef struct {
     long long compactions_total;
 } kv_metrics_snapshot_t;
 
+/* 运行时统计（供健康检查使用） */
+typedef struct {
+    size_t memtable_size;    /* 当前活跃 memtable 的字节大小 */
+    size_t sstable_count;    /* 当前 SSTable 文件数量 */
+    size_t total_keys;       /* 估算的总 key 数量 */
+    int    wal_enabled;      /* WAL 是否启用（Raft模式下为0） */
+} kv_stats_t;
+
 /* 获取指标计数器快照（线程安全） */
 void kv_metrics_snapshot(kv_store_t* db, kv_metrics_snapshot_t* out);
+
+/* 获取运行时统计（线程安全） */
+void kv_get_stats(kv_store_t* db, kv_stats_t* out);
 
 kv_store_t* kv_open(const char* dir_path);
 kv_store_t* kv_open_raft(const char* dir_path);  /* Raft 模式：不创建 WAL */

@@ -173,6 +173,11 @@ class KVClient:
         self._send_command("FLUSHDB")
         return self._read_response()
 
+    def health(self):
+        """HEALTH — 获取节点健康状态"""
+        self._send_command("HEALTH")
+        return self._read_response()
+
     def scan_all(self, batch_size=100):
         """扫描所有 key（封装 SCAN 逻辑）"""
         cursor = 0
@@ -397,7 +402,8 @@ class HAKVClient:
             c, leader = self._get_leader_connection()
             if not c:
                 last_error = "No leader available"
-                time.sleep(0.1 * (attempt + 1))
+                # 指数退避: 100ms, 200ms, 400ms, ...
+                time.sleep(0.1 * (2 ** attempt))
                 continue
 
             try:
@@ -410,7 +416,7 @@ class HAKVClient:
                     if "REDIRECT" in err.upper() or "MOVED" in err.upper() or "NOT LEADER" in err.upper():
                         self._invalidate_leader_cache()
                         self.retry_count += 1
-                        time.sleep(0.05 * (attempt + 1))
+                        time.sleep(0.1 * (2 ** attempt))
                         continue
                     return resp
 
@@ -423,7 +429,7 @@ class HAKVClient:
                 if c:
                     c.close()
                 self.retry_count += 1
-                time.sleep(0.1 * (attempt + 1))
+                time.sleep(0.1 * (2 ** attempt))
                 continue
 
         return {"error": f"Write failed after {max_retries} retries: {last_error}"}
@@ -435,7 +441,7 @@ class HAKVClient:
             c, node = self._get_any_connection()
             if not c:
                 last_error = "No node available"
-                time.sleep(0.05 * (attempt + 1))
+                time.sleep(0.1 * (2 ** attempt))
                 continue
 
             try:
@@ -447,7 +453,7 @@ class HAKVClient:
                 last_error = str(e)
                 if c:
                     c.close()
-                time.sleep(0.05 * (attempt + 1))
+                time.sleep(0.1 * (2 ** attempt))
                 continue
 
         return {"error": f"Read failed after {max_retries} retries: {last_error}"}
@@ -504,6 +510,17 @@ class HAKVClient:
         """FLUSHDB"""
         self.write_count += 1
         return self._execute_write("FLUSHDB")
+
+    def health(self):
+        """HEALTH — 向 Leader 获取节点健康状态"""
+        c, leader = self._get_leader_connection()
+        if not c:
+            return {"error": "No leader available"}
+        try:
+            c._send_command("HEALTH")
+            return c._read_response()
+        except Exception as e:
+            return {"error": str(e)}
 
     def scan_all(self, batch_size=100):
         """扫描所有 key（封装 SCAN 逻辑）"""
@@ -567,6 +584,22 @@ class HAKVClient:
                             except ValueError:
                                 pass
                     results[f"{host}:{resp_port}"] = metrics
+            except Exception as e:
+                results[f"{host}:{resp_port}"] = {"error": str(e)}
+        return results
+
+    def health_check(self):
+        """通过 HTTP /health 端点获取所有节点的健康状态（JSON格式）"""
+        import json
+        results = {}
+        for node in self.nodes:
+            host, resp_port, metrics_port = node
+            try:
+                url = f"http://{host}:{metrics_port}/health"
+                req = urllib.request.Request(url)
+                with urllib.request.urlopen(req, timeout=2) as resp:
+                    body = resp.read().decode("utf-8", errors="replace")
+                    results[f"{host}:{resp_port}"] = json.loads(body)
             except Exception as e:
                 results[f"{host}:{resp_port}"] = {"error": str(e)}
         return results
