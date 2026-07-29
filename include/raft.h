@@ -51,17 +51,26 @@ typedef struct {
     int  port;                     /* Raft RPC 端口 */
 } raft_peer_t;
 
+/* --- 状态机回调 --- */
+/* 将已提交的日志条目应用到业务状态机 */
+typedef int (*raft_apply_cb)(void* state, raft_entry_t* entry);
+
+/* 创建状态机快照：将状态机序列化到指定文件路径，返回 0 成功 */
+typedef int (*raft_snapshot_cb)(void* state, const char* file_path,
+                                 uint64_t last_included_index, uint64_t last_included_term);
+
+/* 从快照恢复状态机：从指定文件路径加载状态机，返回 0 成功 */
+typedef int (*raft_restore_cb)(void* state, const char* file_path);
+
 typedef struct {
     char      node_id[RAFT_NODE_ID_LEN];  /* 本节点 ID */
     int       listen_port;                 /* 本节点监听端口 */
     int       num_peers;                   /* 集群节点数 */
     raft_peer_t peers[RAFT_MAX_NODES];    /* 所有节点（含自身） */
     char      data_dir[256];              /* 持久化目录 */
+    raft_snapshot_cb snapshot_fn;         /* 快照创建回调（可选） */
+    raft_restore_cb  restore_fn;          /* 快照恢复回调（可选） */
 } raft_config_t;
-
-/* --- 状态机回调 --- */
-/* 将已提交的日志条目应用到业务状态机 */
-typedef int (*raft_apply_cb)(void* state, raft_entry_t* entry);
 
 /* --- Raft 句柄（不透明） --- */
 typedef struct raft raft_t;
@@ -100,7 +109,38 @@ const char* raft_role_str(raft_role_t role);
 
 /* 获取节点状态摘要（供调试/metrics） */
 void raft_status(raft_t* r, uint64_t* out_term, raft_role_t* out_role,
-                 uint64_t* out_commit_index, uint64_t* out_last_applied);
+                 uint64_t* out_commit_index, uint64_t* out_last_applied,
+                 size_t* out_log_count, size_t* out_log_size_bytes);
+
+/* --- 日志压缩 & 快照 API --- */
+
+/* 快照元数据 */
+typedef struct {
+    uint64_t last_included_index;   /* 快照包含的最后日志索引 */
+    uint64_t last_included_term;    /* 快照包含的最后日志 term */
+    char     file_path[512];        /* 快照文件路径 */
+    size_t   file_size;             /* 快照文件大小 */
+} raft_snapshot_info_t;
+
+/* 快照触发阈值 */
+#define RAFT_SNAPSHOT_LOG_THRESHOLD       10000   /* 日志条目数超过此值 */
+#define RAFT_SNAPSHOT_LOG_SIZE_THRESHOLD  (20 * 1024 * 1024)  /* 日志总大小超过 20MB */
+
+/* 创建快照：将当前 KV 状态持久化到快照文件，并截断日志
+ * 返回 0 成功，-1 失败 */
+int raft_snapshot_create(raft_t* r);
+
+/* 获取快照信息 */
+int raft_get_snapshot_info(raft_t* r, raft_snapshot_info_t* info);
+
+/* 加载快照到状态机（用于 InstallSnapshot 或重启恢复） */
+int raft_snapshot_restore(raft_t* r, const char* file_path);
+
+/* 检查是否需要触发快照 */
+int raft_needs_snapshot(raft_t* r);
+
+/* 重放所有已提交但未应用的日志到状态机（用于崩溃恢复） */
+int raft_replay_committed(raft_t* r);
 
 #ifdef __cplusplus
 }
