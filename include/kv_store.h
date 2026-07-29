@@ -25,6 +25,7 @@ typedef struct {
 void kv_metrics_snapshot(kv_store_t* db, kv_metrics_snapshot_t* out);
 
 kv_store_t* kv_open(const char* dir_path);
+kv_store_t* kv_open_raft(const char* dir_path);  /* Raft 模式：不创建 WAL */
 void kv_close(kv_store_t* db);
 int kv_put(kv_store_t* db, const char* key, size_t klen, const char* val, size_t vlen);
 int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t* out_vlen);
@@ -44,5 +45,18 @@ void kv_snapshot_free(kv_snapshot_t* snap);
 /* 备份与恢复：在线热备，刷盘后复制所有数据文件到备份目录 */
 int kv_backup(kv_store_t* db, const char* backup_dir);
 kv_store_t* kv_restore(const char* backup_dir, const char* target_dir);
+
+/* 快照导入：将快照目录中的 SSTable 文件高效导入到当前数据库 */
+int kv_import_snapshot_files(kv_store_t* db, const char* snapshot_data_dir);
+
+/* === Raft 模式：禁用 WAL，由 Raft 日志统一持久化 === */
+
+/* 启用 Raft 模式：kv_put/kv_delete 不再写 WAL，恢复时跳过 WAL 重放
+ * 必须在 kv_open 之后、任何写操作之前调用 */
+void kv_set_raft_mode(kv_store_t* db, int enabled);
+
+/* 内部写入（无 WAL）：供 Raft 状态机 apply 使用 */
+int kv_put_internal(kv_store_t* db, const char* key, size_t klen, const char* val, size_t vlen);
+int kv_delete_internal(kv_store_t* db, const char* key, size_t klen);
 
 #endif
