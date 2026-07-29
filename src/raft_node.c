@@ -2,6 +2,7 @@
 #include "resp_server.h"
 #include "metrics_server.h"
 #include "kv_store.h"
+#include "manifest.h"
 #include "mem.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,6 +14,8 @@
 #else
 #include <signal.h>
 #include <pthread.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #endif
 
 /* ================================================================
@@ -23,11 +26,451 @@ static int raft_apply_to_kv(void* state, raft_entry_t* entry) {
     if (!db || !entry) return -1;
 
     if (entry->type == 0) { /* PUT */
-        return kv_put(db, entry->key, entry->key_len, entry->value, entry->value_len);
+        return kv_put_internal(db, entry->key, entry->key_len, entry->value, entry->value_len);
     } else if (entry->type == 1) { /* DELETE */
-        return kv_delete(db, entry->key, entry->key_len);
+        return kv_delete_internal(db, entry->key, entry->key_len);
     }
     return -1;
+}
+
+/* ================================================================
+ * Raft 快照回调：将 kv_store 序列化到快照文件
+ * ================================================================ */
+static int raft_snapshot_to_kv(void* state, const char* file_path,
+                                uint64_t last_included_index, uint64_t last_included_term) {
+    kv_store_t* db = (kv_store_t*)state;
+    if (!db || !file_path) return -1;
+
+    /* 使用 kv_backup 创建完整备份 */
+    char tmp_dir[512];
+    snprintf(tmp_dir, sizeof(tmp_dir), "%s.tmp", file_path);
+
+    if (kv_backup(db, tmp_dir) != 0) {
+        printf("[SNAPSHOT] ERROR: kv_backup failed\n");
+        return -1;
+    }
+
+    /* 统计文件数量与总大小（用于 snapshot.meta） */
+    char search_path[1024];
+    snprintf(search_path, sizeof(search_path), "%s/*.sst", tmp_dir);
+
+    uint32_t file_count = 0;
+    uint64_t total_size = 0;
+
+#ifdef _WIN32
+    WIN32_FIND_DATA pre_find_data;
+    HANDLE pre_h_find = FindFirstFile(search_path, &pre_find_data);
+    if (pre_h_find != INVALID_HANDLE_VALUE) {
+        do {
+            file_count++;
+            total_size += ((uint64_t)pre_find_data.nFileSizeHigh << 32) | pre_find_data.nFileSizeLow;
+        } while (FindNextFile(pre_h_find, &pre_find_data));
+        FindClose(pre_h_find);
+    }
+#endif
+
+    /* 创建快照文件 */
+    FILE* f = fopen(file_path, "wb");
+    if (!f) {
+        printf("[SNAPSHOT] ERROR: Cannot create snapshot file %s\n", file_path);
+        /* 清理临时目录 */
+        {
+            char cmd[2048];
+#ifdef _WIN32
+            snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+            system(cmd);
+#endif
+        }
+        return -1;
+    }
+
+    /* 写入头部：last_included_index(8) + last_included_term(8) */
+    if (fwrite(&last_included_index, 8, 1, f) != 1 ||
+        fwrite(&last_included_term, 8, 1, f) != 1) {
+        printf("[SNAPSHOT] ERROR: Failed to write header\n");
+        fclose(f);
+        remove(file_path);
+        {
+            char cmd[2048];
+#ifdef _WIN32
+            snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+            system(cmd);
+#endif
+        }
+        return -1;
+    }
+
+    /* 打包 MANIFEST 文件到快照中 */
+    {
+        char manifest_src[1024];
+        snprintf(manifest_src, sizeof(manifest_src), "%s/" MANIFEST_FILE_NAME, tmp_dir);
+        FILE* mf = fopen(manifest_src, "rb");
+        if (mf) {
+            fseek(mf, 0, SEEK_END);
+            long mf_size = ftell(mf);
+            fseek(mf, 0, SEEK_SET);
+
+            uint32_t name_len = (uint32_t)strlen(MANIFEST_FILE_NAME);
+            fwrite(&name_len, 4, 1, f);
+            fwrite(MANIFEST_FILE_NAME, 1, name_len, f);
+
+            uint64_t file_sz = (uint64_t)mf_size;
+            fwrite(&file_sz, 8, 1, f);
+
+            uint8_t* buf = kv_malloc((size_t)mf_size);
+            if (buf) {
+                if (fread(buf, 1, (size_t)mf_size, mf) == (size_t)mf_size) {
+                    fwrite(buf, 1, (size_t)mf_size, f);
+                }
+                kv_free(buf);
+            }
+            fclose(mf);
+        }
+    }
+
+    /* 遍历备份目录中的所有 SSTable 文件，写入快照 */
+#ifdef _WIN32
+    WIN32_FIND_DATA find_data;
+    HANDLE h_find = FindFirstFile(search_path, &find_data);
+    if (h_find != INVALID_HANDLE_VALUE) {
+        do {
+            char sst_path[2048];
+            snprintf(sst_path, sizeof(sst_path), "%s/%s", tmp_dir, find_data.cFileName);
+            FILE* sf = fopen(sst_path, "rb");
+            if (!sf) continue;
+
+            fseek(sf, 0, SEEK_END);
+            long sst_size = ftell(sf);
+            fseek(sf, 0, SEEK_SET);
+
+            /* 写入文件名长度 + 文件名 */
+            uint32_t name_len = (uint32_t)strlen(find_data.cFileName);
+            if (fwrite(&name_len, 4, 1, f) != 1 ||
+                fwrite(find_data.cFileName, 1, name_len, f) != name_len) {
+                printf("[SNAPSHOT] ERROR: Failed to write file entry header\n");
+                fclose(sf);
+                fclose(f);
+                remove(file_path);
+                FindClose(h_find);
+                {
+                    char cmd[2048];
+#ifdef _WIN32
+                    snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+                    system(cmd);
+#endif
+                }
+                return -1;
+            }
+
+            /* 写入文件大小 + 文件内容 */
+            uint64_t file_sz = (uint64_t)sst_size;
+            if (fwrite(&file_sz, 8, 1, f) != 1) {
+                printf("[SNAPSHOT] ERROR: Failed to write file size\n");
+                fclose(sf);
+                fclose(f);
+                remove(file_path);
+                FindClose(h_find);
+                {
+                    char cmd[2048];
+#ifdef _WIN32
+                    snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+                    system(cmd);
+#endif
+                }
+                return -1;
+            }
+
+            uint8_t* buf = kv_malloc((size_t)sst_size);
+            if (!buf) {
+                printf("[SNAPSHOT] ERROR: Out of memory\n");
+                fclose(sf);
+                fclose(f);
+                remove(file_path);
+                FindClose(h_find);
+                {
+                    char cmd[2048];
+#ifdef _WIN32
+                    snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+                    system(cmd);
+#endif
+                }
+                return -1;
+            }
+
+            if (fread(buf, 1, (size_t)sst_size, sf) != (size_t)sst_size) {
+                printf("[SNAPSHOT] ERROR: Failed to read SST file %s\n", find_data.cFileName);
+                kv_free(buf);
+                fclose(sf);
+                fclose(f);
+                remove(file_path);
+                FindClose(h_find);
+                {
+                    char cmd[2048];
+#ifdef _WIN32
+                    snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+                    system(cmd);
+#endif
+                }
+                return -1;
+            }
+
+            fwrite(buf, 1, (size_t)sst_size, f);
+            kv_free(buf);
+            fclose(sf);
+        } while (FindNextFile(h_find, &find_data));
+        FindClose(h_find);
+    }
+#else
+    /* Linux: 使用 opendir/readdir 遍历 SSTable 文件 */
+    {
+        DIR* dir = opendir(tmp_dir);
+        if (dir) {
+            struct dirent* entry;
+            while ((entry = readdir(dir)) != NULL) {
+                const char* name = entry->d_name;
+                size_t name_len = strlen(name);
+                /* 只处理 .sst 文件 */
+                if (name_len < 4 || strcmp(name + name_len - 4, ".sst") != 0) continue;
+
+                char sst_path[2048];
+                snprintf(sst_path, sizeof(sst_path), "%s/%s", tmp_dir, name);
+                struct stat st;
+                if (stat(sst_path, &st) != 0 || !S_ISREG(st.st_mode)) continue;
+
+                FILE* sf = fopen(sst_path, "rb");
+                if (!sf) continue;
+
+                /* 写入文件名长度 + 文件名 */
+                uint32_t nlen = (uint32_t)name_len;
+                if (fwrite(&nlen, 4, 1, f) != 1 ||
+                    fwrite(name, 1, name_len, f) != name_len) {
+                    printf("[SNAPSHOT] ERROR: Failed to write file entry header\n");
+                    fclose(sf);
+                    fclose(f);
+                    remove(file_path);
+                    closedir(dir);
+                    { char cmd[2048]; snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", tmp_dir); system(cmd); }
+                    return -1;
+                }
+
+                /* 写入文件大小 + 文件内容 */
+                uint64_t file_sz = (uint64_t)st.st_size;
+                if (fwrite(&file_sz, 8, 1, f) != 1) {
+                    printf("[SNAPSHOT] ERROR: Failed to write file size\n");
+                    fclose(sf);
+                    fclose(f);
+                    remove(file_path);
+                    closedir(dir);
+                    { char cmd[2048]; snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", tmp_dir); system(cmd); }
+                    return -1;
+                }
+
+                uint8_t* buf = kv_malloc((size_t)st.st_size);
+                if (!buf) {
+                    printf("[SNAPSHOT] ERROR: Out of memory\n");
+                    fclose(sf);
+                    fclose(f);
+                    remove(file_path);
+                    closedir(dir);
+                    { char cmd[2048]; snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", tmp_dir); system(cmd); }
+                    return -1;
+                }
+
+                if (fread(buf, 1, (size_t)st.st_size, sf) != (size_t)st.st_size) {
+                    printf("[SNAPSHOT] ERROR: Failed to read SST file %s\n", name);
+                    kv_free(buf);
+                    fclose(sf);
+                    fclose(f);
+                    remove(file_path);
+                    closedir(dir);
+                    { char cmd[2048]; snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", tmp_dir); system(cmd); }
+                    return -1;
+                }
+
+                fwrite(buf, 1, (size_t)st.st_size, f);
+                kv_free(buf);
+                fclose(sf);
+                file_count++;
+                total_size += (uint64_t)st.st_size;
+            }
+            closedir(dir);
+        }
+    }
+#endif
+
+    /* 写入结束标记 */
+    uint32_t end_marker = 0;
+    fwrite(&end_marker, 4, 1, f);
+
+    fclose(f);
+
+    /* 创建 snapshot.meta 文件 */
+    {
+        char meta_path[1024];
+        snprintf(meta_path, sizeof(meta_path), "%s.meta", file_path);
+        FILE* mf = fopen(meta_path, "w");
+        if (mf) {
+            fprintf(mf, "{\"last_included_index\": %llu, \"last_included_term\": %llu, \"file_count\": %u, \"total_size\": %llu}\n",
+                    (unsigned long long)last_included_index,
+                    (unsigned long long)last_included_term,
+                    (unsigned int)file_count,
+                    (unsigned long long)total_size);
+            fclose(mf);
+            printf("[SNAPSHOT] Metadata written to %s\n", meta_path);
+        } else {
+            printf("[SNAPSHOT] WARNING: Failed to create snapshot.meta\n");
+        }
+    }
+
+    /* 清理临时备份目录 */
+    {
+        char cmd[2048];
+#ifdef _WIN32
+        snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+        system(cmd);
+#else
+        snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", tmp_dir);
+        system(cmd);
+#endif
+    }
+
+    printf("[SNAPSHOT] Created snapshot at %s (index=%llu, term=%llu, files=%u, size=%llu)\n",
+           file_path, (unsigned long long)last_included_index,
+           (unsigned long long)last_included_term,
+           (unsigned int)file_count, (unsigned long long)total_size);
+    return 0;
+}
+
+/* ================================================================
+ * Raft 快照恢复回调：从快照文件恢复 kv_store
+ * ================================================================ */
+static int raft_restore_from_kv(void* state, const char* file_path) {
+    kv_store_t* db = (kv_store_t*)state;
+    if (!db || !file_path) return -1;
+
+    FILE* f = fopen(file_path, "rb");
+    if (!f) {
+        printf("[SNAPSHOT] ERROR: Cannot open snapshot file %s\n", file_path);
+        return -1;
+    }
+
+    /* 跳过头部 */
+    fseek(f, 16, SEEK_SET);
+
+    /* 读取所有文件（SSTable + MANIFEST）并恢复到临时目录 */
+    char tmp_dir[512];
+    snprintf(tmp_dir, sizeof(tmp_dir), "%s.restore", file_path);
+
+#ifdef _WIN32
+    CreateDirectory(tmp_dir, NULL);
+#else
+    mkdir(tmp_dir, 0755);
+#endif
+
+    while (1) {
+        uint32_t name_len;
+        if (fread(&name_len, 4, 1, f) != 1 || name_len == 0) break;
+
+        char fname[256];
+        if (fread(fname, 1, name_len, f) != name_len) break;
+        fname[name_len] = '\0';
+
+        uint64_t file_sz;
+        if (fread(&file_sz, 8, 1, f) != 1) break;
+
+        char out_path[2048];
+        snprintf(out_path, sizeof(out_path), "%s/%s", tmp_dir, fname);
+
+        uint8_t* buf = kv_malloc((size_t)file_sz);
+        if (!buf) {
+            printf("[SNAPSHOT] ERROR: Out of memory during restore\n");
+            fclose(f);
+            {
+                char cmd[2048];
+#ifdef _WIN32
+                snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+                system(cmd);
+#else
+                snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", tmp_dir);
+                system(cmd);
+#endif
+            }
+            return -1;
+        }
+
+        if (fread(buf, 1, (size_t)file_sz, f) != (size_t)file_sz) {
+            printf("[SNAPSHOT] ERROR: Failed to read file %s from snapshot\n", fname);
+            kv_free(buf);
+            fclose(f);
+            {
+                char cmd[2048];
+#ifdef _WIN32
+                snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+                system(cmd);
+#else
+                snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", tmp_dir);
+                system(cmd);
+#endif
+            }
+            return -1;
+        }
+
+        FILE* wf = fopen(out_path, "wb");
+        if (wf) {
+            if (fwrite(buf, 1, (size_t)file_sz, wf) != (size_t)file_sz) {
+                printf("[SNAPSHOT] ERROR: Failed to write %s to temp dir\n", fname);
+                kv_free(buf);
+                fclose(wf);
+                fclose(f);
+                {
+                    char cmd[2048];
+#ifdef _WIN32
+                    snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+                    system(cmd);
+#else
+                    snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", tmp_dir);
+                    system(cmd);
+#endif
+                }
+                return -1;
+            }
+            fclose(wf);
+        }
+        kv_free(buf);
+    }
+    fclose(f);
+
+    /* 使用 kv_import_snapshot_files 高效导入：直接复制 SSTable 文件到数据目录 */
+    if (kv_import_snapshot_files(db, tmp_dir) != 0) {
+        printf("[SNAPSHOT] ERROR: Failed to import snapshot from %s\n", file_path);
+        /* 清理临时目录 */
+        {
+            char cmd[2048];
+#ifdef _WIN32
+            snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+            system(cmd);
+#else
+            snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", tmp_dir);
+            system(cmd);
+#endif
+        }
+        return -1;
+    }
+
+    /* 清理临时目录 */
+    {
+        char cmd[2048];
+#ifdef _WIN32
+        snprintf(cmd, sizeof(cmd), "rmdir /s /q \"%s\" 2>nul", tmp_dir);
+        system(cmd);
+#else
+        snprintf(cmd, sizeof(cmd), "rm -rf \"%s\"", tmp_dir);
+        system(cmd);
+#endif
+    }
+
+    printf("[SNAPSHOT] Restored snapshot from %s\n", file_path);
+    return 0;
 }
 
 /* ================================================================
@@ -206,13 +649,13 @@ int main(int argc, char* argv[]) {
     }
     printf("\n");
 
-    /* 打开 kv_store */
-    g_db = kv_open(data_dir);
+    /* 打开 kv_store（Raft 模式：不创建 WAL） */
+    g_db = kv_open_raft(data_dir);
     if (!g_db) {
         fprintf(stderr, "Failed to open database at %s\n", data_dir);
         return 1;
     }
-    printf("[INFO] KV Store opened at %s\n", data_dir);
+    printf("[INFO] KV Store opened in Raft mode at %s\n", data_dir);
 
     /* 创建 Raft 配置 */
     raft_config_t raft_cfg;
@@ -222,6 +665,8 @@ int main(int argc, char* argv[]) {
     raft_cfg.num_peers = num_peers;
     memcpy(raft_cfg.peers, peers, (size_t)num_peers * sizeof(raft_peer_t));
     snprintf(raft_cfg.data_dir, sizeof(raft_cfg.data_dir), "%s", data_dir);
+    raft_cfg.snapshot_fn = raft_snapshot_to_kv;
+    raft_cfg.restore_fn = raft_restore_from_kv;
 
     /* 创建 Raft 节点 */
     g_raft = raft_create(&raft_cfg, g_db, raft_apply_to_kv);
@@ -231,6 +676,42 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     printf("[INFO] Raft node created\n");
+
+    /* 重启恢复：如果存在快照但数据目录中没有 MANIFEST，先从快照恢复状态机
+     * 这处理的是新节点加入或数据目录损坏后重启的场景 */
+    {
+        raft_snapshot_info_t snap_info;
+        if (raft_get_snapshot_info(g_raft, &snap_info) == 0 && snap_info.last_included_index > 0) {
+            char manifest_path[512];
+            snprintf(manifest_path, sizeof(manifest_path), "%s/" MANIFEST_FILE_NAME, data_dir);
+            FILE* mf = fopen(manifest_path, "rb");
+            if (mf) {
+                fclose(mf);
+                printf("[INFO] MANIFEST exists, skipping snapshot restore\n");
+            } else {
+                printf("[INFO] No MANIFEST found, restoring from snapshot (index=%llu)...\n",
+                       (unsigned long long)snap_info.last_included_index);
+                if (raft_snapshot_restore(g_raft, snap_info.file_path) != 0) {
+                    fprintf(stderr, "WARNING: Failed to restore from snapshot %s\n",
+                            snap_info.file_path);
+                }
+            }
+        }
+    }
+
+    /* 崩溃恢复：重放已提交但未应用的 Raft 日志到 KV 引擎 */
+    {
+        uint64_t term, commit_idx, last_applied;
+        raft_role_t role;
+        size_t log_count;
+        raft_status(g_raft, &term, &role, &commit_idx, &last_applied, &log_count, NULL);
+        printf("[INFO] Raft state: term=%llu, role=%s, commit=%llu, applied=%llu, log_count=%zu\n",
+               (unsigned long long)term, raft_role_str(role),
+               (unsigned long long)commit_idx, (unsigned long long)last_applied, log_count);
+        if (commit_idx > last_applied) {
+            raft_replay_committed(g_raft);
+        }
+    }
 
     /* 启动 Raft */
     if (raft_start(g_raft) != 0) {
@@ -248,7 +729,7 @@ int main(int argc, char* argv[]) {
         uint64_t term;
         raft_role_t role;
         uint64_t commit_idx, last_applied;
-        raft_status(g_raft, &term, &role, &commit_idx, &last_applied);
+        raft_status(g_raft, &term, &role, &commit_idx, &last_applied, NULL, NULL);
 
         if (role == RAFT_LEADER) {
             printf("[INFO] This node is LEADER (term=%llu)\n", (unsigned long long)term);
@@ -286,7 +767,7 @@ int main(int argc, char* argv[]) {
 
     /* 启动 Metrics 服务器（后台线程） */
     if (metrics_port > 0) {
-        if (metrics_server_start(&g_metrics, "0.0.0.0", metrics_port, g_db) != 0) {
+        if (metrics_server_start(&g_metrics, "0.0.0.0", metrics_port, g_db, g_raft) != 0) {
             fprintf(stderr, "WARNING: Failed to start metrics server on port %d\n", metrics_port);
         } else {
 #ifdef _WIN32
@@ -319,7 +800,7 @@ int main(int argc, char* argv[]) {
 
     /* 主线程等待（直到信号停止） */
     while (g_raft) {
-        raft_status(g_raft, NULL, NULL, NULL, NULL);
+        raft_status(g_raft, NULL, NULL, NULL, NULL, NULL, NULL);
 #ifdef _WIN32
         Sleep(1000);
 #else

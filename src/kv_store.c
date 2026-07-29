@@ -26,6 +26,8 @@ typedef SRWLOCK RWLOCK;
 #define ATOMIC_READ64(var) InterlockedExchangeAdd64(&(var), 0)
 #else
 #include <pthread.h>
+#include <dirent.h>
+#include <sys/stat.h>
 typedef pthread_rwlock_t RWLOCK;
 #define RWLOCK_INIT(p) pthread_rwlock_init((p), NULL)
 #define RWLOCK_RDLOCK(p) pthread_rwlock_rdlock((p))
@@ -62,6 +64,9 @@ typedef struct kv_store {
     long long deletes_total;
     long long scans_total;
     long long compactions_total;
+
+    /* Raft 模式：禁用 WAL，由 Raft 日志统一持久化 */
+    int raft_mode;
 } kv_store_t;
 
 typedef struct kv_iter {
@@ -236,6 +241,7 @@ kv_store_t* kv_open(const char* dir_path) {
     db->deletes_total = 0;
     db->scans_total = 0;
     db->compactions_total = 0;
+    db->raft_mode = 0;
     
     db->wal_mgr = wal_mgr_open(dir_path);
     
@@ -272,6 +278,84 @@ kv_store_t* kv_open(const char* dir_path) {
     
     merge_scheduler_start(&db->merge_ctx);
     
+    return db;
+}
+
+/* Raft 模式打开：不创建 WAL，不重放 WAL。
+ * 状态恢复由 Raft 日志重放完成（调用者负责）。
+ * 注意：仍需要 MANIFEST 和 SSTable 文件来支持快照恢复。 */
+kv_store_t* kv_open_raft(const char* dir_path) {
+    if (!dir_path) return NULL;
+    
+#ifdef _WIN32
+    CreateDirectoryA(dir_path, NULL);
+#else
+    mkdir(dir_path, 0755);
+#endif
+    
+    kv_store_t* db = kv_malloc(sizeof(kv_store_t));
+    if (!db) return NULL;
+    
+    memset(db, 0, sizeof(kv_store_t));
+    
+    db->dir_path = kv_strdup(dir_path);
+    if (!db->dir_path) {
+        kv_free(db);
+        return NULL;
+    }
+    
+    db->memtable = skiplist_new();
+    if (!db->memtable) {
+        kv_free(db->dir_path);
+        kv_free(db);
+        return NULL;
+    }
+    
+    db->immutable_memtable = NULL;
+    db->memtable_size = 0;
+    db->compression_type = COMPRESSION_ZSTD;
+    
+    /* 初始化指标计数器 */
+    db->puts_total = 0;
+    db->gets_total = 0;
+    db->get_misses_total = 0;
+    db->deletes_total = 0;
+    db->scans_total = 0;
+    db->compactions_total = 0;
+    
+    /* Raft 模式：不创建 WAL */
+    db->raft_mode = 1;
+    db->wal_mgr = NULL;
+    
+    db->manifest = manifest_open(dir_path);
+    if (!db->manifest) {
+        skiplist_free(db->memtable);
+        kv_free(db->dir_path);
+        kv_free(db);
+        return NULL;
+    }
+    
+    db->block_cache = lru_cache_new(1024);
+    
+    db->merge_ctx.dir_path = db->dir_path;
+    db->merge_ctx.manifest = db->manifest;
+    db->merge_ctx.cache = db->block_cache;
+    db->merge_ctx.manifest_lock = &db->manifest_lock;
+    db->merge_ctx.stop = 0;
+    db->merge_ctx.thread_started = 0;
+    db->merge_ctx.compression_type = db->compression_type;
+    
+    RWLOCK_INIT(&db->rwlock);
+    
+    #ifdef _WIN32
+    InitializeCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_init(&db->manifest_lock, NULL);
+    #endif
+    
+    merge_scheduler_start(&db->merge_ctx);
+    
+    printf("[KV] Opened in Raft mode (no WAL) at %s\n", dir_path);
     return db;
 }
 
@@ -320,7 +404,8 @@ int kv_put(kv_store_t* db, const char* key, size_t klen, const char* val, size_t
     
     RWLOCK_WRLOCK(&db->rwlock);
     
-    if (db->wal_mgr) {
+    /* Raft 模式下跳过 WAL 写入（由 Raft 日志统一持久化） */
+    if (db->wal_mgr && !db->raft_mode) {
         wal_mgr_write(db->wal_mgr, WAL_PUT, key, klen, val, vlen);
     }
     
@@ -513,7 +598,8 @@ int kv_delete(kv_store_t* db, const char* key, size_t klen) {
     
     RWLOCK_WRLOCK(&db->rwlock);
     
-    if (db->wal_mgr) {
+    /* Raft 模式下跳过 WAL 写入（由 Raft 日志统一持久化） */
+    if (db->wal_mgr && !db->raft_mode) {
         wal_mgr_write(db->wal_mgr, WAL_DELETE, key, klen, NULL, 0);
     }
     
@@ -982,6 +1068,62 @@ static int copy_file(const char* src, const char* dst) {
     return 0;
 }
 
+/* ================================================================
+ * Raft 模式：内部写入函数（无 WAL）
+ * ================================================================ */
+
+void kv_set_raft_mode(kv_store_t* db, int enabled) {
+    if (!db) return;
+    db->raft_mode = enabled;
+    if (enabled && db->wal_mgr) {
+        /* 关闭 WAL 管理器，不再写入独立 WAL */
+        wal_mgr_close(db->wal_mgr);
+        db->wal_mgr = NULL;
+    }
+    printf("[KV] Raft mode %s\n", enabled ? "enabled" : "disabled");
+}
+
+int kv_put_internal(kv_store_t* db, const char* key, size_t klen, const char* val, size_t vlen) {
+    if (!db || !key || klen == 0 || !val) return -1;
+
+    RWLOCK_WRLOCK(&db->rwlock);
+
+    skiplist_insert(db->memtable, key, klen, val, vlen);
+    db->memtable_size += klen + vlen;
+
+    ATOMIC_INC64(db->puts_total);
+
+    if (db->memtable_size >= MEMTABLE_SIZE_LIMIT) {
+        RWLOCK_UNLOCK_W(&db->rwlock);
+        kv_switch_memtable(db);
+        return 0;
+    }
+
+    RWLOCK_UNLOCK_W(&db->rwlock);
+    return 0;
+}
+
+int kv_delete_internal(kv_store_t* db, const char* key, size_t klen) {
+    if (!db || !key || klen == 0) return -1;
+
+    RWLOCK_WRLOCK(&db->rwlock);
+
+    /* tombstone 插入 */
+    skiplist_insert(db->memtable, key, klen, NULL, 0);
+    db->memtable_size += klen;
+
+    ATOMIC_INC64(db->deletes_total);
+
+    if (db->memtable_size >= MEMTABLE_SIZE_LIMIT) {
+        RWLOCK_UNLOCK_W(&db->rwlock);
+        kv_switch_memtable(db);
+        return 0;
+    }
+
+    RWLOCK_UNLOCK_W(&db->rwlock);
+    return 0;
+}
+
 int kv_backup(kv_store_t* db, const char* backup_dir) {
     if (!db || !backup_dir) return -1;
 
@@ -1056,10 +1198,29 @@ int kv_backup(kv_store_t* db, const char* backup_dir) {
             FindClose(hFind);
         }
 #else
-        /* POSIX: 使用简单的 glob 模式 */
-        char cmd[1024];
-        snprintf(cmd, sizeof(cmd), "cp %s/wal_*.log %s/ 2>/dev/null", db->dir_path, backup_dir);
-        system(cmd);
+        /* Linux: 使用 opendir/readdir 遍历 WAL 文件 */
+        {
+            DIR* dir = opendir(db->dir_path);
+            if (dir) {
+                struct dirent* entry;
+                while ((entry = readdir(dir)) != NULL) {
+                    const char* name = entry->d_name;
+                    size_t name_len = strlen(name);
+                    /* 匹配 wal_*.log 模式 */
+                    if (name_len < 8) continue;
+                    if (strncmp(name, "wal_", 4) != 0) continue;
+                    const char* ext = name + name_len - 4;
+                    if (strcmp(ext, ".log") != 0) continue;
+                    snprintf(src_path, sizeof(src_path), "%s/%s", db->dir_path, name);
+                    snprintf(dst_path, sizeof(dst_path), "%s/%s", backup_dir, name);
+                    if (copy_file(src_path, dst_path) != 0) {
+                        printf("[BACKUP] WARNING: Failed to copy WAL %s\n", name);
+                        errors++;
+                    }
+                }
+                closedir(dir);
+            }
+        }
 #endif
     }
 
@@ -1166,4 +1327,117 @@ kv_store_t* kv_restore(const char* backup_dir, const char* target_dir) {
 
     printf("[RESTORE] Database restored successfully\n");
     return db;
+}
+
+/* ================================================================
+ * 快照导入：高效地将快照目录中的 SSTable 文件导入到当前数据库
+ *
+ * 流程：
+ *   1. 停止 merge 调度器
+ *   2. 刷盘活跃 memtable
+ *   3. 清空 manifest
+ *   4. 复制 MANIFEST 从快照目录到数据目录
+ *   5. 扫描快照目录中的 .sst 文件并复制到数据目录
+ *   6. 重新加载 manifest
+ *   7. 重启 merge 调度器
+ * ================================================================ */
+int kv_import_snapshot_files(kv_store_t* db, const char* snapshot_data_dir) {
+    if (!db || !snapshot_data_dir) return -1;
+
+    printf("[IMPORT] Importing snapshot files from %s...\n", snapshot_data_dir);
+
+    /* 1. 停止 merge 调度器并等待后台线程退出 */
+    merge_scheduler_stop(&db->merge_ctx);
+    merge_scheduler_join(&db->merge_ctx);
+
+    /* 2. 刷盘活跃 memtable */
+    RWLOCK_WRLOCK(&db->rwlock);
+    if (db->memtable && skiplist_count(db->memtable) > 0) {
+        db->immutable_memtable = db->memtable;
+        db->memtable = skiplist_new();
+        db->memtable_size = 0;
+    }
+    RWLOCK_UNLOCK_W(&db->rwlock);
+
+    if (db->immutable_memtable) {
+        kv_flush_memtable(db);
+    }
+
+    /* 3. 清空 manifest */
+    manifest_clear(db->manifest);
+
+    /* 4. 复制 MANIFEST 从快照目录到数据目录 */
+    char src_path[512], dst_path[512];
+    snprintf(src_path, sizeof(src_path), "%s/" MANIFEST_FILE_NAME, snapshot_data_dir);
+    snprintf(dst_path, sizeof(dst_path), "%s/" MANIFEST_FILE_NAME, db->dir_path);
+    if (copy_file(src_path, dst_path) != 0) {
+        printf("[IMPORT] WARNING: MANIFEST not found in snapshot %s\n", src_path);
+        /* 没有 MANIFEST 不算致命错误，继续尝试导入 */
+    }
+
+    /* 也复制 MANIFEST.tmp（如果存在） */
+    snprintf(src_path, sizeof(src_path), "%s/" MANIFEST_TMP_FILE_NAME, snapshot_data_dir);
+    snprintf(dst_path, sizeof(dst_path), "%s/" MANIFEST_TMP_FILE_NAME, db->dir_path);
+    copy_file(src_path, dst_path);  /* 忽略错误 */
+
+    /* 5. 扫描快照目录中的 .sst 文件并复制到数据目录 */
+    char search_pattern[512];
+    snprintf(search_pattern, sizeof(search_pattern), "%s/*.sst", snapshot_data_dir);
+
+#ifdef _WIN32
+    WIN32_FIND_DATAA find_data;
+    HANDLE h_find = FindFirstFileA(search_pattern, &find_data);
+    if (h_find != INVALID_HANDLE_VALUE) {
+        do {
+            snprintf(src_path, sizeof(src_path), "%s/%s", snapshot_data_dir, find_data.cFileName);
+            snprintf(dst_path, sizeof(dst_path), "%s/%s", db->dir_path, find_data.cFileName);
+
+            if (copy_file(src_path, dst_path) != 0) {
+                printf("[IMPORT] ERROR: Failed to copy %s\n", find_data.cFileName);
+                FindClose(h_find);
+                merge_scheduler_start(&db->merge_ctx);
+                return -1;
+            }
+            printf("[IMPORT] Copied %s to data directory\n", find_data.cFileName);
+        } while (FindNextFileA(h_find, &find_data));
+        FindClose(h_find);
+    }
+#else
+    /* Linux: 使用 opendir/readdir 扫描 .sst 文件 */
+    {
+        DIR* dir = opendir(snapshot_data_dir);
+        if (dir) {
+            struct dirent* entry;
+            while ((entry = readdir(dir)) != NULL) {
+                const char* name = entry->d_name;
+                size_t name_len = strlen(name);
+                if (name_len < 4 || strcmp(name + name_len - 4, ".sst") != 0) continue;
+
+                snprintf(src_path, sizeof(src_path), "%s/%s", snapshot_data_dir, name);
+                snprintf(dst_path, sizeof(dst_path), "%s/%s", db->dir_path, name);
+
+                if (copy_file(src_path, dst_path) != 0) {
+                    printf("[IMPORT] ERROR: Failed to copy %s\n", name);
+                    closedir(dir);
+                    merge_scheduler_start(&db->merge_ctx);
+                    return -1;
+                }
+                printf("[IMPORT] Copied %s to data directory\n", name);
+            }
+            closedir(dir);
+        }
+    }
+#endif
+
+    /* 6. 从复制的 MANIFEST 文件重新加载 manifest */
+    manifest_load(db->manifest);
+
+    /* 7. 同步 manifest 到磁盘 */
+    manifest_sync(db->manifest);
+
+    /* 8. 重启 merge 调度器 */
+    merge_scheduler_start(&db->merge_ctx);
+
+    printf("[IMPORT] Snapshot import completed successfully\n");
+    return 0;
 }

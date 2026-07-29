@@ -112,6 +112,17 @@ int manifest_remove_file(manifest_t* m, uint64_t file_id) {
     return -1;
 }
 
+int manifest_clear(manifest_t* m) {
+    if (!m) return -1;
+    
+    manifest_files_free(m->files);
+    m->files = NULL;
+    m->next_file_id = 1;
+    m->version = 0;
+    
+    return 0;
+}
+
 int manifest_list_files(manifest_t* m, int level, manifest_file_t*** out_files, size_t* out_count) {
     if (!m || !out_files || !out_count) return -1;
     

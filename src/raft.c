@@ -68,9 +68,20 @@
 #define RAFT_RPC_PROPOSE_REQ   4
 #define RAFT_RPC_PROPOSE_RESP  5
 #define RAFT_RPC_REDIRECT      6
+#define RAFT_RPC_SNAPSHOT_REQ  7
+#define RAFT_RPC_SNAPSHOT_RESP 8
+#define RAFT_RPC_SNAPSHOT_CHUNK 9  /* 快照分块传输 */
 
 #define RAFT_MAX_MSG_SIZE      (1024 * 1024)  /* 1MB */
 #define RAFT_MAX_LOG_ENTRIES   10000
+#define RAFT_SNAPSHOT_CHUNK_SIZE  (512 * 1024)  /* 512KB per chunk */
+
+/* 前向声明 */
+static void raft_handle_snapshot_request(raft_t* r, SOCKET fd, uint8_t* data, size_t data_len);
+static void raft_handle_snapshot_response(raft_t* r, int peer_index, uint8_t* data, size_t data_len);
+static void raft_handle_snapshot_chunk(raft_t* r, SOCKET fd, uint8_t* data, size_t data_len);
+static void raft_leader_send_snapshot(raft_t* r, int peer_index);
+int raft_snapshot_create(raft_t* r);
 
 /* --- 简单网络字节序辅助 --- */
 static inline void write_u64(uint8_t* buf, uint64_t v) {
@@ -162,7 +173,32 @@ struct raft {
     mutex_t     propose_mutex;
     int         propose_done;
     int         propose_result;
+
+    /* 快照 */
+    uint64_t    snapshot_index;    /* 快照最后包含的索引，0 表示无快照 */
+    uint64_t    snapshot_term;     /* 快照最后包含的 term */
+    char        snapshot_path[512]; /* 快照文件路径 */
+
+    /* 日志大小追踪 */
+    size_t      log_size_bytes;    /* 当前日志总字节数 */
+    size_t      snapshot_size_bytes; /* 快照文件大小 */
+
+    /* 快照分块接收状态 */
+    struct {
+        int      active;           /* 是否正在接收快照 */
+        uint64_t last_included_index;
+        uint64_t last_included_term;
+        uint64_t total_size;
+        uint64_t received;
+        char     tmp_path[512];    /* 临时文件路径 */
+        FILE*    file;             /* 临时文件句柄 */
+    } snap_chunk_state;
 };
+
+/* --- 辅助：计算日志条目大小 --- */
+static size_t raft_log_entry_size(raft_log_entry_t* e) {
+    return sizeof(uint64_t) * 3 + 1 + e->key_len + e->value_len;
+}
 
 /* --- 辅助：查找 peer 索引 --- */
 static int raft_find_peer(raft_t* r, const char* node_id) {
@@ -179,7 +215,25 @@ static int raft_self_index(raft_t* r) {
 
 /* ================================================================
  * 日志持久化
+ *
+ * raft_log 文件格式 v3:
+ *  magic "RAFT" (4B)
+ *  version (4B) = 3
+ *  snapshot_index (8B)       -- 0 表示无快照
+ *  snapshot_term (8B)
+ *  snapshot_path_len (4B)
+ *  snapshot_path (variable)
+ *  snapshot_size_bytes (8B)  -- 快照文件大小
+ *  log_size_bytes (8B)       -- 当前日志总大小
+ *  --- 以下与 v1 相同 ---
+ *  current_term (8B)
+ *  voted_for_len (4B)
+ *  voted_for (variable)
+ *  log_count (8B)
+ *  log entries...
  * ================================================================ */
+#define RAFT_LOG_MAGIC  0x54464152  /* "RAFT" in little-endian */
+#define RAFT_LOG_VERSION 3
 
 static int raft_log_save(raft_t* r) {
     char path[512];
@@ -187,6 +241,25 @@ static int raft_log_save(raft_t* r) {
 
     FILE* f = fopen(path, "wb");
     if (!f) return -1;
+
+    /* 写入 magic + version */
+    uint32_t magic = RAFT_LOG_MAGIC;
+    uint32_t version = RAFT_LOG_VERSION;
+    fwrite(&magic, 4, 1, f);
+    fwrite(&version, 4, 1, f);
+
+    /* 写入快照元数据 */
+    fwrite(&r->snapshot_index, 8, 1, f);
+    fwrite(&r->snapshot_term, 8, 1, f);
+    uint32_t snap_path_len = (uint32_t)strlen(r->snapshot_path);
+    fwrite(&snap_path_len, 4, 1, f);
+    if (snap_path_len > 0) fwrite(r->snapshot_path, 1, snap_path_len, f);
+
+    /* 写入快照和日志大小 */
+    uint64_t snap_size = (uint64_t)r->snapshot_size_bytes;
+    uint64_t log_size = (uint64_t)r->log_size_bytes;
+    fwrite(&snap_size, 8, 1, f);
+    fwrite(&log_size, 8, 1, f);
 
     /* 写入 current_term */
     fwrite(&r->current_term, 8, 1, f);
@@ -224,15 +297,74 @@ static int raft_log_load(raft_t* r) {
     char path[512];
     snprintf(path, sizeof(path), "%s/raft_log", r->cfg.data_dir);
 
+    /* 初始化日志 */
+    r->log_capacity = 1024;
+    r->log = kv_malloc(r->log_capacity * sizeof(raft_log_entry_t));
+    r->log_count = 0;
+
     FILE* f = fopen(path, "rb");
     if (!f) {
         /* 首次启动，无日志 */
         r->current_term = 0;
         memset(r->voted_for, 0, sizeof(r->voted_for));
-        r->log_count = 0;
-        r->log_capacity = 1024;
-        r->log = kv_malloc(r->log_capacity * sizeof(raft_log_entry_t));
+        r->snapshot_index = 0;
+        r->snapshot_term = 0;
+        r->snapshot_path[0] = '\0';
+        printf("[RAFT] No existing log, starting fresh\n");
         return 0;
+    }
+
+    /* 获取文件大小 */
+    fseek(f, 0, SEEK_END);
+    long file_size = ftell(f);
+    fseek(f, 0, SEEK_SET);
+
+    if (file_size < 8) { fclose(f); return -1; }
+
+    /* 读取 magic 和 version */
+    uint32_t magic = 0, version = 0;
+    if (fread(&magic, 4, 1, f) != 1) { fclose(f); return -1; }
+    if (fread(&version, 4, 1, f) != 1) { fclose(f); return -1; }
+
+    int is_v2 = (magic == RAFT_LOG_MAGIC && version >= 2);
+    int is_v3 = (magic == RAFT_LOG_MAGIC && version >= 3);
+
+    if (is_v2) {
+        /* --- v2/v3 格式：读取快照元数据 --- */
+        if (fread(&r->snapshot_index, 8, 1, f) != 1) { fclose(f); return -1; }
+        if (fread(&r->snapshot_term, 8, 1, f) != 1) { fclose(f); return -1; }
+
+        uint32_t snap_path_len = 0;
+        if (fread(&snap_path_len, 4, 1, f) != 1) { fclose(f); return -1; }
+        if (snap_path_len > 0 && snap_path_len < sizeof(r->snapshot_path)) {
+            fread(r->snapshot_path, 1, snap_path_len, f);
+            r->snapshot_path[snap_path_len] = '\0';
+        } else {
+            r->snapshot_path[0] = '\0';
+        }
+
+        /* v3: 读取快照和日志大小 */
+        if (is_v3) {
+            uint64_t snap_size = 0, log_size = 0;
+            if (fread(&snap_size, 8, 1, f) != 1) { fclose(f); return -1; }
+            if (fread(&log_size, 8, 1, f) != 1) { fclose(f); return -1; }
+            r->snapshot_size_bytes = (size_t)snap_size;
+            r->log_size_bytes = (size_t)log_size;
+        } else {
+            r->snapshot_size_bytes = 0;
+            r->log_size_bytes = 0;
+        }
+
+        printf("[RAFT] Loaded snapshot metadata: index=%llu, term=%llu\n",
+               (unsigned long long)r->snapshot_index, (unsigned long long)r->snapshot_term);
+    } else {
+        /* v1 格式：无快照，回退到文件开头 */
+        r->snapshot_index = 0;
+        r->snapshot_term = 0;
+        r->snapshot_path[0] = '\0';
+        r->snapshot_size_bytes = 0;
+        r->log_size_bytes = 0;
+        fseek(f, 0, SEEK_SET);
     }
 
     /* 读取 current_term */
@@ -248,8 +380,10 @@ static int raft_log_load(raft_t* r) {
     /* 读取日志条目 */
     uint64_t count = 0;
     if (fread(&count, 8, 1, f) != 1) { fclose(f); return -1; }
-    r->log_capacity = (count > 1024) ? count + 1024 : 1024;
-    r->log = kv_malloc(r->log_capacity * sizeof(raft_log_entry_t));
+    if (count > r->log_capacity) {
+        r->log_capacity = (size_t)count + 1024;
+        r->log = kv_realloc(r->log, r->log_capacity * sizeof(raft_log_entry_t));
+    }
     r->log_count = (size_t)count;
 
     for (size_t i = 0; i < r->log_count; i++) {
@@ -277,12 +411,26 @@ static int raft_log_load(raft_t* r) {
 
     fclose(f);
 
-    /* 初始化 commit_index 和 last_applied */
-    r->commit_index = r->log_count > 0 ? r->log[r->log_count - 1].index : 0;
-    r->last_applied = r->commit_index;
+    /* 如果 log_size_bytes 为 0（v2 格式），重新计算 */
+    if (r->log_size_bytes == 0) {
+        for (size_t i = 0; i < r->log_count; i++) {
+            r->log_size_bytes += raft_log_entry_size(&r->log[i]);
+        }
+    }
 
-    printf("[RAFT] Loaded log: term=%llu, entries=%zu\n",
-           (unsigned long long)r->current_term, r->log_count);
+    /* 初始化 commit_index 和 last_applied */
+    /* 如果存在快照，起始索引为快照索引 */
+    uint64_t base_index = r->snapshot_index;
+    if (r->log_count > 0) {
+        r->commit_index = r->log[r->log_count - 1].index;
+    } else {
+        r->commit_index = base_index;
+    }
+    r->last_applied = base_index;  /* 快照数据已经 applied，只需应用后续日志 */
+
+    printf("[RAFT] Loaded log: term=%llu, entries=%zu, snapshot_idx=%llu, commit=%llu\n",
+           (unsigned long long)r->current_term, r->log_count,
+           (unsigned long long)r->snapshot_index, (unsigned long long)r->commit_index);
     return 0;
 }
 
@@ -367,16 +515,18 @@ static int rpc_send_append_request(SOCKET fd, uint64_t term, const char* leader_
 }
 
 /* AppendEntries 响应 */
-static int rpc_send_append_response(SOCKET fd, uint64_t term, int success, uint64_t last_idx) {
+static int rpc_send_append_response(SOCKET fd, uint64_t term, int success, uint64_t last_idx,
+                                     int need_snapshot) {
     uint8_t buf[32];
     buf[0] = RAFT_RPC_APPEND_RESP;
     write_u64(buf + 1, term);
     buf[9] = (uint8_t)(success ? 1 : 0);
     write_u64(buf + 10, last_idx);
-    uint32_t total = 18;
-    write_u32(buf + 18, total);
-    send(fd, (const char*)buf + 18, 4, 0);
-    send(fd, (const char*)buf, 18, 0);
+    buf[18] = (uint8_t)(need_snapshot ? 1 : 0);
+    uint32_t total = 19;
+    write_u32(buf + 19, total);
+    send(fd, (const char*)buf + 19, 4, 0);
+    send(fd, (const char*)buf, 19, 0);
     return 0;
 }
 
@@ -460,7 +610,14 @@ static void raft_become_leader(raft_t* r) {
            (unsigned long long)r->current_term);
 
     /* 初始化 leader 状态 */
-    uint64_t last_log_idx = r->log_count > 0 ? r->log[r->log_count - 1].index : 0;
+    uint64_t last_log_idx;
+    if (r->log_count > 0) {
+        last_log_idx = r->log[r->log_count - 1].index;
+    } else if (r->snapshot_index > 0) {
+        last_log_idx = r->snapshot_index;
+    } else {
+        last_log_idx = 0;
+    }
     for (int i = 0; i < r->cfg.num_peers; i++) {
         r->next_index[i] = last_log_idx + 1;
         r->match_index[i] = 0;
@@ -478,7 +635,14 @@ static void raft_become_leader(raft_t* r) {
 
 /* 检查自身日志是否至少和 candidate 一样新 */
 static int raft_log_is_up_to_date(raft_t* r, uint64_t last_idx, uint64_t last_term) {
-    if (r->log_count == 0) return 1; /* no log, accept any */
+    if (r->log_count == 0) {
+        /* 日志为空（可能已被快照截断），使用快照信息 */
+        if (r->snapshot_index > 0) {
+            if (last_term != r->snapshot_term) return last_term > r->snapshot_term;
+            return last_idx >= r->snapshot_index;
+        }
+        return 1; /* 无日志无快照，接受任何 */
+    }
     uint64_t my_last_term = r->log[r->log_count - 1].term;
     uint64_t my_last_idx = r->log[r->log_count - 1].index;
     if (last_term != my_last_term) return last_term > my_last_term;
@@ -614,10 +778,14 @@ static void raft_handle_append_request(raft_t* r, SOCKET fd, uint8_t* data, size
 
     /* 1. 如果 term < currentTerm，拒绝 */
     if (term < r->current_term) {
-        /* 获取 last log index */
-        last_idx = r->log_count > 0 ? r->log[r->log_count - 1].index : 0;
+        /* 获取 last log index（优先日志，否则快照） */
+        if (r->log_count > 0) {
+            last_idx = r->log[r->log_count - 1].index;
+        } else if (r->snapshot_index > 0) {
+            last_idx = r->snapshot_index;
+        }
         MUTEX_UNLOCK(&r->mutex);
-        rpc_send_append_response(fd, r->current_term, 0, last_idx);
+        rpc_send_append_response(fd, r->current_term, 0, last_idx, 0);
         return;
     }
 
@@ -646,15 +814,35 @@ static void raft_handle_append_request(raft_t* r, SOCKET fd, uint8_t* data, size
     /* 3. 检查 prevLogIndex/prevLogTerm */
     if (prev_idx > 0) {
         int found = 0;
-        for (size_t i = 0; i < r->log_count; i++) {
-            if (r->log[i].index == prev_idx) {
-                if (r->log[i].term == prev_term) {
+
+        /* 特殊处理：prev_idx 落在快照范围内 */
+        if (r->snapshot_index > 0 && prev_idx <= r->snapshot_index) {
+            if (prev_idx == r->snapshot_index) {
+                /* prev_idx 正好是快照的最后索引，检查 term 是否匹配 */
+                if (prev_term == r->snapshot_term) {
                     found = 1;
                 }
-                break;
+            } else if (prev_idx < r->snapshot_index) {
+                /* prev_idx 在快照之前，快照已包含这些数据，接受 */
+                found = 1;
             }
         }
+
+        if (!found) {
+            for (size_t i = 0; i < r->log_count; i++) {
+                if (r->log[i].index == prev_idx) {
+                    if (r->log[i].term == prev_term) {
+                        found = 1;
+                    }
+                    break;
+                }
+            }
+        }
+
         if (!found && prev_idx != 0) {
+            /* 判断是否需要快照：prev_idx 在快照之前但 term 不匹配 */
+            int need_snap = (r->snapshot_index > 0 && prev_idx <= r->snapshot_index) ? 1 : 0;
+
             /* 冲突：删除冲突及之后的条目 */
             size_t new_count = 0;
             for (size_t i = 0; i < r->log_count; i++) {
@@ -662,16 +850,17 @@ static void raft_handle_append_request(raft_t* r, SOCKET fd, uint8_t* data, size
                     new_count = i + 1;
                 }
             }
-            /* 释放被删除的条目 */
+            /* 释放被删除的条目并更新 log_size_bytes */
             for (size_t i = new_count; i < r->log_count; i++) {
+                r->log_size_bytes -= raft_log_entry_size(&r->log[i]);
                 kv_free(r->log[i].key);
                 kv_free(r->log[i].value);
             }
             r->log_count = new_count;
-            last_idx = r->log_count > 0 ? r->log[r->log_count - 1].index : 0;
+            last_idx = r->log_count > 0 ? r->log[r->log_count - 1].index : r->snapshot_index;
             MUTEX_UNLOCK(&r->mutex);
             raft_log_save(r);
-            rpc_send_append_response(fd, r->current_term, 0, last_idx);
+            rpc_send_append_response(fd, r->current_term, 0, last_idx, need_snap);
             return;
         }
     }
@@ -696,6 +885,14 @@ static void raft_handle_append_request(raft_t* r, SOCKET fd, uint8_t* data, size
             off += (size_t)val_len;
         }
 
+        /* 跳过已包含在快照中的条目 */
+        if (r->snapshot_index > 0 && e_index <= r->snapshot_index) {
+            kv_free(key);
+            kv_free(val);
+            last_idx = e_index;
+            continue;
+        }
+
         /* 检查是否与现有日志冲突 */
         int found_existing = 0;
         for (size_t j = 0; j < r->log_count; j++) {
@@ -703,6 +900,7 @@ static void raft_handle_append_request(raft_t* r, SOCKET fd, uint8_t* data, size
                 if (r->log[j].term != e_term) {
                     /* 冲突：删除此条目及之后 */
                     for (size_t k = j; k < r->log_count; k++) {
+                        r->log_size_bytes -= raft_log_entry_size(&r->log[k]);
                         kv_free(r->log[k].key);
                         kv_free(r->log[k].value);
                     }
@@ -733,6 +931,7 @@ static void raft_handle_append_request(raft_t* r, SOCKET fd, uint8_t* data, size
             ne->key_len = (size_t)key_len;
             ne->value = val;
             ne->value_len = val ? (size_t)val_len : 0;
+            r->log_size_bytes += raft_log_entry_size(ne);
         }
 
         last_idx = e_index;
@@ -748,7 +947,7 @@ static void raft_handle_append_request(raft_t* r, SOCKET fd, uint8_t* data, size
     MUTEX_UNLOCK(&r->mutex);
 
     raft_log_save(r);
-    rpc_send_append_response(fd, r->current_term, success, last_idx);
+    rpc_send_append_response(fd, r->current_term, success, last_idx, 0);
 
     /* apply committed */
     MUTEX_LOCK(&r->mutex);
@@ -757,11 +956,12 @@ static void raft_handle_append_request(raft_t* r, SOCKET fd, uint8_t* data, size
 }
 
 /* 处理 AppendEntries 响应 */
-static void raft_handle_append_response(raft_t* r, uint8_t* data, size_t data_len) {
+static void raft_handle_append_response(raft_t* r, int peer_index, uint8_t* data, size_t data_len) {
     if (data_len < 18) return;
     uint64_t term = read_u64(data + 1);
     int success = data[9] != 0;
     uint64_t last_idx = read_u64(data + 10);
+    int need_snapshot = (data_len >= 19) ? (data[18] != 0) : 0;
 
     MUTEX_LOCK(&r->mutex);
 
@@ -777,20 +977,29 @@ static void raft_handle_append_response(raft_t* r, uint8_t* data, size_t data_le
         return;
     }
 
-    /* 这里需要知道是哪个 peer 的响应……简化处理：
-     * 单次 AppendEntries 发送给所有 peer，我们通过 last_idx 更新 match_index。
-     * 实际生产代码需要更好的 peer 追踪机制。 */
-    /* 对于演示目的，遍历所有 peer 更新 match_index */
-    for (int i = 0; i < r->cfg.num_peers; i++) {
-        if (i == raft_self_index(r)) continue;
+    /* 更新指定 peer 的 match_index 和 next_index */
+    if (peer_index >= 0 && peer_index < r->cfg.num_peers) {
         if (success) {
-            if (last_idx > r->match_index[i]) {
-                r->match_index[i] = last_idx;
-                r->next_index[i] = last_idx + 1;
+            if (last_idx > r->match_index[peer_index]) {
+                r->match_index[peer_index] = last_idx;
+                r->next_index[peer_index] = last_idx + 1;
             }
         } else {
-            if (r->next_index[i] > 1) {
-                r->next_index[i]--;
+            /* Follower 发送了 need_snapshot 标志：立即发送快照 */
+            if (need_snapshot && r->snapshot_index > 0) {
+                printf("[RAFT] Follower %s needs snapshot (snapshot_index=%llu)\n",
+                       r->cfg.peers[peer_index].id, (unsigned long long)r->snapshot_index);
+                MUTEX_UNLOCK(&r->mutex);
+                raft_leader_send_snapshot(r, peer_index);
+                return;
+            }
+
+            /* 使用 last_idx 快速跳过（而非逐个递减） */
+            if (last_idx > 0 && last_idx < r->next_index[peer_index]) {
+                r->next_index[peer_index] = last_idx + 1;
+                if (r->next_index[peer_index] < 1) r->next_index[peer_index] = 1;
+            } else if (r->next_index[peer_index] > 1) {
+                r->next_index[peer_index]--;
             }
         }
     }
@@ -833,14 +1042,26 @@ static void raft_leader_send_heartbeat(raft_t* r) {
 
         /* 准备发送的日志条目 */
         uint64_t next = r->next_index[i];
+
+        /* 如果 follower 落后太多（next_index <= snapshot_index），发送快照 */
+        if (r->snapshot_index > 0 && next <= r->snapshot_index) {
+            raft_leader_send_snapshot(r, i);
+            continue;
+        }
+
         prev_idx = next - 1;
         prev_term = 0;
 
         if (prev_idx > 0) {
-            for (size_t j = 0; j < r->log_count; j++) {
-                if (r->log[j].index == prev_idx) {
-                    prev_term = r->log[j].term;
-                    break;
+            /* 如果 prev_idx 正好是快照索引，使用快照的 term */
+            if (r->snapshot_index > 0 && prev_idx == r->snapshot_index) {
+                prev_term = r->snapshot_term;
+            } else {
+                for (size_t j = 0; j < r->log_count; j++) {
+                    if (r->log[j].index == prev_idx) {
+                        prev_term = r->log[j].term;
+                        break;
+                    }
                 }
             }
         }
@@ -872,7 +1093,7 @@ static void raft_leader_send_heartbeat(raft_t* r) {
             uint8_t resp_buf[256];
             int total = recv(fd, (char*)resp_buf, (int)resp_len, 0);
             if (total == (int)resp_len) {
-                raft_handle_append_response(r, resp_buf, resp_len);
+                raft_handle_append_response(r, i, resp_buf, resp_len);
             }
         }
         close_socket(fd);
@@ -886,8 +1107,18 @@ static void raft_candidate_start_election(raft_t* r) {
         (rand() % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
     r->last_heartbeat_ms = thread_time_ms(); /* 重置计时器 */
 
-    uint64_t last_log_idx = r->log_count > 0 ? r->log[r->log_count - 1].index : 0;
-    uint64_t last_log_term = r->log_count > 0 ? r->log[r->log_count - 1].term : 0;
+    uint64_t last_log_idx;
+    uint64_t last_log_term;
+    if (r->log_count > 0) {
+        last_log_idx = r->log[r->log_count - 1].index;
+        last_log_term = r->log[r->log_count - 1].term;
+    } else if (r->snapshot_index > 0) {
+        last_log_idx = r->snapshot_index;
+        last_log_term = r->snapshot_term;
+    } else {
+        last_log_idx = 0;
+        last_log_term = 0;
+    }
 
     int self_idx = raft_self_index(r);
     for (int i = 0; i < r->cfg.num_peers; i++) {
@@ -969,6 +1200,8 @@ static void raft_handle_propose_request(raft_t* r, SOCKET fd, uint8_t* data, siz
     ne->key_len = (size_t)key_len;
     ne->value = val;
     ne->value_len = val ? (size_t)val_len : 0;
+
+    r->log_size_bytes += raft_log_entry_size(ne);
 
     /* 立即尝试复制 */
     r->match_index[raft_self_index(r)] = new_idx;
@@ -1052,6 +1285,28 @@ static void* raft_event_loop(void* arg) {
                 raft_leader_send_heartbeat(r);
                 MUTEX_LOCK(&r->mutex);
             }
+
+            /* 自动触发快照（周期性：日志积累超过阈值即触发） */
+            if (r->log_count >= RAFT_SNAPSHOT_LOG_THRESHOLD ||
+                r->log_size_bytes >= RAFT_SNAPSHOT_LOG_SIZE_THRESHOLD) {
+                /* 避免频繁快照：至少等 5 秒，或日志增长超过上次快照的 50% */
+                static uint64_t last_snapshot_ms = 0;
+                uint64_t now2 = thread_time_ms();
+                int should_snap = 0;
+                if (last_snapshot_ms == 0 || (now2 - last_snapshot_ms) > 5000) {
+                    should_snap = 1;
+                } else if (r->snapshot_index > 0 &&
+                           r->log_count > 0 &&
+                           r->log[r->log_count - 1].index - r->snapshot_index > RAFT_SNAPSHOT_LOG_THRESHOLD / 2) {
+                    should_snap = 1;
+                }
+                if (should_snap) {
+                    last_snapshot_ms = now2;
+                    MUTEX_UNLOCK(&r->mutex);
+                    raft_snapshot_create(r);
+                    MUTEX_LOCK(&r->mutex);
+                }
+            }
         }
 
         /* --- Candidate 发起选举 --- */
@@ -1088,6 +1343,12 @@ static void* raft_event_loop(void* arg) {
                             break;
                         case RAFT_RPC_PROPOSE_REQ:
                             raft_handle_propose_request(r, client_fd, msg, msg_len);
+                            break;
+                        case RAFT_RPC_SNAPSHOT_REQ:
+                            raft_handle_snapshot_request(r, client_fd, msg, msg_len);
+                            break;
+                        case RAFT_RPC_SNAPSHOT_CHUNK:
+                            raft_handle_snapshot_chunk(r, client_fd, msg, msg_len);
                             break;
                         default:
                             break;
@@ -1133,6 +1394,11 @@ raft_t* raft_create(raft_config_t* cfg, void* state_machine, raft_apply_cb apply
 
     memset(r->voted_for, 0, sizeof(r->voted_for));
     memset(&r->leader_peer, 0, sizeof(r->leader_peer));
+    r->snapshot_index = 0;
+    r->snapshot_term = 0;
+    memset(r->snapshot_path, 0, sizeof(r->snapshot_path));
+    r->log_size_bytes = 0;
+    r->snapshot_size_bytes = 0;
 
     /* 分配 leader 状态数组 */
     r->next_index = kv_malloc((size_t)cfg->num_peers * sizeof(uint64_t));
@@ -1321,6 +1587,8 @@ int raft_propose(raft_t* r, uint8_t type, const char* key, size_t key_len,
     if (ne->value) memcpy(ne->value, value, value_len);
     ne->value_len = value_len;
 
+    r->log_size_bytes += raft_log_entry_size(ne);
+
     r->match_index[raft_self_index(r)] = new_idx;
     MUTEX_UNLOCK(&r->mutex);
     raft_log_save(r);
@@ -1360,12 +1628,629 @@ const char* raft_role_str(raft_role_t role) {
 }
 
 void raft_status(raft_t* r, uint64_t* out_term, raft_role_t* out_role,
-                 uint64_t* out_commit_index, uint64_t* out_last_applied) {
+                 uint64_t* out_commit_index, uint64_t* out_last_applied,
+                 size_t* out_log_count, size_t* out_log_size_bytes) {
     if (!r) return;
     MUTEX_LOCK(&r->mutex);
     if (out_term) *out_term = r->current_term;
     if (out_role) *out_role = r->role;
     if (out_commit_index) *out_commit_index = r->commit_index;
     if (out_last_applied) *out_last_applied = r->last_applied;
+    if (out_log_count) *out_log_count = r->log_count;
+    if (out_log_size_bytes) *out_log_size_bytes = r->log_size_bytes;
     MUTEX_UNLOCK(&r->mutex);
+}
+
+/* ================================================================
+ * 日志压缩 & 快照
+ * ================================================================ */
+
+/* InstallSnapshot RPC 发送 */
+static int rpc_send_snapshot_request(SOCKET fd, uint64_t term, const char* leader_id,
+                                      uint64_t last_included_index, uint64_t last_included_term,
+                                      const uint8_t* data, size_t data_len) {
+    uint8_t* buf = kv_malloc(data_len + 128);
+    if (!buf) return -1;
+    size_t off = 0;
+
+    buf[off++] = RAFT_RPC_SNAPSHOT_REQ;
+    write_u64(buf + off, term); off += 8;
+    uint32_t id_len = (uint32_t)strlen(leader_id);
+    write_u32(buf + off, id_len); off += 4;
+    memcpy(buf + off, leader_id, id_len); off += id_len;
+    write_u64(buf + off, last_included_index); off += 8;
+    write_u64(buf + off, last_included_term); off += 8;
+    write_u64(buf + off, (uint64_t)data_len); off += 8;
+    memcpy(buf + off, data, data_len); off += data_len;
+
+    uint32_t total = (uint32_t)off;
+    send(fd, (const char*)&total, 4, 0);
+    send(fd, (const char*)buf, (int)off, 0);
+    kv_free(buf);
+    return 0;
+}
+
+/* InstallSnapshot RPC 响应 */
+static int rpc_send_snapshot_response(SOCKET fd, uint64_t term, int success) {
+    uint8_t buf[16];
+    buf[0] = RAFT_RPC_SNAPSHOT_RESP;
+    write_u64(buf + 1, term);
+    buf[9] = (uint8_t)(success ? 1 : 0);
+    uint32_t total = 10;
+    write_u32(buf + 10, total);
+    send(fd, (const char*)buf + 10, 4, 0);
+    send(fd, (const char*)buf, 10, 0);
+    return 0;
+}
+
+/* 处理 InstallSnapshot 请求 */
+static void raft_handle_snapshot_request(raft_t* r, SOCKET fd, uint8_t* data, size_t data_len) {
+    size_t off = 0;
+    if (off + 1 > data_len) return;
+    off++; /* skip type */
+    if (off + 8 > data_len) return;
+    uint64_t term = read_u64(data + off); off += 8;
+    uint32_t id_len = read_u32(data + off); off += 4;
+    if (off + id_len > data_len) return;
+    char leader_id[RAFT_NODE_ID_LEN];
+    memcpy(leader_id, data + off, id_len);
+    leader_id[id_len] = '\0';
+    off += id_len;
+    if (off + 24 > data_len) return;
+    uint64_t last_included_index = read_u64(data + off); off += 8;
+    uint64_t last_included_term = read_u64(data + off); off += 8;
+    uint64_t snap_data_len = read_u64(data + off); off += 8;
+    if (off + snap_data_len > data_len) return;
+
+    MUTEX_LOCK(&r->mutex);
+
+    if (term < r->current_term) {
+        MUTEX_UNLOCK(&r->mutex);
+        rpc_send_snapshot_response(fd, r->current_term, 0);
+        return;
+    }
+
+    r->last_heartbeat_ms = thread_time_ms();
+
+    /* 如果快照比当前日志新，则接受 */
+    if (last_included_index > r->commit_index) {
+        /* 保存快照到文件 */
+        char snap_path[512];
+        snprintf(snap_path, sizeof(snap_path), "%s/snapshot.dat", r->cfg.data_dir);
+
+        FILE* f = fopen(snap_path, "wb");
+        if (f) {
+            /* 写入快照头部 */
+            fwrite(&last_included_index, 8, 1, f);
+            fwrite(&last_included_term, 8, 1, f);
+            fwrite(data + off, 1, (size_t)snap_data_len, f);
+            fclose(f);
+
+            /* 恢复快照到状态机 */
+            if (r->cfg.restore_fn) {
+                r->cfg.restore_fn(r->state_machine, snap_path);
+            }
+
+            /* 更新快照信息 */
+            r->snapshot_index = last_included_index;
+            r->snapshot_term = last_included_term;
+            snprintf(r->snapshot_path, sizeof(r->snapshot_path), "%s", snap_path);
+            r->snapshot_size_bytes = (size_t)snap_data_len + 16; /* 包含头部 */
+
+            /* 丢弃快照之前的日志 */
+            size_t total_freed = 0;
+            size_t new_count = 0;
+            for (size_t i = 0; i < r->log_count; i++) {
+                if (r->log[i].index > last_included_index) {
+                    if (i != new_count) {
+                        r->log[new_count] = r->log[i];
+                    }
+                    new_count++;
+                } else {
+                    total_freed += raft_log_entry_size(&r->log[i]);
+                    kv_free(r->log[i].key);
+                    kv_free(r->log[i].value);
+                }
+            }
+            r->log_count = new_count;
+            r->log_size_bytes -= total_freed;
+
+            r->commit_index = last_included_index;
+            r->last_applied = last_included_index;
+
+            printf("[RAFT] Snapshot installed: index=%llu, term=%llu\n",
+                   (unsigned long long)last_included_index,
+                   (unsigned long long)last_included_term);
+        }
+
+        raft_log_save(r);
+    }
+
+    MUTEX_UNLOCK(&r->mutex);
+    rpc_send_snapshot_response(fd, r->current_term, 1);
+}
+
+/* 处理快照分块 */
+static void raft_handle_snapshot_chunk(raft_t* r, SOCKET fd, uint8_t* data, size_t data_len) {
+    size_t off = 0;
+    if (off + 1 > data_len) return;
+    off++; /* skip type */
+    if (off + 8 > data_len) return;
+    uint64_t term = read_u64(data + off); off += 8;
+    uint32_t id_len = read_u32(data + off); off += 4;
+    if (off + id_len > data_len) return;
+    off += id_len; /* skip leader_id */
+    if (off + 49 > data_len) return;
+    uint64_t last_included_index = read_u64(data + off); off += 8;
+    uint64_t last_included_term = read_u64(data + off); off += 8;
+    uint64_t total_size = read_u64(data + off); off += 8;
+    uint64_t chunk_offset = read_u64(data + off); off += 8;
+    uint64_t chunk_size = read_u64(data + off); off += 8;
+    int is_last = data[off++];
+    if (off + chunk_size > data_len) return;
+
+    MUTEX_LOCK(&r->mutex);
+
+    if (term < r->current_term) {
+        MUTEX_UNLOCK(&r->mutex);
+        rpc_send_snapshot_response(fd, r->current_term, 0);
+        return;
+    }
+
+    r->last_heartbeat_ms = thread_time_ms();
+
+    /* 初始化或继续接收 */
+    if (!r->snap_chunk_state.active || chunk_offset == 0) {
+        /* 清理之前的接收状态 */
+        if (r->snap_chunk_state.file) {
+            fclose(r->snap_chunk_state.file);
+            r->snap_chunk_state.file = NULL;
+        }
+
+        snprintf(r->snap_chunk_state.tmp_path, sizeof(r->snap_chunk_state.tmp_path),
+                 "%s/snapshot.tmp", r->cfg.data_dir);
+
+        r->snap_chunk_state.file = fopen(r->snap_chunk_state.tmp_path, "wb");
+        if (!r->snap_chunk_state.file) {
+            r->snap_chunk_state.active = 0;
+            MUTEX_UNLOCK(&r->mutex);
+            rpc_send_snapshot_response(fd, r->current_term, 0);
+            return;
+        }
+
+        r->snap_chunk_state.active = 1;
+        r->snap_chunk_state.last_included_index = last_included_index;
+        r->snap_chunk_state.last_included_term = last_included_term;
+        r->snap_chunk_state.total_size = total_size;
+        r->snap_chunk_state.received = 0;
+    }
+
+    /* 写入分块数据 */
+    fwrite(data + off, 1, (size_t)chunk_size, r->snap_chunk_state.file);
+    r->snap_chunk_state.received += chunk_size;
+
+    MUTEX_UNLOCK(&r->mutex);
+
+    if (is_last) {
+        /* 所有分块接收完毕，安装快照 */
+        MUTEX_LOCK(&r->mutex);
+        fclose(r->snap_chunk_state.file);
+        r->snap_chunk_state.file = NULL;
+        r->snap_chunk_state.active = 0;
+
+        /* 移动临时文件到正式快照路径 */
+        char final_path[512];
+        snprintf(final_path, sizeof(final_path), "%s/snapshot.dat", r->cfg.data_dir);
+
+        /* 删除旧快照 */
+        remove(final_path);
+
+        /* 重命名临时文件 */
+        if (rename(r->snap_chunk_state.tmp_path, final_path) != 0) {
+            MUTEX_UNLOCK(&r->mutex);
+            rpc_send_snapshot_response(fd, r->current_term, 0);
+            return;
+        }
+
+        /* 恢复快照到状态机 */
+        if (r->cfg.restore_fn) {
+            r->cfg.restore_fn(r->state_machine, final_path);
+        }
+
+        /* 更新快照信息 */
+        r->snapshot_index = last_included_index;
+        r->snapshot_term = last_included_term;
+        snprintf(r->snapshot_path, sizeof(r->snapshot_path), "%s", final_path);
+        r->snapshot_size_bytes = (size_t)total_size + 16;
+
+        /* 丢弃快照之前的日志 */
+        size_t total_freed = 0;
+        size_t new_count = 0;
+        for (size_t i = 0; i < r->log_count; i++) {
+            if (r->log[i].index > last_included_index) {
+                if (i != new_count) {
+                    r->log[new_count] = r->log[i];
+                }
+                new_count++;
+            } else {
+                total_freed += raft_log_entry_size(&r->log[i]);
+                kv_free(r->log[i].key);
+                kv_free(r->log[i].value);
+            }
+        }
+        r->log_count = new_count;
+        r->log_size_bytes -= total_freed;
+
+        r->commit_index = last_included_index;
+        r->last_applied = last_included_index;
+
+        raft_log_save(r);
+
+        printf("[RAFT] Snapshot installed via chunks: index=%llu, term=%llu, total=%llu bytes\n",
+               (unsigned long long)last_included_index,
+               (unsigned long long)last_included_term,
+               (unsigned long long)total_size);
+
+        MUTEX_UNLOCK(&r->mutex);
+    }
+
+    rpc_send_snapshot_response(fd, r->current_term, 1);
+}
+
+/* 处理 InstallSnapshot 响应 */
+static void raft_handle_snapshot_response(raft_t* r, int peer_index, uint8_t* data, size_t data_len) {
+    if (data_len < 10) return;
+    uint64_t term = read_u64(data + 1);
+    int success = data[9] != 0;
+
+    MUTEX_LOCK(&r->mutex);
+
+    if (r->role != RAFT_LEADER) {
+        MUTEX_UNLOCK(&r->mutex);
+        return;
+    }
+
+    if (term > r->current_term) {
+        raft_become_follower(r, term);
+        raft_log_save(r);
+        MUTEX_UNLOCK(&r->mutex);
+        return;
+    }
+
+    if (success && peer_index >= 0 && peer_index < r->cfg.num_peers) {
+        if (r->snapshot_index > r->match_index[peer_index]) {
+            r->match_index[peer_index] = r->snapshot_index;
+            r->next_index[peer_index] = r->snapshot_index + 1;
+        }
+    }
+
+    MUTEX_UNLOCK(&r->mutex);
+}
+
+/* 向 Follower 发送 InstallSnapshot（支持分块） */
+static void raft_leader_send_snapshot(raft_t* r, int peer_index) {
+    if (!r->cfg.snapshot_fn) return;
+
+    /* 先创建快照（如果尚未创建） */
+    if (r->snapshot_index == 0) {
+        raft_snapshot_create(r);
+    }
+
+    if (r->snapshot_index == 0) return;
+
+    /* 读取快照文件 */
+    FILE* f = fopen(r->snapshot_path, "rb");
+    if (!f) return;
+
+    fseek(f, 0, SEEK_END);
+    long file_size = ftell(f);
+    fseek(f, 16, SEEK_SET); /* 跳过头部 (index + term) */
+
+    size_t data_len = (size_t)(file_size - 16);
+    if (data_len == 0) { fclose(f); return; }
+
+    /* 小文件直接发送，大文件分块发送 */
+    if (data_len <= RAFT_SNAPSHOT_CHUNK_SIZE) {
+        uint8_t* snap_data = kv_malloc(data_len);
+        if (!snap_data) { fclose(f); return; }
+        fread(snap_data, 1, data_len, f);
+        fclose(f);
+
+        SOCKET fd = raft_connect_peer(&r->cfg.peers[peer_index]);
+        if (fd == INVALID_SOCKET) { kv_free(snap_data); return; }
+
+        rpc_send_snapshot_request(fd, r->current_term, r->cfg.node_id,
+                                   r->snapshot_index, r->snapshot_term,
+                                   snap_data, data_len);
+
+        uint32_t resp_len = 0;
+        int ret = recv(fd, (char*)&resp_len, 4, 0);
+        if (ret == 4) {
+            uint8_t resp_buf[64];
+            int total = recv(fd, (char*)resp_buf, (int)resp_len, 0);
+            if (total == (int)resp_len) {
+                raft_handle_snapshot_response(r, peer_index, resp_buf, resp_len);
+            }
+        }
+        close_socket(fd);
+        kv_free(snap_data);
+    } else {
+        /* 分块传输 */
+        uint8_t* chunk_buf = kv_malloc(RAFT_SNAPSHOT_CHUNK_SIZE);
+        if (!chunk_buf) { fclose(f); return; }
+
+        uint64_t offset = 0;
+        while (offset < data_len) {
+            size_t chunk_size = RAFT_SNAPSHOT_CHUNK_SIZE;
+            if (offset + chunk_size > data_len) {
+                chunk_size = data_len - offset;
+            }
+
+            fseek(f, 16 + (long)offset, SEEK_SET);
+            fread(chunk_buf, 1, chunk_size, f);
+
+            SOCKET fd = raft_connect_peer(&r->cfg.peers[peer_index]);
+            if (fd == INVALID_SOCKET) { kv_free(chunk_buf); fclose(f); return; }
+
+            int is_last = (offset + chunk_size >= data_len) ? 1 : 0;
+
+            /* 发送分块 */
+            uint8_t hdr[64];
+            size_t hdr_off = 0;
+            hdr[hdr_off++] = RAFT_RPC_SNAPSHOT_CHUNK;
+            write_u64(hdr + hdr_off, r->current_term); hdr_off += 8;
+            uint32_t lid_len = (uint32_t)strlen(r->cfg.node_id);
+            write_u32(hdr + hdr_off, lid_len); hdr_off += 4;
+            memcpy(hdr + hdr_off, r->cfg.node_id, lid_len); hdr_off += lid_len;
+            write_u64(hdr + hdr_off, r->snapshot_index); hdr_off += 8;
+            write_u64(hdr + hdr_off, r->snapshot_term); hdr_off += 8;
+            write_u64(hdr + hdr_off, (uint64_t)data_len); hdr_off += 8;  /* total_size */
+            write_u64(hdr + hdr_off, offset); hdr_off += 8;
+            write_u64(hdr + hdr_off, (uint64_t)chunk_size); hdr_off += 8;
+            hdr[hdr_off++] = (uint8_t)is_last;
+
+            uint32_t total = (uint32_t)(hdr_off + chunk_size);
+            send(fd, (const char*)&total, 4, 0);
+            send(fd, (const char*)hdr, (int)hdr_off, 0);
+            send(fd, (const char*)chunk_buf, (int)chunk_size, 0);
+
+            /* 等待 ACK */
+            uint32_t resp_len = 0;
+            int ret = recv(fd, (char*)&resp_len, 4, 0);
+            if (ret == 4) {
+                uint8_t resp_buf[64];
+                int total_bytes = recv(fd, (char*)resp_buf, (int)resp_len, 0);
+                if (total_bytes == (int)resp_len && resp_len >= 10) {
+                    if (resp_buf[9] == 0) {
+                        /* chunk rejected */
+                        close_socket(fd);
+                        kv_free(chunk_buf);
+                        fclose(f);
+                        return;
+                    }
+                }
+            }
+            close_socket(fd);
+            offset += chunk_size;
+        }
+
+        /* 所有分块发送完毕，更新 match_index */
+        if (offset >= data_len) {
+            /* 手动更新 match_index（快照传输完成） */
+            MUTEX_LOCK(&r->mutex);
+            if (r->snapshot_index > r->match_index[peer_index]) {
+                r->match_index[peer_index] = r->snapshot_index;
+                r->next_index[peer_index] = r->snapshot_index + 1;
+            }
+            MUTEX_UNLOCK(&r->mutex);
+        }
+
+        kv_free(chunk_buf);
+        fclose(f);
+    }
+}
+
+/* 公共 API：检查是否需要快照 */
+int raft_needs_snapshot(raft_t* r) {
+    if (!r) return 0;
+    MUTEX_LOCK(&r->mutex);
+    int needs = (r->log_count >= RAFT_SNAPSHOT_LOG_THRESHOLD) ||
+                (r->log_size_bytes >= RAFT_SNAPSHOT_LOG_SIZE_THRESHOLD);
+    MUTEX_UNLOCK(&r->mutex);
+    return needs;
+}
+
+/* 公共 API：创建快照 */
+int raft_snapshot_create(raft_t* r) {
+    if (!r || !r->cfg.snapshot_fn) return -1;
+
+    MUTEX_LOCK(&r->mutex);
+
+    /* 确定快照点：使用 commit_index */
+    uint64_t snap_idx = r->commit_index;
+    if (snap_idx == 0) {
+        MUTEX_UNLOCK(&r->mutex);
+        return -1;
+    }
+
+    /* 查找 snap_idx 对应的 term */
+    uint64_t snap_term = 0;
+    for (size_t i = 0; i < r->log_count; i++) {
+        if (r->log[i].index == snap_idx) {
+            snap_term = r->log[i].term;
+            break;
+        }
+    }
+    if (snap_term == 0 && snap_idx > 0) {
+        /* 可能已经被截断，使用当前快照信息 */
+        snap_term = r->snapshot_term;
+        if (snap_term == 0) {
+            MUTEX_UNLOCK(&r->mutex);
+            return -1;
+        }
+    }
+
+    /* 生成快照文件路径 */
+    char snap_path[512];
+    snprintf(snap_path, sizeof(snap_path), "%s/snapshot.dat", r->cfg.data_dir);
+
+    /* 如果已有旧快照，先备份后删除 */
+    if (r->snapshot_index > 0 && r->snapshot_path[0] != '\0') {
+        char old_path[1024];
+        memset(old_path, 0, sizeof(old_path));
+        strncpy(old_path, r->snapshot_path, sizeof(old_path) - 5);
+        strncat(old_path, ".old", sizeof(old_path) - strlen(old_path) - 1);
+        remove(old_path);
+        rename(r->snapshot_path, old_path);
+    }
+
+    MUTEX_UNLOCK(&r->mutex);
+
+    /* 调用状态机回调创建快照 */
+    if (r->cfg.snapshot_fn(r->state_machine, snap_path, snap_idx, snap_term) != 0) {
+        return -1;
+    }
+
+    MUTEX_LOCK(&r->mutex);
+
+    /* 更新快照元数据 */
+    r->snapshot_index = snap_idx;
+    r->snapshot_term = snap_term;
+    snprintf(r->snapshot_path, sizeof(r->snapshot_path), "%s", snap_path);
+
+    /* 获取快照文件大小 */
+    {
+        FILE* sf = fopen(snap_path, "rb");
+        if (sf) {
+            fseek(sf, 0, SEEK_END);
+            r->snapshot_size_bytes = (size_t)ftell(sf);
+            fclose(sf);
+        }
+    }
+
+    /* 截断日志：丢弃 snap_idx 及之前的条目 */
+    size_t total_freed = 0;
+    size_t new_count = 0;
+    for (size_t i = 0; i < r->log_count; i++) {
+        if (r->log[i].index > snap_idx) {
+            if (i != new_count) {
+                r->log[new_count] = r->log[i];
+            }
+            new_count++;
+        } else {
+            total_freed += raft_log_entry_size(&r->log[i]);
+            kv_free(r->log[i].key);
+            kv_free(r->log[i].value);
+        }
+    }
+    size_t old_count = r->log_count;
+    r->log_count = new_count;
+    r->log_size_bytes -= total_freed;
+
+    printf("[RAFT] Snapshot created: index=%llu, term=%llu, log truncated %zu -> %zu, freed %zu bytes\n",
+           (unsigned long long)snap_idx, (unsigned long long)snap_term,
+           old_count, new_count, total_freed);
+
+    MUTEX_UNLOCK(&r->mutex);
+    raft_log_save(r);
+    return 0;
+}
+
+/* 公共 API：获取快照信息 */
+int raft_get_snapshot_info(raft_t* r, raft_snapshot_info_t* info) {
+    if (!r || !info) return -1;
+    memset(info, 0, sizeof(*info));
+    MUTEX_LOCK(&r->mutex);
+    info->last_included_index = r->snapshot_index;
+    info->last_included_term = r->snapshot_term;
+    snprintf(info->file_path, sizeof(info->file_path), "%s", r->snapshot_path);
+
+    /* 获取文件大小 */
+    if (r->snapshot_index > 0 && r->snapshot_path[0] != '\0') {
+        FILE* f = fopen(r->snapshot_path, "rb");
+        if (f) {
+            fseek(f, 0, SEEK_END);
+            info->file_size = (size_t)ftell(f);
+            fclose(f);
+        }
+    }
+    MUTEX_UNLOCK(&r->mutex);
+    return 0;
+}
+
+/* 公共 API：从快照恢复 */
+int raft_snapshot_restore(raft_t* r, const char* file_path) {
+    if (!r || !file_path || !r->cfg.restore_fn) return -1;
+
+    FILE* f = fopen(file_path, "rb");
+    if (!f) return -1;
+
+    uint64_t idx, term;
+    if (fread(&idx, 8, 1, f) != 1 || fread(&term, 8, 1, f) != 1) {
+        fclose(f);
+        return -1;
+    }
+    fclose(f);
+
+    /* 恢复状态机 */
+    if (r->cfg.restore_fn(r->state_machine, file_path) != 0) {
+        return -1;
+    }
+
+    MUTEX_LOCK(&r->mutex);
+    r->snapshot_index = idx;
+    r->snapshot_term = term;
+    snprintf(r->snapshot_path, sizeof(r->snapshot_path), "%s", file_path);
+    r->commit_index = idx;
+    r->last_applied = idx;
+    MUTEX_UNLOCK(&r->mutex);
+
+    printf("[RAFT] Snapshot restored: index=%llu, term=%llu\n",
+           (unsigned long long)idx, (unsigned long long)term);
+    return 0;
+}
+
+/* 公共 API：重放所有已提交但未应用的日志到状态机 */
+int raft_replay_committed(raft_t* r) {
+    if (!r || !r->apply_fn) return -1;
+
+    MUTEX_LOCK(&r->mutex);
+
+    uint64_t start = r->last_applied + 1;
+    uint64_t end = r->commit_index;
+    size_t count = 0;
+
+    printf("[RAFT] Replaying committed entries %llu -> %llu...\n",
+           (unsigned long long)start, (unsigned long long)end);
+
+    for (uint64_t idx = start; idx <= end; idx++) {
+        /* 查找日志条目 */
+        raft_log_entry_t* e = NULL;
+        for (size_t i = 0; i < r->log_count; i++) {
+            if (r->log[i].index == idx) {
+                e = &r->log[i];
+                break;
+            }
+        }
+
+        if (e) {
+            raft_entry_t entry;
+            entry.term = e->term;
+            entry.index = e->index;
+            entry.type = e->type;
+            entry.key = e->key;
+            entry.key_len = e->key_len;
+            entry.value = e->value;
+            entry.value_len = e->value_len;
+            r->apply_fn(r->state_machine, &entry);
+            count++;
+        }
+
+        r->last_applied = idx;
+    }
+
+    MUTEX_UNLOCK(&r->mutex);
+
+    printf("[RAFT] Replayed %zu entries to state machine\n", count);
+    return 0;
 }

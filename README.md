@@ -5,12 +5,102 @@
   <img src="docs/benchmark_param_impact.png" alt="Parameter Impact" width="48%">
 </p>
 
-KV Store 是一个用 C11 编写的轻量级嵌入式键值存储引擎，采用 LSM-Tree (Log-Structured Merge-Tree) 架构，支持快照、压缩、Raft 共识、Redis 兼容网络协议等特性。
+## 架构全景图
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                            KV Raft 集群架构全景                                │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────────────────── 客户端层 ───────────────────────────────────┐  │
+│  │                                                                        │  │
+│  │   redis-cli          Python HAKVClient          Grafana Dashboard      │  │
+│  │   (RESP 协议)         (自动 Leader 发现+重试)     (http://localhost:3000) │  │
+│  │       │                      │                        │                │  │
+│  └───────┼──────────────────────┼────────────────────────┼────────────────┘  │
+│          │                      │                        │                   │
+│  ┌───────┼──────────────────────┼─── Raft 共识层 ────────┼───────────────┐  │
+│  │       │                      │                        │                │  │
+│  │  ┌────▼──────────────────────▼────────────────────────▼──────────┐    │  │
+│  │  │                     Raft 3-Node Cluster                        │    │  │
+│  │  │                                                                │    │  │
+│  │  │  ┌──────────────┐    AppendEntries    ┌──────────────┐        │    │  │
+│  │  │  │   Node 1     │◄───────────────────►│   Node 2     │        │    │  │
+│  │  │  │  (Leader)    │     RequestVote     │ (Follower)   │        │    │  │
+│  │  │  │              │◄───────────────────►│              │        │    │  │
+│  │  │  │ RESP  :6379  │                     │ RESP  :6380  │        │    │  │
+│  │  │  │ Raft  :8001  │                     │ Raft  :8002  │        │    │  │
+│  │  │  │ Metrc :9091  │                     │ Metrc :9092  │        │    │  │
+│  │  │  └──────┬───────┘                     └──────┬───────┘        │    │  │
+│  │  │         │                   ▲                │                │    │  │
+│  │  │         │                   │  AppendEntries │                │    │  │
+│  │  │         │                   │                │                │    │  │
+│  │  │         │            ┌──────┴───────┐        │                │    │  │
+│  │  │         └────────────┤   Node 3     ├────────┘                │    │  │
+│  │  │                      │ (Follower)   │                         │    │  │
+│  │  │                      │ RESP  :6381  │                         │    │  │
+│  │  │                      │ Raft  :8003  │                         │    │  │
+│  │  │                      │ Metrc :9093  │                         │    │  │
+│  │  │                      └──────┬───────┘                         │    │  │
+│  │  └─────────────────────────────┼─────────────────────────────────┘    │  │
+│  │                                │                                       │  │
+│  │  ┌─────────────────────────────┼─────────────────────────────────┐    │  │
+│  │  │                     Raft 核心引擎                              │    │  │
+│  │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐    │    │  │
+│  │  │  │ Leader Elect │  │ Log Replicat │  │ Snapshot/Compact │    │    │  │
+│  │  │  │ (150-300ms)  │  │ (AppendEntries)│  │ (InstallSnapshot)│    │    │  │
+│  │  │  └──────────────┘  └──────────────┘  └──────────────────┘    │    │  │
+│  │  └──────────────────────────────────────────────────────────────┘    │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│  ┌─────────────────────────── LSM 存储引擎层 ────────────────────────────┐  │
+│  │                                                                        │  │
+│  │   ┌──────────┐    ┌──────────────────────┐                            │  │
+│  │   │  WAL 日志  │───▶│  MemTable (跳表)      │    ← 写入路径             │  │
+│  │   │ (滚动归档) │    │  O(log n) 插入        │                            │  │
+│  │   └──────────┘    └──────────┬───────────┘                            │  │
+│  │                              │ flush (256KB 阈值)                      │  │
+│  │                              ▼                                         │  │
+│  │                    ┌──────────────────┐                                │  │
+│  │                    │ Immutable MemTable │                                │  │
+│  │                    └────────┬─────────┘                                │  │
+│  │                             │ SSTable write                             │  │
+│  │                             ▼                                           │  │
+│  │   ┌──────────────────────────────────────────────┐                     │  │
+│  │   │  Level 0: SSTable-1, SSTable-2, ...          │                     │  │
+│  │   │  Level 1: SSTable-3, SSTable-4, ... (merged) │  ← 读路径:          │  │
+│  │   │  Level 2: ... (merged)                       │    MemTable →       │  │
+│  │   └──────────────────────────────────────────────┘    Immutable →       │  │
+│  │                                                        Level 0..N       │  │
+│  │   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                 │  │
+│  │   │ Bloom Filter │  │  LRU Cache   │  │ LZ4/Zstd 压缩 │                 │  │
+│  │   │ (SSTable 级) │  │ (数据块缓存)  │  │ (块级压缩)    │                 │  │
+│  │   └──────────────┘  └──────────────┘  └──────────────┘                 │  │
+│  └────────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│  ┌─────────────────────────── 可观测性层 ────────────────────────────────┐  │
+│  │                                                                        │  │
+│  │  ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐ │  │
+│  │  │   Prometheus     │───▶│    Grafana       │    │  Docker Compose  │ │  │
+│  │  │  (scrape 5s)     │    │  (一键仪表盘)     │    │  (一键部署 5 容器) │ │  │
+│  │  │  :9090           │    │  :3000           │    │  kv-raft cluster │ │  │
+│  │  └──────────────────┘    └──────────────────┘    └──────────────────┘ │  │
+│  │                                                                        │  │
+│  │  指标: kv_puts_total, raft_state, raft_term, raft_commit_index, ...   │  │
+│  └────────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+KV Store 是一个用 C11 编写的轻量级嵌入式键值存储引擎，采用 LSM-Tree (Log-Structured Merge-Tree) 架构，集成 Raft 共识协议实现强一致集群复制，支持快照、压缩、Redis 兼容网络协议、Prometheus 监控等特性。
 
 ```bash
-# 一行命令体验
-docker run -p 6379:6379 -p 9090:9090 ghcr.io/yourname/kv_store:latest
+# Docker Compose 一键启动集群 + 监控
+docker-compose up -d
 redis-cli -h 127.0.0.1 -p 6379 SET hello world
+
+# 访问 Grafana 仪表盘
+open http://localhost:3000  (admin / kvstore)
 ```
 
 ## 特性
@@ -374,9 +464,12 @@ kv_store/
 │   ├── crc32.h / crc32.c #   CRC32 校验
 │   ├── encoding.h / .c   #   二进制编码
 │   └── mutex.h           #   跨平台互斥锁
-├── scripts/              # 测试脚本
-│   ├── start_cluster.bat #   一键启动 3 节点集群
-│   ├── test_cluster.py   #   集群集成测试
+├── scripts/              # 测试与运维脚本
+│   ├── start_cluster.bat #   一键启动 3 节点集群 (Windows)
+│   ├── kv_client.py      #   Python 客户端 (含 HA 自动重试)
+│   ├── test_cluster.py   #   集群连通性测试
+│   ├── test_fault_injection.py # 故障注入验证 (Leader 宕机/脑裂)
+│   ├── test_chaos_100k.py     # 10 万条混沌写入 + 一致性校验
 │   ├── param_sweep.py    #   参数扫描
 │   └── plot_benchmark.py #   性能图表生成
 ├── tests/                # 测试
@@ -390,6 +483,96 @@ kv_store/
 │   └── ...
 ├── third_party/zstd/     # 内置 Zstd 压缩库
 └── CMakeLists.txt
+```
+
+## Docker Compose 一键部署
+
+使用 Docker Compose 一键启动 3 节点 Raft 集群 + Prometheus 监控 + Grafana 仪表盘：
+
+```bash
+# 启动全部 5 个容器
+docker-compose up -d
+
+# 查看日志
+docker-compose logs -f kv-node1
+
+# 停止
+docker-compose down
+```
+
+| 服务 | 端口 | 说明 |
+|------|------|------|
+| kv-node1 | 6379, 8001, 9091 | Raft 节点 1 (RESP / Raft / Metrics) |
+| kv-node2 | 6380, 8002, 9092 | Raft 节点 2 |
+| kv-node3 | 6381, 8003, 9093 | Raft 节点 3 |
+| Prometheus | 9090 | 指标采集 (scrape interval: 5s) |
+| Grafana | 3000 | 可视化仪表盘 (admin / kvstore) |
+
+Grafana 已预置 **KV Raft Cluster** 仪表盘，包含：
+- **集群概览**：节点角色 (Leader/Follower)、当前 Term、运行时间
+- **吞吐量**：PUT/GET/DEL 操作速率 (ops/s) 和累计操作数
+- **Raft 健康**：Commit Index vs Applied Index、日志条目数、快照状态
+- **Leader 切换历史**：节点角色变化时间线 (State Timeline)
+
+## Python HA 客户端
+
+`scripts/kv_client.py` 提供 `HAKVClient` 高可用客户端，自动感知 Leader 切换：
+
+```python
+from kv_client import HAKVClient
+
+# 连接 3 节点集群
+client = HAKVClient([
+    ("127.0.0.1", 6379, 9091),  # (resp_host, resp_port, metrics_port)
+    ("127.0.0.1", 6380, 9092),
+    ("127.0.0.1", 6381, 9093),
+])
+
+# 写入自动路由到 Leader，连接失败自动重试
+client.set("hello", "world")
+value = client.get("hello")   # 可从任意节点读取
+
+# 查看集群状态
+print(client.get_stats())
+# {'leader_switches': 0, 'retry_count': 0, 'write_count': 100, ...}
+
+# 获取所有节点指标
+metrics = client.get_cluster_metrics()
+```
+
+核心特性：
+- **自动 Leader 发现**：通过 `/metrics` 端点或写探测定位 Leader
+- **自动重试**：Leader 切换时自动重新发现并重试（最多 3 次）
+- **Leader 缓存**：5 秒 TTL 缓存，减少探测开销
+- **连接池**：复用连接，避免频繁握手
+- **读负载均衡**：GET 请求随机分发到任意节点
+
+## 混沌测试
+
+### 故障注入验证
+
+```bash
+# 完整测试：Leader 宕机 + 网络分区 + 数据一致性
+python scripts/test_fault_injection.py
+
+# 仅测试故障转移
+python scripts/test_fault_injection.py --failover-only
+
+# 仅测试数据一致性
+python scripts/test_fault_injection.py --consistency-only
+```
+
+### 10 万条混沌写入
+
+```bash
+# 写入 10 万条数据，过程中随机 kill 3 次节点，最终校验一致性
+python scripts/test_chaos_100k.py
+
+# 自定义参数
+python scripts/test_chaos_100k.py --num-keys 50000 --kill-count 5
+
+# 仅写入，不注入故障
+python scripts/test_chaos_100k.py --no-kill
 ```
 
 ## 数据格式

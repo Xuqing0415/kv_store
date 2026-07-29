@@ -1,0 +1,133 @@
+version: "3.8"
+
+# ================================================================
+#  KV Store Raft 集群 + Prometheus + Grafana 一键部署
+#
+#  启动: docker-compose up -d
+#  停止: docker-compose down
+#  查看: docker-compose logs -f
+# ================================================================
+
+services:
+  # ---- 3 节点 Raft 集群 ----
+  kv-node1:
+    build: .
+    image: kv-raft:latest
+    container_name: kv-node1
+    hostname: kv-node1
+    restart: unless-stopped
+    ports:
+      - "6379:6379"    # Redis RESP
+      - "8001:8001"    # Raft RPC
+      - "9091:9090"    # Prometheus metrics
+    command:
+      - "--id=node1"
+      - "--raft-port=8001"
+      - "--resp-port=6379"
+      - "--metrics-port=9090"
+      - "--peer=node1:kv-node1:8001"
+      - "--peer=node2:kv-node2:8001"
+      - "--peer=node3:kv-node3:8001"
+      - "--data-dir=/data"
+    volumes:
+      - node1_data:/data
+    networks:
+      - kv-cluster
+
+  kv-node2:
+    build: .
+    image: kv-raft:latest
+    container_name: kv-node2
+    hostname: kv-node2
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+      - "8002:8001"
+      - "9092:9090"
+    command:
+      - "--id=node2"
+      - "--raft-port=8001"
+      - "--resp-port=6379"
+      - "--metrics-port=9090"
+      - "--peer=node1:kv-node1:8001"
+      - "--peer=node2:kv-node2:8001"
+      - "--peer=node3:kv-node3:8001"
+      - "--data-dir=/data"
+    volumes:
+      - node2_data:/data
+    networks:
+      - kv-cluster
+
+  kv-node3:
+    build: .
+    image: kv-raft:latest
+    container_name: kv-node3
+    hostname: kv-node3
+    restart: unless-stopped
+    ports:
+      - "6381:6379"
+      - "8003:8001"
+      - "9093:9090"
+    command:
+      - "--id=node3"
+      - "--raft-port=8001"
+      - "--resp-port=6379"
+      - "--metrics-port=9090"
+      - "--peer=node1:kv-node1:8001"
+      - "--peer=node2:kv-node2:8001"
+      - "--peer=node3:kv-node3:8001"
+      - "--data-dir=/data"
+    volumes:
+      - node3_data:/data
+    networks:
+      - kv-cluster
+
+  # ---- Prometheus 监控 ----
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: kv-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--storage.tsdb.retention.time=7d"
+    networks:
+      - kv-cluster
+
+  # ---- Grafana 可视化 ----
+  grafana:
+    image: grafana/grafana:latest
+    container_name: kv-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=kvstore
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana-dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana-datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - kv-cluster
+    depends_on:
+      - prometheus
+
+volumes:
+  node1_data:
+  node2_data:
+  node3_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  kv-cluster:
+    driver: bridge
