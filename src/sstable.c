@@ -482,7 +482,7 @@ static void index_entry_free(index_entry_t* entry) {
     }
 }
 
-int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
+int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable, compression_type_t comp_type) {
     (void)file_id;
     if (!path || !memtable) return -1;
     
@@ -510,9 +510,9 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
     char* overflow_value = NULL;
     size_t overflow_vlen = 0;
 
-    compression_type_t comp_type = COMPRESSION_ZSTD;
     size_t total_uncompressed = 0;
     size_t total_compressed = 0;
+    compression_type_t effective_comp_type = comp_type;  /* 实际使用的压缩类型（可能因失败回退） */
     
     while (sstable_block_build(&block, iter, prev_key, &prev_len,
                                 &overflow_key, &overflow_klen, &overflow_value, &overflow_vlen) == 0) {
@@ -522,13 +522,13 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
         /* 压缩块数据 */
         uint8_t* compressed_data = NULL;
         size_t compressed_size = 0;
-        if (compression_compress(comp_type, block.data, block.size,
+        if (compression_compress(effective_comp_type, block.data, block.size,
                                  &compressed_data, &compressed_size,
                                  SSTABLE_DEFAULT_COMPRESSION_LEVEL) != 0) {
             /* 压缩失败，回退到不压缩 */
             compressed_data = block.data;
             compressed_size = block.size;
-            comp_type = COMPRESSION_NONE;
+            effective_comp_type = COMPRESSION_NONE;
         }
         total_compressed += compressed_size;
         
@@ -570,7 +570,7 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
     skiplist_iter_free(iter);
     
     printf("[SSTABLE] Compression: %s, %zu -> %zu bytes (%.1f%%)\n",
-           compression_type_name(comp_type), total_uncompressed, total_compressed,
+           compression_type_name(effective_comp_type), total_uncompressed, total_compressed,
            total_uncompressed > 0 ? (100.0 * total_compressed / total_uncompressed) : 0.0);
     
     uint64_t index_offset = ftell(file);
@@ -615,7 +615,7 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable) {
     encode_fixed64(index_size, footer + 8);
     encode_fixed64(filter_offset, footer + 16);
     encode_fixed64(filter_size, footer + 24);
-    footer[32] = (uint8_t)comp_type;
+    footer[32] = (uint8_t)effective_comp_type;
     
     fwrite(footer, 1, SSTABLE_FOOTER_SIZE, file);
     

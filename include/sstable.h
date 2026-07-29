@@ -9,7 +9,9 @@
 #include "lru_cache.h"
 #include "skiplist.h"
 
+#ifndef SSTABLE_BLOCK_SIZE
 #define SSTABLE_BLOCK_SIZE 4096
+#endif
 #define SSTABLE_FOOTER_SIZE 48
 #define SSTABLE_RESTART_INTERVAL 16
 #define SSTABLE_PREV_KEY_CAPACITY 4096
@@ -56,7 +58,7 @@ typedef struct sstable_iter {
 
 sstable_t* sstable_open(const char* path, uint64_t file_id);
 void sstable_close(sstable_t* sst);
-int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable);
+int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable, compression_type_t comp_type);
 int sstable_lookup(sstable_t* sst, const char* key, size_t klen, char** out_value, size_t* out_vlen, lru_cache_t* block_cache);
 sstable_iter_t* sstable_new_iterator(sstable_t* sst);
 void sstable_iter_free(sstable_iter_t* iter);
