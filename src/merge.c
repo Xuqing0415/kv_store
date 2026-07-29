@@ -210,7 +210,7 @@ static int merge_files(merge_context_t* ctx, manifest_file_t** src_files, size_t
     
     snprintf(path, sizeof(path), "%s/%llu.sst", ctx->dir_path, (unsigned long long)new_file_id);
     
-    if (sstable_write(path, new_file_id, merged) != 0) {
+    if (sstable_write(path, new_file_id, merged, ctx->compression_type) != 0) {
         printf("[MERGE] ERROR: Failed to write merged SSTable %s\n", path);
         skiplist_free(merged);
         return -1;

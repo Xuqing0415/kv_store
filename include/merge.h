@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "compression.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -25,6 +26,7 @@ typedef struct merge_context {
     pthread_t thread;
     #endif
     int thread_started;
+    compression_type_t compression_type;  /* 压缩算法类型 */
 } merge_context_t;
 
 void merge_scheduler_start(merge_context_t* ctx);
