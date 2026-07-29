@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structkv__iter" kind="struct" language="C++" prot="public">
+    <compoundname>kv_iter</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structkv__iter_1a2ccf506fdd6178dc89a935af58f8b85d" prot="public" static="no" mutable="no">
+        <type><ref refid="kv__store_8c_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+        <definition>kv_store_t* kv_iter::db</definition>
+        <argsstring></argsstring>
+        <name>db</name>
+        <qualifiedname>kv_iter::db</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/kv_store.c" line="89" column="16" bodyfile="src/kv_store.c" bodystart="89" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__iter_1a47e058d2979e5bae753dc32a0167dbef" prot="public" static="no" mutable="no">
+        <type><ref refid="skiplist_8h_1a5a9fdc8b5fc5c4be419e3f3ab2c01c35" kindref="member">skiplist_t</ref> *</type>
+        <definition>skiplist_t* kv_iter::merged</definition>
+        <argsstring></argsstring>
+        <name>merged</name>
+        <qualifiedname>kv_iter::merged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/kv_store.c" line="91" column="16" bodyfile="src/kv_store.c" bodystart="91" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a4342798ef6a43d3044b8606f4a75cab7" compoundref="kv__store_8c" startline="969" endline="983">kv_iter_free</referencedby>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__iter_1a3ffbe2e25417779d9e6b4b74c2738208" prot="public" static="no" mutable="no">
+        <type><ref refid="skiplist_8h_1adb2b5bc343fa3ba01ff6d0889a85bf27" kindref="member">skiplist_iter_t</ref> *</type>
+        <definition>skiplist_iter_t* kv_iter::merged_iter</definition>
+        <argsstring></argsstring>
+        <name>merged_iter</name>
+        <qualifiedname>kv_iter::merged_iter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/kv_store.c" line="92" column="21" bodyfile="src/kv_store.c" bodystart="92" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a4342798ef6a43d3044b8606f4a75cab7" compoundref="kv__store_8c" startline="969" endline="983">kv_iter_free</referencedby>
+        <referencedby refid="kv__store_8h_1a8e50eecfcbf98705fc5ffd81b7ac139b" compoundref="kv__store_8c" startline="954" endline="967">kv_iter_next</referencedby>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__iter_1af05bad722f9cb2fdb9da46f90a6d9d67" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* kv_iter::start_key</definition>
+        <argsstring></argsstring>
+        <name>start_key</name>
+        <qualifiedname>kv_iter::start_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/kv_store.c" line="93" column="10" bodyfile="src/kv_store.c" bodystart="93" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a4342798ef6a43d3044b8606f4a75cab7" compoundref="kv__store_8c" startline="969" endline="983">kv_iter_free</referencedby>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__iter_1a59dfa81d41b3ffd8e43d8e2c90f9b3b1" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t kv_iter::start_len</definition>
+        <argsstring></argsstring>
+        <name>start_len</name>
+        <qualifiedname>kv_iter::start_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/kv_store.c" line="94" column="12" bodyfile="src/kv_store.c" bodystart="94" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__iter_1aa4f3c95fe20c64b85c50f3280affd250" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* kv_iter::end_key</definition>
+        <argsstring></argsstring>
+        <name>end_key</name>
+        <qualifiedname>kv_iter::end_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/kv_store.c" line="95" column="10" bodyfile="src/kv_store.c" bodystart="95" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a4342798ef6a43d3044b8606f4a75cab7" compoundref="kv__store_8c" startline="969" endline="983">kv_iter_free</referencedby>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__iter_1af5c786d4d1b7ede04a53394ec0d27e44" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t kv_iter::end_len</definition>
+        <argsstring></argsstring>
+        <name>end_len</name>
+        <qualifiedname>kv_iter::end_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/kv_store.c" line="96" column="12" bodyfile="src/kv_store.c" bodystart="96" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>kv_iter</label>
+        <link refid="structkv__iter"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>db</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>merged</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>merged_iter</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>kv_store</label>
+        <link refid="structkv__store"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>immutable_memtable</edgelabel>
+          <edgelabel>memtable</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>wal_mgr</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>manifest</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>block_cache</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>merge_ctx</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>lru_cache</label>
+        <link refid="structlru__cache"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>head</edgelabel>
+          <edgelabel>table</edgelabel>
+          <edgelabel>tail</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>lru_node</label>
+        <link refid="structlru__node"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>next</edgelabel>
+          <edgelabel>prev</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>manifest</label>
+        <link refid="structmanifest"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>files</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>manifest_file</label>
+        <link refid="structmanifest__file"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>merge_context</label>
+        <link refid="structmerge__context"/>
+      </node>
+      <node id="3">
+        <label>skiplist</label>
+        <link refid="structskiplist"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>header</edgelabel>
+          <edgelabel>tail</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>skiplist_iter</label>
+        <link refid="structskiplist__iter"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>current</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>skiplist_node</label>
+        <link refid="structskiplist__node"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>forward</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>wal</label>
+        <link refid="structwal"/>
+      </node>
+      <node id="5">
+        <label>wal_mgr</label>
+        <link refid="structwal__mgr"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>active</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/kv_store.c" line="88" column="1" bodyfile="src/kv_store.c" bodystart="88" bodyend="97"/>
+    <listofallmembers>
+      <member refid="structkv__iter_1a2ccf506fdd6178dc89a935af58f8b85d" prot="public" virt="non-virtual"><scope>kv_iter</scope><name>db</name></member>
+      <member refid="structkv__iter_1aa4f3c95fe20c64b85c50f3280affd250" prot="public" virt="non-virtual"><scope>kv_iter</scope><name>end_key</name></member>
+      <member refid="structkv__iter_1af5c786d4d1b7ede04a53394ec0d27e44" prot="public" virt="non-virtual"><scope>kv_iter</scope><name>end_len</name></member>
+      <member refid="structkv__iter_1a47e058d2979e5bae753dc32a0167dbef" prot="public" virt="non-virtual"><scope>kv_iter</scope><name>merged</name></member>
+      <member refid="structkv__iter_1a3ffbe2e25417779d9e6b4b74c2738208" prot="public" virt="non-virtual"><scope>kv_iter</scope><name>merged_iter</name></member>
+      <member refid="structkv__iter_1af05bad722f9cb2fdb9da46f90a6d9d67" prot="public" virt="non-virtual"><scope>kv_iter</scope><name>start_key</name></member>
+      <member refid="structkv__iter_1a59dfa81d41b3ffd8e43d8e2c90f9b3b1" prot="public" virt="non-virtual"><scope>kv_iter</scope><name>start_len</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structindex__entry" kind="struct" language="C++" prot="public">
+    <compoundname>index_entry</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structindex__entry_1acf44864fadfe2bddb919b393d7a98015" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* index_entry::last_key</definition>
+        <argsstring></argsstring>
+        <name>last_key</name>
+        <qualifiedname>index_entry::last_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/sstable.c" line="479" column="10" bodyfile="src/sstable.c" bodystart="479" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1a464b512cae455b9ddaf8611f57313366" compoundref="sstable_8c" startline="486" endline="493">index_entry_free</referencedby>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structindex__entry_1aabe035e4de218c88dca9523f84b6a8fc" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t index_entry::key_len</definition>
+        <argsstring></argsstring>
+        <name>key_len</name>
+        <qualifiedname>index_entry::key_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/sstable.c" line="480" column="12" bodyfile="src/sstable.c" bodystart="480" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1ac461806936e04fd48217cbd0cbdbc7b9" compoundref="sstable_8c" startline="743" endline="834">sstable_lookup</referencedby>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structindex__entry_1a770e5553e59430b74078e23f845ff1b7" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t index_entry::offset</definition>
+        <argsstring></argsstring>
+        <name>offset</name>
+        <qualifiedname>index_entry::offset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/sstable.c" line="481" column="14" bodyfile="src/sstable.c" bodystart="481" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1ac461806936e04fd48217cbd0cbdbc7b9" compoundref="sstable_8c" startline="743" endline="834">sstable_lookup</referencedby>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structindex__entry_1a2fcf4128594af6d24d9892c01c2674c4" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t index_entry::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>index_entry::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/sstable.c" line="482" column="12" bodyfile="src/sstable.c" bodystart="482" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1ac461806936e04fd48217cbd0cbdbc7b9" compoundref="sstable_8c" startline="743" endline="834">sstable_lookup</referencedby>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structindex__entry_1aa16eeeb03ebae8b57f0b899c378ef658" prot="public" static="no" mutable="no">
+        <type>struct <ref refid="structindex__entry" kindref="compound">index_entry</ref> *</type>
+        <definition>struct index_entry* index_entry::next</definition>
+        <argsstring></argsstring>
+        <name>next</name>
+        <qualifiedname>index_entry::next</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/sstable.c" line="483" column="23" bodyfile="src/sstable.c" bodystart="483" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1a464b512cae455b9ddaf8611f57313366" compoundref="sstable_8c" startline="486" endline="493">index_entry_free</referencedby>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>index_entry</label>
+        <link refid="structindex__entry"/>
+        <childnode refid="1" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/sstable.c" line="478" column="1" bodyfile="src/sstable.c" bodystart="478" bodyend="484"/>
+    <listofallmembers>
+      <member refid="structindex__entry_1aabe035e4de218c88dca9523f84b6a8fc" prot="public" virt="non-virtual"><scope>index_entry</scope><name>key_len</name></member>
+      <member refid="structindex__entry_1acf44864fadfe2bddb919b393d7a98015" prot="public" virt="non-virtual"><scope>index_entry</scope><name>last_key</name></member>
+      <member refid="structindex__entry_1aa16eeeb03ebae8b57f0b899c378ef658" prot="public" virt="non-virtual"><scope>index_entry</scope><name>next</name></member>
+      <member refid="structindex__entry_1a770e5553e59430b74078e23f845ff1b7" prot="public" virt="non-virtual"><scope>index_entry</scope><name>offset</name></member>
+      <member refid="structindex__entry_1a2fcf4128594af6d24d9892c01c2674c4" prot="public" virt="non-virtual"><scope>index_entry</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

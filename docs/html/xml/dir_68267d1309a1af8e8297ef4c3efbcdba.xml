@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir">
+    <compoundname>src</compoundname>
+    <innerfile refid="bloom__filter_8c">bloom_filter.c</innerfile>
+    <innerfile refid="chaos__test_8c">chaos_test.c</innerfile>
+    <innerfile refid="compression_8c">compression.c</innerfile>
+    <innerfile refid="kv__store_8c">kv_store.c</innerfile>
+    <innerfile refid="lru__cache_8c">lru_cache.c</innerfile>
+    <innerfile refid="main_8c">main.c</innerfile>
+    <innerfile refid="manifest_8c">manifest.c</innerfile>
+    <innerfile refid="merge_8c">merge.c</innerfile>
+    <innerfile refid="metrics__server_8c">metrics_server.c</innerfile>
+    <innerfile refid="raft_8c">raft.c</innerfile>
+    <innerfile refid="raft__node_8c">raft_node.c</innerfile>
+    <innerfile refid="resp__server_8c">resp_server.c</innerfile>
+    <innerfile refid="server__main_8c">server_main.c</innerfile>
+    <innerfile refid="skiplist_8c">skiplist.c</innerfile>
+    <innerfile refid="sstable_8c">sstable.c</innerfile>
+    <innerfile refid="wal_8c">wal.c</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/"/>
+  </compounddef>
+</doxygen>

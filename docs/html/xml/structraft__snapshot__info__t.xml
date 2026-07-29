@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structraft__snapshot__info__t" kind="struct" language="C++" prot="public">
+    <compoundname>raft_snapshot_info_t</compoundname>
+    <includes refid="raft_8h" local="no">raft.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structraft__snapshot__info__t_1a62191687069f11719147623797553390" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t raft_snapshot_info_t::last_included_index</definition>
+        <argsstring></argsstring>
+        <name>last_included_index</name>
+        <qualifiedname>raft_snapshot_info_t::last_included_index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="119" column="14" bodyfile="include/raft.h" bodystart="119" bodyend="-1"/>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+        <referencedby refid="metrics__server_8c_1a3d67963f152b21379cd157e13c198ff0" compoundref="metrics__server_8c" startline="113" endline="228">metrics_build_response</referencedby>
+        <referencedby refid="raft_8h_1adaece4aeab4604ecc6da86fed88328a3" compoundref="raft_8c" startline="2178" endline="2197">raft_get_snapshot_info</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__snapshot__info__t_1a4df0047bce52981e675b833ee60ed9d4" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t raft_snapshot_info_t::last_included_term</definition>
+        <argsstring></argsstring>
+        <name>last_included_term</name>
+        <qualifiedname>raft_snapshot_info_t::last_included_term</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="120" column="14" bodyfile="include/raft.h" bodystart="120" bodyend="-1"/>
+        <referencedby refid="raft_8h_1adaece4aeab4604ecc6da86fed88328a3" compoundref="raft_8c" startline="2178" endline="2197">raft_get_snapshot_info</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__snapshot__info__t_1a36867fea57face545f8907da1f653982" prot="public" static="no" mutable="no">
+        <type>char</type>
+        <definition>char raft_snapshot_info_t::file_path[512]</definition>
+        <argsstring>[512]</argsstring>
+        <name>file_path</name>
+        <qualifiedname>raft_snapshot_info_t::file_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="121" column="14" bodyfile="include/raft.h" bodystart="121" bodyend="-1"/>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+        <referencedby refid="raft_8h_1adaece4aeab4604ecc6da86fed88328a3" compoundref="raft_8c" startline="2178" endline="2197">raft_get_snapshot_info</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__snapshot__info__t_1acd84c5ad803ee4a1316a547dd4442b49" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t raft_snapshot_info_t::file_size</definition>
+        <argsstring></argsstring>
+        <name>file_size</name>
+        <qualifiedname>raft_snapshot_info_t::file_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="122" column="14" bodyfile="include/raft.h" bodystart="122" bodyend="-1"/>
+        <referencedby refid="raft_8h_1adaece4aeab4604ecc6da86fed88328a3" compoundref="raft_8c" startline="2178" endline="2197">raft_get_snapshot_info</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/raft.h" line="118" column="1" bodyfile="include/raft.h" bodystart="118" bodyend="123"/>
+    <listofallmembers>
+      <member refid="structraft__snapshot__info__t_1a36867fea57face545f8907da1f653982" prot="public" virt="non-virtual"><scope>raft_snapshot_info_t</scope><name>file_path</name></member>
+      <member refid="structraft__snapshot__info__t_1acd84c5ad803ee4a1316a547dd4442b49" prot="public" virt="non-virtual"><scope>raft_snapshot_info_t</scope><name>file_size</name></member>
+      <member refid="structraft__snapshot__info__t_1a62191687069f11719147623797553390" prot="public" virt="non-virtual"><scope>raft_snapshot_info_t</scope><name>last_included_index</name></member>
+      <member refid="structraft__snapshot__info__t_1a4df0047bce52981e675b833ee60ed9d4" prot="public" virt="non-virtual"><scope>raft_snapshot_info_t</scope><name>last_included_term</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

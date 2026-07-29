@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structchaos__stats__t" kind="struct" language="C++" prot="public">
+    <compoundname>chaos_stats_t</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structchaos__stats__t_1ac0f635ba708679c4b95e59391cf01436" prot="public" static="no" mutable="no">
+        <type><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref></type>
+        <definition>atomic_t chaos_stats_t::put_ops</definition>
+        <argsstring></argsstring>
+        <name>put_ops</name>
+        <qualifiedname>chaos_stats_t::put_ops</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="44" column="14" bodyfile="src/chaos_test.c" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchaos__stats__t_1a37b9a3e3ba66159eab9a61d341a5f4c0" prot="public" static="no" mutable="no">
+        <type><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref></type>
+        <definition>atomic_t chaos_stats_t::put_errors</definition>
+        <argsstring></argsstring>
+        <name>put_errors</name>
+        <qualifiedname>chaos_stats_t::put_errors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="45" column="14" bodyfile="src/chaos_test.c" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchaos__stats__t_1a0f50ac0d51691387f96c6a83b82bf9c5" prot="public" static="no" mutable="no">
+        <type><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref></type>
+        <definition>atomic_t chaos_stats_t::get_ops</definition>
+        <argsstring></argsstring>
+        <name>get_ops</name>
+        <qualifiedname>chaos_stats_t::get_ops</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="46" column="14" bodyfile="src/chaos_test.c" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchaos__stats__t_1a83ec930ad582c6971ddb8a921ee2fa94" prot="public" static="no" mutable="no">
+        <type><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref></type>
+        <definition>atomic_t chaos_stats_t::get_hits</definition>
+        <argsstring></argsstring>
+        <name>get_hits</name>
+        <qualifiedname>chaos_stats_t::get_hits</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="47" column="14" bodyfile="src/chaos_test.c" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchaos__stats__t_1a53185b2e2ce640f6c2bafef0b7327c8b" prot="public" static="no" mutable="no">
+        <type><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref></type>
+        <definition>atomic_t chaos_stats_t::get_misses</definition>
+        <argsstring></argsstring>
+        <name>get_misses</name>
+        <qualifiedname>chaos_stats_t::get_misses</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="48" column="14" bodyfile="src/chaos_test.c" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchaos__stats__t_1aee728e05ad06a12d538d950b0904940c" prot="public" static="no" mutable="no">
+        <type><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref></type>
+        <definition>atomic_t chaos_stats_t::del_ops</definition>
+        <argsstring></argsstring>
+        <name>del_ops</name>
+        <qualifiedname>chaos_stats_t::del_ops</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="49" column="14" bodyfile="src/chaos_test.c" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchaos__stats__t_1ad7d1e20489aeeec3f627ab1149a4e8c7" prot="public" static="no" mutable="no">
+        <type><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref></type>
+        <definition>atomic_t chaos_stats_t::del_errors</definition>
+        <argsstring></argsstring>
+        <name>del_errors</name>
+        <qualifiedname>chaos_stats_t::del_errors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="50" column="14" bodyfile="src/chaos_test.c" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchaos__stats__t_1a283903057e4b0d66a440a2eba7c5f16f" prot="public" static="no" mutable="no">
+        <type><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref></type>
+        <definition>atomic_t chaos_stats_t::scan_ops</definition>
+        <argsstring></argsstring>
+        <name>scan_ops</name>
+        <qualifiedname>chaos_stats_t::scan_ops</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="51" column="14" bodyfile="src/chaos_test.c" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchaos__stats__t_1abb6d1adeda1e649fb825620ace019a11" prot="public" static="no" mutable="no">
+        <type><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref></type>
+        <definition>atomic_t chaos_stats_t::snapshot_ops</definition>
+        <argsstring></argsstring>
+        <name>snapshot_ops</name>
+        <qualifiedname>chaos_stats_t::snapshot_ops</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="52" column="14" bodyfile="src/chaos_test.c" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structchaos__stats__t_1a72a4edc585483bf8f5af7cd2d4c28d6e" prot="public" static="no" mutable="no">
+        <type><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref></type>
+        <definition>atomic_t chaos_stats_t::snapshot_errors</definition>
+        <argsstring></argsstring>
+        <name>snapshot_errors</name>
+        <qualifiedname>chaos_stats_t::snapshot_errors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="53" column="14" bodyfile="src/chaos_test.c" bodystart="53" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/chaos_test.c" line="43" column="1" bodyfile="src/chaos_test.c" bodystart="43" bodyend="54"/>
+    <listofallmembers>
+      <member refid="structchaos__stats__t_1ad7d1e20489aeeec3f627ab1149a4e8c7" prot="public" virt="non-virtual"><scope>chaos_stats_t</scope><name>del_errors</name></member>
+      <member refid="structchaos__stats__t_1aee728e05ad06a12d538d950b0904940c" prot="public" virt="non-virtual"><scope>chaos_stats_t</scope><name>del_ops</name></member>
+      <member refid="structchaos__stats__t_1a83ec930ad582c6971ddb8a921ee2fa94" prot="public" virt="non-virtual"><scope>chaos_stats_t</scope><name>get_hits</name></member>
+      <member refid="structchaos__stats__t_1a53185b2e2ce640f6c2bafef0b7327c8b" prot="public" virt="non-virtual"><scope>chaos_stats_t</scope><name>get_misses</name></member>
+      <member refid="structchaos__stats__t_1a0f50ac0d51691387f96c6a83b82bf9c5" prot="public" virt="non-virtual"><scope>chaos_stats_t</scope><name>get_ops</name></member>
+      <member refid="structchaos__stats__t_1a37b9a3e3ba66159eab9a61d341a5f4c0" prot="public" virt="non-virtual"><scope>chaos_stats_t</scope><name>put_errors</name></member>
+      <member refid="structchaos__stats__t_1ac0f635ba708679c4b95e59391cf01436" prot="public" virt="non-virtual"><scope>chaos_stats_t</scope><name>put_ops</name></member>
+      <member refid="structchaos__stats__t_1a283903057e4b0d66a440a2eba7c5f16f" prot="public" virt="non-virtual"><scope>chaos_stats_t</scope><name>scan_ops</name></member>
+      <member refid="structchaos__stats__t_1a72a4edc585483bf8f5af7cd2d4c28d6e" prot="public" virt="non-virtual"><scope>chaos_stats_t</scope><name>snapshot_errors</name></member>
+      <member refid="structchaos__stats__t_1abb6d1adeda1e649fb825620ace019a11" prot="public" virt="non-virtual"><scope>chaos_stats_t</scope><name>snapshot_ops</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

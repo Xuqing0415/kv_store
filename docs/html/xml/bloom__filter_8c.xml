@@ -1,0 +1,467 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="bloom__filter_8c" kind="file" language="C++">
+    <compoundname>bloom_filter.c</compoundname>
+    <includes refid="bloom__filter_8h" local="yes">bloom_filter.h</includes>
+    <includes local="yes">mem.h</includes>
+    <includes local="no">math.h</includes>
+    <includes local="no">string.h</includes>
+    <incdepgraph>
+      <node id="2">
+        <label>bloom_filter.h</label>
+        <link refid="bloom__filter_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/bloom_filter.c</label>
+        <link refid="bloom__filter_8c"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>math.h</label>
+      </node>
+      <node id="5">
+        <label>mem.h</label>
+      </node>
+      <node id="3">
+        <label>stddef.h</label>
+      </node>
+      <node id="4">
+        <label>stdint.h</label>
+      </node>
+      <node id="7">
+        <label>string.h</label>
+      </node>
+    </incdepgraph>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="bloom__filter_8c_1a75c63fe92fdbaecc8d6d1e685eed239c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t hash1</definition>
+        <argsstring>(const char *key, size_t len)</argsstring>
+        <name>hash1</name>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/bloom_filter.c" line="6" column="17" bodyfile="src/bloom_filter.c" bodystart="6" bodyend="13"/>
+        <referencedby refid="bloom__filter_8h_1a48c905101080a88dd96bbca3e547e676" compoundref="bloom__filter_8c" startline="61" endline="72">bloom_filter_add</referencedby>
+        <referencedby refid="bloom__filter_8h_1a4fa96faf24a1a24fe8963e8fcd2d466e" compoundref="bloom__filter_8c" startline="74" endline="88">bloom_filter_may_contain</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8c_1a3c6207c7b58be8a9f7a635cea27756f8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t hash2</definition>
+        <argsstring>(const char *key, size_t len)</argsstring>
+        <name>hash2</name>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/bloom_filter.c" line="15" column="17" bodyfile="src/bloom_filter.c" bodystart="15" bodyend="21"/>
+        <referencedby refid="bloom__filter_8h_1a48c905101080a88dd96bbca3e547e676" compoundref="bloom__filter_8c" startline="61" endline="72">bloom_filter_add</referencedby>
+        <referencedby refid="bloom__filter_8h_1a4fa96faf24a1a24fe8963e8fcd2d466e" compoundref="bloom__filter_8c" startline="74" endline="88">bloom_filter_may_contain</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8c_1a67e3df74f5bfa3c13986293b6a2232e7" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>static size_t bloom_filter_compute_bits</definition>
+        <argsstring>(size_t expected_keys, double false_positive_rate)</argsstring>
+        <name>bloom_filter_compute_bits</name>
+        <param>
+          <type>size_t</type>
+          <declname>expected_keys</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>false_positive_rate</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/bloom_filter.c" line="23" column="15" bodyfile="src/bloom_filter.c" bodystart="23" bodyend="27"/>
+        <referencedby refid="bloom__filter_8h_1a3380ad482d5857892418df5c6a3bd6c2" compoundref="bloom__filter_8c" startline="35" endline="53">bloom_filter_new</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8c_1a5d875fdd508bbb17220edf0f2bf849d2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>static size_t bloom_filter_compute_hashes</definition>
+        <argsstring>(size_t bits, size_t expected_keys)</argsstring>
+        <name>bloom_filter_compute_hashes</name>
+        <param>
+          <type>size_t</type>
+          <declname>bits</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>expected_keys</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/bloom_filter.c" line="29" column="15" bodyfile="src/bloom_filter.c" bodystart="29" bodyend="33"/>
+        <referencedby refid="bloom__filter_8h_1a3380ad482d5857892418df5c6a3bd6c2" compoundref="bloom__filter_8c" startline="35" endline="53">bloom_filter_new</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8c_1a3380ad482d5857892418df5c6a3bd6c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+        <definition>bloom_filter_t * bloom_filter_new</definition>
+        <argsstring>(size_t expected_keys, double false_positive_rate)</argsstring>
+        <name>bloom_filter_new</name>
+        <param>
+          <type>size_t</type>
+          <declname>expected_keys</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>false_positive_rate</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/bloom_filter.c" line="35" column="16" bodyfile="src/bloom_filter.c" bodystart="35" bodyend="53"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <references refid="bloom__filter_8c_1a67e3df74f5bfa3c13986293b6a2232e7" compoundref="bloom__filter_8c" startline="23" endline="27">bloom_filter_compute_bits</references>
+        <references refid="bloom__filter_8c_1a5d875fdd508bbb17220edf0f2bf849d2" compoundref="bloom__filter_8c" startline="29" endline="33">bloom_filter_compute_hashes</references>
+        <references refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" compoundref="bloom__filter_8h" startline="10">bloom_filter::num_hash</references>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8c_1a84292d7cc1ce4dbd1b919e28f1716284" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bloom_filter_free</definition>
+        <argsstring>(bloom_filter_t *bf)</argsstring>
+        <name>bloom_filter_free</name>
+        <param>
+          <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+          <declname>bf</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/bloom_filter.c" line="55" column="6" bodyfile="src/bloom_filter.c" bodystart="55" bodyend="59"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8c_1a48c905101080a88dd96bbca3e547e676" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bloom_filter_add</definition>
+        <argsstring>(bloom_filter_t *bf, const char *key, size_t klen)</argsstring>
+        <name>bloom_filter_add</name>
+        <param>
+          <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+          <declname>bf</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/bloom_filter.c" line="61" column="6" bodyfile="src/bloom_filter.c" bodystart="61" bodyend="72"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <references refid="bloom__filter_8c_1a75c63fe92fdbaecc8d6d1e685eed239c" compoundref="bloom__filter_8c" startline="6" endline="13">hash1</references>
+        <references refid="bloom__filter_8c_1a3c6207c7b58be8a9f7a635cea27756f8" compoundref="bloom__filter_8c" startline="15" endline="21">hash2</references>
+        <references refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" compoundref="bloom__filter_8h" startline="10">bloom_filter::num_hash</references>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8c_1a4fa96faf24a1a24fe8963e8fcd2d466e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int bloom_filter_may_contain</definition>
+        <argsstring>(bloom_filter_t *bf, const char *key, size_t klen)</argsstring>
+        <name>bloom_filter_may_contain</name>
+        <param>
+          <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+          <declname>bf</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/bloom_filter.c" line="74" column="5" bodyfile="src/bloom_filter.c" bodystart="74" bodyend="88"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <references refid="bloom__filter_8c_1a75c63fe92fdbaecc8d6d1e685eed239c" compoundref="bloom__filter_8c" startline="6" endline="13">hash1</references>
+        <references refid="bloom__filter_8c_1a3c6207c7b58be8a9f7a635cea27756f8" compoundref="bloom__filter_8c" startline="15" endline="21">hash2</references>
+        <references refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" compoundref="bloom__filter_8h" startline="10">bloom_filter::num_hash</references>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8c_1ad41b29a3fd872e92012ec5b7b20783e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t bloom_filter_serialized_size</definition>
+        <argsstring>(bloom_filter_t *bf)</argsstring>
+        <name>bloom_filter_serialized_size</name>
+        <param>
+          <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+          <declname>bf</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/bloom_filter.c" line="90" column="8" bodyfile="src/bloom_filter.c" bodystart="90" bodyend="94"/>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <referencedby refid="bloom__filter_8h_1aa115c2c21a26bfd8042c7e5fc2c9bf41" compoundref="bloom__filter_8c" startline="96" endline="113">bloom_filter_serialize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8c_1aa115c2c21a26bfd8042c7e5fc2c9bf41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t bloom_filter_serialize</definition>
+        <argsstring>(bloom_filter_t *bf, uint8_t *buf, size_t buf_len)</argsstring>
+        <name>bloom_filter_serialize</name>
+        <param>
+          <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+          <declname>bf</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>buf</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>buf_len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/bloom_filter.c" line="96" column="8" bodyfile="src/bloom_filter.c" bodystart="96" bodyend="113"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <references refid="bloom__filter_8c_1ad41b29a3fd872e92012ec5b7b20783e1" compoundref="bloom__filter_8c" startline="90" endline="94">bloom_filter_serialized_size</references>
+        <references refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" compoundref="bloom__filter_8h" startline="10">bloom_filter::num_hash</references>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8c_1a9fc748da7f4da37755bc57336e296219" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+        <definition>bloom_filter_t * bloom_filter_deserialize</definition>
+        <argsstring>(const uint8_t *buf, size_t buf_len)</argsstring>
+        <name>bloom_filter_deserialize</name>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>buf</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>buf_len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/bloom_filter.c" line="115" column="16" bodyfile="src/bloom_filter.c" bodystart="115" bodyend="145"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <references refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" compoundref="bloom__filter_8h" startline="10">bloom_filter::num_hash</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="bloom__filter_8h" kindref="compound">bloom_filter.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;mem.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;math.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6" refid="bloom__filter_8c_1a75c63fe92fdbaecc8d6d1e685eed239c" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>uint32_t<sp/><ref refid="bloom__filter_8c_1a75c63fe92fdbaecc8d6d1e685eed239c" kindref="member">hash1</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>len)<sp/>{</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"><sp/><sp/><sp/><sp/>uint32_t<sp/>h<sp/>=<sp/>0x811c9dc5;</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>len;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>h<sp/>^=<sp/>key[i];</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>h<sp/>*=<sp/>0x01000193;</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>h;</highlight></codeline>
+<codeline lineno="13"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15" refid="bloom__filter_8c_1a3c6207c7b58be8a9f7a635cea27756f8" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>uint32_t<sp/><ref refid="bloom__filter_8c_1a3c6207c7b58be8a9f7a635cea27756f8" kindref="member">hash2</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>len)<sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/>uint32_t<sp/>h<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>len;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>h<sp/>=<sp/>h<sp/>*<sp/>33<sp/>+<sp/>key[i];</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>h;</highlight></codeline>
+<codeline lineno="21"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23" refid="bloom__filter_8c_1a67e3df74f5bfa3c13986293b6a2232e7" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8c_1a67e3df74f5bfa3c13986293b6a2232e7" kindref="member">bloom_filter_compute_bits</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>expected_keys,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>false_positive_rate)<sp/>{</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>ln2<sp/>=<sp/>0.69314718056;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>bits<sp/>=<sp/>(size_t)(-expected_keys<sp/>*<sp/>log(false_positive_rate)<sp/>/<sp/>(ln2<sp/>*<sp/>ln2));</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(bits<sp/>+<sp/>7)<sp/>&amp;<sp/>~7;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29" refid="bloom__filter_8c_1a5d875fdd508bbb17220edf0f2bf849d2" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8c_1a5d875fdd508bbb17220edf0f2bf849d2" kindref="member">bloom_filter_compute_hashes</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>bits,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>expected_keys)<sp/>{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>ln2<sp/>=<sp/>0.69314718056;</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>hashes<sp/>=<sp/>(size_t)(bits<sp/>*<sp/>ln2<sp/>/<sp/>expected_keys);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>hashes<sp/>&lt;<sp/>1<sp/>?<sp/>1<sp/>:<sp/>hashes;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35" refid="bloom__filter_8h_1a3380ad482d5857892418df5c6a3bd6c2" refkind="member"><highlight class="normal"><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/><ref refid="bloom__filter_8c_1a3380ad482d5857892418df5c6a3bd6c2" kindref="member">bloom_filter_new</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>expected_keys,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>false_positive_rate)<sp/>{</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(expected_keys<sp/>==<sp/>0<sp/>||<sp/>false_positive_rate<sp/>&gt;=<sp/>1.0)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>bits_len<sp/>=<sp/><ref refid="bloom__filter_8c_1a67e3df74f5bfa3c13986293b6a2232e7" kindref="member">bloom_filter_compute_bits</ref>(expected_keys,<sp/>false_positive_rate);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>num_hash<sp/>=<sp/><ref refid="bloom__filter_8c_1a5d875fdd508bbb17220edf0f2bf849d2" kindref="member">bloom_filter_compute_hashes</ref>(bits_len,<sp/>expected_keys);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf<sp/>=<sp/>kv_malloc(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>));</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!bf)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>bf-&gt;<ref refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" kindref="member">bits_len</ref><sp/>=<sp/>bits_len;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>bf-&gt;<ref refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" kindref="member">num_hash</ref><sp/>=<sp/>num_hash;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>bf-&gt;<ref refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" kindref="member">bits</ref><sp/>=<sp/>kv_calloc((bits_len<sp/>+<sp/>7)<sp/>/<sp/>8,<sp/>1);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!bf-&gt;<ref refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" kindref="member">bits</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(bf);</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>bf;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55" refid="bloom__filter_8h_1a84292d7cc1ce4dbd1b919e28f1716284" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8c_1a84292d7cc1ce4dbd1b919e28f1716284" kindref="member">bloom_filter_free</ref>(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf)<sp/>{</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!bf)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>kv_free(bf-&gt;<ref refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" kindref="member">bits</ref>);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>kv_free(bf);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61" refid="bloom__filter_8h_1a48c905101080a88dd96bbca3e547e676" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8c_1a48c905101080a88dd96bbca3e547e676" kindref="member">bloom_filter_add</ref>(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen)<sp/>{</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!bf<sp/>||<sp/>!key)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>uint32_t<sp/>h1<sp/>=<sp/><ref refid="bloom__filter_8c_1a75c63fe92fdbaecc8d6d1e685eed239c" kindref="member">hash1</ref>(key,<sp/>klen);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>uint32_t<sp/>h2<sp/>=<sp/><ref refid="bloom__filter_8c_1a3c6207c7b58be8a9f7a635cea27756f8" kindref="member">hash2</ref>(key,<sp/>klen);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>bf-&gt;<ref refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" kindref="member">num_hash</ref>;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint32_t<sp/>h<sp/>=<sp/>h1<sp/>+<sp/>i<sp/>*<sp/>h2;</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>bit_pos<sp/>=<sp/>h<sp/>%<sp/>bf-&gt;<ref refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" kindref="member">bits_len</ref>;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>bf-&gt;<ref refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" kindref="member">bits</ref>[bit_pos<sp/>/<sp/>8]<sp/>|=<sp/>(1<sp/>&lt;&lt;<sp/>(bit_pos<sp/>%<sp/>8));</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="72"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight></codeline>
+<codeline lineno="74" refid="bloom__filter_8h_1a4fa96faf24a1a24fe8963e8fcd2d466e" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8c_1a4fa96faf24a1a24fe8963e8fcd2d466e" kindref="member">bloom_filter_may_contain</ref>(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen)<sp/>{</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!bf<sp/>||<sp/>!key)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/>uint32_t<sp/>h1<sp/>=<sp/><ref refid="bloom__filter_8c_1a75c63fe92fdbaecc8d6d1e685eed239c" kindref="member">hash1</ref>(key,<sp/>klen);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/>uint32_t<sp/>h2<sp/>=<sp/><ref refid="bloom__filter_8c_1a3c6207c7b58be8a9f7a635cea27756f8" kindref="member">hash2</ref>(key,<sp/>klen);</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>bf-&gt;<ref refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" kindref="member">num_hash</ref>;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint32_t<sp/>h<sp/>=<sp/>h1<sp/>+<sp/>i<sp/>*<sp/>h2;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>bit_pos<sp/>=<sp/>h<sp/>%<sp/>bf-&gt;<ref refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" kindref="member">bits_len</ref>;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!(bf-&gt;<ref refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" kindref="member">bits</ref>[bit_pos<sp/>/<sp/>8]<sp/>&amp;<sp/>(1<sp/>&lt;&lt;<sp/>(bit_pos<sp/>%<sp/>8))))<sp/>{</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>1;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight></codeline>
+<codeline lineno="90" refid="bloom__filter_8h_1ad41b29a3fd872e92012ec5b7b20783e1" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8c_1ad41b29a3fd872e92012ec5b7b20783e1" kindref="member">bloom_filter_serialized_size</ref>(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf)<sp/>{</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!bf)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>bytes<sp/>=<sp/>(bf-&gt;<ref refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" kindref="member">bits_len</ref><sp/>+<sp/>7)<sp/>/<sp/>8;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>8<sp/>+<sp/>4<sp/>+<sp/>bytes;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96" refid="bloom__filter_8h_1aa115c2c21a26bfd8042c7e5fc2c9bf41" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8c_1aa115c2c21a26bfd8042c7e5fc2c9bf41" kindref="member">bloom_filter_serialize</ref>(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf,<sp/>uint8_t*<sp/>buf,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>buf_len)<sp/>{</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!bf<sp/>||<sp/>!buf)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>expected<sp/>=<sp/><ref refid="bloom__filter_8c_1ad41b29a3fd872e92012ec5b7b20783e1" kindref="member">bloom_filter_serialized_size</ref>(bf);</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(buf_len<sp/>&lt;<sp/>expected)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>bytes<sp/>=<sp/>(bf-&gt;<ref refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" kindref="member">bits_len</ref><sp/>+<sp/>7)<sp/>/<sp/>8;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>8;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buf[i]<sp/>=<sp/>(bf-&gt;<ref refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" kindref="member">bits_len</ref><sp/>&gt;&gt;<sp/>(8<sp/>*<sp/>i))<sp/>&amp;<sp/>0xff;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>4;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buf[8<sp/>+<sp/>i]<sp/>=<sp/>(bf-&gt;<ref refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" kindref="member">num_hash</ref><sp/>&gt;&gt;<sp/>(8<sp/>*<sp/>i))<sp/>&amp;<sp/>0xff;</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/>memcpy(buf<sp/>+<sp/>12,<sp/>bf-&gt;<ref refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" kindref="member">bits</ref>,<sp/>bytes);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>expected;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight></codeline>
+<codeline lineno="115" refid="bloom__filter_8h_1a9fc748da7f4da37755bc57336e296219" refkind="member"><highlight class="normal"><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/><ref refid="bloom__filter_8c_1a9fc748da7f4da37755bc57336e296219" kindref="member">bloom_filter_deserialize</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>uint8_t*<sp/>buf,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>buf_len)<sp/>{</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!buf<sp/>||<sp/>buf_len<sp/>&lt;<sp/>12)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf<sp/>=<sp/>kv_malloc(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>));</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!bf)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/>bf-&gt;<ref refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" kindref="member">bits_len</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>7;<sp/>i<sp/>&gt;=<sp/>0;<sp/>i--)<sp/>{</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>bf-&gt;<ref refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" kindref="member">bits_len</ref><sp/>=<sp/>(bf-&gt;<ref refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" kindref="member">bits_len</ref><sp/>&lt;&lt;<sp/>8)<sp/>|<sp/>buf[i];</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/>bf-&gt;<ref refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" kindref="member">num_hash</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>3;<sp/>i<sp/>&gt;=<sp/>0;<sp/>i--)<sp/>{</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>bf-&gt;<ref refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" kindref="member">num_hash</ref><sp/>=<sp/>(bf-&gt;<ref refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" kindref="member">num_hash</ref><sp/>&lt;&lt;<sp/>8)<sp/>|<sp/>buf[8<sp/>+<sp/>i];</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>bytes<sp/>=<sp/>(bf-&gt;<ref refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" kindref="member">bits_len</ref><sp/>+<sp/>7)<sp/>/<sp/>8;</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(buf_len<sp/>&lt;<sp/>12<sp/>+<sp/>bytes)<sp/>{</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(bf);</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/>bf-&gt;<ref refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" kindref="member">bits</ref><sp/>=<sp/>kv_malloc(bytes);</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!bf-&gt;<ref refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" kindref="member">bits</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(bf);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/>memcpy(bf-&gt;<ref refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" kindref="member">bits</ref>,<sp/>buf<sp/>+<sp/>12,<sp/>bytes);</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>bf;</highlight></codeline>
+<codeline lineno="145"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/bloom_filter.c"/>
+  </compounddef>
+</doxygen>

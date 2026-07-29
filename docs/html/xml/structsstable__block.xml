@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structsstable__block" kind="struct" language="C++" prot="public">
+    <compoundname>sstable_block</compoundname>
+    <includes refid="sstable_8h" local="no">sstable.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsstable__block_1adc0774cfed7ebf2da7f1476d95a6f898" prot="public" static="no" mutable="no">
+        <type>uint8_t *</type>
+        <definition>uint8_t* sstable_block::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>sstable_block::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="23" column="13" bodyfile="include/sstable.h" bodystart="23" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1a87076f32d4351ee3dae53f3a4a6d1f5d" compoundref="sstable_8c" startline="95" endline="261">sstable_block_build</referencedby>
+        <referencedby refid="sstable_8c_1a1375ddafb91458b388d4d961c59ff359" compoundref="sstable_8c" startline="263" endline="302">sstable_block_decode</referencedby>
+        <referencedby refid="sstable_8c_1a5eee53eee9f981793d2a7304aeec98a5" compoundref="sstable_8c" startline="304" endline="308">sstable_block_free</referencedby>
+        <referencedby refid="sstable_8c_1ace616d80b4fe31bcc08d4def7d127d96" compoundref="sstable_8c" startline="370" endline="476">sstable_block_lookup</referencedby>
+        <referencedby refid="sstable_8c_1a309a12241d60b6c36c6690253f071c08" compoundref="sstable_8c" startline="310" endline="368">sstable_entry_decode</referencedby>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__block_1ae227febd3d01a1c6241ee3ae1d9f75da" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t sstable_block::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>sstable_block::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="24" column="12" bodyfile="include/sstable.h" bodystart="24" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1a87076f32d4351ee3dae53f3a4a6d1f5d" compoundref="sstable_8c" startline="95" endline="261">sstable_block_build</referencedby>
+        <referencedby refid="sstable_8c_1a1375ddafb91458b388d4d961c59ff359" compoundref="sstable_8c" startline="263" endline="302">sstable_block_decode</referencedby>
+        <referencedby refid="sstable_8c_1ace616d80b4fe31bcc08d4def7d127d96" compoundref="sstable_8c" startline="370" endline="476">sstable_block_lookup</referencedby>
+        <referencedby refid="sstable_8c_1a309a12241d60b6c36c6690253f071c08" compoundref="sstable_8c" startline="310" endline="368">sstable_entry_decode</referencedby>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__block_1a3ab2e0ea5fc8476008a0d8319b982139" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t sstable_block::restart_count</definition>
+        <argsstring></argsstring>
+        <name>restart_count</name>
+        <qualifiedname>sstable_block::restart_count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="25" column="12" bodyfile="include/sstable.h" bodystart="25" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1a87076f32d4351ee3dae53f3a4a6d1f5d" compoundref="sstable_8c" startline="95" endline="261">sstable_block_build</referencedby>
+        <referencedby refid="sstable_8c_1a1375ddafb91458b388d4d961c59ff359" compoundref="sstable_8c" startline="263" endline="302">sstable_block_decode</referencedby>
+        <referencedby refid="sstable_8c_1ace616d80b4fe31bcc08d4def7d127d96" compoundref="sstable_8c" startline="370" endline="476">sstable_block_lookup</referencedby>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__block_1a568d843e598a46da4027e8a90959b4c1" prot="public" static="no" mutable="no">
+        <type>uint32_t *</type>
+        <definition>uint32_t* sstable_block::restart_points</definition>
+        <argsstring></argsstring>
+        <name>restart_points</name>
+        <qualifiedname>sstable_block::restart_points</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="26" column="14" bodyfile="include/sstable.h" bodystart="26" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1a1375ddafb91458b388d4d961c59ff359" compoundref="sstable_8c" startline="263" endline="302">sstable_block_decode</referencedby>
+        <referencedby refid="sstable_8c_1a5eee53eee9f981793d2a7304aeec98a5" compoundref="sstable_8c" startline="304" endline="308">sstable_block_free</referencedby>
+        <referencedby refid="sstable_8c_1ace616d80b4fe31bcc08d4def7d127d96" compoundref="sstable_8c" startline="370" endline="476">sstable_block_lookup</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/sstable.h" line="22" column="1" bodyfile="include/sstable.h" bodystart="22" bodyend="27"/>
+    <listofallmembers>
+      <member refid="structsstable__block_1adc0774cfed7ebf2da7f1476d95a6f898" prot="public" virt="non-virtual"><scope>sstable_block</scope><name>data</name></member>
+      <member refid="structsstable__block_1a3ab2e0ea5fc8476008a0d8319b982139" prot="public" virt="non-virtual"><scope>sstable_block</scope><name>restart_count</name></member>
+      <member refid="structsstable__block_1a568d843e598a46da4027e8a90959b4c1" prot="public" virt="non-virtual"><scope>sstable_block</scope><name>restart_points</name></member>
+      <member refid="structsstable__block_1ae227febd3d01a1c6241ee3ae1d9f75da" prot="public" virt="non-virtual"><scope>sstable_block</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

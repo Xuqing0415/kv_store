@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structskiplist" kind="struct" language="C++" prot="public">
+    <compoundname>skiplist</compoundname>
+    <includes refid="skiplist_8h" local="no">skiplist.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structskiplist_1a8cdc90b8b107e406335fda39a1a4a150" prot="public" static="no" mutable="no">
+        <type><ref refid="skiplist_8h_1add5ad3c15496eeaf627983b07b8e3da0" kindref="member">skiplist_node_t</ref> *</type>
+        <definition>skiplist_node_t* skiplist::header</definition>
+        <argsstring></argsstring>
+        <name>header</name>
+        <qualifiedname>skiplist::header</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/skiplist.h" line="25" column="21" bodyfile="include/skiplist.h" bodystart="25" bodyend="-1"/>
+        <referencedby refid="skiplist_8h_1a9e3fbb50aee20956167be2b444987f74" compoundref="skiplist_8c" startline="211" endline="230">skiplist_delete</referencedby>
+        <referencedby refid="skiplist_8h_1ad0ef6f9599f0b74f97cb73db8c9405d6" compoundref="skiplist_8c" startline="112" endline="125">skiplist_free</referencedby>
+        <referencedby refid="skiplist_8h_1a5c78e1b0aab013dd35b7ab8015fa1c6a" compoundref="skiplist_8c" startline="127" endline="178">skiplist_insert</referencedby>
+        <referencedby refid="skiplist_8h_1a7f3d6a7d2523ed2412a196eb8e65adb9" compoundref="skiplist_8c" startline="180" endline="209">skiplist_lookup</referencedby>
+        <referencedby refid="skiplist_8h_1a5d6378cf1c76e34c78429d1383807457" compoundref="skiplist_8c" startline="83" endline="110">skiplist_new</referencedby>
+        <referencedby refid="skiplist_8h_1a51455706e22b354dbe6334120f72c1e4" compoundref="skiplist_8c" startline="242" endline="250">skiplist_new_iterator</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structskiplist_1a28c0d1b2cf6978a9f00446eeee9372ec" prot="public" static="no" mutable="no">
+        <type><ref refid="skiplist_8h_1add5ad3c15496eeaf627983b07b8e3da0" kindref="member">skiplist_node_t</ref> *</type>
+        <definition>skiplist_node_t* skiplist::tail</definition>
+        <argsstring></argsstring>
+        <name>tail</name>
+        <qualifiedname>skiplist::tail</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/skiplist.h" line="26" column="21" bodyfile="include/skiplist.h" bodystart="26" bodyend="-1"/>
+        <referencedby refid="skiplist_8h_1a5d6378cf1c76e34c78429d1383807457" compoundref="skiplist_8c" startline="83" endline="110">skiplist_new</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structskiplist_1a34456f959c5ba9ce905c01ffbe4256df" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int skiplist::level</definition>
+        <argsstring></argsstring>
+        <name>level</name>
+        <qualifiedname>skiplist::level</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/skiplist.h" line="27" column="9" bodyfile="include/skiplist.h" bodystart="27" bodyend="-1"/>
+        <referencedby refid="skiplist_8h_1a9e3fbb50aee20956167be2b444987f74" compoundref="skiplist_8c" startline="211" endline="230">skiplist_delete</referencedby>
+        <referencedby refid="skiplist_8h_1a5c78e1b0aab013dd35b7ab8015fa1c6a" compoundref="skiplist_8c" startline="127" endline="178">skiplist_insert</referencedby>
+        <referencedby refid="skiplist_8h_1a7f3d6a7d2523ed2412a196eb8e65adb9" compoundref="skiplist_8c" startline="180" endline="209">skiplist_lookup</referencedby>
+        <referencedby refid="skiplist_8h_1a5d6378cf1c76e34c78429d1383807457" compoundref="skiplist_8c" startline="83" endline="110">skiplist_new</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structskiplist_1a03b69e60d075f899e2abac3820df279d" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t skiplist::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <qualifiedname>skiplist::count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/skiplist.h" line="28" column="12" bodyfile="include/skiplist.h" bodystart="28" bodyend="-1"/>
+        <referencedby refid="skiplist_8h_1ac2a15e084bef7929745da71371ed44b9" compoundref="skiplist_8c" startline="232" endline="235">skiplist_count</referencedby>
+        <referencedby refid="skiplist_8h_1a5c78e1b0aab013dd35b7ab8015fa1c6a" compoundref="skiplist_8c" startline="127" endline="178">skiplist_insert</referencedby>
+        <referencedby refid="skiplist_8h_1a5d6378cf1c76e34c78429d1383807457" compoundref="skiplist_8c" startline="83" endline="110">skiplist_new</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structskiplist_1ac429850bbe4c53f405ceb90507caced4" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t skiplist::memory_usage</definition>
+        <argsstring></argsstring>
+        <name>memory_usage</name>
+        <qualifiedname>skiplist::memory_usage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/skiplist.h" line="29" column="12" bodyfile="include/skiplist.h" bodystart="29" bodyend="-1"/>
+        <referencedby refid="skiplist_8h_1a5c78e1b0aab013dd35b7ab8015fa1c6a" compoundref="skiplist_8c" startline="127" endline="178">skiplist_insert</referencedby>
+        <referencedby refid="skiplist_8h_1afeea602e69a7217b01f3ebd021f787bc" compoundref="skiplist_8c" startline="237" endline="240">skiplist_memory_usage</referencedby>
+        <referencedby refid="skiplist_8h_1a5d6378cf1c76e34c78429d1383807457" compoundref="skiplist_8c" startline="83" endline="110">skiplist_new</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structskiplist_1a4c8ed7506baff2c7190fc2130a588a7d" prot="public" static="no" mutable="no">
+        <type>MUTEX_T</type>
+        <definition>MUTEX_T skiplist::mutex</definition>
+        <argsstring></argsstring>
+        <name>mutex</name>
+        <qualifiedname>skiplist::mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/skiplist.h" line="30" column="13" bodyfile="include/skiplist.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structskiplist_1a9d53ccb0e77afb651b55be43093e2640" prot="public" static="no" mutable="no">
+        <type>RWLOCK_T</type>
+        <definition>RWLOCK_T skiplist::rwlock</definition>
+        <argsstring></argsstring>
+        <name>rwlock</name>
+        <qualifiedname>skiplist::rwlock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/skiplist.h" line="31" column="14" bodyfile="include/skiplist.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>skiplist</label>
+        <link refid="structskiplist"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>header</edgelabel>
+          <edgelabel>tail</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>skiplist_node</label>
+        <link refid="structskiplist__node"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>forward</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/skiplist.h" line="24" column="1" bodyfile="include/skiplist.h" bodystart="24" bodyend="32"/>
+    <listofallmembers>
+      <member refid="structskiplist_1a03b69e60d075f899e2abac3820df279d" prot="public" virt="non-virtual"><scope>skiplist</scope><name>count</name></member>
+      <member refid="structskiplist_1a8cdc90b8b107e406335fda39a1a4a150" prot="public" virt="non-virtual"><scope>skiplist</scope><name>header</name></member>
+      <member refid="structskiplist_1a34456f959c5ba9ce905c01ffbe4256df" prot="public" virt="non-virtual"><scope>skiplist</scope><name>level</name></member>
+      <member refid="structskiplist_1ac429850bbe4c53f405ceb90507caced4" prot="public" virt="non-virtual"><scope>skiplist</scope><name>memory_usage</name></member>
+      <member refid="structskiplist_1a4c8ed7506baff2c7190fc2130a588a7d" prot="public" virt="non-virtual"><scope>skiplist</scope><name>mutex</name></member>
+      <member refid="structskiplist_1a9d53ccb0e77afb651b55be43093e2640" prot="public" virt="non-virtual"><scope>skiplist</scope><name>rwlock</name></member>
+      <member refid="structskiplist_1a28c0d1b2cf6978a9f00446eeee9372ec" prot="public" virt="non-virtual"><scope>skiplist</scope><name>tail</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

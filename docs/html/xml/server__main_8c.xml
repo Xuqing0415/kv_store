@@ -1,0 +1,384 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="server__main_8c" kind="file" language="C++">
+    <compoundname>server_main.c</compoundname>
+    <includes refid="resp__server_8h" local="yes">resp_server.h</includes>
+    <includes refid="metrics__server_8h" local="yes">metrics_server.h</includes>
+    <includes refid="kv__store_8h" local="yes">kv_store.h</includes>
+    <includes local="no">stdio.h</includes>
+    <includes local="no">stdlib.h</includes>
+    <includes local="no">string.h</includes>
+    <includes local="no">signal.h</includes>
+    <includes local="no">pthread.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>kv_store.h</label>
+        <link refid="kv__store_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>metrics_server.h</label>
+        <link refid="metrics__server_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>resp_server.h</label>
+        <link refid="resp__server_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/server_main.c</label>
+        <link refid="server__main_8c"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>pthread.h</label>
+      </node>
+      <node id="9">
+        <label>signal.h</label>
+      </node>
+      <node id="4">
+        <label>stddef.h</label>
+      </node>
+      <node id="6">
+        <label>stdio.h</label>
+      </node>
+      <node id="7">
+        <label>stdlib.h</label>
+      </node>
+      <node id="8">
+        <label>string.h</label>
+      </node>
+    </incdepgraph>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" prot="public" static="yes" mutable="no">
+        <type><ref refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" kindref="member">resp_server_t</ref> *</type>
+        <definition>resp_server_t* g_resp_server</definition>
+        <argsstring></argsstring>
+        <name>g_resp_server</name>
+        <initializer>= NULL</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/server_main.c" line="16" column="22" bodyfile="src/server_main.c" bodystart="16" bodyend="-1"/>
+        <referencedby refid="server__main_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="server__main_8c" startline="56" endline="176">main</referencedby>
+        <referencedby refid="server__main_8c_1ae710b6e1e3475f05843032f73a4dd7a7" compoundref="server__main_8c" startline="33" endline="37">signal_handler</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" prot="public" static="yes" mutable="no">
+        <type><ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref> *</type>
+        <definition>metrics_server_t* g_metrics_server</definition>
+        <argsstring></argsstring>
+        <name>g_metrics_server</name>
+        <initializer>= NULL</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/server_main.c" line="17" column="25" bodyfile="src/server_main.c" bodystart="17" bodyend="-1"/>
+        <referencedby refid="server__main_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="server__main_8c" startline="56" endline="176">main</referencedby>
+        <referencedby refid="server__main_8c_1ae710b6e1e3475f05843032f73a4dd7a7" compoundref="server__main_8c" startline="33" endline="37">signal_handler</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="server__main_8c_1ae710b6e1e3475f05843032f73a4dd7a7" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void signal_handler</definition>
+        <argsstring>(int sig)</argsstring>
+        <name>signal_handler</name>
+        <param>
+          <type>int</type>
+          <declname>sig</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/server_main.c" line="33" column="13" bodyfile="src/server_main.c" bodystart="33" bodyend="37"/>
+        <references refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" compoundref="server__main_8c" startline="17">g_metrics_server</references>
+        <references refid="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" compoundref="server__main_8c" startline="16">g_resp_server</references>
+        <references refid="metrics__server_8h_1a2fd5d4484ae5eaaea76f71866350c84c" compoundref="metrics__server_8c" startline="406" endline="409">metrics_server_stop</references>
+        <references refid="resp__server_8h_1ab6901871f1865a91172fd3490b75c8b8" compoundref="resp__server_8c" startline="774" endline="777">resp_server_stop</references>
+      </memberdef>
+      <memberdef kind="function" id="server__main_8c_1ac81c773017061a45642bfde41f916da2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void *</type>
+        <definition>static void * metrics_thread_func</definition>
+        <argsstring>(void *arg)</argsstring>
+        <name>metrics_thread_func</name>
+        <param>
+          <type>void *</type>
+          <declname>arg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/server_main.c" line="39" column="13" bodyfile="src/server_main.c" bodystart="39" bodyend="43"/>
+        <references refid="metrics__server_8h_1a1a8a794cc3ca3ebdbb57ae18086c1775" compoundref="metrics__server_8c" startline="356" endline="404">metrics_server_run</references>
+      </memberdef>
+      <memberdef kind="function" id="server__main_8c_1ab18b415ece5553e9dccfeb6b4149e407" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void print_usage</definition>
+        <argsstring>(const char *prog)</argsstring>
+        <name>print_usage</name>
+        <param>
+          <type>const char *</type>
+          <declname>prog</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/server_main.c" line="46" column="13" bodyfile="src/server_main.c" bodystart="46" bodyend="54"/>
+        <referencedby refid="server__main_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="server__main_8c" startline="56" endline="176">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="server__main_8c_1a0ddf1224851353fc92bfbff6f499fa97" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int main</definition>
+        <argsstring>(int argc, char *argv[])</argsstring>
+        <name>main</name>
+        <param>
+          <type>int</type>
+          <declname>argc</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>argv</declname>
+          <array>[]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/server_main.c" line="56" column="5" bodyfile="src/server_main.c" bodystart="56" bodyend="176"/>
+        <references refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" compoundref="server__main_8c" startline="17">g_metrics_server</references>
+        <references refid="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" compoundref="server__main_8c" startline="16">g_resp_server</references>
+        <references refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" compoundref="kv__store_8c" startline="524" endline="574">kv_close</references>
+        <references refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</references>
+        <references refid="metrics__server_8h_1abbb727e26ee2979923fb2f7ea6f9de48" compoundref="metrics__server_8h" startline="14">METRICS_DEFAULT_PORT</references>
+        <references refid="metrics__server_8h_1a60405df12a195e134c42609c3dc2eb09" compoundref="metrics__server_8c" startline="411" endline="427">metrics_server_free</references>
+        <references refid="metrics__server_8h_1a20476f764a5c417e3115581567a31252" compoundref="metrics__server_8c" startline="292" endline="354">metrics_server_start</references>
+        <references refid="raft__node_8c_1ac81c773017061a45642bfde41f916da2" compoundref="raft__node_8c" startline="520" endline="523">metrics_thread_func</references>
+        <references refid="server__main_8c_1ab18b415ece5553e9dccfeb6b4149e407" compoundref="server__main_8c" startline="46" endline="54">print_usage</references>
+        <references refid="resp__server_8h_1a7bb705c8f328adcd88246f58311bdb35" compoundref="resp__server_8h" startline="11">RESP_DEFAULT_PORT</references>
+        <references refid="resp__server_8h_1aaac30d06a3381728bfc37b628f447709" compoundref="resp__server_8c" startline="779" endline="804">resp_server_free</references>
+        <references refid="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" compoundref="resp__server_8c" startline="686" endline="772">resp_server_run</references>
+        <references refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" compoundref="resp__server_8c" startline="619" endline="684">resp_server_start</references>
+        <references refid="raft__node_8c_1ae710b6e1e3475f05843032f73a4dd7a7" compoundref="raft__node_8c" startline="512" endline="518">signal_handler</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="resp__server_8h" kindref="compound">resp_server.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="metrics__server_8h" kindref="compound">metrics_server.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="kv__store_8h" kindref="compound">kv_store.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdlib.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;windows.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;process.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;signal.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;pthread.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16" refid="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" kindref="member">resp_server_t</ref>*<sp/><ref refid="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" kindref="member">g_resp_server</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="17" refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref>*<sp/><ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>BOOL<sp/>WINAPI<sp/><ref refid="server__main_8c_1ae710b6e1e3475f05843032f73a4dd7a7" kindref="member">signal_handler</ref>(DWORD<sp/>ctrl_type)<sp/>{</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>(void)ctrl_type;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" kindref="member">g_resp_server</ref>)<sp/><ref refid="resp__server_8h_1ab6901871f1865a91172fd3490b75c8b8" kindref="member">resp_server_stop</ref>(<ref refid="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" kindref="member">g_resp_server</ref>);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>)<sp/><ref refid="metrics__server_8h_1a2fd5d4484ae5eaaea76f71866350c84c" kindref="member">metrics_server_stop</ref>(<ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>TRUE;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>DWORD<sp/>WINAPI<sp/><ref refid="server__main_8c_1ac81c773017061a45642bfde41f916da2" kindref="member">metrics_thread_func</ref>(LPVOID<sp/>arg)<sp/>{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref>*<sp/>server<sp/>=<sp/>(<ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref>*)arg;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="metrics__server_8h_1a1a8a794cc3ca3ebdbb57ae18086c1775" kindref="member">metrics_server_run</ref>(server);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="31"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33" refid="server__main_8c_1ae710b6e1e3475f05843032f73a4dd7a7" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="server__main_8c_1ae710b6e1e3475f05843032f73a4dd7a7" kindref="member">signal_handler</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>sig)<sp/>{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>(void)sig;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" kindref="member">g_resp_server</ref>)<sp/><ref refid="resp__server_8h_1ab6901871f1865a91172fd3490b75c8b8" kindref="member">resp_server_stop</ref>(<ref refid="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" kindref="member">g_resp_server</ref>);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>)<sp/><ref refid="metrics__server_8h_1a2fd5d4484ae5eaaea76f71866350c84c" kindref="member">metrics_server_stop</ref>(<ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39" refid="server__main_8c_1ac81c773017061a45642bfde41f916da2" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/><ref refid="server__main_8c_1ac81c773017061a45642bfde41f916da2" kindref="member">metrics_thread_func</ref>(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/>arg)<sp/>{</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref>*<sp/>server<sp/>=<sp/>(<ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref>*)arg;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="metrics__server_8h_1a1a8a794cc3ca3ebdbb57ae18086c1775" kindref="member">metrics_server_run</ref>(server);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46" refid="server__main_8c_1ab18b415ece5553e9dccfeb6b4149e407" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="server__main_8c_1ab18b415ece5553e9dccfeb6b4149e407" kindref="member">print_usage</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>prog)<sp/>{</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Usage:<sp/>%s<sp/>[options]\n&quot;</highlight><highlight class="normal">,<sp/>prog);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Options:\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>-h<sp/>&lt;host&gt;<sp/><sp/><sp/><sp/>Bind<sp/>address<sp/>(default:<sp/>127.0.0.1)\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>-p<sp/>&lt;port&gt;<sp/><sp/><sp/><sp/>Listen<sp/>port<sp/>(default:<sp/>6379)\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>-m<sp/>&lt;port&gt;<sp/><sp/><sp/><sp/>Metrics<sp/>HTTP<sp/>port<sp/>(default:<sp/>9090,<sp/>0<sp/>to<sp/>disable)\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>-d<sp/>&lt;dir&gt;<sp/><sp/><sp/><sp/><sp/>Data<sp/>directory<sp/>(default:<sp/>./data)\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>--help<sp/><sp/><sp/><sp/><sp/><sp/><sp/>Show<sp/>this<sp/>help\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56" refid="server__main_8c_1a0ddf1224851353fc92bfbff6f499fa97" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="main_8c_1ae66f6b31b5ad750f1fe042a706a4e3d4" kindref="member">main</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>argc,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>argv[])<sp/>{</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>host<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;127.0.0.1&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>port<sp/>=<sp/><ref refid="resp__server_8h_1a7bb705c8f328adcd88246f58311bdb35" kindref="member">RESP_DEFAULT_PORT</ref>;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>metrics_port<sp/>=<sp/><ref refid="metrics__server_8h_1abbb727e26ee2979923fb2f7ea6f9de48" kindref="member">METRICS_DEFAULT_PORT</ref>;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>data_dir<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;./data&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>1;<sp/>i<sp/>&lt;<sp/>argc;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(argv[i],<sp/></highlight><highlight class="stringliteral">&quot;-h&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>i<sp/>+<sp/>1<sp/>&lt;<sp/>argc)<sp/>{</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>host<sp/>=<sp/>argv[++i];</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(argv[i],<sp/></highlight><highlight class="stringliteral">&quot;-p&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>i<sp/>+<sp/>1<sp/>&lt;<sp/>argc)<sp/>{</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>port<sp/>=<sp/>atoi(argv[++i]);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(argv[i],<sp/></highlight><highlight class="stringliteral">&quot;-m&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>i<sp/>+<sp/>1<sp/>&lt;<sp/>argc)<sp/>{</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>metrics_port<sp/>=<sp/>atoi(argv[++i]);</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(argv[i],<sp/></highlight><highlight class="stringliteral">&quot;-d&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>i<sp/>+<sp/>1<sp/>&lt;<sp/>argc)<sp/>{</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>data_dir<sp/>=<sp/>argv[++i];</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(argv[i],<sp/></highlight><highlight class="stringliteral">&quot;--help&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="server__main_8c_1ab18b415ece5553e9dccfeb6b4149e407" kindref="member">print_usage</ref>(argv[0]);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/></highlight><highlight class="stringliteral">&quot;Unknown<sp/>option:<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>argv[i]);</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="server__main_8c_1ab18b415ece5553e9dccfeb6b4149e407" kindref="member">print_usage</ref>(argv[0]);</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>1;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;========================================\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>KV<sp/>Store<sp/>Redis-compatible<sp/>Server\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;========================================\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Data<sp/>directory:<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>data_dir);</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Bind:<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>%s:%d\n&quot;</highlight><highlight class="normal">,<sp/>host,<sp/>port);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(metrics_port<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Metrics:<sp/><sp/><sp/><sp/><sp/><sp/><sp/>http://%s:%d/metrics\n&quot;</highlight><highlight class="normal">,<sp/>host,<sp/>metrics_port);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Metrics:<sp/><sp/><sp/><sp/><sp/><sp/><sp/>disabled\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db<sp/>=<sp/><ref refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" kindref="member">kv_open</ref>(data_dir);</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!db)<sp/>{</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/></highlight><highlight class="stringliteral">&quot;Failed<sp/>to<sp/>open<sp/>database<sp/>at<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>data_dir);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>1;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>启动<sp/>RESP<sp/>服务器<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" kindref="member">resp_server_start</ref>(&amp;<ref refid="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" kindref="member">g_resp_server</ref>,<sp/>host,<sp/>port,<sp/>db)<sp/>!=<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/></highlight><highlight class="stringliteral">&quot;Failed<sp/>to<sp/>start<sp/>RESP<sp/>server\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" kindref="member">kv_close</ref>(db);</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>1;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>启动<sp/>Metrics<sp/>HTTP<sp/>服务器（后台线程）<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>HANDLE<sp/>metrics_thread<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/>pthread_t<sp/>metrics_thread;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>metrics_thread_started<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(metrics_port<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="metrics__server_8h_1a20476f764a5c417e3115581567a31252" kindref="member">metrics_server_start</ref>(&amp;<ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>,<sp/>host,<sp/>metrics_port,<sp/>db,<sp/>NULL)<sp/>!=<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/></highlight><highlight class="stringliteral">&quot;WARNING:<sp/>Failed<sp/>to<sp/>start<sp/>metrics<sp/>server<sp/>on<sp/>port<sp/>%d\n&quot;</highlight><highlight class="normal">,<sp/>metrics_port);</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>metrics_thread<sp/>=<sp/>CreateThread(NULL,<sp/>0,<sp/><ref refid="raft__node_8c_1ac81c773017061a45642bfde41f916da2" kindref="member">metrics_thread_func</ref>,<sp/><ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>,<sp/>0,<sp/>NULL);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!metrics_thread)<sp/>{</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/></highlight><highlight class="stringliteral">&quot;WARNING:<sp/>Failed<sp/>to<sp/>create<sp/>metrics<sp/>thread\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="metrics__server_8h_1a60405df12a195e134c42609c3dc2eb09" kindref="member">metrics_server_free</ref>(<ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>);</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(pthread_create(&amp;metrics_thread,<sp/>NULL,<sp/><ref refid="raft__node_8c_1ac81c773017061a45642bfde41f916da2" kindref="member">metrics_thread_func</ref>,<sp/><ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>)<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>metrics_thread_started<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/></highlight><highlight class="stringliteral">&quot;WARNING:<sp/>Failed<sp/>to<sp/>create<sp/>metrics<sp/>thread\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="metrics__server_8h_1a60405df12a195e134c42609c3dc2eb09" kindref="member">metrics_server_free</ref>(<ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>);</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/>SetConsoleCtrlHandler(<ref refid="raft__node_8c_1ae710b6e1e3475f05843032f73a4dd7a7" kindref="member">signal_handler</ref>,<sp/>TRUE);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/>signal(SIGINT,<sp/><ref refid="raft__node_8c_1ae710b6e1e3475f05843032f73a4dd7a7" kindref="member">signal_handler</ref>);</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/>signal(SIGTERM,<sp/><ref refid="raft__node_8c_1ae710b6e1e3475f05843032f73a4dd7a7" kindref="member">signal_handler</ref>);</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Connect<sp/>with:<sp/>redis-cli<sp/>-h<sp/>%s<sp/>-p<sp/>%d\n&quot;</highlight><highlight class="normal">,<sp/>host,<sp/>port);</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(metrics_port<sp/>&gt;<sp/>0<sp/>&amp;&amp;<sp/><ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Metrics<sp/>at:<sp/><sp/><sp/>http://%s:%d/metrics\n&quot;</highlight><highlight class="normal">,<sp/>host,<sp/>metrics_port);</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Press<sp/>Ctrl+C<sp/>to<sp/>stop.\n\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" kindref="member">resp_server_run</ref>(<ref refid="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" kindref="member">g_resp_server</ref>);</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;\n[INFO]<sp/>Shutting<sp/>down...\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>等待<sp/>metrics<sp/>线程退出<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(metrics_thread)<sp/>{</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>WaitForSingleObject(metrics_thread,<sp/>5000);</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>CloseHandle(metrics_thread);</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="metrics__server_8h_1a60405df12a195e134c42609c3dc2eb09" kindref="member">metrics_server_free</ref>(<ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>);</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(metrics_thread_started)<sp/>{</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pthread_join(metrics_thread,<sp/>NULL);</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="metrics__server_8h_1a60405df12a195e134c42609c3dc2eb09" kindref="member">metrics_server_free</ref>(<ref refid="server__main_8c_1a7e9c02d48aed6d7ac7ce32fd5bbaf167" kindref="member">g_metrics_server</ref>);</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="resp__server_8h_1aaac30d06a3381728bfc37b628f447709" kindref="member">resp_server_free</ref>(<ref refid="server__main_8c_1aae7a7fb7e9eac11a0f563e4618c6f052" kindref="member">g_resp_server</ref>);</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" kindref="member">kv_close</ref>(db);</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[INFO]<sp/>Server<sp/>stopped.\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"></highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="176"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/server_main.c"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,296 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="resp__server_8h" kind="file" language="C++">
+    <compoundname>resp_server.h</compoundname>
+    <includes refid="kv__store_8h" local="yes">kv_store.h</includes>
+    <includedby refid="raft__node_8c" local="yes">src/raft_node.c</includedby>
+    <includedby refid="resp__server_8c" local="yes">src/resp_server.c</includedby>
+    <includedby refid="server__main_8c" local="yes">src/server_main.c</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>kv_store.h</label>
+        <link refid="kv__store_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/resp_server.h</label>
+        <link refid="resp__server_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>stddef.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>include/resp_server.h</label>
+        <link refid="resp__server_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/raft_node.c</label>
+        <link refid="raft__node_8c"/>
+      </node>
+      <node id="3">
+        <label>src/resp_server.c</label>
+        <link refid="resp__server_8c"/>
+      </node>
+      <node id="4">
+        <label>src/server_main.c</label>
+        <link refid="server__main_8c"/>
+      </node>
+    </invincdepgraph>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="resp__server_8h_1a7bb705c8f328adcd88246f58311bdb35" prot="public" static="no">
+        <name>RESP_DEFAULT_PORT</name>
+        <initializer>6379</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/resp_server.h" line="11" column="9" bodyfile="include/resp_server.h" bodystart="11" bodyend="-1"/>
+        <referencedby refid="server__main_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="server__main_8c" startline="56" endline="176">main</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="resp__server_8h_1a463cf1b37b2730a543f24adbb17637c0" prot="public" static="no">
+        <name>RESP_MAX_CLIENTS</name>
+        <initializer>32</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/resp_server.h" line="12" column="9" bodyfile="include/resp_server.h" bodystart="12" bodyend="-1"/>
+        <referencedby refid="resp__server_8h_1aaac30d06a3381728bfc37b628f447709" compoundref="resp__server_8c" startline="779" endline="804">resp_server_free</referencedby>
+        <referencedby refid="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" compoundref="resp__server_8c" startline="686" endline="772">resp_server_run</referencedby>
+        <referencedby refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" compoundref="resp__server_8c" startline="619" endline="684">resp_server_start</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="resp__server_8h_1ae3f3ea770d106ba0dcfa18246f1dba00" prot="public" static="no">
+        <name>RESP_MAX_CMD_LEN</name>
+        <initializer>(1024 * 1024)  /* 1MB max command */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/resp_server.h" line="13" column="9" bodyfile="include/resp_server.h" bodystart="13" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1a09d9de08aeb52c7180985fd08fa043fb" compoundref="resp__server_8c" startline="102" endline="221">resp_parse</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="resp__server_8h_1a78e785b107efb6944d3cd209c7b8b2d3" prot="public" static="no">
+        <name>RESP_IO_BUF_SIZE</name>
+        <initializer>(64 * 1024)     /* 64KB I/O buffer */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/resp_server.h" line="14" column="9" bodyfile="include/resp_server.h" bodystart="14" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1a25ce0d89a4bc68339e6bd32c2b6a6f27" compoundref="resp__server_8c" startline="501" endline="613">resp_process_client</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="resp__server_8h_1aa027c37d5edc1d81e17246b8e8b21838" prot="public" static="no">
+        <name>RESP_REPLY_BUF_SIZE</name>
+        <initializer>(1024 * 1024)   /* 1MB reply buffer */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/resp_server.h" line="15" column="9" bodyfile="include/resp_server.h" bodystart="15" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1adb9cdefcde0f4e434eb83a2688e569dd" compoundref="resp__server_8c" startline="233" endline="244">resp_reply_new</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" prot="public" static="no">
+        <type>struct <ref refid="structresp__server" kindref="compound">resp_server</ref></type>
+        <definition>typedef struct resp_server resp_server_t</definition>
+        <argsstring></argsstring>
+        <name>resp_server_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/resp_server.h" line="18" column="26" bodyfile="include/resp_server.h" bodystart="18" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int resp_server_start</definition>
+        <argsstring>(resp_server_t **out_server, const char *host, int port, kv_store_t *db)</argsstring>
+        <name>resp_server_start</name>
+        <param>
+          <type><ref refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" kindref="member">resp_server_t</ref> **</type>
+          <declname>out_server</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>host</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>port</declname>
+        </param>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/resp_server.h" line="21" column="5" bodyfile="src/resp_server.c" bodystart="619" bodyend="684" declfile="include/resp_server.h" declline="21" declcolumn="5"/>
+        <references refid="structresp__client_1acdf5c3a177a24c136ecf4e7885d71ff3" compoundref="resp__server_8c" startline="485">resp_client::active</references>
+        <references refid="structresp__server_1a53320127bd434f621f9611bea38f7a18" compoundref="resp__server_8c" startline="491">resp_server::clients</references>
+        <references refid="structresp__server_1aba3939c29e5ef6fa4ca2608536802393" compoundref="resp__server_8c" startline="490">resp_server::db</references>
+        <references refid="structresp__client_1ad2eecedb947cc1edb5a6aaa04b38ab71" compoundref="resp__server_8c" startline="481">resp_client::fd</references>
+        <references refid="structresp__server_1a6b19fbcf350d8ecd983bf51d9045441c" compoundref="resp__server_8c" startline="493">resp_server::host</references>
+        <references refid="metrics__server_8c_1a26769957ec1a2beaf223f33b66ee64ab" compoundref="metrics__server_8c" startline="27">INVALID_SOCKET</references>
+        <references refid="structresp__server_1a14311b2033736379e708e64208919719" compoundref="resp__server_8c" startline="489">resp_server::listen_fd</references>
+        <references refid="structresp__server_1ab80b4f18550ee7d203da657dcf01c5eb" compoundref="resp__server_8c" startline="494">resp_server::port</references>
+        <references refid="resp__server_8h_1a463cf1b37b2730a543f24adbb17637c0" compoundref="resp__server_8h" startline="12">RESP_MAX_CLIENTS</references>
+        <references refid="resp__server_8c_1aaac30d06a3381728bfc37b628f447709" compoundref="resp__server_8c" startline="779" endline="804">resp_server_free</references>
+        <references refid="structresp__server_1a465325764e788e19d441d71a801a3513" compoundref="resp__server_8c" startline="492">resp_server::running</references>
+        <references refid="metrics__server_8c_1a633b0396ff93d336a088412a190a5072" compoundref="metrics__server_8c" startline="28">SOCKET_ERROR</references>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void resp_server_run</definition>
+        <argsstring>(resp_server_t *server)</argsstring>
+        <name>resp_server_run</name>
+        <param>
+          <type><ref refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" kindref="member">resp_server_t</ref> *</type>
+          <declname>server</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/resp_server.h" line="24" column="6" bodyfile="src/resp_server.c" bodystart="686" bodyend="772" declfile="include/resp_server.h" declline="24" declcolumn="6"/>
+        <references refid="structresp__client_1acdf5c3a177a24c136ecf4e7885d71ff3" compoundref="resp__server_8c" startline="485">resp_client::active</references>
+        <references refid="structresp__client_1a43415ddcc67fca82fe8cbdee97d593ae" compoundref="resp__server_8c" startline="484">resp_client::buf_len</references>
+        <references refid="structresp__client_1ac973e9174e2466ba29374cd5e40ab534" compoundref="resp__server_8c" startline="483">resp_client::buf_pos</references>
+        <references refid="structresp__server_1a53320127bd434f621f9611bea38f7a18" compoundref="resp__server_8c" startline="491">resp_server::clients</references>
+        <references refid="resp__server_8c_1a1c6795db8afe1096e4a005206e556e12" compoundref="resp__server_8c" startline="24">close_socket</references>
+        <references refid="structresp__client_1ad2eecedb947cc1edb5a6aaa04b38ab71" compoundref="resp__server_8c" startline="481">resp_client::fd</references>
+        <references refid="metrics__server_8c_1a26769957ec1a2beaf223f33b66ee64ab" compoundref="metrics__server_8c" startline="27">INVALID_SOCKET</references>
+        <references refid="structresp__server_1a14311b2033736379e708e64208919719" compoundref="resp__server_8c" startline="489">resp_server::listen_fd</references>
+        <references refid="resp__server_8h_1a463cf1b37b2730a543f24adbb17637c0" compoundref="resp__server_8h" startline="12">RESP_MAX_CLIENTS</references>
+        <references refid="resp__server_8c_1a25ce0d89a4bc68339e6bd32c2b6a6f27" compoundref="resp__server_8c" startline="501" endline="613">resp_process_client</references>
+        <references refid="structresp__server_1a465325764e788e19d441d71a801a3513" compoundref="resp__server_8c" startline="492">resp_server::running</references>
+        <references refid="metrics__server_8c_1aff55fe551a9992a54ec54621c524d0a4" compoundref="metrics__server_8c" startline="26">SOCKET</references>
+        <referencedby refid="server__main_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="server__main_8c" startline="56" endline="176">main</referencedby>
+        <referencedby refid="raft__node_8c_1ad709862083a051ab890c3efaf4bb04a4" compoundref="raft__node_8c" startline="525" endline="528">resp_thread_func</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="resp__server_8h_1ab6901871f1865a91172fd3490b75c8b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void resp_server_stop</definition>
+        <argsstring>(resp_server_t *server)</argsstring>
+        <name>resp_server_stop</name>
+        <param>
+          <type><ref refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" kindref="member">resp_server_t</ref> *</type>
+          <declname>server</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/resp_server.h" line="27" column="6" bodyfile="src/resp_server.c" bodystart="774" bodyend="777" declfile="include/resp_server.h" declline="27" declcolumn="6"/>
+        <references refid="structresp__server_1a465325764e788e19d441d71a801a3513" compoundref="resp__server_8c" startline="492">resp_server::running</references>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+        <referencedby refid="raft__node_8c_1ae710b6e1e3475f05843032f73a4dd7a7" compoundref="raft__node_8c" startline="512" endline="518">signal_handler</referencedby>
+        <referencedby refid="server__main_8c_1ae710b6e1e3475f05843032f73a4dd7a7" compoundref="server__main_8c" startline="33" endline="37">signal_handler</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="resp__server_8h_1aaac30d06a3381728bfc37b628f447709" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void resp_server_free</definition>
+        <argsstring>(resp_server_t *server)</argsstring>
+        <name>resp_server_free</name>
+        <param>
+          <type><ref refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" kindref="member">resp_server_t</ref> *</type>
+          <declname>server</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/resp_server.h" line="30" column="6" bodyfile="src/resp_server.c" bodystart="779" bodyend="804" declfile="include/resp_server.h" declline="30" declcolumn="6"/>
+        <references refid="structresp__client_1acdf5c3a177a24c136ecf4e7885d71ff3" compoundref="resp__server_8c" startline="485">resp_client::active</references>
+        <references refid="structresp__server_1a53320127bd434f621f9611bea38f7a18" compoundref="resp__server_8c" startline="491">resp_server::clients</references>
+        <references refid="resp__server_8c_1a1c6795db8afe1096e4a005206e556e12" compoundref="resp__server_8c" startline="24">close_socket</references>
+        <references refid="structresp__client_1ad2eecedb947cc1edb5a6aaa04b38ab71" compoundref="resp__server_8c" startline="481">resp_client::fd</references>
+        <references refid="structresp__server_1a6b19fbcf350d8ecd983bf51d9045441c" compoundref="resp__server_8c" startline="493">resp_server::host</references>
+        <references refid="metrics__server_8c_1a26769957ec1a2beaf223f33b66ee64ab" compoundref="metrics__server_8c" startline="27">INVALID_SOCKET</references>
+        <references refid="structresp__server_1a14311b2033736379e708e64208919719" compoundref="resp__server_8c" startline="489">resp_server::listen_fd</references>
+        <references refid="resp__server_8h_1a463cf1b37b2730a543f24adbb17637c0" compoundref="resp__server_8h" startline="12">RESP_MAX_CLIENTS</references>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+        <referencedby refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" compoundref="resp__server_8c" startline="619" endline="684">resp_server_start</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>RESP_SERVER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RESP_SERVER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="kv__store_8h" kindref="compound">kv_store.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>Redis<sp/>RESP<sp/>协议服务器配置<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11" refid="resp__server_8h_1a7bb705c8f328adcd88246f58311bdb35" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RESP_DEFAULT_PORT<sp/><sp/><sp/><sp/>6379</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12" refid="resp__server_8h_1a463cf1b37b2730a543f24adbb17637c0" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RESP_MAX_CLIENTS<sp/><sp/><sp/><sp/><sp/>32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13" refid="resp__server_8h_1ae3f3ea770d106ba0dcfa18246f1dba00" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RESP_MAX_CMD_LEN<sp/><sp/><sp/><sp/><sp/>(1024<sp/>*<sp/>1024)<sp/><sp/></highlight><highlight class="comment">/*<sp/>1MB<sp/>max<sp/>command<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14" refid="resp__server_8h_1a78e785b107efb6944d3cd209c7b8b2d3" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RESP_IO_BUF_SIZE<sp/><sp/><sp/><sp/><sp/>(64<sp/>*<sp/>1024)<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>64KB<sp/>I/O<sp/>buffer<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15" refid="resp__server_8h_1aa027c37d5edc1d81e17246b8e8b21838" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RESP_REPLY_BUF_SIZE<sp/><sp/>(1024<sp/>*<sp/>1024)<sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>1MB<sp/>reply<sp/>buffer<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>服务器句柄<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18" refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structresp__server" kindref="compound">resp_server</ref><sp/><ref refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" kindref="member">resp_server_t</ref>;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>启动<sp/>RESP<sp/>服务器，返回<sp/>0<sp/>成功，-1<sp/>失败<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" kindref="member">resp_server_start</ref>(<ref refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" kindref="member">resp_server_t</ref>**<sp/>out_server,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structresp__server_1a6b19fbcf350d8ecd983bf51d9045441c" kindref="member">host</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structresp__server_1ab80b4f18550ee7d203da657dcf01c5eb" kindref="member">port</ref>,<sp/><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/><ref refid="structresp__server_1aba3939c29e5ef6fa4ca2608536802393" kindref="member">db</ref>);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>运行服务器主循环（阻塞，直到收到停止信号）<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" kindref="member">resp_server_run</ref>(<ref refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" kindref="member">resp_server_t</ref>*<sp/>server);</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>停止服务器<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="resp__server_8h_1ab6901871f1865a91172fd3490b75c8b8" kindref="member">resp_server_stop</ref>(<ref refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" kindref="member">resp_server_t</ref>*<sp/>server);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>销毁服务器资源<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="resp__server_8h_1aaac30d06a3381728bfc37b628f447709" kindref="member">resp_server_free</ref>(<ref refid="resp__server_8h_1a02fcaa85ed43184eb7e8422e2c061143" kindref="member">resp_server_t</ref>*<sp/>server);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>RESP_SERVER_H<sp/>*/</highlight><highlight class="preprocessor"></highlight></codeline>
+    </programlisting>
+    <location file="include/resp_server.h"/>
+  </compounddef>
+</doxygen>

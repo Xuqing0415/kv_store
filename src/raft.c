@@ -382,7 +382,9 @@ static int raft_log_load(raft_t* r) {
     if (fread(&count, 8, 1, f) != 1) { fclose(f); return -1; }
     if (count > r->log_capacity) {
         r->log_capacity = (size_t)count + 1024;
-        r->log = kv_realloc(r->log, r->log_capacity * sizeof(raft_log_entry_t));
+        void* tmp = kv_realloc(r->log, r->log_capacity * sizeof(raft_log_entry_t));
+        if (!tmp) { fclose(f); return -1; }
+        r->log = (raft_log_entry_t*)tmp;
     }
     r->log_count = (size_t)count;
 
@@ -881,6 +883,7 @@ static void raft_handle_append_request(raft_t* r, SOCKET fd, uint8_t* data, size
         if (val_len > 0) {
             if (off + val_len > data_len) { kv_free(key); break; }
             val = kv_malloc((size_t)val_len);
+            if (!val) { kv_free(key); break; }
             memcpy(val, data + off, (size_t)val_len);
             off += (size_t)val_len;
         }
@@ -921,7 +924,9 @@ static void raft_handle_append_request(raft_t* r, SOCKET fd, uint8_t* data, size
             /* 扩容 */
             if (r->log_count >= r->log_capacity) {
                 r->log_capacity *= 2;
-                r->log = kv_realloc(r->log, r->log_capacity * sizeof(raft_log_entry_t));
+                void* tmp = kv_realloc(r->log, r->log_capacity * sizeof(raft_log_entry_t));
+                if (!tmp) { kv_free(key); kv_free(val); break; }
+                r->log = (raft_log_entry_t*)tmp;
             }
             raft_log_entry_t* ne = &r->log[r->log_count++];
             ne->term = e_term;
@@ -1188,7 +1193,9 @@ static void raft_handle_propose_request(raft_t* r, SOCKET fd, uint8_t* data, siz
     /* 扩容日志 */
     if (r->log_count >= r->log_capacity) {
         r->log_capacity *= 2;
-        r->log = kv_realloc(r->log, r->log_capacity * sizeof(raft_log_entry_t));
+        void* tmp = kv_realloc(r->log, r->log_capacity * sizeof(raft_log_entry_t));
+        if (!tmp) { MUTEX_UNLOCK(&r->mutex); return; }
+        r->log = (raft_log_entry_t*)tmp;
     }
 
     uint64_t new_idx = r->log_count > 0 ? r->log[r->log_count - 1].index + 1 : 1;
@@ -1428,6 +1435,15 @@ void raft_destroy(raft_t* r) {
     raft_join(r);
 
     if (r->listen_fd != INVALID_SOCKET) close_socket(r->listen_fd);
+
+    /* 清理快照分块接收临时文件（防止句柄泄漏） */
+    if (r->snap_chunk_state.file) {
+        fclose(r->snap_chunk_state.file);
+        r->snap_chunk_state.file = NULL;
+        remove(r->snap_chunk_state.tmp_path);
+    }
+    r->snap_chunk_state.active = 0;
+
     for (size_t i = 0; i < r->log_count; i++) {
         kv_free(r->log[i].key);
         kv_free(r->log[i].value);
@@ -1572,7 +1588,9 @@ int raft_propose(raft_t* r, uint8_t type, const char* key, size_t key_len,
     MUTEX_LOCK(&r->mutex);
     if (r->log_count >= r->log_capacity) {
         r->log_capacity *= 2;
-        r->log = kv_realloc(r->log, r->log_capacity * sizeof(raft_log_entry_t));
+        void* tmp = kv_realloc(r->log, r->log_capacity * sizeof(raft_log_entry_t));
+        if (!tmp) { MUTEX_UNLOCK(&r->mutex); return -1; }
+        r->log = (raft_log_entry_t*)tmp;
     }
 
     uint64_t new_idx = r->log_count > 0 ? r->log[r->log_count - 1].index + 1 : 1;

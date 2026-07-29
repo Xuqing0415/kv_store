@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structskiplist__iter" kind="struct" language="C++" prot="public">
+    <compoundname>skiplist_iter</compoundname>
+    <includes refid="skiplist_8h" local="no">skiplist.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structskiplist__iter_1abf571def741558300cc970625f53f102" prot="public" static="no" mutable="no">
+        <type><ref refid="skiplist_8h_1add5ad3c15496eeaf627983b07b8e3da0" kindref="member">skiplist_node_t</ref> *</type>
+        <definition>skiplist_node_t* skiplist_iter::current</definition>
+        <argsstring></argsstring>
+        <name>current</name>
+        <qualifiedname>skiplist_iter::current</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/skiplist.h" line="19" column="21" bodyfile="include/skiplist.h" bodystart="19" bodyend="-1"/>
+        <referencedby refid="skiplist_8h_1a69dfbcd76ad2fa6f4da01ec99119d64a" compoundref="skiplist_8c" startline="258" endline="290">skiplist_iter_next</referencedby>
+        <referencedby refid="skiplist_8h_1a51455706e22b354dbe6334120f72c1e4" compoundref="skiplist_8c" startline="242" endline="250">skiplist_new_iterator</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>skiplist_iter</label>
+        <link refid="structskiplist__iter"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>current</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>skiplist_node</label>
+        <link refid="structskiplist__node"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>forward</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/skiplist.h" line="18" column="1" bodyfile="include/skiplist.h" bodystart="18" bodyend="20"/>
+    <listofallmembers>
+      <member refid="structskiplist__iter_1abf571def741558300cc970625f53f102" prot="public" virt="non-virtual"><scope>skiplist_iter</scope><name>current</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

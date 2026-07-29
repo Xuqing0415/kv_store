@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="bloom__filter_8h" kind="file" language="C++">
+    <compoundname>bloom_filter.h</compoundname>
+    <includes local="no">stddef.h</includes>
+    <includes local="no">stdint.h</includes>
+    <includedby refid="bloom__filter_8c" local="yes">src/bloom_filter.c</includedby>
+    <includedby refid="kv__store_8c" local="yes">src/kv_store.c</includedby>
+    <includedby refid="sstable_8c" local="yes">src/sstable.c</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>include/bloom_filter.h</label>
+        <link refid="bloom__filter_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>stddef.h</label>
+      </node>
+      <node id="3">
+        <label>stdint.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>include/bloom_filter.h</label>
+        <link refid="bloom__filter_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/bloom_filter.c</label>
+        <link refid="bloom__filter_8c"/>
+      </node>
+      <node id="3">
+        <label>src/kv_store.c</label>
+        <link refid="kv__store_8c"/>
+      </node>
+      <node id="4">
+        <label>src/sstable.c</label>
+        <link refid="sstable_8c"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structbloom__filter" prot="public">bloom_filter</innerclass>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" prot="public" static="no">
+        <type>struct <ref refid="structbloom__filter" kindref="compound">bloom_filter</ref></type>
+        <definition>typedef struct bloom_filter bloom_filter_t</definition>
+        <argsstring></argsstring>
+        <name>bloom_filter_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/bloom_filter.h" line="11" column="16"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="bloom__filter_8h_1a3380ad482d5857892418df5c6a3bd6c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+        <definition>bloom_filter_t * bloom_filter_new</definition>
+        <argsstring>(size_t expected_keys, double false_positive_rate)</argsstring>
+        <name>bloom_filter_new</name>
+        <param>
+          <type>size_t</type>
+          <declname>expected_keys</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>false_positive_rate</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/bloom_filter.h" line="13" column="16" bodyfile="src/bloom_filter.c" bodystart="35" bodyend="53" declfile="include/bloom_filter.h" declline="13" declcolumn="16"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <references refid="bloom__filter_8c_1a67e3df74f5bfa3c13986293b6a2232e7" compoundref="bloom__filter_8c" startline="23" endline="27">bloom_filter_compute_bits</references>
+        <references refid="bloom__filter_8c_1a5d875fdd508bbb17220edf0f2bf849d2" compoundref="bloom__filter_8c" startline="29" endline="33">bloom_filter_compute_hashes</references>
+        <references refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" compoundref="bloom__filter_8h" startline="10">bloom_filter::num_hash</references>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8h_1a84292d7cc1ce4dbd1b919e28f1716284" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bloom_filter_free</definition>
+        <argsstring>(bloom_filter_t *bf)</argsstring>
+        <name>bloom_filter_free</name>
+        <param>
+          <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+          <declname>bf</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/bloom_filter.h" line="14" column="6" bodyfile="src/bloom_filter.c" bodystart="55" bodyend="59" declfile="include/bloom_filter.h" declline="14" declcolumn="6"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8h_1a48c905101080a88dd96bbca3e547e676" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bloom_filter_add</definition>
+        <argsstring>(bloom_filter_t *bf, const char *key, size_t klen)</argsstring>
+        <name>bloom_filter_add</name>
+        <param>
+          <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+          <declname>bf</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/bloom_filter.h" line="15" column="6" bodyfile="src/bloom_filter.c" bodystart="61" bodyend="72" declfile="include/bloom_filter.h" declline="15" declcolumn="6"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <references refid="bloom__filter_8c_1a75c63fe92fdbaecc8d6d1e685eed239c" compoundref="bloom__filter_8c" startline="6" endline="13">hash1</references>
+        <references refid="bloom__filter_8c_1a3c6207c7b58be8a9f7a635cea27756f8" compoundref="bloom__filter_8c" startline="15" endline="21">hash2</references>
+        <references refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" compoundref="bloom__filter_8h" startline="10">bloom_filter::num_hash</references>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8h_1a4fa96faf24a1a24fe8963e8fcd2d466e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int bloom_filter_may_contain</definition>
+        <argsstring>(bloom_filter_t *bf, const char *key, size_t klen)</argsstring>
+        <name>bloom_filter_may_contain</name>
+        <param>
+          <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+          <declname>bf</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/bloom_filter.h" line="16" column="5" bodyfile="src/bloom_filter.c" bodystart="74" bodyend="88" declfile="include/bloom_filter.h" declline="16" declcolumn="5"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <references refid="bloom__filter_8c_1a75c63fe92fdbaecc8d6d1e685eed239c" compoundref="bloom__filter_8c" startline="6" endline="13">hash1</references>
+        <references refid="bloom__filter_8c_1a3c6207c7b58be8a9f7a635cea27756f8" compoundref="bloom__filter_8c" startline="15" endline="21">hash2</references>
+        <references refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" compoundref="bloom__filter_8h" startline="10">bloom_filter::num_hash</references>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8h_1aa115c2c21a26bfd8042c7e5fc2c9bf41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t bloom_filter_serialize</definition>
+        <argsstring>(bloom_filter_t *bf, uint8_t *buf, size_t buf_len)</argsstring>
+        <name>bloom_filter_serialize</name>
+        <param>
+          <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+          <declname>bf</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>buf</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>buf_len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/bloom_filter.h" line="17" column="8" bodyfile="src/bloom_filter.c" bodystart="96" bodyend="113" declfile="include/bloom_filter.h" declline="17" declcolumn="8"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <references refid="bloom__filter_8c_1ad41b29a3fd872e92012ec5b7b20783e1" compoundref="bloom__filter_8c" startline="90" endline="94">bloom_filter_serialized_size</references>
+        <references refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" compoundref="bloom__filter_8h" startline="10">bloom_filter::num_hash</references>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8h_1a9fc748da7f4da37755bc57336e296219" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+        <definition>bloom_filter_t * bloom_filter_deserialize</definition>
+        <argsstring>(const uint8_t *buf, size_t buf_len)</argsstring>
+        <name>bloom_filter_deserialize</name>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>buf</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>buf_len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/bloom_filter.h" line="18" column="16" bodyfile="src/bloom_filter.c" bodystart="115" bodyend="145" declfile="include/bloom_filter.h" declline="18" declcolumn="16"/>
+        <references refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" compoundref="bloom__filter_8h" startline="8">bloom_filter::bits</references>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <references refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" compoundref="bloom__filter_8h" startline="10">bloom_filter::num_hash</references>
+      </memberdef>
+      <memberdef kind="function" id="bloom__filter_8h_1ad41b29a3fd872e92012ec5b7b20783e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t bloom_filter_serialized_size</definition>
+        <argsstring>(bloom_filter_t *bf)</argsstring>
+        <name>bloom_filter_serialized_size</name>
+        <param>
+          <type><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref> *</type>
+          <declname>bf</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/bloom_filter.h" line="19" column="8" bodyfile="src/bloom_filter.c" bodystart="90" bodyend="94" declfile="include/bloom_filter.h" declline="19" declcolumn="8"/>
+        <references refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" compoundref="bloom__filter_8h" startline="9">bloom_filter::bits_len</references>
+        <referencedby refid="bloom__filter_8h_1aa115c2c21a26bfd8042c7e5fc2c9bf41" compoundref="bloom__filter_8c" startline="96" endline="113">bloom_filter_serialize</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>BLOOM_FILTER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>BLOOM_FILTER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stddef.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdint.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7" refid="structbloom__filter" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structbloom__filter" kindref="compound">bloom_filter</ref><sp/>{</highlight></codeline>
+<codeline lineno="8" refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>uint8_t*<sp/><ref refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" kindref="member">bits</ref>;</highlight></codeline>
+<codeline lineno="9" refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" kindref="member">bits_len</ref>;</highlight></codeline>
+<codeline lineno="10" refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" kindref="member">num_hash</ref>;</highlight></codeline>
+<codeline lineno="11" refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" refkind="member"><highlight class="normal">}<sp/><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>;</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/><ref refid="bloom__filter_8h_1a3380ad482d5857892418df5c6a3bd6c2" kindref="member">bloom_filter_new</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>expected_keys,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>false_positive_rate);</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8h_1a84292d7cc1ce4dbd1b919e28f1716284" kindref="member">bloom_filter_free</ref>(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8h_1a48c905101080a88dd96bbca3e547e676" kindref="member">bloom_filter_add</ref>(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8h_1a4fa96faf24a1a24fe8963e8fcd2d466e" kindref="member">bloom_filter_may_contain</ref>(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8h_1aa115c2c21a26bfd8042c7e5fc2c9bf41" kindref="member">bloom_filter_serialize</ref>(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf,<sp/>uint8_t*<sp/>buf,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>buf_len);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/><ref refid="bloom__filter_8h_1a9fc748da7f4da37755bc57336e296219" kindref="member">bloom_filter_deserialize</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>uint8_t*<sp/>buf,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>buf_len);</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="bloom__filter_8h_1ad41b29a3fd872e92012ec5b7b20783e1" kindref="member">bloom_filter_serialized_size</ref>(<ref refid="bloom__filter_8h_1ae8e489e3af6919431ce2004e81f0d621" kindref="member">bloom_filter_t</ref>*<sp/>bf);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="include/bloom_filter.h"/>
+  </compounddef>
+</doxygen>

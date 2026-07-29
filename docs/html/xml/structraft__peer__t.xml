@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structraft__peer__t" kind="struct" language="C++" prot="public">
+    <compoundname>raft_peer_t</compoundname>
+    <includes refid="raft_8h" local="no">raft.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structraft__peer__t_1adf096b4aa461a87ead26decf17b0a25e" prot="public" static="no" mutable="no">
+        <type>char</type>
+        <definition>char raft_peer_t::id[RAFT_NODE_ID_LEN]</definition>
+        <argsstring>[RAFT_NODE_ID_LEN]</argsstring>
+        <name>id</name>
+        <qualifiedname>raft_peer_t::id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="49" column="10" bodyfile="include/raft.h" bodystart="49" bodyend="-1"/>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+        <referencedby refid="raft_8c_1a53b219c95852da66bf0de448edebb4d5" compoundref="raft_8c" startline="608" endline="636">raft_become_leader</referencedby>
+        <referencedby refid="raft_8c_1ab9d09f5928d6c9df85c5b1ae38c2e289" compoundref="raft_8c" startline="204" endline="209">raft_find_peer</referencedby>
+        <referencedby refid="raft_8c_1a3f6523350031eb1f328f0011813f5925" compoundref="raft_8c" startline="964" endline="1038">raft_handle_append_response</referencedby>
+        <referencedby refid="raft_8c_1ab78a5008c76cbf9542f2cd2398ffe0c0" compoundref="raft_8c" startline="1155" endline="1237">raft_handle_propose_request</referencedby>
+        <referencedby refid="raft_8h_1aee59798c5da5f030e0de76ac5219f65e" compoundref="raft_8c" startline="1515" endline="1618">raft_propose</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__peer__t_1a8fc9d04dd34ebc3ac530083d4f25f07f" prot="public" static="no" mutable="no">
+        <type>char</type>
+        <definition>char raft_peer_t::host[64]</definition>
+        <argsstring>[64]</argsstring>
+        <name>host</name>
+        <qualifiedname>raft_peer_t::host</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="50" column="10" bodyfile="include/raft.h" bodystart="50" bodyend="-1"/>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+        <referencedby refid="raft_8c_1a3772298efc9592cae9a0b40090701acf" compoundref="raft_8c" startline="562" endline="582">raft_connect_peer</referencedby>
+        <referencedby refid="raft_8c_1ab78a5008c76cbf9542f2cd2398ffe0c0" compoundref="raft_8c" startline="1155" endline="1237">raft_handle_propose_request</referencedby>
+        <referencedby refid="raft_8h_1aee59798c5da5f030e0de76ac5219f65e" compoundref="raft_8c" startline="1515" endline="1618">raft_propose</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__peer__t_1a7ff1f5db65bf3d539ec449e1633d9535" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int raft_peer_t::port</definition>
+        <argsstring></argsstring>
+        <name>port</name>
+        <qualifiedname>raft_peer_t::port</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="51" column="10" bodyfile="include/raft.h" bodystart="51" bodyend="-1"/>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+        <referencedby refid="raft_8c_1a3772298efc9592cae9a0b40090701acf" compoundref="raft_8c" startline="562" endline="582">raft_connect_peer</referencedby>
+        <referencedby refid="raft_8c_1ab78a5008c76cbf9542f2cd2398ffe0c0" compoundref="raft_8c" startline="1155" endline="1237">raft_handle_propose_request</referencedby>
+        <referencedby refid="raft_8h_1aee59798c5da5f030e0de76ac5219f65e" compoundref="raft_8c" startline="1515" endline="1618">raft_propose</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/raft.h" line="48" column="1" bodyfile="include/raft.h" bodystart="48" bodyend="52"/>
+    <listofallmembers>
+      <member refid="structraft__peer__t_1a8fc9d04dd34ebc3ac530083d4f25f07f" prot="public" virt="non-virtual"><scope>raft_peer_t</scope><name>host</name></member>
+      <member refid="structraft__peer__t_1adf096b4aa461a87ead26decf17b0a25e" prot="public" virt="non-virtual"><scope>raft_peer_t</scope><name>id</name></member>
+      <member refid="structraft__peer__t_1a7ff1f5db65bf3d539ec449e1633d9535" prot="public" virt="non-virtual"><scope>raft_peer_t</scope><name>port</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

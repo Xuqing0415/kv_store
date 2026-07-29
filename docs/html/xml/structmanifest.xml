@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structmanifest" kind="struct" language="C++" prot="public">
+    <compoundname>manifest</compoundname>
+    <includes refid="manifest_8h" local="no">manifest.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structmanifest_1a11440e860a7c980230450115b8f2e618" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* manifest::dir_path</definition>
+        <argsstring></argsstring>
+        <name>dir_path</name>
+        <qualifiedname>manifest::dir_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="22" column="10" bodyfile="include/manifest.h" bodystart="22" bodyend="-1"/>
+        <referencedby refid="manifest_8h_1a5d1e760abe0a2988da14531d4431cd9a" compoundref="manifest_8c" startline="51" endline="57">manifest_close</referencedby>
+        <referencedby refid="manifest_8h_1aea56d11e385e679f5910da48e02f9a67" compoundref="manifest_8c" startline="206" endline="267">manifest_load</referencedby>
+        <referencedby refid="manifest_8h_1a4595c099070292074eecf62dc44f8e6e" compoundref="manifest_8c" startline="30" endline="49">manifest_open</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmanifest_1a94c3b9ff936b8485c83969133de24735" prot="public" static="no" mutable="no">
+        <type><ref refid="manifest_8h_1a9b7669d7128e8f85a99379eb1ffba3ed" kindref="member">manifest_file_t</ref> *</type>
+        <definition>manifest_file_t* manifest::files</definition>
+        <argsstring></argsstring>
+        <name>files</name>
+        <qualifiedname>manifest::files</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="23" column="21" bodyfile="include/manifest.h" bodystart="23" bodyend="-1"/>
+        <referencedby refid="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" compoundref="manifest_8c" startline="59" endline="94">manifest_add_file</referencedby>
+        <referencedby refid="manifest_8h_1acdf72e733f23ae5ca16a62fad50193f2" compoundref="manifest_8c" startline="115" endline="124">manifest_clear</referencedby>
+        <referencedby refid="manifest_8h_1a5d1e760abe0a2988da14531d4431cd9a" compoundref="manifest_8c" startline="51" endline="57">manifest_close</referencedby>
+        <referencedby refid="manifest_8h_1a1b49825fc2dafa1d29d1fea3f32df54f" compoundref="manifest_8c" startline="126" endline="154">manifest_list_files</referencedby>
+        <referencedby refid="manifest_8h_1a4595c099070292074eecf62dc44f8e6e" compoundref="manifest_8c" startline="30" endline="49">manifest_open</referencedby>
+        <referencedby refid="manifest_8h_1ac1eb70471bbbeb6b1c92f6d6a56595fa" compoundref="manifest_8c" startline="96" endline="113">manifest_remove_file</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmanifest_1ab3664d7d3c29f06af49c544def50672c" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t manifest::next_file_id</definition>
+        <argsstring></argsstring>
+        <name>next_file_id</name>
+        <qualifiedname>manifest::next_file_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="24" column="14" bodyfile="include/manifest.h" bodystart="24" bodyend="-1"/>
+        <referencedby refid="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" compoundref="manifest_8c" startline="59" endline="94">manifest_add_file</referencedby>
+        <referencedby refid="manifest_8h_1acdf72e733f23ae5ca16a62fad50193f2" compoundref="manifest_8c" startline="115" endline="124">manifest_clear</referencedby>
+        <referencedby refid="manifest_8h_1aea56d11e385e679f5910da48e02f9a67" compoundref="manifest_8c" startline="206" endline="267">manifest_load</referencedby>
+        <referencedby refid="manifest_8h_1a1d46175cf2b2973de5508a455f6d9e9e" compoundref="manifest_8c" startline="156" endline="159">manifest_next_file_id</referencedby>
+        <referencedby refid="manifest_8h_1a4595c099070292074eecf62dc44f8e6e" compoundref="manifest_8c" startline="30" endline="49">manifest_open</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmanifest_1a382813c4ee57bd93b30ef9b4c6f89504" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t manifest::version</definition>
+        <argsstring></argsstring>
+        <name>version</name>
+        <qualifiedname>manifest::version</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="25" column="14" bodyfile="include/manifest.h" bodystart="25" bodyend="-1"/>
+        <referencedby refid="manifest_8h_1acdf72e733f23ae5ca16a62fad50193f2" compoundref="manifest_8c" startline="115" endline="124">manifest_clear</referencedby>
+        <referencedby refid="manifest_8h_1aea56d11e385e679f5910da48e02f9a67" compoundref="manifest_8c" startline="206" endline="267">manifest_load</referencedby>
+        <referencedby refid="manifest_8h_1a4595c099070292074eecf62dc44f8e6e" compoundref="manifest_8c" startline="30" endline="49">manifest_open</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>manifest</label>
+        <link refid="structmanifest"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>files</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>manifest_file</label>
+        <link refid="structmanifest__file"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/manifest.h" line="21" column="1" bodyfile="include/manifest.h" bodystart="21" bodyend="26"/>
+    <listofallmembers>
+      <member refid="structmanifest_1a11440e860a7c980230450115b8f2e618" prot="public" virt="non-virtual"><scope>manifest</scope><name>dir_path</name></member>
+      <member refid="structmanifest_1a94c3b9ff936b8485c83969133de24735" prot="public" virt="non-virtual"><scope>manifest</scope><name>files</name></member>
+      <member refid="structmanifest_1ab3664d7d3c29f06af49c544def50672c" prot="public" virt="non-virtual"><scope>manifest</scope><name>next_file_id</name></member>
+      <member refid="structmanifest_1a382813c4ee57bd93b30ef9b4c6f89504" prot="public" virt="non-virtual"><scope>manifest</scope><name>version</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

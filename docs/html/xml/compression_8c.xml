@@ -1,0 +1,366 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="compression_8c" kind="file" language="C++">
+    <compoundname>compression.c</compoundname>
+    <includes refid="compression_8h" local="yes">compression.h</includes>
+    <includes local="yes">mem.h</includes>
+    <includes local="no">stdlib.h</includes>
+    <includes local="no">string.h</includes>
+    <includes local="no">zstd.h</includes>
+    <includes local="no">lz4.h</includes>
+    <includes local="no">lz4hc.h</includes>
+    <incdepgraph>
+      <node id="2">
+        <label>compression.h</label>
+        <link refid="compression_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/compression.c</label>
+        <link refid="compression_8c"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>lz4.h</label>
+      </node>
+      <node id="10">
+        <label>lz4hc.h</label>
+      </node>
+      <node id="5">
+        <label>mem.h</label>
+      </node>
+      <node id="3">
+        <label>stddef.h</label>
+      </node>
+      <node id="4">
+        <label>stdint.h</label>
+      </node>
+      <node id="6">
+        <label>stdlib.h</label>
+      </node>
+      <node id="7">
+        <label>string.h</label>
+      </node>
+      <node id="8">
+        <label>zstd.h</label>
+      </node>
+    </incdepgraph>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="compression_8c_1a3208d31f4fef71ec8a7f3969b3b8779c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int compression_compress</definition>
+        <argsstring>(compression_type_t type, const uint8_t *src, size_t src_len, uint8_t **dst, size_t *dst_len, int level)</argsstring>
+        <name>compression_compress</name>
+        <param>
+          <type><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>src_len</declname>
+        </param>
+        <param>
+          <type>uint8_t **</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>dst_len</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/compression.c" line="9" column="5" bodyfile="src/compression.c" bodystart="9" bodyend="61"/>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45ea3ade9631478cdf3d7c5afa8440e1eef7" compoundref="compression_8h" startline="11">COMPRESSION_LZ4</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" compoundref="compression_8h" startline="9">COMPRESSION_NONE</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" compoundref="compression_8h" startline="10">COMPRESSION_ZSTD</references>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="compression_8c_1a79650c11b7716eea7ee9d11e55b7b141" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int compression_decompress</definition>
+        <argsstring>(compression_type_t type, const uint8_t *src, size_t src_len, uint8_t **dst, size_t *dst_len)</argsstring>
+        <name>compression_decompress</name>
+        <param>
+          <type><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>src_len</declname>
+        </param>
+        <param>
+          <type>uint8_t **</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>dst_len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/compression.c" line="63" column="5" bodyfile="src/compression.c" bodystart="63" bodyend="119"/>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45ea3ade9631478cdf3d7c5afa8440e1eef7" compoundref="compression_8h" startline="11">COMPRESSION_LZ4</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" compoundref="compression_8h" startline="9">COMPRESSION_NONE</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" compoundref="compression_8h" startline="10">COMPRESSION_ZSTD</references>
+        <referencedby refid="sstable_8c_1a67e017987a36b04ca62be6a9d8c79d20" compoundref="sstable_8c" startline="29" endline="93">sstable_read_block</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="compression_8c_1a28b703ef71d95c823016dd46ad9ef427" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t compression_bound</definition>
+        <argsstring>(compression_type_t type, size_t src_len)</argsstring>
+        <name>compression_bound</name>
+        <param>
+          <type><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>src_len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/compression.c" line="121" column="8" bodyfile="src/compression.c" bodystart="121" bodyend="132"/>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45ea3ade9631478cdf3d7c5afa8440e1eef7" compoundref="compression_8h" startline="11">COMPRESSION_LZ4</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" compoundref="compression_8h" startline="9">COMPRESSION_NONE</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" compoundref="compression_8h" startline="10">COMPRESSION_ZSTD</references>
+      </memberdef>
+      <memberdef kind="function" id="compression_8c_1a3c8288ee520347b43ae4d0dfef8923af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char * compression_type_name</definition>
+        <argsstring>(compression_type_t type)</argsstring>
+        <name>compression_type_name</name>
+        <param>
+          <type><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/compression.c" line="134" column="12" bodyfile="src/compression.c" bodystart="134" bodyend="141"/>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45ea3ade9631478cdf3d7c5afa8440e1eef7" compoundref="compression_8h" startline="11">COMPRESSION_LZ4</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" compoundref="compression_8h" startline="9">COMPRESSION_NONE</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" compoundref="compression_8h" startline="10">COMPRESSION_ZSTD</references>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="compression_8c_1a11dca174c37fcc6ea065418476bf08b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref></type>
+        <definition>compression_type_t compression_type_from_name</definition>
+        <argsstring>(const char *name)</argsstring>
+        <name>compression_type_from_name</name>
+        <param>
+          <type>const char *</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/compression.c" line="143" column="20" bodyfile="src/compression.c" bodystart="143" bodyend="149"/>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45ea3ade9631478cdf3d7c5afa8440e1eef7" compoundref="compression_8h" startline="11">COMPRESSION_LZ4</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" compoundref="compression_8h" startline="9">COMPRESSION_NONE</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" compoundref="compression_8h" startline="10">COMPRESSION_ZSTD</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="compression_8h" kindref="compound">compression.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;mem.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdlib.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;zstd.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;lz4.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;lz4hc.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9" refid="compression_8h_1a3208d31f4fef71ec8a7f3969b3b8779c" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="compression_8c_1a3208d31f4fef71ec8a7f3969b3b8779c" kindref="member">compression_compress</ref>(<ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref><sp/>type,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>uint8_t*<sp/>src,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>src_len,</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t**<sp/>dst,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>dst_len,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>level)<sp/>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!src<sp/>||<sp/>src_len<sp/>==<sp/>0<sp/>||<sp/>!dst<sp/>||<sp/>!dst_len)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(type)<sp/>{</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" kindref="member">COMPRESSION_NONE</ref>:<sp/>{</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst<sp/>=<sp/>kv_malloc(src_len);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!*dst)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>memcpy(*dst,<sp/>src,<sp/>src_len);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst_len<sp/>=<sp/>src_len;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" kindref="member">COMPRESSION_ZSTD</ref>:<sp/>{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>bound<sp/>=<sp/>ZSTD_compressBound(src_len);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst<sp/>=<sp/>kv_malloc(bound);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!*dst)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>compressed<sp/>=<sp/>ZSTD_compress(*dst,<sp/>bound,<sp/>src,<sp/>src_len,<sp/>level);</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ZSTD_isError(compressed))<sp/>{</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(*dst);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst_len<sp/>=<sp/>compressed;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45ea3ade9631478cdf3d7c5afa8440e1eef7" kindref="member">COMPRESSION_LZ4</ref>:<sp/>{</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>src_size<sp/>=<sp/>(int)src_len;</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>((</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">)src_size<sp/>!=<sp/>src_len)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;<sp/></highlight><highlight class="comment">/*<sp/>溢出检查<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>bound<sp/>=<sp/>LZ4_compressBound(src_size);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst<sp/>=<sp/>kv_malloc((</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">)bound<sp/>+<sp/>4);<sp/></highlight><highlight class="comment">/*<sp/>+4<sp/>存储原始大小<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!*dst)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>使用<sp/>LZ4_compress_HC<sp/>进行高压缩比压缩，level<sp/>控制压缩级别<sp/>(1-12)<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>lz4_level<sp/>=<sp/>(level<sp/>&lt;=<sp/>0)<sp/>?<sp/>LZ4HC_CLEVEL_DEFAULT<sp/>:<sp/></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(level<sp/>&gt;<sp/>LZ4HC_CLEVEL_MAX)<sp/>?<sp/>LZ4HC_CLEVEL_MAX<sp/>:<sp/>level;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>compressed<sp/>=<sp/>LZ4_compress_HC((</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*)src,<sp/>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*)(*dst<sp/>+<sp/>4),</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>src_size,<sp/>bound,<sp/>lz4_level);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(compressed<sp/>&lt;=<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(*dst);</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>在压缩数据前存储原始大小，LZ4<sp/>解压时需要<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>((uint32_t*)*dst)[0]<sp/>=<sp/>(uint32_t)src_len;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst_len<sp/>=<sp/>(size_t)compressed<sp/>+<sp/>4;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="61"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight></codeline>
+<codeline lineno="63" refid="compression_8h_1a79650c11b7716eea7ee9d11e55b7b141" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="compression_8c_1a79650c11b7716eea7ee9d11e55b7b141" kindref="member">compression_decompress</ref>(<ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref><sp/>type,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>uint8_t*<sp/>src,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>src_len,</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t**<sp/>dst,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>dst_len)<sp/>{</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!src<sp/>||<sp/>src_len<sp/>==<sp/>0<sp/>||<sp/>!dst<sp/>||<sp/>!dst_len)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(type)<sp/>{</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" kindref="member">COMPRESSION_NONE</ref>:<sp/>{</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst<sp/>=<sp/>kv_malloc(src_len);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!*dst)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>memcpy(*dst,<sp/>src,<sp/>src_len);</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst_len<sp/>=<sp/>src_len;</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" kindref="member">COMPRESSION_ZSTD</ref>:<sp/>{</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>获取解压后大小<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>decompressed_size<sp/>=<sp/>ZSTD_getFrameContentSize(src,<sp/>src_len);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(decompressed_size<sp/>==<sp/>ZSTD_CONTENTSIZE_ERROR)<sp/>{</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(decompressed_size<sp/>==<sp/>ZSTD_CONTENTSIZE_UNKNOWN)<sp/>{</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>未知大小，使用流式解压或估算<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>decompressed_size<sp/>=<sp/>src_len<sp/>*<sp/>4;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst<sp/>=<sp/>kv_malloc((</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">)decompressed_size);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!*dst)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>result<sp/>=<sp/>ZSTD_decompress(*dst,<sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">)decompressed_size,<sp/>src,<sp/>src_len);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ZSTD_isError(result))<sp/>{</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(*dst);</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst_len<sp/>=<sp/>result;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45ea3ade9631478cdf3d7c5afa8440e1eef7" kindref="member">COMPRESSION_LZ4</ref>:<sp/>{</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(src_len<sp/>&lt;<sp/>4)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>读取原始大小（存储在压缩数据前<sp/>4<sp/>字节）<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint32_t<sp/>orig_size<sp/>=<sp/>((</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>uint32_t*)src)[0];</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(orig_size<sp/>==<sp/>0)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst<sp/>=<sp/>kv_malloc(orig_size);</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!*dst)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>decompressed<sp/>=<sp/>LZ4_decompress_safe((</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*)(src<sp/>+<sp/>4),<sp/>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*)*dst,</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)(src_len<sp/>-<sp/>4),<sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)orig_size);</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(decompressed<sp/>&lt;<sp/>0<sp/>||<sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">)decompressed<sp/>!=<sp/>orig_size)<sp/>{</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(*dst);</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*dst_len<sp/>=<sp/>orig_size;</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="119"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight></codeline>
+<codeline lineno="121" refid="compression_8h_1a28b703ef71d95c823016dd46ad9ef427" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="compression_8c_1a28b703ef71d95c823016dd46ad9ef427" kindref="member">compression_bound</ref>(<ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref><sp/>type,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>src_len)<sp/>{</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(type)<sp/>{</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" kindref="member">COMPRESSION_NONE</ref>:</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>src_len;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" kindref="member">COMPRESSION_ZSTD</ref>:</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>ZSTD_compressBound(src_len);</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45ea3ade9631478cdf3d7c5afa8440e1eef7" kindref="member">COMPRESSION_LZ4</ref>:</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">)LZ4_compressBound((</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)src_len)<sp/>+<sp/>4;<sp/></highlight><highlight class="comment">/*<sp/>+4<sp/>存储原始大小<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>src_len;</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="132"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight></codeline>
+<codeline lineno="134" refid="compression_8h_1a3c8288ee520347b43ae4d0dfef8923af" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="compression_8c_1a3c8288ee520347b43ae4d0dfef8923af" kindref="member">compression_type_name</ref>(<ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref><sp/>type)<sp/>{</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(type)<sp/>{</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" kindref="member">COMPRESSION_NONE</ref>:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;none&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" kindref="member">COMPRESSION_ZSTD</ref>:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;zstd&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45ea3ade9631478cdf3d7c5afa8440e1eef7" kindref="member">COMPRESSION_LZ4</ref>:<sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;lz4&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">:<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;unknown&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="141"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143" refid="compression_8h_1a11dca174c37fcc6ea065418476bf08b1" refkind="member"><highlight class="normal"><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref><sp/><ref refid="compression_8c_1a11dca174c37fcc6ea065418476bf08b1" kindref="member">compression_type_from_name</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>name)<sp/>{</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!name)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" kindref="member">COMPRESSION_ZSTD</ref>;</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(name,<sp/></highlight><highlight class="stringliteral">&quot;none&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" kindref="member">COMPRESSION_NONE</ref>;</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(name,<sp/></highlight><highlight class="stringliteral">&quot;zstd&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" kindref="member">COMPRESSION_ZSTD</ref>;</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(name,<sp/></highlight><highlight class="stringliteral">&quot;lz4&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0)<sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45ea3ade9631478cdf3d7c5afa8440e1eef7" kindref="member">COMPRESSION_LZ4</ref>;</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" kindref="member">COMPRESSION_ZSTD</ref>;<sp/></highlight><highlight class="comment">/*<sp/>默认<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/compression.c"/>
+  </compounddef>
+</doxygen>

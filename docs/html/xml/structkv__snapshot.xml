@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structkv__snapshot" kind="struct" language="C++" prot="public">
+    <compoundname>kv_snapshot</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structkv__snapshot_1a5e65f361ae30fc69557d025e287bc135" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* kv_snapshot::dir_path</definition>
+        <argsstring></argsstring>
+        <name>dir_path</name>
+        <qualifiedname>kv_snapshot::dir_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/kv_store.c" line="999" column="10" bodyfile="src/kv_store.c" bodystart="999" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" compoundref="kv__store_8c" startline="1014" endline="1073">kv_snapshot_create</referencedby>
+        <referencedby refid="kv__store_8h_1a2e4e48206e3052f91933404bebd4c296" compoundref="kv__store_8c" startline="1075" endline="1089">kv_snapshot_free</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__snapshot_1a3644b23d43fdce2697778e3f0e3c7d73" prot="public" static="no" mutable="no">
+        <type><ref refid="manifest_8h_1a9b7669d7128e8f85a99379eb1ffba3ed" kindref="member">manifest_file_t</ref> **</type>
+        <definition>manifest_file_t** kv_snapshot::files</definition>
+        <argsstring></argsstring>
+        <name>files</name>
+        <qualifiedname>kv_snapshot::files</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/kv_store.c" line="1000" column="21" bodyfile="src/kv_store.c" bodystart="1000" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" compoundref="kv__store_8c" startline="1014" endline="1073">kv_snapshot_create</referencedby>
+        <referencedby refid="kv__store_8h_1a2e4e48206e3052f91933404bebd4c296" compoundref="kv__store_8c" startline="1075" endline="1089">kv_snapshot_free</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__snapshot_1a7d2bb9816a49bb391475e370e8136298" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t kv_snapshot::file_count</definition>
+        <argsstring></argsstring>
+        <name>file_count</name>
+        <qualifiedname>kv_snapshot::file_count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/kv_store.c" line="1001" column="12" bodyfile="src/kv_store.c" bodystart="1001" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" compoundref="kv__store_8c" startline="1014" endline="1073">kv_snapshot_create</referencedby>
+        <referencedby refid="kv__store_8h_1a2e4e48206e3052f91933404bebd4c296" compoundref="kv__store_8c" startline="1075" endline="1089">kv_snapshot_free</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__snapshot_1a01000e86f86f2bffc64fe9ce8ac110d4" prot="public" static="no" mutable="no">
+        <type><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref> *</type>
+        <definition>lru_cache_t* kv_snapshot::block_cache</definition>
+        <argsstring></argsstring>
+        <name>block_cache</name>
+        <qualifiedname>kv_snapshot::block_cache</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/kv_store.c" line="1002" column="17" bodyfile="src/kv_store.c" bodystart="1002" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" compoundref="kv__store_8c" startline="1014" endline="1073">kv_snapshot_create</referencedby>
+        <referencedby refid="kv__store_8h_1a2e4e48206e3052f91933404bebd4c296" compoundref="kv__store_8c" startline="1075" endline="1089">kv_snapshot_free</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>kv_snapshot</label>
+        <link refid="structkv__snapshot"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>files</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>block_cache</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>lru_cache</label>
+        <link refid="structlru__cache"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>head</edgelabel>
+          <edgelabel>table</edgelabel>
+          <edgelabel>tail</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>lru_node</label>
+        <link refid="structlru__node"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>next</edgelabel>
+          <edgelabel>prev</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>manifest_file</label>
+        <link refid="structmanifest__file"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/kv_store.c" line="998" column="1" bodyfile="src/kv_store.c" bodystart="998" bodyend="1003"/>
+    <listofallmembers>
+      <member refid="structkv__snapshot_1a01000e86f86f2bffc64fe9ce8ac110d4" prot="public" virt="non-virtual"><scope>kv_snapshot</scope><name>block_cache</name></member>
+      <member refid="structkv__snapshot_1a5e65f361ae30fc69557d025e287bc135" prot="public" virt="non-virtual"><scope>kv_snapshot</scope><name>dir_path</name></member>
+      <member refid="structkv__snapshot_1a7d2bb9816a49bb391475e370e8136298" prot="public" virt="non-virtual"><scope>kv_snapshot</scope><name>file_count</name></member>
+      <member refid="structkv__snapshot_1a3644b23d43fdce2697778e3f0e3c7d73" prot="public" virt="non-virtual"><scope>kv_snapshot</scope><name>files</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

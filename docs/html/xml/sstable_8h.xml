@@ -1,0 +1,618 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="sstable_8h" kind="file" language="C++">
+    <compoundname>sstable.h</compoundname>
+    <includes local="no">stddef.h</includes>
+    <includes local="no">stdint.h</includes>
+    <includes local="no">stdio.h</includes>
+    <includes refid="compression_8h" local="yes">compression.h</includes>
+    <includes refid="lru__cache_8h" local="yes">lru_cache.h</includes>
+    <includes refid="skiplist_8h" local="yes">skiplist.h</includes>
+    <includedby refid="kv__store_8c" local="yes">src/kv_store.c</includedby>
+    <includedby refid="merge_8c" local="yes">src/merge.c</includedby>
+    <includedby refid="sstable_8c" local="yes">src/sstable.c</includedby>
+    <incdepgraph>
+      <node id="5">
+        <label>compression.h</label>
+        <link refid="compression_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>lru_cache.h</label>
+        <link refid="lru__cache_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>skiplist.h</label>
+        <link refid="skiplist_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/sstable.h</label>
+        <link refid="sstable_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>mutex.h</label>
+      </node>
+      <node id="7">
+        <label>pthread.h</label>
+      </node>
+      <node id="2">
+        <label>stddef.h</label>
+      </node>
+      <node id="3">
+        <label>stdint.h</label>
+      </node>
+      <node id="4">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>include/sstable.h</label>
+        <link refid="sstable_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/kv_store.c</label>
+        <link refid="kv__store_8c"/>
+      </node>
+      <node id="3">
+        <label>src/merge.c</label>
+        <link refid="merge_8c"/>
+      </node>
+      <node id="4">
+        <label>src/sstable.c</label>
+        <link refid="sstable_8c"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structsstable__block" prot="public">sstable_block</innerclass>
+    <innerclass refid="structsstable" prot="public">sstable</innerclass>
+    <innerclass refid="structsstable__iter" prot="public">sstable_iter</innerclass>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="sstable_8h_1a7faf984d9939d829de71fba5ad662f81" prot="public" static="no">
+        <name>SSTABLE_BLOCK_SIZE</name>
+        <initializer>4096</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="13" column="9" bodyfile="include/sstable.h" bodystart="13" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1a87076f32d4351ee3dae53f3a4a6d1f5d" compoundref="sstable_8c" startline="95" endline="261">sstable_block_build</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="sstable_8h_1af965fa1342eb5e2926079beb68552ebb" prot="public" static="no">
+        <name>SSTABLE_FOOTER_SIZE</name>
+        <initializer>48</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="15" column="10" bodyfile="include/sstable.h" bodystart="15" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1ac461806936e04fd48217cbd0cbdbc7b9" compoundref="sstable_8c" startline="743" endline="834">sstable_lookup</referencedby>
+        <referencedby refid="sstable_8h_1a3d2d335d8d676a87f6d8524b14b5f513" compoundref="sstable_8c" startline="647" endline="728">sstable_open</referencedby>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="sstable_8h_1a6add1dba5ebb0cfba2461473f7a17671" prot="public" static="no">
+        <name>SSTABLE_RESTART_INTERVAL</name>
+        <initializer>16</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="16" column="9" bodyfile="include/sstable.h" bodystart="16" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1a87076f32d4351ee3dae53f3a4a6d1f5d" compoundref="sstable_8c" startline="95" endline="261">sstable_block_build</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="sstable_8h_1ad7b5731546b3821e5ca7ec98228b0b3c" prot="public" static="no">
+        <name>SSTABLE_PREV_KEY_CAPACITY</name>
+        <initializer>4096</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="17" column="9" bodyfile="include/sstable.h" bodystart="17" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1a87076f32d4351ee3dae53f3a4a6d1f5d" compoundref="sstable_8c" startline="95" endline="261">sstable_block_build</referencedby>
+        <referencedby refid="sstable_8c_1ace616d80b4fe31bcc08d4def7d127d96" compoundref="sstable_8c" startline="370" endline="476">sstable_block_lookup</referencedby>
+        <referencedby refid="sstable_8c_1a309a12241d60b6c36c6690253f071c08" compoundref="sstable_8c" startline="310" endline="368">sstable_entry_decode</referencedby>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="sstable_8h_1add0ef6f2d1d2c1132813e5ed6d079c49" prot="public" static="no">
+        <name>SSTABLE_DEFAULT_COMPRESSION_LEVEL</name>
+        <initializer>1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="20" column="9" bodyfile="include/sstable.h" bodystart="20" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" compoundref="sstable_8c" startline="495" endline="645">sstable_write</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="sstable_8h_1a493fac1cf27fcba05d1356866b233c94" prot="public" static="no">
+        <type>struct <ref refid="structsstable__block" kindref="compound">sstable_block</ref></type>
+        <definition>typedef struct sstable_block sstable_block_t</definition>
+        <argsstring></argsstring>
+        <name>sstable_block_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="27" column="17"/>
+      </memberdef>
+      <memberdef kind="typedef" id="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" prot="public" static="no">
+        <type>struct <ref refid="structsstable" kindref="compound">sstable</ref></type>
+        <definition>typedef struct sstable sstable_t</definition>
+        <argsstring></argsstring>
+        <name>sstable_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="47" column="11"/>
+      </memberdef>
+      <memberdef kind="typedef" id="sstable_8h_1ab359b0d4329b40591074e87fb1f20934" prot="public" static="no">
+        <type>struct <ref refid="structsstable__iter" kindref="compound">sstable_iter</ref></type>
+        <definition>typedef struct sstable_iter sstable_iter_t</definition>
+        <argsstring></argsstring>
+        <name>sstable_iter_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="57" column="16"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="sstable_8h_1a3d2d335d8d676a87f6d8524b14b5f513" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref> *</type>
+        <definition>sstable_t * sstable_open</definition>
+        <argsstring>(const char *path, uint64_t file_id)</argsstring>
+        <name>sstable_open</name>
+        <param>
+          <type>const char *</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>file_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="59" column="11" bodyfile="src/sstable.c" bodystart="647" bodyend="728" declfile="include/sstable.h" declline="59" declcolumn="11"/>
+        <references refid="structsstable_1a2d930d1dbd79b0b8085dad7515d25286" compoundref="sstable_8h" startline="45">sstable::cached_index_data</references>
+        <references refid="structsstable_1ae1ef2e98427069a0d74984f4fb9aeefa" compoundref="sstable_8h" startline="46">sstable::cached_index_data_len</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" compoundref="compression_8h" startline="9">COMPRESSION_NONE</references>
+        <references refid="structsstable_1a14fb2ce7bc2a73f885d9bbe1ee608d2d" compoundref="sstable_8h" startline="38">sstable::compression_type</references>
+        <references refid="structsstable_1a4ebd992b069f2291da455f277131add2" compoundref="sstable_8h" startline="30">sstable::file</references>
+        <references refid="structsstable_1acaef36fa70934a1f9fbc265d10517e44" compoundref="sstable_8h" startline="32">sstable::file_id</references>
+        <references refid="structsstable_1a39d9c702ea64a8a795f7e7926bf5f41c" compoundref="sstable_8h" startline="33">sstable::file_size</references>
+        <references refid="structsstable_1aa5b9b3ddd8d633b1c61add29b9b2629b" compoundref="sstable_8h" startline="44">sstable::filter_cache</references>
+        <references refid="structsstable_1a860fc01e0323300e267c31559d08075b" compoundref="sstable_8h" startline="36">sstable::filter_offset</references>
+        <references refid="structsstable_1a37141812c3cd6dba2b4d0c1bafb6b982" compoundref="sstable_8h" startline="37">sstable::filter_size</references>
+        <references refid="structsstable_1a3e5d9c834289730120b5c6acc5119e79" compoundref="sstable_8h" startline="43">sstable::index_cache</references>
+        <references refid="structsstable_1a7c0a1c119d5f52c37109438781d625de" compoundref="sstable_8h" startline="34">sstable::index_offset</references>
+        <references refid="structsstable_1a7c9b99f34069f7db7a91c187f0817cf4" compoundref="sstable_8h" startline="35">sstable::index_size</references>
+        <references refid="structsstable_1ab3eff3ca09fc1768105451d0ad833a50" compoundref="sstable_8h" startline="41">sstable::largest_key</references>
+        <references refid="structsstable_1a1525c3285e88017074640c21c50cc543" compoundref="sstable_8h" startline="42">sstable::largest_key_len</references>
+        <references refid="structsstable_1a9ba8db9b8b2c65e9948ab064cf4f17be" compoundref="sstable_8h" startline="31">sstable::path</references>
+        <references refid="structsstable_1a38d0c500296d1d8d4c34c7ee0dab7d3f" compoundref="sstable_8h" startline="39">sstable::smallest_key</references>
+        <references refid="structsstable_1aec0e749ba57c3b11fa96fdfdfa1f6e7f" compoundref="sstable_8h" startline="40">sstable::smallest_key_len</references>
+        <references refid="sstable_8h_1af965fa1342eb5e2926079beb68552ebb" compoundref="sstable_8h" startline="15">SSTABLE_FOOTER_SIZE</references>
+        <referencedby refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" compoundref="kv__store_8c" startline="602" endline="733">kv_get</referencedby>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="sstable_8h_1a8f7511d759e436cff50fdb79f8173647" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sstable_close</definition>
+        <argsstring>(sstable_t *sst)</argsstring>
+        <name>sstable_close</name>
+        <param>
+          <type><ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref> *</type>
+          <declname>sst</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="60" column="6" bodyfile="src/sstable.c" bodystart="730" bodyend="741" declfile="include/sstable.h" declline="60" declcolumn="6"/>
+        <references refid="structsstable_1a2d930d1dbd79b0b8085dad7515d25286" compoundref="sstable_8h" startline="45">sstable::cached_index_data</references>
+        <references refid="structsstable_1a4ebd992b069f2291da455f277131add2" compoundref="sstable_8h" startline="30">sstable::file</references>
+        <references refid="structsstable_1ab3eff3ca09fc1768105451d0ad833a50" compoundref="sstable_8h" startline="41">sstable::largest_key</references>
+        <references refid="structsstable_1a9ba8db9b8b2c65e9948ab064cf4f17be" compoundref="sstable_8h" startline="31">sstable::path</references>
+        <references refid="structsstable_1a38d0c500296d1d8d4c34c7ee0dab7d3f" compoundref="sstable_8h" startline="39">sstable::smallest_key</references>
+        <referencedby refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" compoundref="kv__store_8c" startline="602" endline="733">kv_get</referencedby>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int sstable_write</definition>
+        <argsstring>(const char *path, uint64_t file_id, skiplist_t *memtable, compression_type_t comp_type)</argsstring>
+        <name>sstable_write</name>
+        <param>
+          <type>const char *</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>file_id</declname>
+        </param>
+        <param>
+          <type><ref refid="skiplist_8h_1a5a9fdc8b5fc5c4be419e3f3ab2c01c35" kindref="member">skiplist_t</ref> *</type>
+          <declname>memtable</declname>
+        </param>
+        <param>
+          <type><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref></type>
+          <declname>comp_type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="61" column="5" bodyfile="src/sstable.c" bodystart="495" bodyend="645" declfile="include/sstable.h" declline="61" declcolumn="5"/>
+        <references refid="compression_8h_1a3208d31f4fef71ec8a7f3969b3b8779c" compoundref="compression_8c" startline="9" endline="61">compression_compress</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac549b871996d1ef05d40056bf5bb52e5" compoundref="compression_8h" startline="9">COMPRESSION_NONE</references>
+        <references refid="compression_8h_1a3c8288ee520347b43ae4d0dfef8923af" compoundref="compression_8c" startline="134" endline="141">compression_type_name</references>
+        <references refid="structsstable__block_1adc0774cfed7ebf2da7f1476d95a6f898" compoundref="sstable_8h" startline="23">sstable_block::data</references>
+        <references refid="sstable_8c_1a464b512cae455b9ddaf8611f57313366" compoundref="sstable_8c" startline="486" endline="493">index_entry_free</references>
+        <references refid="structindex__entry_1aabe035e4de218c88dca9523f84b6a8fc" compoundref="sstable_8c" startline="480">index_entry::key_len</references>
+        <references refid="structindex__entry_1acf44864fadfe2bddb919b393d7a98015" compoundref="sstable_8c" startline="479">index_entry::last_key</references>
+        <references refid="structindex__entry_1aa16eeeb03ebae8b57f0b899c378ef658" compoundref="sstable_8c" startline="483">index_entry::next</references>
+        <references refid="structindex__entry_1a770e5553e59430b74078e23f845ff1b7" compoundref="sstable_8c" startline="481">index_entry::offset</references>
+        <references refid="structindex__entry_1a2fcf4128594af6d24d9892c01c2674c4" compoundref="sstable_8c" startline="482">index_entry::size</references>
+        <references refid="structsstable__block_1ae227febd3d01a1c6241ee3ae1d9f75da" compoundref="sstable_8h" startline="24">sstable_block::size</references>
+        <references refid="skiplist_8h_1a2e0f3f6c1dc4c0caf4c6f6c0da91158b" compoundref="skiplist_8c" startline="252" endline="256">skiplist_iter_free</references>
+        <references refid="skiplist_8h_1a51455706e22b354dbe6334120f72c1e4" compoundref="skiplist_8c" startline="242" endline="250">skiplist_new_iterator</references>
+        <references refid="sstable_8c_1a87076f32d4351ee3dae53f3a4a6d1f5d" compoundref="sstable_8c" startline="95" endline="261">sstable_block_build</references>
+        <references refid="sstable_8c_1a5eee53eee9f981793d2a7304aeec98a5" compoundref="sstable_8c" startline="304" endline="308">sstable_block_free</references>
+        <references refid="sstable_8h_1add0ef6f2d1d2c1132813e5ed6d079c49" compoundref="sstable_8h" startline="20">SSTABLE_DEFAULT_COMPRESSION_LEVEL</references>
+        <references refid="sstable_8h_1af965fa1342eb5e2926079beb68552ebb" compoundref="sstable_8h" startline="15">SSTABLE_FOOTER_SIZE</references>
+        <references refid="sstable_8h_1ad7b5731546b3821e5ca7ec98228b0b3c" compoundref="sstable_8h" startline="17">SSTABLE_PREV_KEY_CAPACITY</references>
+        <referencedby refid="kv__store_8c_1a5f0bfcd3bf571aa044ff2d5ef7d435ca" compoundref="kv__store_8c" startline="195" endline="290">kv_flush_memtable</referencedby>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="sstable_8h_1ac461806936e04fd48217cbd0cbdbc7b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int sstable_lookup</definition>
+        <argsstring>(sstable_t *sst, const char *key, size_t klen, char **out_value, size_t *out_vlen, lru_cache_t *block_cache)</argsstring>
+        <name>sstable_lookup</name>
+        <param>
+          <type><ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref> *</type>
+          <declname>sst</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>char **</type>
+          <declname>out_value</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>out_vlen</declname>
+        </param>
+        <param>
+          <type><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref> *</type>
+          <declname>block_cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="62" column="5" bodyfile="src/sstable.c" bodystart="743" bodyend="834" declfile="include/sstable.h" declline="62" declcolumn="5"/>
+        <references refid="structsstable_1a2d930d1dbd79b0b8085dad7515d25286" compoundref="sstable_8h" startline="45">sstable::cached_index_data</references>
+        <references refid="structsstable_1ae1ef2e98427069a0d74984f4fb9aeefa" compoundref="sstable_8h" startline="46">sstable::cached_index_data_len</references>
+        <references refid="structsstable_1a4ebd992b069f2291da455f277131add2" compoundref="sstable_8h" startline="30">sstable::file</references>
+        <references refid="structsstable_1a39d9c702ea64a8a795f7e7926bf5f41c" compoundref="sstable_8h" startline="33">sstable::file_size</references>
+        <references refid="structsstable_1a7c0a1c119d5f52c37109438781d625de" compoundref="sstable_8h" startline="34">sstable::index_offset</references>
+        <references refid="structsstable_1a7c9b99f34069f7db7a91c187f0817cf4" compoundref="sstable_8h" startline="35">sstable::index_size</references>
+        <references refid="structindex__entry_1aabe035e4de218c88dca9523f84b6a8fc" compoundref="sstable_8c" startline="480">index_entry::key_len</references>
+        <references refid="structindex__entry_1a770e5553e59430b74078e23f845ff1b7" compoundref="sstable_8c" startline="481">index_entry::offset</references>
+        <references refid="structindex__entry_1a2fcf4128594af6d24d9892c01c2674c4" compoundref="sstable_8c" startline="482">index_entry::size</references>
+        <references refid="sstable_8c_1a5eee53eee9f981793d2a7304aeec98a5" compoundref="sstable_8c" startline="304" endline="308">sstable_block_free</references>
+        <references refid="sstable_8c_1ace616d80b4fe31bcc08d4def7d127d96" compoundref="sstable_8c" startline="370" endline="476">sstable_block_lookup</references>
+        <references refid="sstable_8h_1af965fa1342eb5e2926079beb68552ebb" compoundref="sstable_8h" startline="15">SSTABLE_FOOTER_SIZE</references>
+        <references refid="sstable_8c_1a67e017987a36b04ca62be6a9d8c79d20" compoundref="sstable_8c" startline="29" endline="93">sstable_read_block</references>
+        <referencedby refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" compoundref="kv__store_8c" startline="602" endline="733">kv_get</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="sstable_8h_1a82d6818722a409b88cf1d0210511c95d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="sstable_8h_1ab359b0d4329b40591074e87fb1f20934" kindref="member">sstable_iter_t</ref> *</type>
+        <definition>sstable_iter_t * sstable_new_iterator</definition>
+        <argsstring>(sstable_t *sst)</argsstring>
+        <name>sstable_new_iterator</name>
+        <param>
+          <type><ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref> *</type>
+          <declname>sst</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="63" column="16" bodyfile="src/sstable.c" bodystart="836" bodyend="856" declfile="include/sstable.h" declline="63" declcolumn="16"/>
+        <references refid="structsstable__iter_1a8f5b9c87fc982be79372406fa525a7e2" compoundref="sstable_8h" startline="52">sstable_iter::block_offset</references>
+        <references refid="structsstable__iter_1a0992bdc8ebf7693fb34ee3059c106d1d" compoundref="sstable_8h" startline="51">sstable_iter::current_block</references>
+        <references refid="structsstable__iter_1a982e56967bc9a782671fd606abe33e87" compoundref="sstable_8h" startline="53">sstable_iter::entry_offset</references>
+        <references refid="structsstable__iter_1ac47025e8734b03fe9e4cf73ee09c4258" compoundref="sstable_8h" startline="54">sstable_iter::eof</references>
+        <references refid="structsstable_1a4ebd992b069f2291da455f277131add2" compoundref="sstable_8h" startline="30">sstable::file</references>
+        <references refid="structsstable__iter_1aaf7e7c3f517f280c179c5fe7d5e87e05" compoundref="sstable_8h" startline="55">sstable_iter::prev_key</references>
+        <references refid="structsstable__iter_1a1dbf22c123f068d28f5ee48920f085cd" compoundref="sstable_8h" startline="56">sstable_iter::prev_len</references>
+        <references refid="structsstable__iter_1ad4abcbdf85c6e564530431b0c6f272ea" compoundref="sstable_8h" startline="50">sstable_iter::sst</references>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+        <referencedby refid="kv__store_8c_1adfb68e9ae72026e3f95fd86cf2ca5205" compoundref="kv__store_8c" startline="833" endline="863">merge_sstable_into</referencedby>
+        <referencedby refid="sstable_8h_1ae192eb49a44935a89c8676b303a68832" compoundref="sstable_8c" startline="977" endline="1001">sstable_largest_key</referencedby>
+        <referencedby refid="sstable_8h_1a10be7532fe0a4bb958c3408da4a40f6a" compoundref="sstable_8c" startline="953" endline="975">sstable_smallest_key</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="sstable_8h_1a1cc4e5a8a06b9356c83e20dc4a74d7ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void sstable_iter_free</definition>
+        <argsstring>(sstable_iter_t *iter)</argsstring>
+        <name>sstable_iter_free</name>
+        <param>
+          <type><ref refid="sstable_8h_1ab359b0d4329b40591074e87fb1f20934" kindref="member">sstable_iter_t</ref> *</type>
+          <declname>iter</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="64" column="6" bodyfile="src/sstable.c" bodystart="858" bodyend="866" declfile="include/sstable.h" declline="64" declcolumn="6"/>
+        <references refid="structsstable__iter_1a0992bdc8ebf7693fb34ee3059c106d1d" compoundref="sstable_8h" startline="51">sstable_iter::current_block</references>
+        <references refid="sstable_8c_1a5eee53eee9f981793d2a7304aeec98a5" compoundref="sstable_8c" startline="304" endline="308">sstable_block_free</references>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+        <referencedby refid="kv__store_8c_1adfb68e9ae72026e3f95fd86cf2ca5205" compoundref="kv__store_8c" startline="833" endline="863">merge_sstable_into</referencedby>
+        <referencedby refid="sstable_8h_1ae192eb49a44935a89c8676b303a68832" compoundref="sstable_8c" startline="977" endline="1001">sstable_largest_key</referencedby>
+        <referencedby refid="sstable_8h_1a10be7532fe0a4bb958c3408da4a40f6a" compoundref="sstable_8c" startline="953" endline="975">sstable_smallest_key</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int sstable_iter_next</definition>
+        <argsstring>(sstable_iter_t *iter, char **key, size_t *klen, char **value, size_t *vlen)</argsstring>
+        <name>sstable_iter_next</name>
+        <param>
+          <type><ref refid="sstable_8h_1ab359b0d4329b40591074e87fb1f20934" kindref="member">sstable_iter_t</ref> *</type>
+          <declname>iter</declname>
+        </param>
+        <param>
+          <type>char **</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>char **</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="65" column="5" bodyfile="src/sstable.c" bodystart="868" bodyend="951" declfile="include/sstable.h" declline="65" declcolumn="5"/>
+        <references refid="structsstable__iter_1a0992bdc8ebf7693fb34ee3059c106d1d" compoundref="sstable_8h" startline="51">sstable_iter::current_block</references>
+        <references refid="structsstable__block_1adc0774cfed7ebf2da7f1476d95a6f898" compoundref="sstable_8h" startline="23">sstable_block::data</references>
+        <references refid="structsstable__iter_1a982e56967bc9a782671fd606abe33e87" compoundref="sstable_8h" startline="53">sstable_iter::entry_offset</references>
+        <references refid="structsstable__iter_1ac47025e8734b03fe9e4cf73ee09c4258" compoundref="sstable_8h" startline="54">sstable_iter::eof</references>
+        <references refid="structsstable_1a4ebd992b069f2291da455f277131add2" compoundref="sstable_8h" startline="30">sstable::file</references>
+        <references refid="structsstable_1a7c0a1c119d5f52c37109438781d625de" compoundref="sstable_8h" startline="34">sstable::index_offset</references>
+        <references refid="structsstable__entry_1a02f36a7cac18bd38f5c320bc1a40b31a" compoundref="sstable_8c" startline="21">sstable_entry::key</references>
+        <references refid="structsstable__iter_1aaf7e7c3f517f280c179c5fe7d5e87e05" compoundref="sstable_8h" startline="55">sstable_iter::prev_key</references>
+        <references refid="structsstable__iter_1a1dbf22c123f068d28f5ee48920f085cd" compoundref="sstable_8h" startline="56">sstable_iter::prev_len</references>
+        <references refid="structsstable__block_1a3ab2e0ea5fc8476008a0d8319b982139" compoundref="sstable_8h" startline="25">sstable_block::restart_count</references>
+        <references refid="structsstable__entry_1ae0a0dcdf7a5237534f3479b891f7a4ef" compoundref="sstable_8c" startline="18">sstable_entry::shared_len</references>
+        <references refid="structsstable__block_1ae227febd3d01a1c6241ee3ae1d9f75da" compoundref="sstable_8h" startline="24">sstable_block::size</references>
+        <references refid="structsstable__iter_1ad4abcbdf85c6e564530431b0c6f272ea" compoundref="sstable_8h" startline="50">sstable_iter::sst</references>
+        <references refid="sstable_8c_1a5eee53eee9f981793d2a7304aeec98a5" compoundref="sstable_8c" startline="304" endline="308">sstable_block_free</references>
+        <references refid="sstable_8c_1a309a12241d60b6c36c6690253f071c08" compoundref="sstable_8c" startline="310" endline="368">sstable_entry_decode</references>
+        <references refid="sstable_8c_1a67e017987a36b04ca62be6a9d8c79d20" compoundref="sstable_8c" startline="29" endline="93">sstable_read_block</references>
+        <references refid="structsstable__entry_1a930a6b993293a72c1c6ce8fad8523345" compoundref="sstable_8c" startline="19">sstable_entry::unshared_len</references>
+        <references refid="structsstable__entry_1a7b1655bba328129d49523993fe5084de" compoundref="sstable_8c" startline="22">sstable_entry::value</references>
+        <references refid="structsstable__entry_1abafd4347cf5c625f526719e846419448" compoundref="sstable_8c" startline="20">sstable_entry::value_len</references>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+        <referencedby refid="kv__store_8c_1adfb68e9ae72026e3f95fd86cf2ca5205" compoundref="kv__store_8c" startline="833" endline="863">merge_sstable_into</referencedby>
+        <referencedby refid="sstable_8h_1ae192eb49a44935a89c8676b303a68832" compoundref="sstable_8c" startline="977" endline="1001">sstable_largest_key</referencedby>
+        <referencedby refid="sstable_8h_1a10be7532fe0a4bb958c3408da4a40f6a" compoundref="sstable_8c" startline="953" endline="975">sstable_smallest_key</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="sstable_8h_1a10be7532fe0a4bb958c3408da4a40f6a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char * sstable_smallest_key</definition>
+        <argsstring>(sstable_t *sst, size_t *out_len)</argsstring>
+        <name>sstable_smallest_key</name>
+        <param>
+          <type><ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref> *</type>
+          <declname>sst</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>out_len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="66" column="12" bodyfile="src/sstable.c" bodystart="953" bodyend="975" declfile="include/sstable.h" declline="66" declcolumn="12"/>
+        <references refid="structsstable_1a38d0c500296d1d8d4c34c7ee0dab7d3f" compoundref="sstable_8h" startline="39">sstable::smallest_key</references>
+        <references refid="structsstable_1aec0e749ba57c3b11fa96fdfdfa1f6e7f" compoundref="sstable_8h" startline="40">sstable::smallest_key_len</references>
+        <references refid="sstable_8c_1a1cc4e5a8a06b9356c83e20dc4a74d7ec" compoundref="sstable_8c" startline="858" endline="866">sstable_iter_free</references>
+        <references refid="sstable_8c_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</references>
+        <references refid="sstable_8c_1a82d6818722a409b88cf1d0210511c95d" compoundref="sstable_8c" startline="836" endline="856">sstable_new_iterator</references>
+      </memberdef>
+      <memberdef kind="function" id="sstable_8h_1ae192eb49a44935a89c8676b303a68832" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char * sstable_largest_key</definition>
+        <argsstring>(sstable_t *sst, size_t *out_len)</argsstring>
+        <name>sstable_largest_key</name>
+        <param>
+          <type><ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref> *</type>
+          <declname>sst</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>out_len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="67" column="12" bodyfile="src/sstable.c" bodystart="977" bodyend="1001" declfile="include/sstable.h" declline="67" declcolumn="12"/>
+        <references refid="structsstable_1ab3eff3ca09fc1768105451d0ad833a50" compoundref="sstable_8h" startline="41">sstable::largest_key</references>
+        <references refid="structsstable_1a1525c3285e88017074640c21c50cc543" compoundref="sstable_8h" startline="42">sstable::largest_key_len</references>
+        <references refid="sstable_8c_1a1cc4e5a8a06b9356c83e20dc4a74d7ec" compoundref="sstable_8c" startline="858" endline="866">sstable_iter_free</references>
+        <references refid="sstable_8c_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</references>
+        <references refid="sstable_8c_1a82d6818722a409b88cf1d0210511c95d" compoundref="sstable_8c" startline="836" endline="856">sstable_new_iterator</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>SSTABLE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SSTABLE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stddef.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdint.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="compression_8h" kindref="compound">compression.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="lru__cache_8h" kindref="compound">lru_cache.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="skiplist_8h" kindref="compound">skiplist.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>SSTABLE_BLOCK_SIZE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13" refid="sstable_8h_1a7faf984d9939d829de71fba5ad662f81" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SSTABLE_BLOCK_SIZE<sp/>4096</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15" refid="sstable_8h_1af965fa1342eb5e2926079beb68552ebb" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SSTABLE_FOOTER_SIZE<sp/>48</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16" refid="sstable_8h_1a6add1dba5ebb0cfba2461473f7a17671" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SSTABLE_RESTART_INTERVAL<sp/>16</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17" refid="sstable_8h_1ad7b5731546b3821e5ca7ec98228b0b3c" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SSTABLE_PREV_KEY_CAPACITY<sp/>4096</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>默认压缩级别：1=快速压缩，兼顾速度和压缩比<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20" refid="sstable_8h_1add0ef6f2d1d2c1132813e5ed6d079c49" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SSTABLE_DEFAULT_COMPRESSION_LEVEL<sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22" refid="structsstable__block" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsstable__block" kindref="compound">sstable_block</ref><sp/>{</highlight></codeline>
+<codeline lineno="23" refid="structsstable__block_1adc0774cfed7ebf2da7f1476d95a6f898" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>uint8_t*<sp/><ref refid="structsstable__block_1adc0774cfed7ebf2da7f1476d95a6f898" kindref="member">data</ref>;</highlight></codeline>
+<codeline lineno="24" refid="structsstable__block_1ae227febd3d01a1c6241ee3ae1d9f75da" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structsstable__block_1ae227febd3d01a1c6241ee3ae1d9f75da" kindref="member">size</ref>;</highlight></codeline>
+<codeline lineno="25" refid="structsstable__block_1a3ab2e0ea5fc8476008a0d8319b982139" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structsstable__block_1a3ab2e0ea5fc8476008a0d8319b982139" kindref="member">restart_count</ref>;</highlight></codeline>
+<codeline lineno="26" refid="structsstable__block_1a568d843e598a46da4027e8a90959b4c1" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>uint32_t*<sp/><ref refid="structsstable__block_1a568d843e598a46da4027e8a90959b4c1" kindref="member">restart_points</ref>;</highlight></codeline>
+<codeline lineno="27" refid="sstable_8h_1a493fac1cf27fcba05d1356866b233c94" refkind="member"><highlight class="normal">}<sp/><ref refid="sstable_8h_1a493fac1cf27fcba05d1356866b233c94" kindref="member">sstable_block_t</ref>;</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29" refid="structsstable" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsstable" kindref="compound">sstable</ref><sp/>{</highlight></codeline>
+<codeline lineno="30" refid="structsstable_1a4ebd992b069f2291da455f277131add2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>FILE*<sp/><ref refid="structsstable_1a4ebd992b069f2291da455f277131add2" kindref="member">file</ref>;</highlight></codeline>
+<codeline lineno="31" refid="structsstable_1a9ba8db9b8b2c65e9948ab064cf4f17be" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structsstable_1a9ba8db9b8b2c65e9948ab064cf4f17be" kindref="member">path</ref>;</highlight></codeline>
+<codeline lineno="32" refid="structsstable_1acaef36fa70934a1f9fbc265d10517e44" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>uint64_t<sp/><ref refid="structsstable_1acaef36fa70934a1f9fbc265d10517e44" kindref="member">file_id</ref>;</highlight></codeline>
+<codeline lineno="33" refid="structsstable_1a39d9c702ea64a8a795f7e7926bf5f41c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structsstable_1a39d9c702ea64a8a795f7e7926bf5f41c" kindref="member">file_size</ref>;</highlight></codeline>
+<codeline lineno="34" refid="structsstable_1a7c0a1c119d5f52c37109438781d625de" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>uint64_t<sp/><ref refid="structsstable_1a7c0a1c119d5f52c37109438781d625de" kindref="member">index_offset</ref>;</highlight></codeline>
+<codeline lineno="35" refid="structsstable_1a7c9b99f34069f7db7a91c187f0817cf4" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structsstable_1a7c9b99f34069f7db7a91c187f0817cf4" kindref="member">index_size</ref>;</highlight></codeline>
+<codeline lineno="36" refid="structsstable_1a860fc01e0323300e267c31559d08075b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>uint64_t<sp/><ref refid="structsstable_1a860fc01e0323300e267c31559d08075b" kindref="member">filter_offset</ref>;</highlight></codeline>
+<codeline lineno="37" refid="structsstable_1a37141812c3cd6dba2b4d0c1bafb6b982" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structsstable_1a37141812c3cd6dba2b4d0c1bafb6b982" kindref="member">filter_size</ref>;</highlight></codeline>
+<codeline lineno="38" refid="structsstable_1a14fb2ce7bc2a73f885d9bbe1ee608d2d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref><sp/><ref refid="structsstable_1a14fb2ce7bc2a73f885d9bbe1ee608d2d" kindref="member">compression_type</ref>;<sp/><sp/></highlight><highlight class="comment">/*<sp/>压缩算法类型<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39" refid="structsstable_1a38d0c500296d1d8d4c34c7ee0dab7d3f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structsstable_1a38d0c500296d1d8d4c34c7ee0dab7d3f" kindref="member">smallest_key</ref>;</highlight></codeline>
+<codeline lineno="40" refid="structsstable_1aec0e749ba57c3b11fa96fdfdfa1f6e7f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structsstable_1aec0e749ba57c3b11fa96fdfdfa1f6e7f" kindref="member">smallest_key_len</ref>;</highlight></codeline>
+<codeline lineno="41" refid="structsstable_1ab3eff3ca09fc1768105451d0ad833a50" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structsstable_1ab3eff3ca09fc1768105451d0ad833a50" kindref="member">largest_key</ref>;</highlight></codeline>
+<codeline lineno="42" refid="structsstable_1a1525c3285e88017074640c21c50cc543" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structsstable_1a1525c3285e88017074640c21c50cc543" kindref="member">largest_key_len</ref>;</highlight></codeline>
+<codeline lineno="43" refid="structsstable_1a3e5d9c834289730120b5c6acc5119e79" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/><ref refid="structsstable_1a3e5d9c834289730120b5c6acc5119e79" kindref="member">index_cache</ref>;</highlight></codeline>
+<codeline lineno="44" refid="structsstable_1aa5b9b3ddd8d633b1c61add29b9b2629b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/><ref refid="structsstable_1aa5b9b3ddd8d633b1c61add29b9b2629b" kindref="member">filter_cache</ref>;</highlight></codeline>
+<codeline lineno="45" refid="structsstable_1a2d930d1dbd79b0b8085dad7515d25286" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>uint8_t*<sp/><ref refid="structsstable_1a2d930d1dbd79b0b8085dad7515d25286" kindref="member">cached_index_data</ref>;<sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>缓存的索引块原始数据<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46" refid="structsstable_1ae1ef2e98427069a0d74984f4fb9aeefa" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structsstable_1ae1ef2e98427069a0d74984f4fb9aeefa" kindref="member">cached_index_data_len</ref>;</highlight></codeline>
+<codeline lineno="47" refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" refkind="member"><highlight class="normal">}<sp/><ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref>;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49" refid="structsstable__iter" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structsstable__iter" kindref="compound">sstable_iter</ref><sp/>{</highlight></codeline>
+<codeline lineno="50" refid="structsstable__iter_1ad4abcbdf85c6e564530431b0c6f272ea" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref>*<sp/><ref refid="structsstable__iter_1ad4abcbdf85c6e564530431b0c6f272ea" kindref="member">sst</ref>;</highlight></codeline>
+<codeline lineno="51" refid="structsstable__iter_1a0992bdc8ebf7693fb34ee3059c106d1d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="sstable_8h_1a493fac1cf27fcba05d1356866b233c94" kindref="member">sstable_block_t</ref>*<sp/><ref refid="structsstable__iter_1a0992bdc8ebf7693fb34ee3059c106d1d" kindref="member">current_block</ref>;</highlight></codeline>
+<codeline lineno="52" refid="structsstable__iter_1a8f5b9c87fc982be79372406fa525a7e2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structsstable__iter_1a8f5b9c87fc982be79372406fa525a7e2" kindref="member">block_offset</ref>;</highlight></codeline>
+<codeline lineno="53" refid="structsstable__iter_1a982e56967bc9a782671fd606abe33e87" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structsstable__iter_1a982e56967bc9a782671fd606abe33e87" kindref="member">entry_offset</ref>;</highlight></codeline>
+<codeline lineno="54" refid="structsstable__iter_1ac47025e8734b03fe9e4cf73ee09c4258" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structsstable__iter_1ac47025e8734b03fe9e4cf73ee09c4258" kindref="member">eof</ref>;</highlight></codeline>
+<codeline lineno="55" refid="structsstable__iter_1aaf7e7c3f517f280c179c5fe7d5e87e05" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/><ref refid="structsstable__iter_1aaf7e7c3f517f280c179c5fe7d5e87e05" kindref="member">prev_key</ref>[<ref refid="sstable_8h_1ad7b5731546b3821e5ca7ec98228b0b3c" kindref="member">SSTABLE_PREV_KEY_CAPACITY</ref>];</highlight></codeline>
+<codeline lineno="56" refid="structsstable__iter_1a1dbf22c123f068d28f5ee48920f085cd" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structsstable__iter_1a1dbf22c123f068d28f5ee48920f085cd" kindref="member">prev_len</ref>;</highlight></codeline>
+<codeline lineno="57" refid="sstable_8h_1ab359b0d4329b40591074e87fb1f20934" refkind="member"><highlight class="normal">}<sp/><ref refid="sstable_8h_1ab359b0d4329b40591074e87fb1f20934" kindref="member">sstable_iter_t</ref>;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref>*<sp/><ref refid="sstable_8h_1a3d2d335d8d676a87f6d8524b14b5f513" kindref="member">sstable_open</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>path,<sp/>uint64_t<sp/>file_id);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="sstable_8h_1a8f7511d759e436cff50fdb79f8173647" kindref="member">sstable_close</ref>(<ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref>*<sp/>sst);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="sstable_8h_1acb832b0f59a4d29fc174781b17d85965" kindref="member">sstable_write</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>path,<sp/>uint64_t<sp/>file_id,<sp/><ref refid="skiplist_8h_1a5a9fdc8b5fc5c4be419e3f3ab2c01c35" kindref="member">skiplist_t</ref>*<sp/>memtable,<sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref><sp/>comp_type);</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="sstable_8h_1ac461806936e04fd48217cbd0cbdbc7b9" kindref="member">sstable_lookup</ref>(<ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref>*<sp/>sst,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">**<sp/>out_value,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>out_vlen,<sp/><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref>*<sp/>block_cache);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><ref refid="sstable_8h_1ab359b0d4329b40591074e87fb1f20934" kindref="member">sstable_iter_t</ref>*<sp/><ref refid="sstable_8h_1a82d6818722a409b88cf1d0210511c95d" kindref="member">sstable_new_iterator</ref>(<ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref>*<sp/>sst);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="sstable_8h_1a1cc4e5a8a06b9356c83e20dc4a74d7ec" kindref="member">sstable_iter_free</ref>(<ref refid="sstable_8h_1ab359b0d4329b40591074e87fb1f20934" kindref="member">sstable_iter_t</ref>*<sp/>iter);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" kindref="member">sstable_iter_next</ref>(<ref refid="sstable_8h_1ab359b0d4329b40591074e87fb1f20934" kindref="member">sstable_iter_t</ref>*<sp/>iter,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">**<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>klen,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">**<sp/>value,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>vlen);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="sstable_8h_1a10be7532fe0a4bb958c3408da4a40f6a" kindref="member">sstable_smallest_key</ref>(<ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref>*<sp/>sst,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>out_len);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="sstable_8h_1ae192eb49a44935a89c8676b303a68832" kindref="member">sstable_largest_key</ref>(<ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref>*<sp/>sst,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>out_len);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="include/sstable.h"/>
+  </compounddef>
+</doxygen>

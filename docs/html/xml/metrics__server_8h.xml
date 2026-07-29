@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="metrics__server_8h" kind="file" language="C++">
+    <compoundname>metrics_server.h</compoundname>
+    <includes refid="kv__store_8h" local="yes">kv_store.h</includes>
+    <includedby refid="metrics__server_8c" local="yes">src/metrics_server.c</includedby>
+    <includedby refid="raft__node_8c" local="yes">src/raft_node.c</includedby>
+    <includedby refid="server__main_8c" local="yes">src/server_main.c</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>kv_store.h</label>
+        <link refid="kv__store_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/metrics_server.h</label>
+        <link refid="metrics__server_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>stddef.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>include/metrics_server.h</label>
+        <link refid="metrics__server_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/metrics_server.c</label>
+        <link refid="metrics__server_8c"/>
+      </node>
+      <node id="3">
+        <label>src/raft_node.c</label>
+        <link refid="raft__node_8c"/>
+      </node>
+      <node id="4">
+        <label>src/server_main.c</label>
+        <link refid="server__main_8c"/>
+      </node>
+    </invincdepgraph>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="metrics__server_8h_1abbb727e26ee2979923fb2f7ea6f9de48" prot="public" static="no">
+        <name>METRICS_DEFAULT_PORT</name>
+        <initializer>9090</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/metrics_server.h" line="14" column="9" bodyfile="include/metrics_server.h" bodystart="14" bodyend="-1"/>
+        <referencedby refid="server__main_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="server__main_8c" startline="56" endline="176">main</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="metrics__server_8h_1aab6b3d36fa82c8372e9265233bb2395a" prot="public" static="no">
+        <type>struct <ref refid="structraft" kindref="compound">raft</ref></type>
+        <definition>typedef struct raft raft_t</definition>
+        <argsstring></argsstring>
+        <name>raft_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/metrics_server.h" line="8" column="19" bodyfile="include/metrics_server.h" bodystart="8" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" prot="public" static="no">
+        <type>struct <ref refid="structmetrics__server" kindref="compound">metrics_server</ref></type>
+        <definition>typedef struct metrics_server metrics_server_t</definition>
+        <argsstring></argsstring>
+        <name>metrics_server_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/metrics_server.h" line="16" column="29" bodyfile="include/metrics_server.h" bodystart="16" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="metrics__server_8h_1a20476f764a5c417e3115581567a31252" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int metrics_server_start</definition>
+        <argsstring>(metrics_server_t **out_server, const char *host, int port, kv_store_t *db, raft_t *raft)</argsstring>
+        <name>metrics_server_start</name>
+        <param>
+          <type><ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref> **</type>
+          <declname>out_server</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>host</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>port</declname>
+        </param>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <param>
+          <type><ref refid="metrics__server_8h_1aab6b3d36fa82c8372e9265233bb2395a" kindref="member">raft_t</ref> *</type>
+          <declname>raft</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/metrics_server.h" line="20" column="5" bodyfile="src/metrics_server.c" bodystart="292" bodyend="354" declfile="include/metrics_server.h" declline="20" declcolumn="5"/>
+        <references refid="structmetrics__server_1a7f7e013703848d269840391305972bd8" compoundref="metrics__server_8c" startline="39">metrics_server::db</references>
+        <references refid="structmetrics__server_1a4dfe4bc651c059935530838ff1a3d365" compoundref="metrics__server_8c" startline="42">metrics_server::host</references>
+        <references refid="metrics__server_8c_1a26769957ec1a2beaf223f33b66ee64ab" compoundref="metrics__server_8c" startline="27">INVALID_SOCKET</references>
+        <references refid="structmetrics__server_1ae2486d82a6326d6c6e00ff4b0756cf6f" compoundref="metrics__server_8c" startline="38">metrics_server::listen_fd</references>
+        <references refid="metrics__server_8c_1a60405df12a195e134c42609c3dc2eb09" compoundref="metrics__server_8c" startline="411" endline="427">metrics_server_free</references>
+        <references refid="structmetrics__server_1a70442e43f6269ac26f9c4835079ab4d4" compoundref="metrics__server_8c" startline="43">metrics_server::port</references>
+        <references refid="structmetrics__server_1a18f188c4fbe46c1163876411b55ab3f3" compoundref="metrics__server_8c" startline="40">metrics_server::raft</references>
+        <references refid="structmetrics__server_1ab80cf49276b0a5cf603c3b5554c723d9" compoundref="metrics__server_8c" startline="41">metrics_server::running</references>
+        <references refid="metrics__server_8c_1a633b0396ff93d336a088412a190a5072" compoundref="metrics__server_8c" startline="28">SOCKET_ERROR</references>
+        <references refid="structmetrics__server_1a6081c292fbb1ef335869251cfd4ef617" compoundref="metrics__server_8c" startline="44">metrics_server::start_time</references>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="metrics__server_8h_1a1a8a794cc3ca3ebdbb57ae18086c1775" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void metrics_server_run</definition>
+        <argsstring>(metrics_server_t *server)</argsstring>
+        <name>metrics_server_run</name>
+        <param>
+          <type><ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref> *</type>
+          <declname>server</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/metrics_server.h" line="24" column="6" bodyfile="src/metrics_server.c" bodystart="356" bodyend="404" declfile="include/metrics_server.h" declline="24" declcolumn="6"/>
+        <references refid="metrics__server_8c_1a26769957ec1a2beaf223f33b66ee64ab" compoundref="metrics__server_8c" startline="27">INVALID_SOCKET</references>
+        <references refid="structmetrics__server_1ae2486d82a6326d6c6e00ff4b0756cf6f" compoundref="metrics__server_8c" startline="38">metrics_server::listen_fd</references>
+        <references refid="metrics__server_8c_1a8dbf97dd7b8a28b34a5438d1609d5849" compoundref="metrics__server_8c" startline="249" endline="286">metrics_handle_connection</references>
+        <references refid="structmetrics__server_1ab80cf49276b0a5cf603c3b5554c723d9" compoundref="metrics__server_8c" startline="41">metrics_server::running</references>
+        <references refid="metrics__server_8c_1aff55fe551a9992a54ec54621c524d0a4" compoundref="metrics__server_8c" startline="26">SOCKET</references>
+        <referencedby refid="raft__node_8c_1ac81c773017061a45642bfde41f916da2" compoundref="raft__node_8c" startline="520" endline="523">metrics_thread_func</referencedby>
+        <referencedby refid="server__main_8c_1ac81c773017061a45642bfde41f916da2" compoundref="server__main_8c" startline="39" endline="43">metrics_thread_func</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="metrics__server_8h_1a2fd5d4484ae5eaaea76f71866350c84c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void metrics_server_stop</definition>
+        <argsstring>(metrics_server_t *server)</argsstring>
+        <name>metrics_server_stop</name>
+        <param>
+          <type><ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref> *</type>
+          <declname>server</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/metrics_server.h" line="27" column="6" bodyfile="src/metrics_server.c" bodystart="406" bodyend="409" declfile="include/metrics_server.h" declline="27" declcolumn="6"/>
+        <references refid="structmetrics__server_1ab80cf49276b0a5cf603c3b5554c723d9" compoundref="metrics__server_8c" startline="41">metrics_server::running</references>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+        <referencedby refid="raft__node_8c_1ae710b6e1e3475f05843032f73a4dd7a7" compoundref="raft__node_8c" startline="512" endline="518">signal_handler</referencedby>
+        <referencedby refid="server__main_8c_1ae710b6e1e3475f05843032f73a4dd7a7" compoundref="server__main_8c" startline="33" endline="37">signal_handler</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="metrics__server_8h_1a60405df12a195e134c42609c3dc2eb09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void metrics_server_free</definition>
+        <argsstring>(metrics_server_t *server)</argsstring>
+        <name>metrics_server_free</name>
+        <param>
+          <type><ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref> *</type>
+          <declname>server</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/metrics_server.h" line="30" column="6" bodyfile="src/metrics_server.c" bodystart="411" bodyend="427" declfile="include/metrics_server.h" declline="30" declcolumn="6"/>
+        <references refid="metrics__server_8c_1a1c6795db8afe1096e4a005206e556e12" compoundref="metrics__server_8c" startline="25">close_socket</references>
+        <references refid="structmetrics__server_1a4dfe4bc651c059935530838ff1a3d365" compoundref="metrics__server_8c" startline="42">metrics_server::host</references>
+        <references refid="metrics__server_8c_1a26769957ec1a2beaf223f33b66ee64ab" compoundref="metrics__server_8c" startline="27">INVALID_SOCKET</references>
+        <references refid="structmetrics__server_1ae2486d82a6326d6c6e00ff4b0756cf6f" compoundref="metrics__server_8c" startline="38">metrics_server::listen_fd</references>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+        <referencedby refid="metrics__server_8h_1a20476f764a5c417e3115581567a31252" compoundref="metrics__server_8c" startline="292" endline="354">metrics_server_start</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>METRICS_SERVER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>METRICS_SERVER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="kv__store_8h" kindref="compound">kv_store.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>前向声明，避免循环依赖<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structraft" kindref="compound">raft</ref>;</highlight></codeline>
+<codeline lineno="8" refid="metrics__server_8h_1aab6b3d36fa82c8372e9265233bb2395a" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structraft" kindref="compound">raft</ref><sp/><ref refid="metrics__server_8h_1aab6b3d36fa82c8372e9265233bb2395a" kindref="member">raft_t</ref>;</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14" refid="metrics__server_8h_1abbb727e26ee2979923fb2f7ea6f9de48" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>METRICS_DEFAULT_PORT<sp/>9090</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16" refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structmetrics__server" kindref="compound">metrics_server</ref><sp/><ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref>;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>启动<sp/>metrics<sp/>HTTP<sp/>服务器，返回<sp/>0<sp/>成功，-1<sp/>失败</highlight></codeline>
+<codeline lineno="19"><highlight class="comment"><sp/>*<sp/>raft<sp/>参数可选（传<sp/>NULL<sp/>则只暴露<sp/>KV<sp/>指标）<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="metrics__server_8h_1a20476f764a5c417e3115581567a31252" kindref="member">metrics_server_start</ref>(<ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref>**<sp/>out_server,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structmetrics__server_1a4dfe4bc651c059935530838ff1a3d365" kindref="member">host</ref>,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structmetrics__server_1a70442e43f6269ac26f9c4835079ab4d4" kindref="member">port</ref>,</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/><ref refid="structmetrics__server_1a7f7e013703848d269840391305972bd8" kindref="member">db</ref>,<sp/><ref refid="metrics__server_8h_1aab6b3d36fa82c8372e9265233bb2395a" kindref="member">raft_t</ref>*<sp/><ref refid="structraft" kindref="compound">raft</ref>);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>运行服务器主循环（阻塞，直到收到停止信号）<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="metrics__server_8h_1a1a8a794cc3ca3ebdbb57ae18086c1775" kindref="member">metrics_server_run</ref>(<ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref>*<sp/>server);</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>停止服务器<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="metrics__server_8h_1a2fd5d4484ae5eaaea76f71866350c84c" kindref="member">metrics_server_stop</ref>(<ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref>*<sp/>server);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>销毁服务器资源<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="metrics__server_8h_1a60405df12a195e134c42609c3dc2eb09" kindref="member">metrics_server_free</ref>(<ref refid="metrics__server_8h_1a6436b21894a5c2e5afe53c4a0ae079e2" kindref="member">metrics_server_t</ref>*<sp/>server);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="include/metrics_server.h"/>
+  </compounddef>
+</doxygen>

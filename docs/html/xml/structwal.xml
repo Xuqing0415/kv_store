@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structwal" kind="struct" language="C++" prot="public">
+    <compoundname>wal</compoundname>
+    <includes refid="wal_8h" local="no">wal.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structwal_1adce7b9e3129a1d08467da8b6dd7bd81a" prot="public" static="no" mutable="no">
+        <type>FILE *</type>
+        <definition>FILE* wal::file</definition>
+        <argsstring></argsstring>
+        <name>file</name>
+        <qualifiedname>wal::file</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="29" column="10" bodyfile="include/wal.h" bodystart="29" bodyend="-1"/>
+        <referencedby refid="wal_8h_1ab5c677761e13e05ab70cfa13782438fb" compoundref="wal_8c" startline="335" endline="343">wal_close</referencedby>
+        <referencedby refid="wal_8h_1a711953a17f21654bc2b8566e1d148f5b" compoundref="wal_8c" startline="310" endline="333">wal_open</referencedby>
+        <referencedby refid="wal_8h_1a9720b41392ac7b53a127b741408d739e" compoundref="wal_8c" startline="396" endline="461">wal_replay</referencedby>
+        <referencedby refid="wal_8h_1ab68b30d13fe3cf226565b396ced72c5e" compoundref="wal_8c" startline="472" endline="478">wal_size</referencedby>
+        <referencedby refid="wal_8h_1a25837431920cf767bb8ef6a97a379a5c" compoundref="wal_8c" startline="386" endline="394">wal_sync</referencedby>
+        <referencedby refid="wal_8h_1a70589fa0e9257fb13f4e6f6c15c1402f" compoundref="wal_8c" startline="463" endline="470">wal_truncate</referencedby>
+        <referencedby refid="wal_8h_1ad67b92f852a478e80213df8eed7cbe68" compoundref="wal_8c" startline="345" endline="384">wal_write</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structwal_1a23258501b2ee50d2eebca1e44485a2a3" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* wal::path</definition>
+        <argsstring></argsstring>
+        <name>path</name>
+        <qualifiedname>wal::path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="30" column="10" bodyfile="include/wal.h" bodystart="30" bodyend="-1"/>
+        <referencedby refid="wal_8h_1ab5c677761e13e05ab70cfa13782438fb" compoundref="wal_8c" startline="335" endline="343">wal_close</referencedby>
+        <referencedby refid="wal_8h_1a711953a17f21654bc2b8566e1d148f5b" compoundref="wal_8c" startline="310" endline="333">wal_open</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structwal_1a5b4bc2d813a14961679f5f41d36661bf" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t wal::sync_interval</definition>
+        <argsstring></argsstring>
+        <name>sync_interval</name>
+        <qualifiedname>wal::sync_interval</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="31" column="12" bodyfile="include/wal.h" bodystart="31" bodyend="-1"/>
+        <referencedby refid="wal_8h_1a711953a17f21654bc2b8566e1d148f5b" compoundref="wal_8c" startline="310" endline="333">wal_open</referencedby>
+        <referencedby refid="wal_8h_1ad67b92f852a478e80213df8eed7cbe68" compoundref="wal_8c" startline="345" endline="384">wal_write</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structwal_1a47ba018f8e77f109bc1d336e2093b069" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t wal::bytes_since_sync</definition>
+        <argsstring></argsstring>
+        <name>bytes_since_sync</name>
+        <qualifiedname>wal::bytes_since_sync</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="32" column="12" bodyfile="include/wal.h" bodystart="32" bodyend="-1"/>
+        <referencedby refid="wal_8h_1a711953a17f21654bc2b8566e1d148f5b" compoundref="wal_8c" startline="310" endline="333">wal_open</referencedby>
+        <referencedby refid="wal_8h_1a25837431920cf767bb8ef6a97a379a5c" compoundref="wal_8c" startline="386" endline="394">wal_sync</referencedby>
+        <referencedby refid="wal_8h_1ad67b92f852a478e80213df8eed7cbe68" compoundref="wal_8c" startline="345" endline="384">wal_write</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/wal.h" line="28" column="1" bodyfile="include/wal.h" bodystart="28" bodyend="33"/>
+    <listofallmembers>
+      <member refid="structwal_1a47ba018f8e77f109bc1d336e2093b069" prot="public" virt="non-virtual"><scope>wal</scope><name>bytes_since_sync</name></member>
+      <member refid="structwal_1adce7b9e3129a1d08467da8b6dd7bd81a" prot="public" virt="non-virtual"><scope>wal</scope><name>file</name></member>
+      <member refid="structwal_1a23258501b2ee50d2eebca1e44485a2a3" prot="public" virt="non-virtual"><scope>wal</scope><name>path</name></member>
+      <member refid="structwal_1a5b4bc2d813a14961679f5f41d36661bf" prot="public" virt="non-virtual"><scope>wal</scope><name>sync_interval</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

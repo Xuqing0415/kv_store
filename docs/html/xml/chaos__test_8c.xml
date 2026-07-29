@@ -1,0 +1,1006 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="chaos__test_8c" kind="file" language="C++">
+    <compoundname>chaos_test.c</compoundname>
+    <includes refid="kv__store_8h" local="yes">kv_store.h</includes>
+    <includes local="yes">mem.h</includes>
+    <includes local="no">stdio.h</includes>
+    <includes local="no">stdlib.h</includes>
+    <includes local="no">string.h</includes>
+    <includes local="no">time.h</includes>
+    <includes local="no">math.h</includes>
+    <includes local="no">pthread.h</includes>
+    <includes local="no">unistd.h</includes>
+    <incdepgraph>
+      <node id="2">
+        <label>kv_store.h</label>
+        <link refid="kv__store_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/chaos_test.c</label>
+        <link refid="chaos__test_8c"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>math.h</label>
+      </node>
+      <node id="4">
+        <label>mem.h</label>
+      </node>
+      <node id="10">
+        <label>pthread.h</label>
+      </node>
+      <node id="3">
+        <label>stddef.h</label>
+      </node>
+      <node id="5">
+        <label>stdio.h</label>
+      </node>
+      <node id="6">
+        <label>stdlib.h</label>
+      </node>
+      <node id="7">
+        <label>string.h</label>
+      </node>
+      <node id="8">
+        <label>time.h</label>
+      </node>
+      <node id="11">
+        <label>unistd.h</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="structchaos__stats__t" prot="public">chaos_stats_t</innerclass>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="chaos__test_8c_1a264f85729ba264625594024d230c216b" prot="public" static="no">
+        <name>THREAD_FN</name>
+        <initializer>void*(*)(void*)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="24" column="12" bodyfile="src/chaos_test.c" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1a4c4cf564e25b1a938d2928c8a2cf3474" prot="public" static="no">
+        <name>THREAD_RET</name>
+        <initializer>void*</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="25" column="9" bodyfile="src/chaos_test.c" bodystart="25" bodyend="-1"/>
+        <referencedby refid="merge_8c_1a2c0c5111d2b8eefdf36b175c56cfa3c8" compoundref="merge_8c" startline="34" endline="67">merge_worker</referencedby>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1ad954087e608668a7319ae8d56f3d9585" prot="public" static="no">
+        <name>THREAD_CREATE</name>
+        <param><defname>h</defname></param>
+        <param><defname>a</defname></param>
+        <param><defname>f</defname></param>
+        <param><defname>d</defname></param>
+        <initializer>(pthread_create((h), (a), (f), (d)) == 0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="26" column="9" bodyfile="src/chaos_test.c" bodystart="26" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1a32b707564bed59165e7c20f05c921f84" prot="public" static="no">
+        <name>THREAD_JOIN</name>
+        <param><defname>h</defname></param>
+        <initializer>pthread_join((h), NULL)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="27" column="9" bodyfile="src/chaos_test.c" bodystart="27" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1af4a4e49bfd86a70ccd6c3126742294d7" prot="public" static="no">
+        <name>THREAD_CLOSE</name>
+        <param><defname>h</defname></param>
+        <initializer>((void)(h))</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="28" column="9" bodyfile="src/chaos_test.c" bodystart="28" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1a3b0b0f3de380dbd1bbf2107d1687a30f" prot="public" static="no">
+        <name>SLEEP_MS</name>
+        <param><defname>ms</defname></param>
+        <initializer>usleep((ms) * 1000)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="29" column="9" bodyfile="src/chaos_test.c" bodystart="29" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" prot="public" static="no">
+        <name>ATOMIC_INC</name>
+        <param><defname>p</defname></param>
+        <initializer>__sync_add_and_fetch((p), 1)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="30" column="9" bodyfile="src/chaos_test.c" bodystart="30" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1a7e57bf544e4e66e826f4443ceeabba96" prot="public" static="no">
+        <name>ATOMIC_ADD</name>
+        <param><defname>p</defname></param>
+        <param><defname>v</defname></param>
+        <initializer>__sync_add_and_fetch((p), (v))</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="31" column="9" bodyfile="src/chaos_test.c" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1a7735206bdfad487588bba2126b806ab7" prot="public" static="no">
+        <name>NUM_THREADS</name>
+        <initializer>4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="35" column="9" bodyfile="src/chaos_test.c" bodystart="35" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="chaos__test_8c_1a809d00f6b512663cf68281a50ffff81d" compoundref="chaos__test_8c" startline="209" endline="220">print_stats_header</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" prot="public" static="no">
+        <name>NUM_KEYS</name>
+        <initializer>10000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="36" column="9" bodyfile="src/chaos_test.c" bodystart="36" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="chaos__test_8c_1a809d00f6b512663cf68281a50ffff81d" compoundref="chaos__test_8c" startline="209" endline="220">print_stats_header</referencedby>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+        <referencedby refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" compoundref="chaos__test_8c" startline="249" endline="300">verify_data_integrity</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1a80ee23c695ea9c43960513d691f89266" prot="public" static="no">
+        <name>TEST_DURATION</name>
+        <initializer>60     /* 测试持续秒数 */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="37" column="9" bodyfile="src/chaos_test.c" bodystart="37" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="chaos__test_8c_1a809d00f6b512663cf68281a50ffff81d" compoundref="chaos__test_8c" startline="209" endline="220">print_stats_header</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" prot="public" static="no">
+        <name>KEY_PREFIX</name>
+        <initializer>&quot;ck_&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="38" column="9" bodyfile="src/chaos_test.c" bodystart="38" bodyend="-1"/>
+        <referencedby refid="main_8c_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="main_8c" startline="103" endline="184">main</referencedby>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="main_8c_1a035fbbf5ce226a67e296e28c99054732" compoundref="main_8c" startline="30" endline="101">run_test</referencedby>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+        <referencedby refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" compoundref="chaos__test_8c" startline="249" endline="300">verify_data_integrity</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1a4e687b42546199b504ec7d2319cd9e2a" prot="public" static="no">
+        <name>VAL_PREFIX</name>
+        <initializer>&quot;cv_&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="39" column="9" bodyfile="src/chaos_test.c" bodystart="39" bodyend="-1"/>
+        <referencedby refid="main_8c_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="main_8c" startline="103" endline="184">main</referencedby>
+        <referencedby refid="main_8c_1a035fbbf5ce226a67e296e28c99054732" compoundref="main_8c" startline="30" endline="101">run_test</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="chaos__test_8c_1aaa8008886226ab2871b307c456cfdbb7" prot="public" static="no">
+        <name>VAL_SIZE</name>
+        <initializer>128</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="40" column="9" bodyfile="src/chaos_test.c" bodystart="40" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" prot="public" static="no">
+        <type>volatile int</type>
+        <definition>typedef volatile int atomic_t</definition>
+        <argsstring></argsstring>
+        <name>atomic_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="32" column="22" bodyfile="src/chaos_test.c" bodystart="32" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" prot="public" static="yes" mutable="no">
+        <type><ref refid="structchaos__stats__t" kindref="compound">chaos_stats_t</ref></type>
+        <definition>chaos_stats_t g_stats</definition>
+        <argsstring></argsstring>
+        <name>g_stats</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="56" column="22" bodyfile="src/chaos_test.c" bodystart="56" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a4048a033923bd0e0d9062c2402531f70" compoundref="chaos__test_8c" startline="222" endline="247">print_stats</referencedby>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="chaos__test_8c_1a037aed45f792fc3e78387006be43a53e" prot="public" static="yes" mutable="no">
+        <type>volatile int</type>
+        <definition>volatile int g_running</definition>
+        <argsstring></argsstring>
+        <name>g_running</name>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="57" column="21" bodyfile="src/chaos_test.c" bodystart="57" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" prot="public" static="yes" mutable="no">
+        <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+        <definition>kv_store_t* g_db</definition>
+        <argsstring></argsstring>
+        <name>g_db</name>
+        <initializer>= NULL</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="58" column="19" bodyfile="src/chaos_test.c" bodystart="58" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" prot="public" static="yes" mutable="no">
+        <type>const char *</type>
+        <definition>const char* g_data_dir</definition>
+        <argsstring></argsstring>
+        <name>g_data_dir</name>
+        <initializer>= NULL</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="59" column="19" bodyfile="src/chaos_test.c" bodystart="59" bodyend="-1"/>
+        <referencedby refid="chaos__test_8c_1a2963a459170a975369ed7788a526ff0b" compoundref="chaos__test_8c" startline="302" endline="312">cleanup_data_dir</referencedby>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="chaos__test_8c_1a809d00f6b512663cf68281a50ffff81d" compoundref="chaos__test_8c" startline="209" endline="220">print_stats_header</referencedby>
+        <referencedby refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" compoundref="chaos__test_8c" startline="249" endline="300">verify_data_integrity</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="chaos__test_8c_1ad0e5f51ff9be371d9918fb261fa0cf22" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void fill_random_value</definition>
+        <argsstring>(char *buf, size_t len)</argsstring>
+        <name>fill_random_value</name>
+        <param>
+          <type>char *</type>
+          <declname>buf</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="61" column="13" bodyfile="src/chaos_test.c" bodystart="61" bodyend="67"/>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="chaos__test_8c_1a4c4cf564e25b1a938d2928c8a2cf3474" kindref="member">THREAD_RET</ref></type>
+        <definition>static THREAD_RET worker_thread</definition>
+        <argsstring>(void *arg)</argsstring>
+        <name>worker_thread</name>
+        <param>
+          <type>void *</type>
+          <declname>arg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="69" column="19" bodyfile="src/chaos_test.c" bodystart="69" bodyend="141"/>
+        <references refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" compoundref="chaos__test_8c" startline="30">ATOMIC_INC</references>
+        <references refid="chaos__test_8c_1ad0e5f51ff9be371d9918fb261fa0cf22" compoundref="chaos__test_8c" startline="61" endline="67">fill_random_value</references>
+        <references refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" compoundref="chaos__test_8c" startline="58">g_db</references>
+        <references refid="chaos__test_8c_1a037aed45f792fc3e78387006be43a53e" compoundref="chaos__test_8c" startline="57">g_running</references>
+        <references refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" compoundref="chaos__test_8c" startline="56">g_stats</references>
+        <references refid="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" compoundref="chaos__test_8c" startline="38">KEY_PREFIX</references>
+        <references refid="kv__store_8h_1a25deb538aeb44468c7ae4c71aee2d150" compoundref="kv__store_8c" startline="770" endline="795">kv_delete</references>
+        <references refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" compoundref="kv__store_8c" startline="602" endline="733">kv_get</references>
+        <references refid="kv__store_8h_1a4342798ef6a43d3044b8606f4a75cab7" compoundref="kv__store_8c" startline="969" endline="983">kv_iter_free</references>
+        <references refid="kv__store_8h_1a8e50eecfcbf98705fc5ffd81b7ac139b" compoundref="kv__store_8c" startline="954" endline="967">kv_iter_next</references>
+        <references refid="kv__store_8h_1acbc27bec469af3563081723fc01faeac" compoundref="kv__store_8c" startline="576" endline="600">kv_put</references>
+        <references refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</references>
+        <references refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" compoundref="chaos__test_8c" startline="36">NUM_KEYS</references>
+        <references refid="chaos__test_8c_1a4c4cf564e25b1a938d2928c8a2cf3474" compoundref="chaos__test_8c" startline="25">THREAD_RET</references>
+        <references refid="chaos__test_8c_1aaa8008886226ab2871b307c456cfdbb7" compoundref="chaos__test_8c" startline="40">VAL_SIZE</references>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="chaos__test_8c_1a4c4cf564e25b1a938d2928c8a2cf3474" kindref="member">THREAD_RET</ref></type>
+        <definition>static THREAD_RET snapshot_thread</definition>
+        <argsstring>(void *arg)</argsstring>
+        <name>snapshot_thread</name>
+        <param>
+          <type>void *</type>
+          <declname>arg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="143" column="19" bodyfile="src/chaos_test.c" bodystart="143" bodyend="207"/>
+        <references refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" compoundref="chaos__test_8c" startline="30">ATOMIC_INC</references>
+        <references refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" compoundref="chaos__test_8c" startline="58">g_db</references>
+        <references refid="chaos__test_8c_1a037aed45f792fc3e78387006be43a53e" compoundref="chaos__test_8c" startline="57">g_running</references>
+        <references refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" compoundref="chaos__test_8c" startline="56">g_stats</references>
+        <references refid="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" compoundref="chaos__test_8c" startline="38">KEY_PREFIX</references>
+        <references refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" compoundref="kv__store_8c" startline="602" endline="733">kv_get</references>
+        <references refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" compoundref="kv__store_8c" startline="1014" endline="1073">kv_snapshot_create</references>
+        <references refid="kv__store_8h_1a2e4e48206e3052f91933404bebd4c296" compoundref="kv__store_8c" startline="1075" endline="1089">kv_snapshot_free</references>
+        <references refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</references>
+        <references refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" compoundref="chaos__test_8c" startline="36">NUM_KEYS</references>
+        <references refid="chaos__test_8c_1a3b0b0f3de380dbd1bbf2107d1687a30f" compoundref="chaos__test_8c" startline="29">SLEEP_MS</references>
+        <references refid="chaos__test_8c_1a4c4cf564e25b1a938d2928c8a2cf3474" compoundref="chaos__test_8c" startline="25">THREAD_RET</references>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="chaos__test_8c_1a809d00f6b512663cf68281a50ffff81d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void print_stats_header</definition>
+        <argsstring>(void)</argsstring>
+        <name>print_stats_header</name>
+        <param>
+          <type>void</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="209" column="13" bodyfile="src/chaos_test.c" bodystart="209" bodyend="220"/>
+        <references refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" compoundref="chaos__test_8c" startline="59">g_data_dir</references>
+        <references refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" compoundref="chaos__test_8c" startline="36">NUM_KEYS</references>
+        <references refid="chaos__test_8c_1a7735206bdfad487588bba2126b806ab7" compoundref="chaos__test_8c" startline="35">NUM_THREADS</references>
+        <references refid="chaos__test_8c_1a80ee23c695ea9c43960513d691f89266" compoundref="chaos__test_8c" startline="37">TEST_DURATION</references>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="chaos__test_8c_1a4048a033923bd0e0d9062c2402531f70" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void print_stats</definition>
+        <argsstring>(const char *phase, double elapsed)</argsstring>
+        <name>print_stats</name>
+        <param>
+          <type>const char *</type>
+          <declname>phase</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>elapsed</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="222" column="13" bodyfile="src/chaos_test.c" bodystart="222" bodyend="247"/>
+        <references refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" compoundref="chaos__test_8c" startline="56">g_stats</references>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>static int verify_data_integrity</definition>
+        <argsstring>(void)</argsstring>
+        <name>verify_data_integrity</name>
+        <param>
+          <type>void</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="249" column="12" bodyfile="src/chaos_test.c" bodystart="249" bodyend="300"/>
+        <references refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" compoundref="chaos__test_8c" startline="59">g_data_dir</references>
+        <references refid="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" compoundref="chaos__test_8c" startline="38">KEY_PREFIX</references>
+        <references refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" compoundref="kv__store_8c" startline="524" endline="574">kv_close</references>
+        <references refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" compoundref="kv__store_8c" startline="602" endline="733">kv_get</references>
+        <references refid="kv__store_8h_1a4342798ef6a43d3044b8606f4a75cab7" compoundref="kv__store_8c" startline="969" endline="983">kv_iter_free</references>
+        <references refid="kv__store_8h_1a8e50eecfcbf98705fc5ffd81b7ac139b" compoundref="kv__store_8c" startline="954" endline="967">kv_iter_next</references>
+        <references refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</references>
+        <references refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</references>
+        <references refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" compoundref="chaos__test_8c" startline="36">NUM_KEYS</references>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="chaos__test_8c_1a2963a459170a975369ed7788a526ff0b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void cleanup_data_dir</definition>
+        <argsstring>(void)</argsstring>
+        <name>cleanup_data_dir</name>
+        <param>
+          <type>void</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="302" column="13" bodyfile="src/chaos_test.c" bodystart="302" bodyend="312"/>
+        <references refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" compoundref="chaos__test_8c" startline="59">g_data_dir</references>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int main</definition>
+        <argsstring>(int argc, char *argv[])</argsstring>
+        <name>main</name>
+        <param>
+          <type>int</type>
+          <declname>argc</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>argv</declname>
+          <array>[]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/chaos_test.c" line="314" column="5" bodyfile="src/chaos_test.c" bodystart="314" bodyend="426"/>
+        <references refid="chaos__test_8c_1a2963a459170a975369ed7788a526ff0b" compoundref="chaos__test_8c" startline="302" endline="312">cleanup_data_dir</references>
+        <references refid="chaos__test_8c_1ad0e5f51ff9be371d9918fb261fa0cf22" compoundref="chaos__test_8c" startline="61" endline="67">fill_random_value</references>
+        <references refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" compoundref="chaos__test_8c" startline="59">g_data_dir</references>
+        <references refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" compoundref="chaos__test_8c" startline="58">g_db</references>
+        <references refid="chaos__test_8c_1a037aed45f792fc3e78387006be43a53e" compoundref="chaos__test_8c" startline="57">g_running</references>
+        <references refid="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" compoundref="chaos__test_8c" startline="38">KEY_PREFIX</references>
+        <references refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" compoundref="kv__store_8c" startline="524" endline="574">kv_close</references>
+        <references refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</references>
+        <references refid="kv__store_8h_1acbc27bec469af3563081723fc01faeac" compoundref="kv__store_8c" startline="576" endline="600">kv_put</references>
+        <references refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" compoundref="chaos__test_8c" startline="36">NUM_KEYS</references>
+        <references refid="chaos__test_8c_1a7735206bdfad487588bba2126b806ab7" compoundref="chaos__test_8c" startline="35">NUM_THREADS</references>
+        <references refid="chaos__test_8c_1a4048a033923bd0e0d9062c2402531f70" compoundref="chaos__test_8c" startline="222" endline="247">print_stats</references>
+        <references refid="chaos__test_8c_1a809d00f6b512663cf68281a50ffff81d" compoundref="chaos__test_8c" startline="209" endline="220">print_stats_header</references>
+        <references refid="chaos__test_8c_1a3b0b0f3de380dbd1bbf2107d1687a30f" compoundref="chaos__test_8c" startline="29">SLEEP_MS</references>
+        <references refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</references>
+        <references refid="chaos__test_8c_1a80ee23c695ea9c43960513d691f89266" compoundref="chaos__test_8c" startline="37">TEST_DURATION</references>
+        <references refid="chaos__test_8c_1af4a4e49bfd86a70ccd6c3126742294d7" compoundref="chaos__test_8c" startline="28">THREAD_CLOSE</references>
+        <references refid="chaos__test_8c_1ad954087e608668a7319ae8d56f3d9585" compoundref="chaos__test_8c" startline="26">THREAD_CREATE</references>
+        <references refid="chaos__test_8c_1a32b707564bed59165e7c20f05c921f84" compoundref="chaos__test_8c" startline="27">THREAD_JOIN</references>
+        <references refid="chaos__test_8c_1aaa8008886226ab2871b307c456cfdbb7" compoundref="chaos__test_8c" startline="40">VAL_SIZE</references>
+        <references refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" compoundref="chaos__test_8c" startline="249" endline="300">verify_data_integrity</references>
+        <references refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="kv__store_8h" kindref="compound">kv_store.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;mem.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdlib.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;time.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;math.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;windows.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;process.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>THREAD_FN<sp/>unsigned(__stdcall*)(void*)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>THREAD_RET<sp/>unsigned</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>THREAD_CREATE(h,<sp/>a,<sp/>f,<sp/>d)<sp/>((void)(*(h)<sp/>=<sp/>(HANDLE)_beginthreadex(NULL,<sp/>0,<sp/>(f),<sp/>(d),<sp/>0,<sp/>NULL)))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>THREAD_JOIN(h)<sp/>WaitForSingleObject((h),<sp/>INFINITE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>THREAD_CLOSE(h)<sp/>CloseHandle((h))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SLEEP_MS(ms)<sp/>Sleep((ms))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ATOMIC_INC(p)<sp/>InterlockedIncrement((LONG*)(p))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ATOMIC_ADD(p,<sp/>v)<sp/>InterlockedAdd((LONG*)(p),<sp/>(LONG)(v))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">volatile</highlight><highlight class="normal"><sp/>LONG<sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref>;</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;pthread.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;unistd.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24" refid="chaos__test_8c_1a264f85729ba264625594024d230c216b" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>THREAD_FN<sp/>void*(*)(void*)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25" refid="chaos__test_8c_1a4c4cf564e25b1a938d2928c8a2cf3474" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>THREAD_RET<sp/>void*</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26" refid="chaos__test_8c_1ad954087e608668a7319ae8d56f3d9585" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>THREAD_CREATE(h,<sp/>a,<sp/>f,<sp/>d)<sp/>(pthread_create((h),<sp/>(a),<sp/>(f),<sp/>(d))<sp/>==<sp/>0)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27" refid="chaos__test_8c_1a32b707564bed59165e7c20f05c921f84" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>THREAD_JOIN(h)<sp/>pthread_join((h),<sp/>NULL)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28" refid="chaos__test_8c_1af4a4e49bfd86a70ccd6c3126742294d7" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>THREAD_CLOSE(h)<sp/>((void)(h))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29" refid="chaos__test_8c_1a3b0b0f3de380dbd1bbf2107d1687a30f" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SLEEP_MS(ms)<sp/>usleep((ms)<sp/>*<sp/>1000)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30" refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ATOMIC_INC(p)<sp/>__sync_add_and_fetch((p),<sp/>1)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31" refid="chaos__test_8c_1a7e57bf544e4e66e826f4443ceeabba96" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ATOMIC_ADD(p,<sp/>v)<sp/>__sync_add_and_fetch((p),<sp/>(v))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32" refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">volatile</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref>;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35" refid="chaos__test_8c_1a7735206bdfad487588bba2126b806ab7" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NUM_THREADS<sp/><sp/><sp/><sp/><sp/><sp/>4</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36" refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NUM_KEYS<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>10000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37" refid="chaos__test_8c_1a80ee23c695ea9c43960513d691f89266" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>TEST_DURATION<sp/><sp/><sp/><sp/>60<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>测试持续秒数<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38" refid="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>KEY_PREFIX<sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;ck_&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39" refid="chaos__test_8c_1a4e687b42546199b504ec7d2319cd9e2a" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>VAL_PREFIX<sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;cv_&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40" refid="chaos__test_8c_1aaa8008886226ab2871b307c456cfdbb7" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>VAL_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>128</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>统计信息<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43" refid="structchaos__stats__t" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="44" refid="structchaos__stats__t_1ac0f635ba708679c4b95e59391cf01436" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref><sp/><ref refid="structchaos__stats__t_1ac0f635ba708679c4b95e59391cf01436" kindref="member">put_ops</ref>;</highlight></codeline>
+<codeline lineno="45" refid="structchaos__stats__t_1a37b9a3e3ba66159eab9a61d341a5f4c0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref><sp/><ref refid="structchaos__stats__t_1a37b9a3e3ba66159eab9a61d341a5f4c0" kindref="member">put_errors</ref>;</highlight></codeline>
+<codeline lineno="46" refid="structchaos__stats__t_1a0f50ac0d51691387f96c6a83b82bf9c5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref><sp/><ref refid="structchaos__stats__t_1a0f50ac0d51691387f96c6a83b82bf9c5" kindref="member">get_ops</ref>;</highlight></codeline>
+<codeline lineno="47" refid="structchaos__stats__t_1a83ec930ad582c6971ddb8a921ee2fa94" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref><sp/><ref refid="structchaos__stats__t_1a83ec930ad582c6971ddb8a921ee2fa94" kindref="member">get_hits</ref>;</highlight></codeline>
+<codeline lineno="48" refid="structchaos__stats__t_1a53185b2e2ce640f6c2bafef0b7327c8b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref><sp/><ref refid="structchaos__stats__t_1a53185b2e2ce640f6c2bafef0b7327c8b" kindref="member">get_misses</ref>;</highlight></codeline>
+<codeline lineno="49" refid="structchaos__stats__t_1aee728e05ad06a12d538d950b0904940c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref><sp/><ref refid="structchaos__stats__t_1aee728e05ad06a12d538d950b0904940c" kindref="member">del_ops</ref>;</highlight></codeline>
+<codeline lineno="50" refid="structchaos__stats__t_1ad7d1e20489aeeec3f627ab1149a4e8c7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref><sp/><ref refid="structchaos__stats__t_1ad7d1e20489aeeec3f627ab1149a4e8c7" kindref="member">del_errors</ref>;</highlight></codeline>
+<codeline lineno="51" refid="structchaos__stats__t_1a283903057e4b0d66a440a2eba7c5f16f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref><sp/><ref refid="structchaos__stats__t_1a283903057e4b0d66a440a2eba7c5f16f" kindref="member">scan_ops</ref>;</highlight></codeline>
+<codeline lineno="52" refid="structchaos__stats__t_1abb6d1adeda1e649fb825620ace019a11" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref><sp/><ref refid="structchaos__stats__t_1abb6d1adeda1e649fb825620ace019a11" kindref="member">snapshot_ops</ref>;</highlight></codeline>
+<codeline lineno="53" refid="structchaos__stats__t_1a72a4edc585483bf8f5af7cd2d4c28d6e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1aea39e8cf94d500bf7467a0e0c4f7d7db" kindref="member">atomic_t</ref><sp/><ref refid="structchaos__stats__t_1a72a4edc585483bf8f5af7cd2d4c28d6e" kindref="member">snapshot_errors</ref>;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal">}<sp/><ref refid="structchaos__stats__t" kindref="compound">chaos_stats_t</ref>;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56" refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="structchaos__stats__t" kindref="compound">chaos_stats_t</ref><sp/><ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>;</highlight></codeline>
+<codeline lineno="57" refid="chaos__test_8c_1a037aed45f792fc3e78387006be43a53e" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">volatile</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="chaos__test_8c_1a037aed45f792fc3e78387006be43a53e" kindref="member">g_running</ref><sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="58" refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/><ref refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" kindref="member">g_db</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="59" refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" kindref="member">g_data_dir</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61" refid="chaos__test_8c_1ad0e5f51ff9be371d9918fb261fa0cf22" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="chaos__test_8c_1ad0e5f51ff9be371d9918fb261fa0cf22" kindref="member">fill_random_value</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>buf,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>len)<sp/>{</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>charset[]<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;abcdefghijklmnopqrstuvwxyz0123456789&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>len<sp/>-<sp/>1;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buf[i]<sp/>=<sp/>charset[rand()<sp/>%<sp/>(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(charset)<sp/>-<sp/>1)];</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>buf[len<sp/>-<sp/>1]<sp/>=<sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69" refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="chaos__test_8c_1a4c4cf564e25b1a938d2928c8a2cf3474" kindref="member">THREAD_RET</ref><sp/><ref refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" kindref="member">worker_thread</ref>(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/>arg)<sp/>{</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>thread_id<sp/>=<sp/>(int)(intptr_t)arg;</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>key[64];</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>value[<ref refid="chaos__test_8c_1aaa8008886226ab2871b307c456cfdbb7" kindref="member">VAL_SIZE</ref>];</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>iter<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[CHAOS]<sp/>Worker<sp/>%d<sp/>started\n&quot;</highlight><highlight class="normal">,<sp/>thread_id);</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(<ref refid="chaos__test_8c_1a037aed45f792fc3e78387006be43a53e" kindref="member">g_running</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>op<sp/>=<sp/>rand()<sp/>%<sp/>100;</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>key_idx<sp/>=<sp/>rand()<sp/>%<sp/><ref refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" kindref="member">NUM_KEYS</ref>;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snprintf(key,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(key),<sp/></highlight><highlight class="stringliteral">&quot;%s%d&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" kindref="member">KEY_PREFIX</ref>,<sp/>key_idx);</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(op<sp/>&lt;<sp/>50)<sp/>{</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>50%<sp/>PUT<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1ad0e5f51ff9be371d9918fb261fa0cf22" kindref="member">fill_random_value</ref>(value,<sp/><ref refid="chaos__test_8c_1aaa8008886226ab2871b307c456cfdbb7" kindref="member">VAL_SIZE</ref>);</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="kv__store_8h_1acbc27bec469af3563081723fc01faeac" kindref="member">kv_put</ref>(<ref refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" kindref="member">g_db</ref>,<sp/>key,<sp/>strlen(key),<sp/>value,<sp/>strlen(value))<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" kindref="member">ATOMIC_INC</ref>(&amp;<ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.put_ops);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" kindref="member">ATOMIC_INC</ref>(&amp;<ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.put_errors);</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(op<sp/>&lt;<sp/>85)<sp/>{</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>35%<sp/>GET<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>val<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>vlen<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>ret<sp/>=<sp/><ref refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" kindref="member">kv_get</ref>(<ref refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" kindref="member">g_db</ref>,<sp/>key,<sp/>strlen(key),<sp/>&amp;val,<sp/>&amp;vlen);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" kindref="member">ATOMIC_INC</ref>(&amp;<ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.get_ops);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ret<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" kindref="member">ATOMIC_INC</ref>(&amp;<ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.get_hits);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(val);</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" kindref="member">ATOMIC_INC</ref>(&amp;<ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.get_misses);</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(op<sp/>&lt;<sp/>95)<sp/>{</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>10%<sp/>DELETE<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="kv__store_8h_1a25deb538aeb44468c7ae4c71aee2d150" kindref="member">kv_delete</ref>(<ref refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" kindref="member">g_db</ref>,<sp/>key,<sp/>strlen(key))<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" kindref="member">ATOMIC_INC</ref>(&amp;<ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.del_ops);</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" kindref="member">ATOMIC_INC</ref>(&amp;<ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.del_errors);</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>5%<sp/>SCAN<sp/>(lightweight,<sp/>limited<sp/>range)<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>start_idx<sp/>=<sp/>rand()<sp/>%<sp/>(<ref refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" kindref="member">NUM_KEYS</ref><sp/>-<sp/>100);</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>end_idx<sp/>=<sp/>start_idx<sp/>+<sp/>100;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>start_key[64],<sp/>end_key[64];</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snprintf(start_key,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(start_key),<sp/></highlight><highlight class="stringliteral">&quot;%s%d&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" kindref="member">KEY_PREFIX</ref>,<sp/>start_idx);</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snprintf(end_key,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(end_key),<sp/></highlight><highlight class="stringliteral">&quot;%s%d&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" kindref="member">KEY_PREFIX</ref>,<sp/>end_idx);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" kindref="member">kv_iter_t</ref>*<sp/>iter<sp/>=<sp/><ref refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" kindref="member">kv_scan</ref>(<ref refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" kindref="member">g_db</ref>,<sp/>start_key,<sp/>strlen(start_key),</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>end_key,<sp/>strlen(end_key));</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(iter)<sp/>{</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>k<sp/>=<sp/>NULL;<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>kl<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>v<sp/>=<sp/>NULL;<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>vl<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>count<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(<ref refid="kv__store_8h_1a8e50eecfcbf98705fc5ffd81b7ac139b" kindref="member">kv_iter_next</ref>(iter,<sp/>&amp;k,<sp/>&amp;kl,<sp/>&amp;v,<sp/>&amp;vl)<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>count<sp/>&lt;<sp/>100)<sp/>{</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(k);</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(v);</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>count++;</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1a4342798ef6a43d3044b8606f4a75cab7" kindref="member">kv_iter_free</ref>(iter);</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" kindref="member">ATOMIC_INC</ref>(&amp;<ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.scan_ops);</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>iter++;</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(iter<sp/>%<sp/>10000<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[CHAOS]<sp/>Worker<sp/>%d:<sp/>%d<sp/>iterations\n&quot;</highlight><highlight class="normal">,<sp/>thread_id,<sp/>iter);</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[CHAOS]<sp/>Worker<sp/>%d<sp/>stopped<sp/>after<sp/>%d<sp/>iterations\n&quot;</highlight><highlight class="normal">,<sp/>thread_id,<sp/>iter);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(<ref refid="chaos__test_8c_1a4c4cf564e25b1a938d2928c8a2cf3474" kindref="member">THREAD_RET</ref>)0;</highlight></codeline>
+<codeline lineno="141"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143" refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="chaos__test_8c_1a4c4cf564e25b1a938d2928c8a2cf3474" kindref="member">THREAD_RET</ref><sp/><ref refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" kindref="member">snapshot_thread</ref>(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/>arg)<sp/>{</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>(void)arg;</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>snapshot_count<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[CHAOS]<sp/>Snapshot<sp/>thread<sp/>started\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(<ref refid="chaos__test_8c_1a037aed45f792fc3e78387006be43a53e" kindref="member">g_running</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a3b0b0f3de380dbd1bbf2107d1687a30f" kindref="member">SLEEP_MS</ref>(5000);<sp/></highlight><highlight class="comment">/*<sp/>每<sp/>5<sp/>秒创建一个快照<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!<ref refid="chaos__test_8c_1a037aed45f792fc3e78387006be43a53e" kindref="member">g_running</ref>)<sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"></highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1ac716d77176102ea3172a069079a588f5" kindref="member">kv_snapshot_t</ref>*<sp/>snap<sp/>=<sp/><ref refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" kindref="member">kv_snapshot_create</ref>(<ref refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" kindref="member">g_db</ref>);</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!snap)<sp/>{</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" kindref="member">ATOMIC_INC</ref>(&amp;<ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.snapshot_errors);</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[SNAP]<sp/>ERROR:<sp/>Failed<sp/>to<sp/>create<sp/>snapshot\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">continue</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a6ad4bd913da8895de7eee0f2f1841b63" kindref="member">ATOMIC_INC</ref>(&amp;<ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.snapshot_ops);</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snapshot_count++;</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>验证快照：随机抽查<sp/>50<sp/>个<sp/>key<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>verify_errors<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>50;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>key_idx<sp/>=<sp/>rand()<sp/>%<sp/><ref refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" kindref="member">NUM_KEYS</ref>;</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>key[64];</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snprintf(key,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(key),<sp/></highlight><highlight class="stringliteral">&quot;%s%d&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" kindref="member">KEY_PREFIX</ref>,<sp/>key_idx);</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>snap_val<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>snap_vlen<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>snap_ret<sp/>=<sp/><ref refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" kindref="member">kv_snapshot_get</ref>(snap,<sp/>key,<sp/>strlen(key),<sp/>&amp;snap_val,<sp/>&amp;snap_vlen);</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"></highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>同时从主库读取<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>db_val<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>db_vlen<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>db_ret<sp/>=<sp/><ref refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" kindref="member">kv_get</ref>(<ref refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" kindref="member">g_db</ref>,<sp/>key,<sp/>strlen(key),<sp/>&amp;db_val,<sp/>&amp;db_vlen);</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"></highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(snap_ret<sp/>!=<sp/>db_ret)<sp/>{</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[SNAP]<sp/>MISMATCH<sp/>for<sp/>key<sp/>&apos;%s&apos;:<sp/>snap_ret=%d<sp/>db_ret=%d\n&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>key,<sp/>snap_ret,<sp/>db_ret);</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>verify_errors++;</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(snap_ret<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>db_ret<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(snap_vlen<sp/>!=<sp/>db_vlen<sp/>||<sp/>memcmp(snap_val,<sp/>db_val,<sp/>snap_vlen)<sp/>!=<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[SNAP]<sp/>VALUE<sp/>MISMATCH<sp/>for<sp/>key<sp/>&apos;%s&apos;:<sp/>snap_len=%zu<sp/>db_len=%zu\n&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>key,<sp/>snap_vlen,<sp/>db_vlen);</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>verify_errors++;</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"></highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(snap_val);</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(db_val);</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"></highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(verify_errors<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[SNAP]<sp/>Snapshot<sp/>#%d:<sp/>%d<sp/>verification<sp/>errors!\n&quot;</highlight><highlight class="normal">,<sp/>snapshot_count,<sp/>verify_errors);</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[SNAP]<sp/>Snapshot<sp/>#%d<sp/>created<sp/>and<sp/>verified<sp/>OK\n&quot;</highlight><highlight class="normal">,<sp/>snapshot_count);</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"></highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1a2e4e48206e3052f91933404bebd4c296" kindref="member">kv_snapshot_free</ref>(snap);</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"></highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[CHAOS]<sp/>Snapshot<sp/>thread<sp/>stopped<sp/>after<sp/>%d<sp/>snapshots\n&quot;</highlight><highlight class="normal">,<sp/>snapshot_count);</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(<ref refid="chaos__test_8c_1a4c4cf564e25b1a938d2928c8a2cf3474" kindref="member">THREAD_RET</ref>)0;</highlight></codeline>
+<codeline lineno="207"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"></highlight></codeline>
+<codeline lineno="209" refid="chaos__test_8c_1a809d00f6b512663cf68281a50ffff81d" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="chaos__test_8c_1a809d00f6b512663cf68281a50ffff81d" kindref="member">print_stats_header</ref>(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;==============================================================\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>KV<sp/>Store<sp/>Chaos<sp/>Test\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;==============================================================\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Threads:<sp/><sp/><sp/><sp/><sp/><sp/>%d\n&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1a7735206bdfad487588bba2126b806ab7" kindref="member">NUM_THREADS</ref>);</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Keys:<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>%d\n&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" kindref="member">NUM_KEYS</ref>);</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Duration:<sp/><sp/><sp/><sp/><sp/>%d<sp/>seconds\n&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1a80ee23c695ea9c43960513d691f89266" kindref="member">TEST_DURATION</ref>);</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Data<sp/>dir:<sp/><sp/><sp/><sp/><sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" kindref="member">g_data_dir</ref>);</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Compression:<sp/><sp/>zstd\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;==============================================================\n\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="220"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"></highlight></codeline>
+<codeline lineno="222" refid="chaos__test_8c_1a4048a033923bd0e0d9062c2402531f70" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="chaos__test_8c_1a4048a033923bd0e0d9062c2402531f70" kindref="member">print_stats</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>phase,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>elapsed)<sp/>{</highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>put_ops<sp/>=<sp/><ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.put_ops;</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>get_ops<sp/>=<sp/><ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.get_ops;</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>get_hits<sp/>=<sp/><ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.get_hits;</highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>get_misses<sp/>=<sp/><ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.get_misses;</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>del_ops<sp/>=<sp/><ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.del_ops;</highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>scan_ops<sp/>=<sp/><ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.scan_ops;</highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>snap_ops<sp/>=<sp/><ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.snapshot_ops;</highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>snap_errs<sp/>=<sp/><ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.snapshot_errors;</highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>put_errs<sp/>=<sp/><ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.put_errors;</highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>del_errs<sp/>=<sp/><ref refid="chaos__test_8c_1aaf0d5769b5f7eea3860d1c662548f3f9" kindref="member">g_stats</ref>.del_errors;</highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>total_ops<sp/>=<sp/>put_ops<sp/>+<sp/>get_ops<sp/>+<sp/>del_ops<sp/>+<sp/>scan_ops;</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"></highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;\n[STATS]<sp/>===<sp/>%s<sp/>(%.1f<sp/>sec)<sp/>===\n&quot;</highlight><highlight class="normal">,<sp/>phase,<sp/>elapsed);</highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>PUT:<sp/><sp/><sp/><sp/>%lld<sp/>ops<sp/>(%.0f/s),<sp/>%lld<sp/>errors\n&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="237"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>put_ops,<sp/>elapsed<sp/>&gt;<sp/>0<sp/>?<sp/>put_ops<sp/>/<sp/>elapsed<sp/>:<sp/>0,<sp/>put_errs);</highlight></codeline>
+<codeline lineno="238"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>GET:<sp/><sp/><sp/><sp/>%lld<sp/>ops<sp/>(%.0f/s),<sp/>hit=%lld<sp/>miss=%lld<sp/>(%.1f%%<sp/>hit)\n&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>get_ops,<sp/>elapsed<sp/>&gt;<sp/>0<sp/>?<sp/>get_ops<sp/>/<sp/>elapsed<sp/>:<sp/>0,<sp/>get_hits,<sp/>get_misses,</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>get_ops<sp/>&gt;<sp/>0<sp/>?<sp/>100.0<sp/>*<sp/>get_hits<sp/>/<sp/>get_ops<sp/>:<sp/>0);</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>DEL:<sp/><sp/><sp/><sp/>%lld<sp/>ops<sp/>(%.0f/s),<sp/>%lld<sp/>errors\n&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>del_ops,<sp/>elapsed<sp/>&gt;<sp/>0<sp/>?<sp/>del_ops<sp/>/<sp/>elapsed<sp/>:<sp/>0,<sp/>del_errs);</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>SCAN:<sp/><sp/><sp/>%lld<sp/>ops\n&quot;</highlight><highlight class="normal">,<sp/>scan_ops);</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>SNAP:<sp/><sp/><sp/>%lld<sp/>created,<sp/>%lld<sp/>errors\n&quot;</highlight><highlight class="normal">,<sp/>snap_ops,<sp/>snap_errs);</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>TOTAL:<sp/><sp/>%lld<sp/>ops<sp/>(%.0f/s)\n&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>total_ops,<sp/>elapsed<sp/>&gt;<sp/>0<sp/>?<sp/>total_ops<sp/>/<sp/>elapsed<sp/>:<sp/>0);</highlight></codeline>
+<codeline lineno="247"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"></highlight></codeline>
+<codeline lineno="249" refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" kindref="member">verify_data_integrity</ref>(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;\n[VERIFY]<sp/>Checking<sp/>data<sp/>integrity...\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"></highlight></codeline>
+<codeline lineno="252"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db<sp/>=<sp/><ref refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" kindref="member">kv_open</ref>(<ref refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" kindref="member">g_data_dir</ref>);</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!db)<sp/>{</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[VERIFY]<sp/>ERROR:<sp/>Failed<sp/>to<sp/>reopen<sp/>database\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>1;</highlight></codeline>
+<codeline lineno="256"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="257"><highlight class="normal"></highlight></codeline>
+<codeline lineno="258"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>errors<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="259"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>found<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="260"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>missing<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="261"><highlight class="normal"></highlight></codeline>
+<codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>随机抽查<sp/>200<sp/>个<sp/>key<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="263"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>200;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="264"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>key_idx<sp/>=<sp/>rand()<sp/>%<sp/><ref refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" kindref="member">NUM_KEYS</ref>;</highlight></codeline>
+<codeline lineno="265"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>key[64];</highlight></codeline>
+<codeline lineno="266"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snprintf(key,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(key),<sp/></highlight><highlight class="stringliteral">&quot;%s%d&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" kindref="member">KEY_PREFIX</ref>,<sp/>key_idx);</highlight></codeline>
+<codeline lineno="267"><highlight class="normal"></highlight></codeline>
+<codeline lineno="268"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>val<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="269"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>vlen<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="270"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>ret<sp/>=<sp/><ref refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" kindref="member">kv_get</ref>(db,<sp/>key,<sp/>strlen(key),<sp/>&amp;val,<sp/>&amp;vlen);</highlight></codeline>
+<codeline lineno="271"><highlight class="normal"></highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ret<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="273"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>found++;</highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(val);</highlight></codeline>
+<codeline lineno="275"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>missing++;</highlight></codeline>
+<codeline lineno="277"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>记录但不报错，因为<sp/>key<sp/>可能已被删除（混沌测试中有<sp/>DELETE<sp/>操作）<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="278"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="280"><highlight class="normal"></highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>全量扫描<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>scan_count<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" kindref="member">kv_iter_t</ref>*<sp/>iter<sp/>=<sp/><ref refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" kindref="member">kv_scan</ref>(db,<sp/>NULL,<sp/>0,<sp/>NULL,<sp/>0);</highlight></codeline>
+<codeline lineno="284"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(iter)<sp/>{</highlight></codeline>
+<codeline lineno="285"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>k<sp/>=<sp/>NULL;<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>kl<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="286"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>v<sp/>=<sp/>NULL;<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>vl<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(<ref refid="kv__store_8h_1a8e50eecfcbf98705fc5ffd81b7ac139b" kindref="member">kv_iter_next</ref>(iter,<sp/>&amp;k,<sp/>&amp;kl,<sp/>&amp;v,<sp/>&amp;vl)<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="288"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>scan_count++;</highlight></codeline>
+<codeline lineno="289"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(k);</highlight></codeline>
+<codeline lineno="290"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(v);</highlight></codeline>
+<codeline lineno="291"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="292"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1a4342798ef6a43d3044b8606f4a75cab7" kindref="member">kv_iter_free</ref>(iter);</highlight></codeline>
+<codeline lineno="293"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="294"><highlight class="normal"></highlight></codeline>
+<codeline lineno="295"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[VERIFY]<sp/>Random<sp/>check:<sp/>%d<sp/>found,<sp/>%d<sp/>missing<sp/>(of<sp/>200)\n&quot;</highlight><highlight class="normal">,<sp/>found,<sp/>missing);</highlight></codeline>
+<codeline lineno="296"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[VERIFY]<sp/>Total<sp/>keys<sp/>in<sp/>database:<sp/>%d\n&quot;</highlight><highlight class="normal">,<sp/>scan_count);</highlight></codeline>
+<codeline lineno="297"><highlight class="normal"></highlight></codeline>
+<codeline lineno="298"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" kindref="member">kv_close</ref>(db);</highlight></codeline>
+<codeline lineno="299"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>errors;</highlight></codeline>
+<codeline lineno="300"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="301"><highlight class="normal"></highlight></codeline>
+<codeline lineno="302" refid="chaos__test_8c_1a2963a459170a975369ed7788a526ff0b" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="chaos__test_8c_1a2963a459170a975369ed7788a526ff0b" kindref="member">cleanup_data_dir</ref>(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="303"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="304"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>cmd[512];</highlight></codeline>
+<codeline lineno="305"><highlight class="normal"><sp/><sp/><sp/><sp/>snprintf(cmd,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(cmd),<sp/></highlight><highlight class="stringliteral">&quot;rd<sp/>/s<sp/>/q<sp/>\&quot;%s\&quot;<sp/>2&gt;nul&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" kindref="member">g_data_dir</ref>);</highlight></codeline>
+<codeline lineno="306"><highlight class="normal"><sp/><sp/><sp/><sp/>system(cmd);</highlight></codeline>
+<codeline lineno="307"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="308"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>cmd[512];</highlight></codeline>
+<codeline lineno="309"><highlight class="normal"><sp/><sp/><sp/><sp/>snprintf(cmd,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(cmd),<sp/></highlight><highlight class="stringliteral">&quot;rm<sp/>-rf<sp/>\&quot;%s\&quot;&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" kindref="member">g_data_dir</ref>);</highlight></codeline>
+<codeline lineno="310"><highlight class="normal"><sp/><sp/><sp/><sp/>system(cmd);</highlight></codeline>
+<codeline lineno="311"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="312"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="313"><highlight class="normal"></highlight></codeline>
+<codeline lineno="314" refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="main_8c_1ae66f6b31b5ad750f1fe042a706a4e3d4" kindref="member">main</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>argc,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>argv[])<sp/>{</highlight></codeline>
+<codeline lineno="315"><highlight class="normal"><sp/><sp/><sp/><sp/>srand((</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)time(NULL));</highlight></codeline>
+<codeline lineno="316"><highlight class="normal"></highlight></codeline>
+<codeline lineno="317"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" kindref="member">g_data_dir</ref><sp/>=<sp/></highlight><highlight class="stringliteral">&quot;./chaos_test_db&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="318"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>duration<sp/>=<sp/><ref refid="chaos__test_8c_1a80ee23c695ea9c43960513d691f89266" kindref="member">TEST_DURATION</ref>;</highlight></codeline>
+<codeline lineno="319"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>threads<sp/>=<sp/><ref refid="chaos__test_8c_1a7735206bdfad487588bba2126b806ab7" kindref="member">NUM_THREADS</ref>;</highlight></codeline>
+<codeline lineno="320"><highlight class="normal"></highlight></codeline>
+<codeline lineno="321"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>1;<sp/>i<sp/>&lt;<sp/>argc;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="322"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(argv[i],<sp/></highlight><highlight class="stringliteral">&quot;-d&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>i<sp/>+<sp/>1<sp/>&lt;<sp/>argc)<sp/>{</highlight></codeline>
+<codeline lineno="323"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" kindref="member">g_data_dir</ref><sp/>=<sp/>argv[++i];</highlight></codeline>
+<codeline lineno="324"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(argv[i],<sp/></highlight><highlight class="stringliteral">&quot;-t&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>i<sp/>+<sp/>1<sp/>&lt;<sp/>argc)<sp/>{</highlight></codeline>
+<codeline lineno="325"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>duration<sp/>=<sp/>atoi(argv[++i]);</highlight></codeline>
+<codeline lineno="326"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(argv[i],<sp/></highlight><highlight class="stringliteral">&quot;-n&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>i<sp/>+<sp/>1<sp/>&lt;<sp/>argc)<sp/>{</highlight></codeline>
+<codeline lineno="327"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>threads<sp/>=<sp/>atoi(argv[++i]);</highlight></codeline>
+<codeline lineno="328"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(strcmp(argv[i],<sp/></highlight><highlight class="stringliteral">&quot;--clean&quot;</highlight><highlight class="normal">)<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="329"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a2963a459170a975369ed7788a526ff0b" kindref="member">cleanup_data_dir</ref>();</highlight></codeline>
+<codeline lineno="330"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="331"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="332"><highlight class="normal"></highlight></codeline>
+<codeline lineno="333"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(threads<sp/>&lt;<sp/>1)<sp/>threads<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="334"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(threads<sp/>&gt;<sp/>16)<sp/>threads<sp/>=<sp/>16;</highlight></codeline>
+<codeline lineno="335"><highlight class="normal"></highlight></codeline>
+<codeline lineno="336"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a809d00f6b512663cf68281a50ffff81d" kindref="member">print_stats_header</ref>();</highlight></codeline>
+<codeline lineno="337"><highlight class="normal"></highlight></codeline>
+<codeline lineno="338"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>清理旧数据<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="339"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a2963a459170a975369ed7788a526ff0b" kindref="member">cleanup_data_dir</ref>();</highlight></codeline>
+<codeline lineno="340"><highlight class="normal"></highlight></codeline>
+<codeline lineno="341"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>打开数据库<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="342"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" kindref="member">g_db</ref><sp/>=<sp/><ref refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" kindref="member">kv_open</ref>(<ref refid="chaos__test_8c_1a070e6ada2616403e5b262a87cf4bf73c" kindref="member">g_data_dir</ref>);</highlight></codeline>
+<codeline lineno="343"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!<ref refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" kindref="member">g_db</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="344"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/></highlight><highlight class="stringliteral">&quot;Failed<sp/>to<sp/>open<sp/>database\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="345"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>1;</highlight></codeline>
+<codeline lineno="346"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="347"><highlight class="normal"></highlight></codeline>
+<codeline lineno="348"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>预填充数据<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="349"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[CHAOS]<sp/>Pre-populating<sp/>%d<sp/>keys...\n&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" kindref="member">NUM_KEYS</ref>);</highlight></codeline>
+<codeline lineno="350"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>value[<ref refid="chaos__test_8c_1aaa8008886226ab2871b307c456cfdbb7" kindref="member">VAL_SIZE</ref>];</highlight></codeline>
+<codeline lineno="351"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>key[64];</highlight></codeline>
+<codeline lineno="352"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/><ref refid="chaos__test_8c_1a9a8c7403a867e0c9543467ee8754050d" kindref="member">NUM_KEYS</ref>;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="353"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snprintf(key,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(key),<sp/></highlight><highlight class="stringliteral">&quot;%s%d&quot;</highlight><highlight class="normal">,<sp/><ref refid="chaos__test_8c_1aed55fc621b57cca4ec6b074bf7518355" kindref="member">KEY_PREFIX</ref>,<sp/>i);</highlight></codeline>
+<codeline lineno="354"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1ad0e5f51ff9be371d9918fb261fa0cf22" kindref="member">fill_random_value</ref>(value,<sp/><ref refid="chaos__test_8c_1aaa8008886226ab2871b307c456cfdbb7" kindref="member">VAL_SIZE</ref>);</highlight></codeline>
+<codeline lineno="355"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1acbc27bec469af3563081723fc01faeac" kindref="member">kv_put</ref>(<ref refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" kindref="member">g_db</ref>,<sp/>key,<sp/>strlen(key),<sp/>value,<sp/>strlen(value));</highlight></codeline>
+<codeline lineno="356"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="357"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[CHAOS]<sp/>Pre-population<sp/>complete\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="358"><highlight class="normal"></highlight></codeline>
+<codeline lineno="359"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>启动工作线程<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="360"><highlight class="normal"><sp/><sp/><sp/><sp/>HANDLE<sp/>thread_handles[16];</highlight></codeline>
+<codeline lineno="361"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>threads;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="362"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1ad954087e608668a7319ae8d56f3d9585" kindref="member">THREAD_CREATE</ref>(&amp;thread_handles[i],<sp/>NULL,<sp/><ref refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" kindref="member">worker_thread</ref>,<sp/>(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*)(intptr_t)i);</highlight></codeline>
+<codeline lineno="363"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="364"><highlight class="normal"></highlight></codeline>
+<codeline lineno="365"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>启动快照线程<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="366"><highlight class="normal"><sp/><sp/><sp/><sp/>HANDLE<sp/>snapshot_handle;</highlight></codeline>
+<codeline lineno="367"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1ad954087e608668a7319ae8d56f3d9585" kindref="member">THREAD_CREATE</ref>(&amp;snapshot_handle,<sp/>NULL,<sp/><ref refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" kindref="member">snapshot_thread</ref>,<sp/>NULL);</highlight></codeline>
+<codeline lineno="368"><highlight class="normal"></highlight></codeline>
+<codeline lineno="369"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>运行指定时间<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="370"><highlight class="normal"><sp/><sp/><sp/><sp/>time_t<sp/>start_time<sp/>=<sp/>time(NULL);</highlight></codeline>
+<codeline lineno="371"><highlight class="normal"><sp/><sp/><sp/><sp/>time_t<sp/>last_report<sp/>=<sp/>start_time;</highlight></codeline>
+<codeline lineno="372"><highlight class="normal"></highlight></codeline>
+<codeline lineno="373"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;[CHAOS]<sp/>Test<sp/>running<sp/>for<sp/>%d<sp/>seconds...\n&quot;</highlight><highlight class="normal">,<sp/>duration);</highlight></codeline>
+<codeline lineno="374"><highlight class="normal"><sp/><sp/><sp/><sp/>fflush(stdout);</highlight></codeline>
+<codeline lineno="375"><highlight class="normal"></highlight></codeline>
+<codeline lineno="376"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(1)<sp/>{</highlight></codeline>
+<codeline lineno="377"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a3b0b0f3de380dbd1bbf2107d1687a30f" kindref="member">SLEEP_MS</ref>(1000);</highlight></codeline>
+<codeline lineno="378"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>time_t<sp/>now<sp/>=<sp/>time(NULL);</highlight></codeline>
+<codeline lineno="379"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>elapsed<sp/>=<sp/>difftime(now,<sp/>start_time);</highlight></codeline>
+<codeline lineno="380"><highlight class="normal"></highlight></codeline>
+<codeline lineno="381"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(elapsed<sp/>&gt;=<sp/>duration)<sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="382"><highlight class="normal"></highlight></codeline>
+<codeline lineno="383"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>每<sp/>10<sp/>秒输出一次统计<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="384"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(difftime(now,<sp/>last_report)<sp/>&gt;=<sp/>10.0)<sp/>{</highlight></codeline>
+<codeline lineno="385"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a4048a033923bd0e0d9062c2402531f70" kindref="member">print_stats</ref>(</highlight><highlight class="stringliteral">&quot;Running&quot;</highlight><highlight class="normal">,<sp/>elapsed);</highlight></codeline>
+<codeline lineno="386"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>last_report<sp/>=<sp/>now;</highlight></codeline>
+<codeline lineno="387"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fflush(stdout);</highlight></codeline>
+<codeline lineno="388"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="389"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="390"><highlight class="normal"></highlight></codeline>
+<codeline lineno="391"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>停止所有线程<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="392"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;\n[CHAOS]<sp/>Stopping<sp/>all<sp/>threads...\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="393"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a037aed45f792fc3e78387006be43a53e" kindref="member">g_running</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="394"><highlight class="normal"></highlight></codeline>
+<codeline lineno="395"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>threads;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="396"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a32b707564bed59165e7c20f05c921f84" kindref="member">THREAD_JOIN</ref>(thread_handles[i]);</highlight></codeline>
+<codeline lineno="397"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1af4a4e49bfd86a70ccd6c3126742294d7" kindref="member">THREAD_CLOSE</ref>(thread_handles[i]);</highlight></codeline>
+<codeline lineno="398"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="399"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a32b707564bed59165e7c20f05c921f84" kindref="member">THREAD_JOIN</ref>(snapshot_handle);</highlight></codeline>
+<codeline lineno="400"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1af4a4e49bfd86a70ccd6c3126742294d7" kindref="member">THREAD_CLOSE</ref>(snapshot_handle);</highlight></codeline>
+<codeline lineno="401"><highlight class="normal"></highlight></codeline>
+<codeline lineno="402"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>total_elapsed<sp/>=<sp/>difftime(time(NULL),<sp/>start_time);</highlight></codeline>
+<codeline lineno="403"><highlight class="normal"></highlight></codeline>
+<codeline lineno="404"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>最终统计<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="405"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a4048a033923bd0e0d9062c2402531f70" kindref="member">print_stats</ref>(</highlight><highlight class="stringliteral">&quot;Final&quot;</highlight><highlight class="normal">,<sp/>total_elapsed);</highlight></codeline>
+<codeline lineno="406"><highlight class="normal"></highlight></codeline>
+<codeline lineno="407"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>关闭数据库<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="408"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;\n[CHAOS]<sp/>Closing<sp/>database...\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="409"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" kindref="member">kv_close</ref>(<ref refid="chaos__test_8c_1ade18375fdfab7cc27661066f595aa3e0" kindref="member">g_db</ref>);</highlight></codeline>
+<codeline lineno="410"><highlight class="normal"></highlight></codeline>
+<codeline lineno="411"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>验证数据完整性<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="412"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>verify_errors<sp/>=<sp/><ref refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" kindref="member">verify_data_integrity</ref>();</highlight></codeline>
+<codeline lineno="413"><highlight class="normal"></highlight></codeline>
+<codeline lineno="414"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>清理<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="415"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="chaos__test_8c_1a2963a459170a975369ed7788a526ff0b" kindref="member">cleanup_data_dir</ref>();</highlight></codeline>
+<codeline lineno="416"><highlight class="normal"></highlight></codeline>
+<codeline lineno="417"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;\n==============================================================\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="418"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(verify_errors<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="419"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>Chaos<sp/>test<sp/>PASSED!<sp/>No<sp/>data<sp/>integrity<sp/>errors.\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="420"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="421"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;<sp/><sp/>Chaos<sp/>test<sp/>FAILED!<sp/>%d<sp/>errors<sp/>found.\n&quot;</highlight><highlight class="normal">,<sp/>verify_errors);</highlight></codeline>
+<codeline lineno="422"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="423"><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;==============================================================\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="424"><highlight class="normal"></highlight></codeline>
+<codeline lineno="425"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>verify_errors<sp/>&gt;<sp/>0<sp/>?<sp/>1<sp/>:<sp/>0;</highlight></codeline>
+<codeline lineno="426"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/chaos_test.c"/>
+  </compounddef>
+</doxygen>

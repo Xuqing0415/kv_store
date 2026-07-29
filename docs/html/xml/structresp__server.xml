@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structresp__server" kind="struct" language="C++" prot="public">
+    <compoundname>resp_server</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structresp__server_1a14311b2033736379e708e64208919719" prot="public" static="no" mutable="no">
+        <type><ref refid="resp__server_8c_1aff55fe551a9992a54ec54621c524d0a4" kindref="member">SOCKET</ref></type>
+        <definition>SOCKET resp_server::listen_fd</definition>
+        <argsstring></argsstring>
+        <name>listen_fd</name>
+        <qualifiedname>resp_server::listen_fd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="489" column="12" bodyfile="src/resp_server.c" bodystart="489" bodyend="-1"/>
+        <referencedby refid="resp__server_8h_1aaac30d06a3381728bfc37b628f447709" compoundref="resp__server_8c" startline="779" endline="804">resp_server_free</referencedby>
+        <referencedby refid="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" compoundref="resp__server_8c" startline="686" endline="772">resp_server_run</referencedby>
+        <referencedby refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" compoundref="resp__server_8c" startline="619" endline="684">resp_server_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structresp__server_1aba3939c29e5ef6fa4ca2608536802393" prot="public" static="no" mutable="no">
+        <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+        <definition>kv_store_t* resp_server::db</definition>
+        <argsstring></argsstring>
+        <name>db</name>
+        <qualifiedname>resp_server::db</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="490" column="16" bodyfile="src/resp_server.c" bodystart="490" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1a25ce0d89a4bc68339e6bd32c2b6a6f27" compoundref="resp__server_8c" startline="501" endline="613">resp_process_client</referencedby>
+        <referencedby refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" compoundref="resp__server_8c" startline="619" endline="684">resp_server_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structresp__server_1a53320127bd434f621f9611bea38f7a18" prot="public" static="no" mutable="no">
+        <type><ref refid="resp__server_8c_1a0bd349d39b778c13b99ca8e543a54a23" kindref="member">resp_client_t</ref></type>
+        <definition>resp_client_t resp_server::clients[RESP_MAX_CLIENTS]</definition>
+        <argsstring>[RESP_MAX_CLIENTS]</argsstring>
+        <name>clients</name>
+        <qualifiedname>resp_server::clients</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="491" column="19" bodyfile="src/resp_server.c" bodystart="491" bodyend="-1"/>
+        <referencedby refid="resp__server_8h_1aaac30d06a3381728bfc37b628f447709" compoundref="resp__server_8c" startline="779" endline="804">resp_server_free</referencedby>
+        <referencedby refid="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" compoundref="resp__server_8c" startline="686" endline="772">resp_server_run</referencedby>
+        <referencedby refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" compoundref="resp__server_8c" startline="619" endline="684">resp_server_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structresp__server_1a465325764e788e19d441d71a801a3513" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int resp_server::running</definition>
+        <argsstring></argsstring>
+        <name>running</name>
+        <qualifiedname>resp_server::running</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="492" column="9" bodyfile="src/resp_server.c" bodystart="492" bodyend="-1"/>
+        <referencedby refid="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" compoundref="resp__server_8c" startline="686" endline="772">resp_server_run</referencedby>
+        <referencedby refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" compoundref="resp__server_8c" startline="619" endline="684">resp_server_start</referencedby>
+        <referencedby refid="resp__server_8h_1ab6901871f1865a91172fd3490b75c8b8" compoundref="resp__server_8c" startline="774" endline="777">resp_server_stop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structresp__server_1a6b19fbcf350d8ecd983bf51d9045441c" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* resp_server::host</definition>
+        <argsstring></argsstring>
+        <name>host</name>
+        <qualifiedname>resp_server::host</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="493" column="10" bodyfile="src/resp_server.c" bodystart="493" bodyend="-1"/>
+        <referencedby refid="resp__server_8h_1aaac30d06a3381728bfc37b628f447709" compoundref="resp__server_8c" startline="779" endline="804">resp_server_free</referencedby>
+        <referencedby refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" compoundref="resp__server_8c" startline="619" endline="684">resp_server_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structresp__server_1ab80b4f18550ee7d203da657dcf01c5eb" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int resp_server::port</definition>
+        <argsstring></argsstring>
+        <name>port</name>
+        <qualifiedname>resp_server::port</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="494" column="9" bodyfile="src/resp_server.c" bodystart="494" bodyend="-1"/>
+        <referencedby refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" compoundref="resp__server_8c" startline="619" endline="684">resp_server_start</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>kv_store</label>
+        <link refid="structkv__store"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>immutable_memtable</edgelabel>
+          <edgelabel>memtable</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>wal_mgr</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>manifest</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>block_cache</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>merge_ctx</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>lru_cache</label>
+        <link refid="structlru__cache"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>head</edgelabel>
+          <edgelabel>table</edgelabel>
+          <edgelabel>tail</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>lru_node</label>
+        <link refid="structlru__node"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>next</edgelabel>
+          <edgelabel>prev</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>manifest</label>
+        <link refid="structmanifest"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>files</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>manifest_file</label>
+        <link refid="structmanifest__file"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>merge_context</label>
+        <link refid="structmerge__context"/>
+      </node>
+      <node id="12">
+        <label>resp_client</label>
+        <link refid="structresp__client"/>
+      </node>
+      <node id="1">
+        <label>resp_server</label>
+        <link refid="structresp__server"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>db</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>clients</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>skiplist</label>
+        <link refid="structskiplist"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>header</edgelabel>
+          <edgelabel>tail</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>skiplist_node</label>
+        <link refid="structskiplist__node"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>forward</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>wal</label>
+        <link refid="structwal"/>
+      </node>
+      <node id="5">
+        <label>wal_mgr</label>
+        <link refid="structwal__mgr"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>active</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/resp_server.c" line="488" column="1" bodyfile="src/resp_server.c" bodystart="488" bodyend="498"/>
+    <listofallmembers>
+      <member refid="structresp__server_1a53320127bd434f621f9611bea38f7a18" prot="public" virt="non-virtual"><scope>resp_server</scope><name>clients</name></member>
+      <member refid="structresp__server_1aba3939c29e5ef6fa4ca2608536802393" prot="public" virt="non-virtual"><scope>resp_server</scope><name>db</name></member>
+      <member refid="structresp__server_1a6b19fbcf350d8ecd983bf51d9045441c" prot="public" virt="non-virtual"><scope>resp_server</scope><name>host</name></member>
+      <member refid="structresp__server_1a14311b2033736379e708e64208919719" prot="public" virt="non-virtual"><scope>resp_server</scope><name>listen_fd</name></member>
+      <member refid="structresp__server_1ab80b4f18550ee7d203da657dcf01c5eb" prot="public" virt="non-virtual"><scope>resp_server</scope><name>port</name></member>
+      <member refid="structresp__server_1a465325764e788e19d441d71a801a3513" prot="public" virt="non-virtual"><scope>resp_server</scope><name>running</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

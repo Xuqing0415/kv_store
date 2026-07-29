@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structraft__entry__t" kind="struct" language="C++" prot="public">
+    <compoundname>raft_entry_t</compoundname>
+    <includes refid="raft_8h" local="no">raft.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structraft__entry__t_1ae323a00d5d5d52dc56c929c968444034" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t raft_entry_t::term</definition>
+        <argsstring></argsstring>
+        <name>term</name>
+        <qualifiedname>raft_entry_t::term</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="31" column="14" bodyfile="include/raft.h" bodystart="31" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__entry__t_1a22fb302ca80762edd1476d35467b772b" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t raft_entry_t::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>raft_entry_t::index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="32" column="14" bodyfile="include/raft.h" bodystart="32" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__entry__t_1a70dd620e1932f58957b0cfb0d87e48ce" prot="public" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t raft_entry_t::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>raft_entry_t::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="33" column="14" bodyfile="include/raft.h" bodystart="33" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft__node_8c_1a036c77cd3d9e063df2822e1dc524bafc" compoundref="raft__node_8c" startline="24" endline="34">raft_apply_to_kv</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__entry__t_1aed95237dbb42be7ee08875feb35785b9" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* raft_entry_t::key</definition>
+        <argsstring></argsstring>
+        <name>key</name>
+        <qualifiedname>raft_entry_t::key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="34" column="13" bodyfile="include/raft.h" bodystart="34" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft__node_8c_1a036c77cd3d9e063df2822e1dc524bafc" compoundref="raft__node_8c" startline="24" endline="34">raft_apply_to_kv</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__entry__t_1a2c6e2a62b85878161592b89bf577a06d" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t raft_entry_t::key_len</definition>
+        <argsstring></argsstring>
+        <name>key_len</name>
+        <qualifiedname>raft_entry_t::key_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="35" column="14" bodyfile="include/raft.h" bodystart="35" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft__node_8c_1a036c77cd3d9e063df2822e1dc524bafc" compoundref="raft__node_8c" startline="24" endline="34">raft_apply_to_kv</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__entry__t_1aac75a4e68e00fd04deca27b1dc4671d9" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* raft_entry_t::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>raft_entry_t::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="36" column="13" bodyfile="include/raft.h" bodystart="36" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft__node_8c_1a036c77cd3d9e063df2822e1dc524bafc" compoundref="raft__node_8c" startline="24" endline="34">raft_apply_to_kv</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__entry__t_1aeacacaab8afd2f5ea809212c5a6c6dfd" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t raft_entry_t::value_len</definition>
+        <argsstring></argsstring>
+        <name>value_len</name>
+        <qualifiedname>raft_entry_t::value_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/raft.h" line="37" column="14" bodyfile="include/raft.h" bodystart="37" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft__node_8c_1a036c77cd3d9e063df2822e1dc524bafc" compoundref="raft__node_8c" startline="24" endline="34">raft_apply_to_kv</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/raft.h" line="30" column="1" bodyfile="include/raft.h" bodystart="30" bodyend="38"/>
+    <listofallmembers>
+      <member refid="structraft__entry__t_1a22fb302ca80762edd1476d35467b772b" prot="public" virt="non-virtual"><scope>raft_entry_t</scope><name>index</name></member>
+      <member refid="structraft__entry__t_1aed95237dbb42be7ee08875feb35785b9" prot="public" virt="non-virtual"><scope>raft_entry_t</scope><name>key</name></member>
+      <member refid="structraft__entry__t_1a2c6e2a62b85878161592b89bf577a06d" prot="public" virt="non-virtual"><scope>raft_entry_t</scope><name>key_len</name></member>
+      <member refid="structraft__entry__t_1ae323a00d5d5d52dc56c929c968444034" prot="public" virt="non-virtual"><scope>raft_entry_t</scope><name>term</name></member>
+      <member refid="structraft__entry__t_1a70dd620e1932f58957b0cfb0d87e48ce" prot="public" virt="non-virtual"><scope>raft_entry_t</scope><name>type</name></member>
+      <member refid="structraft__entry__t_1aac75a4e68e00fd04deca27b1dc4671d9" prot="public" virt="non-virtual"><scope>raft_entry_t</scope><name>value</name></member>
+      <member refid="structraft__entry__t_1aeacacaab8afd2f5ea809212c5a6c6dfd" prot="public" virt="non-virtual"><scope>raft_entry_t</scope><name>value_len</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

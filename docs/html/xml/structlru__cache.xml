@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structlru__cache" kind="struct" language="C++" prot="public">
+    <compoundname>lru_cache</compoundname>
+    <includes refid="lru__cache_8h" local="no">lru_cache.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" prot="public" static="no" mutable="no">
+        <type><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref> *</type>
+        <definition>lru_node_t* lru_cache::head</definition>
+        <argsstring></argsstring>
+        <name>head</name>
+        <qualifiedname>lru_cache::head</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="22" column="16" bodyfile="include/lru_cache.h" bodystart="22" bodyend="-1"/>
+        <referencedby refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" compoundref="lru__cache_8c" startline="80" endline="97">lru_add_to_head</referencedby>
+        <referencedby refid="lru__cache_8h_1a5dce8063dde908934862ea5c798bfafc" compoundref="lru__cache_8c" startline="127" endline="145">lru_cache_free</referencedby>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+        <referencedby refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" compoundref="lru__cache_8c" startline="99" endline="125">lru_cache_new</referencedby>
+        <referencedby refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" prot="public" static="no" mutable="no">
+        <type><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref> *</type>
+        <definition>lru_node_t* lru_cache::tail</definition>
+        <argsstring></argsstring>
+        <name>tail</name>
+        <qualifiedname>lru_cache::tail</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="23" column="16" bodyfile="include/lru_cache.h" bodystart="23" bodyend="-1"/>
+        <referencedby refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" compoundref="lru__cache_8c" startline="80" endline="97">lru_add_to_head</referencedby>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" compoundref="lru__cache_8c" startline="99" endline="125">lru_cache_new</referencedby>
+        <referencedby refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" prot="public" static="no" mutable="no">
+        <type><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref> **</type>
+        <definition>lru_node_t** lru_cache::table</definition>
+        <argsstring></argsstring>
+        <name>table</name>
+        <qualifiedname>lru_cache::table</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="24" column="16" bodyfile="include/lru_cache.h" bodystart="24" bodyend="-1"/>
+        <referencedby refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" compoundref="lru__cache_8c" startline="80" endline="97">lru_add_to_head</referencedby>
+        <referencedby refid="lru__cache_8h_1a5dce8063dde908934862ea5c798bfafc" compoundref="lru__cache_8c" startline="127" endline="145">lru_cache_free</referencedby>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+        <referencedby refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" compoundref="lru__cache_8c" startline="99" endline="125">lru_cache_new</referencedby>
+        <referencedby refid="lru__cache_8h_1a1304eae1bbb02da02f5f5e8a420847f7" compoundref="lru__cache_8c" startline="271" endline="310">lru_cache_remove</referencedby>
+        <referencedby refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structlru__cache_1ac826ac1f145df5bc953289a9cd784781" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t lru_cache::capacity</definition>
+        <argsstring></argsstring>
+        <name>capacity</name>
+        <qualifiedname>lru_cache::capacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="25" column="12" bodyfile="include/lru_cache.h" bodystart="25" bodyend="-1"/>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" compoundref="lru__cache_8c" startline="99" endline="125">lru_cache_new</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t lru_cache::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>lru_cache::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="26" column="12" bodyfile="include/lru_cache.h" bodystart="26" bodyend="-1"/>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" compoundref="lru__cache_8c" startline="99" endline="125">lru_cache_new</referencedby>
+        <referencedby refid="lru__cache_8h_1a1304eae1bbb02da02f5f5e8a420847f7" compoundref="lru__cache_8c" startline="271" endline="310">lru_cache_remove</referencedby>
+        <referencedby refid="lru__cache_8h_1a94a95dc94caad4d8ca9a5c41c1bfb7ff" compoundref="lru__cache_8c" startline="312" endline="315">lru_cache_size</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t lru_cache::hash_mask</definition>
+        <argsstring></argsstring>
+        <name>hash_mask</name>
+        <qualifiedname>lru_cache::hash_mask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="27" column="12" bodyfile="include/lru_cache.h" bodystart="27" bodyend="-1"/>
+        <referencedby refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" compoundref="lru__cache_8c" startline="80" endline="97">lru_add_to_head</referencedby>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+        <referencedby refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" compoundref="lru__cache_8c" startline="99" endline="125">lru_cache_new</referencedby>
+        <referencedby refid="lru__cache_8h_1a1304eae1bbb02da02f5f5e8a420847f7" compoundref="lru__cache_8c" startline="271" endline="310">lru_cache_remove</referencedby>
+        <referencedby refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" prot="public" static="no" mutable="no">
+        <type>pthread_mutex_t</type>
+        <definition>pthread_mutex_t lru_cache::lock</definition>
+        <argsstring></argsstring>
+        <name>lock</name>
+        <qualifiedname>lru_cache::lock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="31" column="21" bodyfile="include/lru_cache.h" bodystart="31" bodyend="-1"/>
+        <referencedby refid="lru__cache_8h_1a5dce8063dde908934862ea5c798bfafc" compoundref="lru__cache_8c" startline="127" endline="145">lru_cache_free</referencedby>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+        <referencedby refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" compoundref="lru__cache_8c" startline="99" endline="125">lru_cache_new</referencedby>
+        <referencedby refid="lru__cache_8h_1a1304eae1bbb02da02f5f5e8a420847f7" compoundref="lru__cache_8c" startline="271" endline="310">lru_cache_remove</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>lru_cache</label>
+        <link refid="structlru__cache"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>head</edgelabel>
+          <edgelabel>table</edgelabel>
+          <edgelabel>tail</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>lru_node</label>
+        <link refid="structlru__node"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>next</edgelabel>
+          <edgelabel>prev</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/lru_cache.h" line="21" column="1" bodyfile="include/lru_cache.h" bodystart="21" bodyend="33"/>
+    <listofallmembers>
+      <member refid="structlru__cache_1ac826ac1f145df5bc953289a9cd784781" prot="public" virt="non-virtual"><scope>lru_cache</scope><name>capacity</name></member>
+      <member refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" prot="public" virt="non-virtual"><scope>lru_cache</scope><name>hash_mask</name></member>
+      <member refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" prot="public" virt="non-virtual"><scope>lru_cache</scope><name>head</name></member>
+      <member refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" prot="public" virt="non-virtual"><scope>lru_cache</scope><name>lock</name></member>
+      <member refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" prot="public" virt="non-virtual"><scope>lru_cache</scope><name>size</name></member>
+      <member refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" prot="public" virt="non-virtual"><scope>lru_cache</scope><name>table</name></member>
+      <member refid="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" prot="public" virt="non-virtual"><scope>lru_cache</scope><name>tail</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['wal_5fclose_0',['wal_close',['../wal_8h.html#ab5c677761e13e05ab70cfa13782438fb',1,'wal_close(wal_t *w):&#160;wal.c'],['../wal_8c.html#ab5c677761e13e05ab70cfa13782438fb',1,'wal_close(wal_t *w):&#160;wal.c']]],
+  ['wal_5fmgr_5factive_5fsize_1',['wal_mgr_active_size',['../wal_8h.html#ac5ff9edb72952a6aea71b33053fb0d1a',1,'wal_mgr_active_size(wal_mgr_t *wm):&#160;wal.c'],['../wal_8c.html#ac5ff9edb72952a6aea71b33053fb0d1a',1,'wal_mgr_active_size(wal_mgr_t *wm):&#160;wal.c']]],
+  ['wal_5fmgr_5farchive_2',['wal_mgr_archive',['../wal_8h.html#a0477fda1593e9fefab6a8ba5f3cf3009',1,'wal_mgr_archive(wal_mgr_t *wm):&#160;wal.c'],['../wal_8c.html#a0477fda1593e9fefab6a8ba5f3cf3009',1,'wal_mgr_archive(wal_mgr_t *wm):&#160;wal.c']]],
+  ['wal_5fmgr_5fclose_3',['wal_mgr_close',['../wal_8h.html#a9a9c6ff1fb038110d3a09af89ec3c262',1,'wal_mgr_close(wal_mgr_t *wm):&#160;wal.c'],['../wal_8c.html#a9a9c6ff1fb038110d3a09af89ec3c262',1,'wal_mgr_close(wal_mgr_t *wm):&#160;wal.c']]],
+  ['wal_5fmgr_5fdelete_5fall_5fold_4',['wal_mgr_delete_all_old',['../wal_8c.html#a553dc7d35ee9f96b037182a05a170de6',1,'wal.c']]],
+  ['wal_5fmgr_5fmake_5fpath_5',['wal_mgr_make_path',['../wal_8c.html#a700880de35c88964f2ab31175d453c3d',1,'wal.c']]],
+  ['wal_5fmgr_5fopen_6',['wal_mgr_open',['../wal_8h.html#ad93f9f1fc01b4ee2ff51600666232420',1,'wal_mgr_open(const char *dir_path):&#160;wal.c'],['../wal_8c.html#ad93f9f1fc01b4ee2ff51600666232420',1,'wal_mgr_open(const char *dir_path):&#160;wal.c']]],
+  ['wal_5fmgr_5freplay_7',['wal_mgr_replay',['../wal_8h.html#a484cd076aa5d6853f2072c792b60c39c',1,'wal_mgr_replay(wal_mgr_t *wm, int(*callback)(wal_record_t *record, void *arg), void *arg):&#160;wal.c'],['../wal_8c.html#a484cd076aa5d6853f2072c792b60c39c',1,'wal_mgr_replay(wal_mgr_t *wm, int(*callback)(wal_record_t *record, void *arg), void *arg):&#160;wal.c']]],
+  ['wal_5fmgr_5fscan_5fdir_8',['wal_mgr_scan_dir',['../wal_8c.html#a81f5b4a7b4f65c3a8e3a768577d31466',1,'wal.c']]],
+  ['wal_5fmgr_5fseq_9',['wal_mgr_seq',['../wal_8h.html#a44252d75b4ebf1ac54ab6eef0195af1f',1,'wal_mgr_seq(wal_mgr_t *wm):&#160;wal.c'],['../wal_8c.html#a44252d75b4ebf1ac54ab6eef0195af1f',1,'wal_mgr_seq(wal_mgr_t *wm):&#160;wal.c']]],
+  ['wal_5fmgr_5fsync_10',['wal_mgr_sync',['../wal_8h.html#afe75b1ecad079adc49f01bde36496b63',1,'wal_mgr_sync(wal_mgr_t *wm):&#160;wal.c'],['../wal_8c.html#afe75b1ecad079adc49f01bde36496b63',1,'wal_mgr_sync(wal_mgr_t *wm):&#160;wal.c']]],
+  ['wal_5fmgr_5fwrite_11',['wal_mgr_write',['../wal_8h.html#a66b27b1919547d721d0318540a63bc07',1,'wal_mgr_write(wal_mgr_t *wm, wal_record_type_t type, const char *key, size_t klen, const char *value, size_t vlen):&#160;wal.c'],['../wal_8c.html#a66b27b1919547d721d0318540a63bc07',1,'wal_mgr_write(wal_mgr_t *wm, wal_record_type_t type, const char *key, size_t klen, const char *value, size_t vlen):&#160;wal.c']]],
+  ['wal_5fopen_12',['wal_open',['../wal_8h.html#a711953a17f21654bc2b8566e1d148f5b',1,'wal_open(const char *path):&#160;wal.c'],['../wal_8c.html#a711953a17f21654bc2b8566e1d148f5b',1,'wal_open(const char *path):&#160;wal.c']]],
+  ['wal_5freplay_13',['wal_replay',['../wal_8h.html#a9720b41392ac7b53a127b741408d739e',1,'wal_replay(wal_t *w, int(*callback)(wal_record_t *record, void *arg), void *arg):&#160;wal.c'],['../wal_8c.html#a9720b41392ac7b53a127b741408d739e',1,'wal_replay(wal_t *w, int(*callback)(wal_record_t *record, void *arg), void *arg):&#160;wal.c']]],
+  ['wal_5freplay_5fcallback_14',['wal_replay_callback',['../kv__store_8c.html#a85fffac7def48d02ad97b8fb585ba0f8',1,'kv_store.c']]],
+  ['wal_5fsize_15',['wal_size',['../wal_8h.html#ab68b30d13fe3cf226565b396ced72c5e',1,'wal_size(wal_t *w):&#160;wal.c'],['../wal_8c.html#ab68b30d13fe3cf226565b396ced72c5e',1,'wal_size(wal_t *w):&#160;wal.c']]],
+  ['wal_5fsync_16',['wal_sync',['../wal_8h.html#a25837431920cf767bb8ef6a97a379a5c',1,'wal_sync(wal_t *w):&#160;wal.c'],['../wal_8c.html#a25837431920cf767bb8ef6a97a379a5c',1,'wal_sync(wal_t *w):&#160;wal.c']]],
+  ['wal_5ftruncate_17',['wal_truncate',['../wal_8h.html#a70589fa0e9257fb13f4e6f6c15c1402f',1,'wal_truncate(wal_t *w, size_t offset):&#160;wal.c'],['../wal_8c.html#a70589fa0e9257fb13f4e6f6c15c1402f',1,'wal_truncate(wal_t *w, size_t offset):&#160;wal.c']]],
+  ['wal_5fwrite_18',['wal_write',['../wal_8h.html#ad67b92f852a478e80213df8eed7cbe68',1,'wal_write(wal_t *w, wal_record_type_t type, const char *key, size_t klen, const char *value, size_t vlen):&#160;wal.c'],['../wal_8c.html#ad67b92f852a478e80213df8eed7cbe68',1,'wal_write(wal_t *w, wal_record_type_t type, const char *key, size_t klen, const char *value, size_t vlen):&#160;wal.c']]],
+  ['worker_5fthread_19',['worker_thread',['../chaos__test_8c.html#a4e02a2b6ef758a5880b64d8b4ce7f1af',1,'chaos_test.c']]],
+  ['write_5fu32_20',['write_u32',['../raft_8c.html#a2d98e30e6ffbddf3426f68b76ebfb8d8',1,'raft.c']]],
+  ['write_5fu64_21',['write_u64',['../raft_8c.html#a1cc4b4e4fd368c53fa998585a13ee236',1,'raft.c']]]
+];
