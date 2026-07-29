@@ -108,10 +108,23 @@ static int kv_flush_memtable(kv_store_t* db) {
     size_t count = skiplist_count(db->immutable_memtable);
     printf("[FLUSH] Flushing MemTable with %zu entries to SSTable...\n", count);
     
+    /* 获取 manifest_lock 保护 manifest 操作，避免与 merge 线程竞争 */
+    #ifdef _WIN32
+    EnterCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_lock(&db->manifest_lock);
+    #endif
+    
     char path[512];
     uint64_t file_id = manifest_next_file_id(db->manifest);
     
     snprintf(path, sizeof(path), "%s/%llu.sst", db->dir_path, (unsigned long long)file_id);
+    
+    #ifdef _WIN32
+    LeaveCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_unlock(&db->manifest_lock);
+    #endif
     
     if (sstable_write(path, file_id, db->immutable_memtable, db->compression_type) != 0) {
         printf("[FLUSH] ERROR: Failed to write SSTable %s\n", path);
@@ -156,8 +169,21 @@ static int kv_flush_memtable(kv_store_t* db) {
         fclose(f);
     }
     
+    /* 重新获取 manifest_lock 进行 manifest 修改 */
+    #ifdef _WIN32
+    EnterCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_lock(&db->manifest_lock);
+    #endif
+    
     manifest_add_file(db->manifest, file_id, 0, smallest_key, sklen, largest_key, lklen, file_size);
     manifest_sync(db->manifest);
+    
+    #ifdef _WIN32
+    LeaveCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_unlock(&db->manifest_lock);
+    #endif
     
     kv_free(smallest_key);
     kv_free(largest_key);

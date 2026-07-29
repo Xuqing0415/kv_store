@@ -114,6 +114,7 @@ static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, ch
     size_t vlen = 0;
     int first_entry = 1;
     int entries_in_block = 0;
+    size_t last_key_len = 0;  /* 跟踪最后一个 key 的实际长度，不被重启点重置影响 */
     
     /* 检查是否有上次未写入的溢出条目（跨块边界被截断的记录） */
     if (*overflow_key != NULL) {
@@ -182,6 +183,7 @@ static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, ch
             memcpy(prev_key, key, SSTABLE_PREV_KEY_CAPACITY - 1);
             *prev_len = SSTABLE_PREV_KEY_CAPACITY - 1;
         }
+        last_key_len = *prev_len;  /* 保存实际 key 长度，用于索引条目 */
         
         entries_in_block++;
         
@@ -246,6 +248,9 @@ static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, ch
     
     block->size = offset;
     block->restart_count = restart_count;
+    
+    /* 恢复 prev_len 为最后一个 key 的实际长度，供索引条目使用 */
+    *prev_len = last_key_len;
     
     return 0;
 }
@@ -766,6 +771,10 @@ int sstable_lookup(sstable_t* sst, const char* key, size_t klen, char** out_valu
         if (pos + key_len > sst->index_size) break;
         
         int cmp = memcmp(index_data + pos, key, key_len < klen ? key_len : klen);
+        /* 前缀匹配时，较短的 key 更小 */
+        if (cmp == 0) {
+            cmp = (key_len < klen) ? -1 : (key_len > klen) ? 1 : 0;
+        }
         if (cmp >= 0) {
             target_offset = offset;
             break;

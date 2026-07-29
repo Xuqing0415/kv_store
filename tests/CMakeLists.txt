@@ -39,3 +39,6 @@ target_link_libraries(test_crash_recovery kv_store)
 
 add_executable(test_memcheck test_memcheck.c)
 target_link_libraries(test_memcheck kv_store)
+
+add_executable(test_debug_lookup test_debug_lookup.c)
+target_link_libraries(test_debug_lookup kv_store)

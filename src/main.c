@@ -128,6 +128,10 @@ int main() {
             return 1;
         }
         
+        /* 等待后台 merge 线程完成所有压缩，确保 SSTable 文件处于一致状态 */
+        printf("[INFO] Waiting for background compaction to complete...\n");
+        kv_force_merge(db);
+        
         int verify_errors = 0;
         for (int i = 0; i < VERIFY_READS; i++) {
             int idx = rand() % TEST_ENTRIES;
