@@ -1,5 +1,6 @@
 build/
 build_win/
+build_sweep/
 cmake-build-debug/
 cmake-build-release/
 *.o
@@ -12,8 +13,15 @@ cmake-build-release/
 .idea/
 test_db/
 test_kv_*/
+cluster/
+example_db/
+example_backup_db/
+example_concurrent_db/
+example_restore_db/
+example_backup/
 *.log
 *.tmp
 *.sst
 *.txt
 debug_*.c
+sweep_results.csv
