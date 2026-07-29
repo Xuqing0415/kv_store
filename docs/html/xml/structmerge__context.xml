@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structmerge__context" kind="struct" language="C++" prot="public">
+    <compoundname>merge_context</compoundname>
+    <includes refid="merge_8h" local="no">merge.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structmerge__context_1ad892442b42d2a9867e74a082a3434d5c" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* merge_context::dir_path</definition>
+        <argsstring></argsstring>
+        <name>dir_path</name>
+        <qualifiedname>merge_context::dir_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="17" column="10" bodyfile="include/merge.h" bodystart="17" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+        <referencedby refid="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" compoundref="kv__store_8c" startline="435" endline="522">kv_open_raft</referencedby>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmerge__context_1adf808c35e51aa26fd571f3c4ba66625b" prot="public" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* merge_context::manifest</definition>
+        <argsstring></argsstring>
+        <name>manifest</name>
+        <qualifiedname>merge_context::manifest</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="18" column="10" bodyfile="include/merge.h" bodystart="18" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+        <referencedby refid="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" compoundref="kv__store_8c" startline="435" endline="522">kv_open_raft</referencedby>
+        <referencedby refid="merge_8h_1ade2fd4d583fadd6da1dc63c0fec1e208" compoundref="merge_8c" startline="282" endline="317">merge_execute</referencedby>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+        <referencedby refid="merge_8h_1a151086cd64d064ca1a3d0b353f1b53fa" compoundref="merge_8c" startline="93" endline="137">merge_should_trigger</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmerge__context_1a4a5de43ff8ff5c33ea78faf87f65043d" prot="public" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* merge_context::cache</definition>
+        <argsstring></argsstring>
+        <name>cache</name>
+        <qualifiedname>merge_context::cache</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="19" column="10" bodyfile="include/merge.h" bodystart="19" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+        <referencedby refid="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" compoundref="kv__store_8c" startline="435" endline="522">kv_open_raft</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmerge__context_1a47eae201d539c86e28f26721deeaead5" prot="public" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* merge_context::manifest_lock</definition>
+        <argsstring></argsstring>
+        <name>manifest_lock</name>
+        <qualifiedname>merge_context::manifest_lock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="20" column="10" bodyfile="include/merge.h" bodystart="20" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+        <referencedby refid="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" compoundref="kv__store_8c" startline="435" endline="522">kv_open_raft</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmerge__context_1a2763bff70283d88b3d97dc00e633e8ee" prot="public" static="no" mutable="no">
+        <type>volatile int</type>
+        <definition>volatile int merge_context::stop</definition>
+        <argsstring></argsstring>
+        <name>stop</name>
+        <qualifiedname>merge_context::stop</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="25" column="18" bodyfile="include/merge.h" bodystart="25" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+        <referencedby refid="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" compoundref="kv__store_8c" startline="435" endline="522">kv_open_raft</referencedby>
+        <referencedby refid="merge_8h_1ab68b218fb4e410ba018a6523dab2cbaa" compoundref="merge_8c" startline="84" endline="91">merge_scheduler_join</referencedby>
+        <referencedby refid="merge_8h_1ace6f39139e55e8eedfc3a58a9f1c12f8" compoundref="merge_8c" startline="69" endline="76">merge_scheduler_start</referencedby>
+        <referencedby refid="merge_8h_1acccd1c3ea9d5b2af1b1c32ed837de8c1" compoundref="merge_8c" startline="78" endline="82">merge_scheduler_stop</referencedby>
+        <referencedby refid="merge_8c_1a2c0c5111d2b8eefdf36b175c56cfa3c8" compoundref="merge_8c" startline="34" endline="67">merge_worker</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmerge__context_1a92857c41f4d28c8e851927f28451cc3a" prot="public" static="no" mutable="no">
+        <type>pthread_t</type>
+        <definition>pthread_t merge_context::thread</definition>
+        <argsstring></argsstring>
+        <name>thread</name>
+        <qualifiedname>merge_context::thread</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="26" column="15" bodyfile="include/merge.h" bodystart="26" bodyend="-1"/>
+        <referencedby refid="merge_8h_1ab68b218fb4e410ba018a6523dab2cbaa" compoundref="merge_8c" startline="84" endline="91">merge_scheduler_join</referencedby>
+        <referencedby refid="merge_8h_1ace6f39139e55e8eedfc3a58a9f1c12f8" compoundref="merge_8c" startline="69" endline="76">merge_scheduler_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmerge__context_1aeb07c40988e050b5630ccd6ad2f3241e" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int merge_context::thread_started</definition>
+        <argsstring></argsstring>
+        <name>thread_started</name>
+        <qualifiedname>merge_context::thread_started</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="28" column="9" bodyfile="include/merge.h" bodystart="28" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+        <referencedby refid="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" compoundref="kv__store_8c" startline="435" endline="522">kv_open_raft</referencedby>
+        <referencedby refid="merge_8h_1ab68b218fb4e410ba018a6523dab2cbaa" compoundref="merge_8c" startline="84" endline="91">merge_scheduler_join</referencedby>
+        <referencedby refid="merge_8h_1ace6f39139e55e8eedfc3a58a9f1c12f8" compoundref="merge_8c" startline="69" endline="76">merge_scheduler_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmerge__context_1a2a16a211f2b6e2094c93752d8b7738c5" prot="public" static="no" mutable="no">
+        <type><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref></type>
+        <definition>compression_type_t merge_context::compression_type</definition>
+        <argsstring></argsstring>
+        <name>compression_type</name>
+        <qualifiedname>merge_context::compression_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="29" column="24" bodyfile="include/merge.h" bodystart="29" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+        <referencedby refid="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" compoundref="kv__store_8c" startline="435" endline="522">kv_open_raft</referencedby>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/merge.h" line="16" column="1" bodyfile="include/merge.h" bodystart="16" bodyend="30"/>
+    <listofallmembers>
+      <member refid="structmerge__context_1a4a5de43ff8ff5c33ea78faf87f65043d" prot="public" virt="non-virtual"><scope>merge_context</scope><name>cache</name></member>
+      <member refid="structmerge__context_1a2a16a211f2b6e2094c93752d8b7738c5" prot="public" virt="non-virtual"><scope>merge_context</scope><name>compression_type</name></member>
+      <member refid="structmerge__context_1ad892442b42d2a9867e74a082a3434d5c" prot="public" virt="non-virtual"><scope>merge_context</scope><name>dir_path</name></member>
+      <member refid="structmerge__context_1adf808c35e51aa26fd571f3c4ba66625b" prot="public" virt="non-virtual"><scope>merge_context</scope><name>manifest</name></member>
+      <member refid="structmerge__context_1a47eae201d539c86e28f26721deeaead5" prot="public" virt="non-virtual"><scope>merge_context</scope><name>manifest_lock</name></member>
+      <member refid="structmerge__context_1a2763bff70283d88b3d97dc00e633e8ee" prot="public" virt="non-virtual"><scope>merge_context</scope><name>stop</name></member>
+      <member refid="structmerge__context_1a92857c41f4d28c8e851927f28451cc3a" prot="public" virt="non-virtual"><scope>merge_context</scope><name>thread</name></member>
+      <member refid="structmerge__context_1aeb07c40988e050b5630ccd6ad2f3241e" prot="public" virt="non-virtual"><scope>merge_context</scope><name>thread_started</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

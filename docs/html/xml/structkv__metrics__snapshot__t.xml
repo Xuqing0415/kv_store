@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structkv__metrics__snapshot__t" kind="struct" language="C++" prot="public">
+    <compoundname>kv_metrics_snapshot_t</compoundname>
+    <includes refid="kv__store_8h" local="no">kv_store.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structkv__metrics__snapshot__t_1adb84911b03395532f17e5639fb4af420" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long kv_metrics_snapshot_t::puts_total</definition>
+        <argsstring></argsstring>
+        <name>puts_total</name>
+        <qualifiedname>kv_metrics_snapshot_t::puts_total</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="16" column="15" bodyfile="include/kv_store.h" bodystart="16" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a4a4257e72aaf47f862a8ad28319a4946" compoundref="kv__store_8c" startline="760" endline="768">kv_metrics_snapshot</referencedby>
+        <referencedby refid="metrics__server_8c_1a3d67963f152b21379cd157e13c198ff0" compoundref="metrics__server_8c" startline="113" endline="228">metrics_build_response</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__metrics__snapshot__t_1ae4c8a90c64ae167996b0ddb06e208ea5" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long kv_metrics_snapshot_t::gets_total</definition>
+        <argsstring></argsstring>
+        <name>gets_total</name>
+        <qualifiedname>kv_metrics_snapshot_t::gets_total</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="17" column="15" bodyfile="include/kv_store.h" bodystart="17" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a4a4257e72aaf47f862a8ad28319a4946" compoundref="kv__store_8c" startline="760" endline="768">kv_metrics_snapshot</referencedby>
+        <referencedby refid="metrics__server_8c_1a3d67963f152b21379cd157e13c198ff0" compoundref="metrics__server_8c" startline="113" endline="228">metrics_build_response</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__metrics__snapshot__t_1a360475943bfca7646269cddb2fdc01d3" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long kv_metrics_snapshot_t::get_misses_total</definition>
+        <argsstring></argsstring>
+        <name>get_misses_total</name>
+        <qualifiedname>kv_metrics_snapshot_t::get_misses_total</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="18" column="15" bodyfile="include/kv_store.h" bodystart="18" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a4a4257e72aaf47f862a8ad28319a4946" compoundref="kv__store_8c" startline="760" endline="768">kv_metrics_snapshot</referencedby>
+        <referencedby refid="metrics__server_8c_1a3d67963f152b21379cd157e13c198ff0" compoundref="metrics__server_8c" startline="113" endline="228">metrics_build_response</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__metrics__snapshot__t_1a43829a8959a5a177d785cb4f782d31e0" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long kv_metrics_snapshot_t::deletes_total</definition>
+        <argsstring></argsstring>
+        <name>deletes_total</name>
+        <qualifiedname>kv_metrics_snapshot_t::deletes_total</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="19" column="15" bodyfile="include/kv_store.h" bodystart="19" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a4a4257e72aaf47f862a8ad28319a4946" compoundref="kv__store_8c" startline="760" endline="768">kv_metrics_snapshot</referencedby>
+        <referencedby refid="metrics__server_8c_1a3d67963f152b21379cd157e13c198ff0" compoundref="metrics__server_8c" startline="113" endline="228">metrics_build_response</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__metrics__snapshot__t_1ab76c467770418c5e6325d445b71a8806" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long kv_metrics_snapshot_t::scans_total</definition>
+        <argsstring></argsstring>
+        <name>scans_total</name>
+        <qualifiedname>kv_metrics_snapshot_t::scans_total</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="20" column="15" bodyfile="include/kv_store.h" bodystart="20" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a4a4257e72aaf47f862a8ad28319a4946" compoundref="kv__store_8c" startline="760" endline="768">kv_metrics_snapshot</referencedby>
+        <referencedby refid="metrics__server_8c_1a3d67963f152b21379cd157e13c198ff0" compoundref="metrics__server_8c" startline="113" endline="228">metrics_build_response</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structkv__metrics__snapshot__t_1aa027e706a684186d1d32b81d1006d51c" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long kv_metrics_snapshot_t::compactions_total</definition>
+        <argsstring></argsstring>
+        <name>compactions_total</name>
+        <qualifiedname>kv_metrics_snapshot_t::compactions_total</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="21" column="15" bodyfile="include/kv_store.h" bodystart="21" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a4a4257e72aaf47f862a8ad28319a4946" compoundref="kv__store_8c" startline="760" endline="768">kv_metrics_snapshot</referencedby>
+        <referencedby refid="metrics__server_8c_1a3d67963f152b21379cd157e13c198ff0" compoundref="metrics__server_8c" startline="113" endline="228">metrics_build_response</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/kv_store.h" line="15" column="1" bodyfile="include/kv_store.h" bodystart="15" bodyend="22"/>
+    <listofallmembers>
+      <member refid="structkv__metrics__snapshot__t_1aa027e706a684186d1d32b81d1006d51c" prot="public" virt="non-virtual"><scope>kv_metrics_snapshot_t</scope><name>compactions_total</name></member>
+      <member refid="structkv__metrics__snapshot__t_1a43829a8959a5a177d785cb4f782d31e0" prot="public" virt="non-virtual"><scope>kv_metrics_snapshot_t</scope><name>deletes_total</name></member>
+      <member refid="structkv__metrics__snapshot__t_1a360475943bfca7646269cddb2fdc01d3" prot="public" virt="non-virtual"><scope>kv_metrics_snapshot_t</scope><name>get_misses_total</name></member>
+      <member refid="structkv__metrics__snapshot__t_1ae4c8a90c64ae167996b0ddb06e208ea5" prot="public" virt="non-virtual"><scope>kv_metrics_snapshot_t</scope><name>gets_total</name></member>
+      <member refid="structkv__metrics__snapshot__t_1adb84911b03395532f17e5639fb4af420" prot="public" virt="non-virtual"><scope>kv_metrics_snapshot_t</scope><name>puts_total</name></member>
+      <member refid="structkv__metrics__snapshot__t_1ab76c467770418c5e6325d445b71a8806" prot="public" virt="non-virtual"><scope>kv_metrics_snapshot_t</scope><name>scans_total</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

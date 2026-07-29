@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structlru__node" kind="struct" language="C++" prot="public">
+    <compoundname>lru_node</compoundname>
+    <includes refid="lru__cache_8h" local="no">lru_cache.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* lru_node::key</definition>
+        <argsstring></argsstring>
+        <name>key</name>
+        <qualifiedname>lru_node::key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="13" column="10" bodyfile="include/lru_cache.h" bodystart="13" bodyend="-1"/>
+        <referencedby refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" compoundref="lru__cache_8c" startline="80" endline="97">lru_add_to_head</referencedby>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+        <referencedby refid="lru__cache_8h_1a1304eae1bbb02da02f5f5e8a420847f7" compoundref="lru__cache_8c" startline="271" endline="310">lru_cache_remove</referencedby>
+        <referencedby refid="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" compoundref="lru__cache_8c" startline="54" endline="59">lru_node_free</referencedby>
+        <referencedby refid="lru__cache_8c_1a709b3af3a8d9827a024a5e86cca441ce" compoundref="lru__cache_8c" startline="27" endline="52">lru_node_new</referencedby>
+        <referencedby refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t lru_node::key_len</definition>
+        <argsstring></argsstring>
+        <name>key_len</name>
+        <qualifiedname>lru_node::key_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="14" column="12" bodyfile="include/lru_cache.h" bodystart="14" bodyend="-1"/>
+        <referencedby refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" compoundref="lru__cache_8c" startline="80" endline="97">lru_add_to_head</referencedby>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+        <referencedby refid="lru__cache_8h_1a1304eae1bbb02da02f5f5e8a420847f7" compoundref="lru__cache_8c" startline="271" endline="310">lru_cache_remove</referencedby>
+        <referencedby refid="lru__cache_8c_1a709b3af3a8d9827a024a5e86cca441ce" compoundref="lru__cache_8c" startline="27" endline="52">lru_node_new</referencedby>
+        <referencedby refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structlru__node_1a00fe9107fe418081becf9a7631afc71c" prot="public" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* lru_node::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>lru_node::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="15" column="10" bodyfile="include/lru_cache.h" bodystart="15" bodyend="-1"/>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+        <referencedby refid="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" compoundref="lru__cache_8c" startline="54" endline="59">lru_node_free</referencedby>
+        <referencedby refid="lru__cache_8c_1a709b3af3a8d9827a024a5e86cca441ce" compoundref="lru__cache_8c" startline="27" endline="52">lru_node_new</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structlru__node_1ab7babf275eb889a2a9743a4e8615b686" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t lru_node::value_len</definition>
+        <argsstring></argsstring>
+        <name>value_len</name>
+        <qualifiedname>lru_node::value_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="16" column="12" bodyfile="include/lru_cache.h" bodystart="16" bodyend="-1"/>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+        <referencedby refid="lru__cache_8c_1a709b3af3a8d9827a024a5e86cca441ce" compoundref="lru__cache_8c" startline="27" endline="52">lru_node_new</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structlru__node_1a7da948acce25415fef6efe09c96dce26" prot="public" static="no" mutable="no">
+        <type>struct <ref refid="structlru__node" kindref="compound">lru_node</ref> *</type>
+        <definition>struct lru_node* lru_node::prev</definition>
+        <argsstring></argsstring>
+        <name>prev</name>
+        <qualifiedname>lru_node::prev</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="17" column="20" bodyfile="include/lru_cache.h" bodystart="17" bodyend="-1"/>
+        <referencedby refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" compoundref="lru__cache_8c" startline="80" endline="97">lru_add_to_head</referencedby>
+        <referencedby refid="lru__cache_8c_1a709b3af3a8d9827a024a5e86cca441ce" compoundref="lru__cache_8c" startline="27" endline="52">lru_node_new</referencedby>
+        <referencedby refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" prot="public" static="no" mutable="no">
+        <type>struct <ref refid="structlru__node" kindref="compound">lru_node</ref> *</type>
+        <definition>struct lru_node* lru_node::next</definition>
+        <argsstring></argsstring>
+        <name>next</name>
+        <qualifiedname>lru_node::next</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/lru_cache.h" line="18" column="20" bodyfile="include/lru_cache.h" bodystart="18" bodyend="-1"/>
+        <referencedby refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" compoundref="lru__cache_8c" startline="80" endline="97">lru_add_to_head</referencedby>
+        <referencedby refid="lru__cache_8h_1a5dce8063dde908934862ea5c798bfafc" compoundref="lru__cache_8c" startline="127" endline="145">lru_cache_free</referencedby>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+        <referencedby refid="lru__cache_8c_1a709b3af3a8d9827a024a5e86cca441ce" compoundref="lru__cache_8c" startline="27" endline="52">lru_node_new</referencedby>
+        <referencedby refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>lru_node</label>
+        <link refid="structlru__node"/>
+        <childnode refid="1" relation="usage">
+          <edgelabel>next</edgelabel>
+          <edgelabel>prev</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/lru_cache.h" line="12" column="1" bodyfile="include/lru_cache.h" bodystart="12" bodyend="19"/>
+    <listofallmembers>
+      <member refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" prot="public" virt="non-virtual"><scope>lru_node</scope><name>key</name></member>
+      <member refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" prot="public" virt="non-virtual"><scope>lru_node</scope><name>key_len</name></member>
+      <member refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" prot="public" virt="non-virtual"><scope>lru_node</scope><name>next</name></member>
+      <member refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" prot="public" virt="non-virtual"><scope>lru_node</scope><name>prev</name></member>
+      <member refid="structlru__node_1a00fe9107fe418081becf9a7631afc71c" prot="public" virt="non-virtual"><scope>lru_node</scope><name>value</name></member>
+      <member refid="structlru__node_1ab7babf275eb889a2a9743a4e8615b686" prot="public" virt="non-virtual"><scope>lru_node</scope><name>value_len</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

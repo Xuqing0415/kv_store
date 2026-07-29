@@ -1,0 +1,438 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="manifest_8h" kind="file" language="C++">
+    <compoundname>manifest.h</compoundname>
+    <includes local="no">stddef.h</includes>
+    <includes local="no">stdint.h</includes>
+    <includedby refid="kv__store_8c" local="yes">src/kv_store.c</includedby>
+    <includedby refid="manifest_8c" local="yes">src/manifest.c</includedby>
+    <includedby refid="merge_8c" local="yes">src/merge.c</includedby>
+    <includedby refid="raft__node_8c" local="yes">src/raft_node.c</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>include/manifest.h</label>
+        <link refid="manifest_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>stddef.h</label>
+      </node>
+      <node id="3">
+        <label>stdint.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>include/manifest.h</label>
+        <link refid="manifest_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/kv_store.c</label>
+        <link refid="kv__store_8c"/>
+      </node>
+      <node id="3">
+        <label>src/manifest.c</label>
+        <link refid="manifest_8c"/>
+      </node>
+      <node id="4">
+        <label>src/merge.c</label>
+        <link refid="merge_8c"/>
+      </node>
+      <node id="5">
+        <label>src/raft_node.c</label>
+        <link refid="raft__node_8c"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structmanifest__file" prot="public">manifest_file</innerclass>
+    <innerclass refid="structmanifest" prot="public">manifest</innerclass>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="manifest_8h_1a4903c2bdf4f7dd0820d1769eeda94365" prot="public" static="no">
+        <name>MANIFEST_FILE_NAME</name>
+        <initializer>&quot;MANIFEST&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="7" column="9" bodyfile="include/manifest.h" bodystart="7" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a1bf78b7e348906a983cbc68514d8aa5b" compoundref="kv__store_8c" startline="1301" endline="1440">kv_backup</referencedby>
+        <referencedby refid="kv__store_8h_1acd6d23c4b82ed9032006996b84cc6955" compoundref="kv__store_8c" startline="1518" endline="1617">kv_import_snapshot_files</referencedby>
+        <referencedby refid="kv__store_8h_1aae7426a44a76277fe48e8f928c73ae22" compoundref="kv__store_8c" startline="1442" endline="1504">kv_restore</referencedby>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+        <referencedby refid="manifest_8h_1aea56d11e385e679f5910da48e02f9a67" compoundref="manifest_8c" startline="206" endline="267">manifest_load</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+        <referencedby refid="raft__node_8c_1a43079a05b06d465ff498e340913cf2e8" compoundref="raft__node_8c" startline="39" endline="342">raft_snapshot_to_kv</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="manifest_8h_1ab49f63f5e4d157647ad33306c58a8c67" prot="public" static="no">
+        <name>MANIFEST_TMP_FILE_NAME</name>
+        <initializer>&quot;MANIFEST.tmp&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="8" column="9" bodyfile="include/manifest.h" bodystart="8" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a1bf78b7e348906a983cbc68514d8aa5b" compoundref="kv__store_8c" startline="1301" endline="1440">kv_backup</referencedby>
+        <referencedby refid="kv__store_8h_1acd6d23c4b82ed9032006996b84cc6955" compoundref="kv__store_8c" startline="1518" endline="1617">kv_import_snapshot_files</referencedby>
+        <referencedby refid="kv__store_8h_1aae7426a44a76277fe48e8f928c73ae22" compoundref="kv__store_8c" startline="1442" endline="1504">kv_restore</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="manifest_8h_1a9b7669d7128e8f85a99379eb1ffba3ed" prot="public" static="no">
+        <type>struct <ref refid="structmanifest__file" kindref="compound">manifest_file</ref></type>
+        <definition>typedef struct manifest_file manifest_file_t</definition>
+        <argsstring></argsstring>
+        <name>manifest_file_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="19" column="17"/>
+      </memberdef>
+      <memberdef kind="typedef" id="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" prot="public" static="no">
+        <type>struct <ref refid="structmanifest" kindref="compound">manifest</ref></type>
+        <definition>typedef struct manifest manifest_t</definition>
+        <argsstring></argsstring>
+        <name>manifest_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="26" column="12"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="manifest_8h_1a4595c099070292074eecf62dc44f8e6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref> *</type>
+        <definition>manifest_t * manifest_open</definition>
+        <argsstring>(const char *dir_path)</argsstring>
+        <name>manifest_open</name>
+        <param>
+          <type>const char *</type>
+          <declname>dir_path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="28" column="12" bodyfile="src/manifest.c" bodystart="30" bodyend="49" declfile="include/manifest.h" declline="28" declcolumn="12"/>
+        <references refid="structmanifest_1a11440e860a7c980230450115b8f2e618" compoundref="manifest_8h" startline="22">manifest::dir_path</references>
+        <references refid="structmanifest_1a94c3b9ff936b8485c83969133de24735" compoundref="manifest_8h" startline="23">manifest::files</references>
+        <references refid="manifest_8c_1aea56d11e385e679f5910da48e02f9a67" compoundref="manifest_8c" startline="206" endline="267">manifest_load</references>
+        <references refid="structmanifest_1ab3664d7d3c29f06af49c544def50672c" compoundref="manifest_8h" startline="24">manifest::next_file_id</references>
+        <references refid="structmanifest_1a382813c4ee57bd93b30ef9b4c6f89504" compoundref="manifest_8h" startline="25">manifest::version</references>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+        <referencedby refid="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" compoundref="kv__store_8c" startline="435" endline="522">kv_open_raft</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="manifest_8h_1a5d1e760abe0a2988da14531d4431cd9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void manifest_close</definition>
+        <argsstring>(manifest_t *m)</argsstring>
+        <name>manifest_close</name>
+        <param>
+          <type><ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref> *</type>
+          <declname>m</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="29" column="6" bodyfile="src/manifest.c" bodystart="51" bodyend="57" declfile="include/manifest.h" declline="29" declcolumn="6"/>
+        <references refid="structmanifest_1a11440e860a7c980230450115b8f2e618" compoundref="manifest_8h" startline="22">manifest::dir_path</references>
+        <references refid="structmanifest_1a94c3b9ff936b8485c83969133de24735" compoundref="manifest_8h" startline="23">manifest::files</references>
+        <references refid="manifest_8c_1a9e95da955abeeb636b25478cb635b2f7" compoundref="manifest_8c" startline="21" endline="28">manifest_files_free</references>
+        <referencedby refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" compoundref="kv__store_8c" startline="524" endline="574">kv_close</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int manifest_add_file</definition>
+        <argsstring>(manifest_t *m, uint64_t file_id, int level, const char *smallest_key, size_t sklen, const char *largest_key, size_t lklen, size_t file_size)</argsstring>
+        <name>manifest_add_file</name>
+        <param>
+          <type><ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref> *</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>file_id</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>smallest_key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>sklen</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>largest_key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>lklen</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>file_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="30" column="5" bodyfile="src/manifest.c" bodystart="59" bodyend="94" declfile="include/manifest.h" declline="30" declcolumn="5"/>
+        <references refid="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" compoundref="manifest_8h" startline="11">manifest_file::file_id</references>
+        <references refid="structmanifest__file_1a87019421a20431113ffb51347ce2e329" compoundref="manifest_8h" startline="17">manifest_file::file_size</references>
+        <references refid="structmanifest_1a94c3b9ff936b8485c83969133de24735" compoundref="manifest_8h" startline="23">manifest::files</references>
+        <references refid="structmanifest__file_1a6ea1361b547d1f6cdc992b5c0a65dd25" compoundref="manifest_8h" startline="15">manifest_file::largest_key</references>
+        <references refid="structmanifest__file_1acbd780969f0924279a1972ffc50aef1c" compoundref="manifest_8h" startline="16">manifest_file::largest_key_len</references>
+        <references refid="structmanifest__file_1ad44ca515be7a7088af22b9fed2b6706d" compoundref="manifest_8h" startline="12">manifest_file::level</references>
+        <references refid="structmanifest__file_1a7bc0b1e19e7244284a8d9ed76bd5263c" compoundref="manifest_8h" startline="18">manifest_file::next</references>
+        <references refid="structmanifest_1ab3664d7d3c29f06af49c544def50672c" compoundref="manifest_8h" startline="24">manifest::next_file_id</references>
+        <references refid="structmanifest__file_1aba49690d903d266c1a66cd4407dafdcf" compoundref="manifest_8h" startline="13">manifest_file::smallest_key</references>
+        <references refid="structmanifest__file_1addb4eec8ec5a1b26381cb2e7f5afc139" compoundref="manifest_8h" startline="14">manifest_file::smallest_key_len</references>
+        <referencedby refid="kv__store_8c_1a5f0bfcd3bf571aa044ff2d5ef7d435ca" compoundref="kv__store_8c" startline="195" endline="290">kv_flush_memtable</referencedby>
+        <referencedby refid="manifest_8h_1aea56d11e385e679f5910da48e02f9a67" compoundref="manifest_8c" startline="206" endline="267">manifest_load</referencedby>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="manifest_8h_1ac1eb70471bbbeb6b1c92f6d6a56595fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int manifest_remove_file</definition>
+        <argsstring>(manifest_t *m, uint64_t file_id)</argsstring>
+        <name>manifest_remove_file</name>
+        <param>
+          <type><ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref> *</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>file_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="31" column="5" bodyfile="src/manifest.c" bodystart="96" bodyend="113" declfile="include/manifest.h" declline="31" declcolumn="5"/>
+        <references refid="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" compoundref="manifest_8h" startline="11">manifest_file::file_id</references>
+        <references refid="structmanifest_1a94c3b9ff936b8485c83969133de24735" compoundref="manifest_8h" startline="23">manifest::files</references>
+        <references refid="manifest_8c_1a18c37e329a8fedc6f0c324594b3099a7" compoundref="manifest_8c" startline="14" endline="19">manifest_file_free</references>
+        <references refid="structmanifest__file_1a7bc0b1e19e7244284a8d9ed76bd5263c" compoundref="manifest_8h" startline="18">manifest_file::next</references>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="manifest_8h_1acdf72e733f23ae5ca16a62fad50193f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int manifest_clear</definition>
+        <argsstring>(manifest_t *m)</argsstring>
+        <name>manifest_clear</name>
+        <param>
+          <type><ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref> *</type>
+          <declname>m</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="32" column="5" bodyfile="src/manifest.c" bodystart="115" bodyend="124" declfile="include/manifest.h" declline="32" declcolumn="5"/>
+        <references refid="structmanifest_1a94c3b9ff936b8485c83969133de24735" compoundref="manifest_8h" startline="23">manifest::files</references>
+        <references refid="manifest_8c_1a9e95da955abeeb636b25478cb635b2f7" compoundref="manifest_8c" startline="21" endline="28">manifest_files_free</references>
+        <references refid="structmanifest_1ab3664d7d3c29f06af49c544def50672c" compoundref="manifest_8h" startline="24">manifest::next_file_id</references>
+        <references refid="structmanifest_1a382813c4ee57bd93b30ef9b4c6f89504" compoundref="manifest_8h" startline="25">manifest::version</references>
+        <referencedby refid="kv__store_8h_1acd6d23c4b82ed9032006996b84cc6955" compoundref="kv__store_8c" startline="1518" endline="1617">kv_import_snapshot_files</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="manifest_8h_1a1b49825fc2dafa1d29d1fea3f32df54f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int manifest_list_files</definition>
+        <argsstring>(manifest_t *m, int level, manifest_file_t ***out_files, size_t *out_count)</argsstring>
+        <name>manifest_list_files</name>
+        <param>
+          <type><ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref> *</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type><ref refid="manifest_8h_1a9b7669d7128e8f85a99379eb1ffba3ed" kindref="member">manifest_file_t</ref> ***</type>
+          <declname>out_files</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>out_count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="33" column="5" bodyfile="src/manifest.c" bodystart="126" bodyend="154" declfile="include/manifest.h" declline="33" declcolumn="5"/>
+        <references refid="structmanifest_1a94c3b9ff936b8485c83969133de24735" compoundref="manifest_8h" startline="23">manifest::files</references>
+        <references refid="structmanifest__file_1a7bc0b1e19e7244284a8d9ed76bd5263c" compoundref="manifest_8h" startline="18">manifest_file::next</references>
+        <referencedby refid="kv__store_8h_1a1bf78b7e348906a983cbc68514d8aa5b" compoundref="kv__store_8c" startline="1301" endline="1440">kv_backup</referencedby>
+        <referencedby refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" compoundref="kv__store_8c" startline="602" endline="733">kv_get</referencedby>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" compoundref="kv__store_8c" startline="1014" endline="1073">kv_snapshot_create</referencedby>
+        <referencedby refid="kv__store_8c_1ad8a1e35142cf227b5d95940067071768" compoundref="kv__store_8c" startline="112" endline="180">maintenance_thread_func</referencedby>
+        <referencedby refid="merge_8h_1ade2fd4d583fadd6da1dc63c0fec1e208" compoundref="merge_8c" startline="282" endline="317">merge_execute</referencedby>
+        <referencedby refid="merge_8h_1a151086cd64d064ca1a3d0b353f1b53fa" compoundref="merge_8c" startline="93" endline="137">merge_should_trigger</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="manifest_8h_1a1d46175cf2b2973de5508a455f6d9e9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint64_t</type>
+        <definition>uint64_t manifest_next_file_id</definition>
+        <argsstring>(manifest_t *m)</argsstring>
+        <name>manifest_next_file_id</name>
+        <param>
+          <type><ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref> *</type>
+          <declname>m</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="34" column="10" bodyfile="src/manifest.c" bodystart="156" bodyend="159" declfile="include/manifest.h" declline="34" declcolumn="10"/>
+        <references refid="structmanifest_1ab3664d7d3c29f06af49c544def50672c" compoundref="manifest_8h" startline="24">manifest::next_file_id</references>
+        <referencedby refid="kv__store_8c_1a5f0bfcd3bf571aa044ff2d5ef7d435ca" compoundref="kv__store_8c" startline="195" endline="290">kv_flush_memtable</referencedby>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int manifest_sync</definition>
+        <argsstring>(manifest_t *m)</argsstring>
+        <name>manifest_sync</name>
+        <param>
+          <type><ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref> *</type>
+          <declname>m</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="35" column="5" bodyfile="src/manifest.c" bodystart="161" bodyend="204" declfile="include/manifest.h" declline="35" declcolumn="5"/>
+        <references refid="structmanifest_1a11440e860a7c980230450115b8f2e618" compoundref="manifest_8h" startline="22">manifest::dir_path</references>
+        <references refid="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" compoundref="manifest_8h" startline="11">manifest_file::file_id</references>
+        <references refid="structmanifest__file_1a87019421a20431113ffb51347ce2e329" compoundref="manifest_8h" startline="17">manifest_file::file_size</references>
+        <references refid="structmanifest_1a94c3b9ff936b8485c83969133de24735" compoundref="manifest_8h" startline="23">manifest::files</references>
+        <references refid="structmanifest__file_1a6ea1361b547d1f6cdc992b5c0a65dd25" compoundref="manifest_8h" startline="15">manifest_file::largest_key</references>
+        <references refid="structmanifest__file_1acbd780969f0924279a1972ffc50aef1c" compoundref="manifest_8h" startline="16">manifest_file::largest_key_len</references>
+        <references refid="structmanifest__file_1ad44ca515be7a7088af22b9fed2b6706d" compoundref="manifest_8h" startline="12">manifest_file::level</references>
+        <references refid="manifest_8h_1a4903c2bdf4f7dd0820d1769eeda94365" compoundref="manifest_8h" startline="7">MANIFEST_FILE_NAME</references>
+        <references refid="manifest_8h_1ab49f63f5e4d157647ad33306c58a8c67" compoundref="manifest_8h" startline="8">MANIFEST_TMP_FILE_NAME</references>
+        <references refid="structmanifest__file_1a7bc0b1e19e7244284a8d9ed76bd5263c" compoundref="manifest_8h" startline="18">manifest_file::next</references>
+        <references refid="structmanifest_1ab3664d7d3c29f06af49c544def50672c" compoundref="manifest_8h" startline="24">manifest::next_file_id</references>
+        <references refid="structmanifest__file_1aba49690d903d266c1a66cd4407dafdcf" compoundref="manifest_8h" startline="13">manifest_file::smallest_key</references>
+        <references refid="structmanifest__file_1addb4eec8ec5a1b26381cb2e7f5afc139" compoundref="manifest_8h" startline="14">manifest_file::smallest_key_len</references>
+        <references refid="structmanifest_1a382813c4ee57bd93b30ef9b4c6f89504" compoundref="manifest_8h" startline="25">manifest::version</references>
+        <referencedby refid="kv__store_8h_1a1bf78b7e348906a983cbc68514d8aa5b" compoundref="kv__store_8c" startline="1301" endline="1440">kv_backup</referencedby>
+        <referencedby refid="kv__store_8c_1a5f0bfcd3bf571aa044ff2d5ef7d435ca" compoundref="kv__store_8c" startline="195" endline="290">kv_flush_memtable</referencedby>
+        <referencedby refid="kv__store_8h_1acd6d23c4b82ed9032006996b84cc6955" compoundref="kv__store_8c" startline="1518" endline="1617">kv_import_snapshot_files</referencedby>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="manifest_8h_1aea56d11e385e679f5910da48e02f9a67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int manifest_load</definition>
+        <argsstring>(manifest_t *m)</argsstring>
+        <name>manifest_load</name>
+        <param>
+          <type><ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref> *</type>
+          <declname>m</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="36" column="5" bodyfile="src/manifest.c" bodystart="206" bodyend="267" declfile="include/manifest.h" declline="36" declcolumn="5"/>
+        <references refid="structmanifest_1a11440e860a7c980230450115b8f2e618" compoundref="manifest_8h" startline="22">manifest::dir_path</references>
+        <references refid="manifest_8c_1a041012ed791e3968542a71e7b0e9a38b" compoundref="manifest_8c" startline="59" endline="94">manifest_add_file</references>
+        <references refid="manifest_8h_1a4903c2bdf4f7dd0820d1769eeda94365" compoundref="manifest_8h" startline="7">MANIFEST_FILE_NAME</references>
+        <references refid="structmanifest_1ab3664d7d3c29f06af49c544def50672c" compoundref="manifest_8h" startline="24">manifest::next_file_id</references>
+        <references refid="structmanifest_1a382813c4ee57bd93b30ef9b4c6f89504" compoundref="manifest_8h" startline="25">manifest::version</references>
+        <referencedby refid="kv__store_8h_1acd6d23c4b82ed9032006996b84cc6955" compoundref="kv__store_8c" startline="1518" endline="1617">kv_import_snapshot_files</referencedby>
+        <referencedby refid="manifest_8h_1a4595c099070292074eecf62dc44f8e6e" compoundref="manifest_8c" startline="30" endline="49">manifest_open</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>MANIFEST_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MANIFEST_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stddef.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdint.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7" refid="manifest_8h_1a4903c2bdf4f7dd0820d1769eeda94365" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MANIFEST_FILE_NAME<sp/>&quot;MANIFEST&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8" refid="manifest_8h_1ab49f63f5e4d157647ad33306c58a8c67" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MANIFEST_TMP_FILE_NAME<sp/>&quot;MANIFEST.tmp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10" refid="structmanifest__file" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structmanifest__file" kindref="compound">manifest_file</ref><sp/>{</highlight></codeline>
+<codeline lineno="11" refid="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>uint64_t<sp/><ref refid="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" kindref="member">file_id</ref>;</highlight></codeline>
+<codeline lineno="12" refid="structmanifest__file_1ad44ca515be7a7088af22b9fed2b6706d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structmanifest__file_1ad44ca515be7a7088af22b9fed2b6706d" kindref="member">level</ref>;</highlight></codeline>
+<codeline lineno="13" refid="structmanifest__file_1aba49690d903d266c1a66cd4407dafdcf" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structmanifest__file_1aba49690d903d266c1a66cd4407dafdcf" kindref="member">smallest_key</ref>;</highlight></codeline>
+<codeline lineno="14" refid="structmanifest__file_1addb4eec8ec5a1b26381cb2e7f5afc139" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structmanifest__file_1addb4eec8ec5a1b26381cb2e7f5afc139" kindref="member">smallest_key_len</ref>;</highlight></codeline>
+<codeline lineno="15" refid="structmanifest__file_1a6ea1361b547d1f6cdc992b5c0a65dd25" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structmanifest__file_1a6ea1361b547d1f6cdc992b5c0a65dd25" kindref="member">largest_key</ref>;</highlight></codeline>
+<codeline lineno="16" refid="structmanifest__file_1acbd780969f0924279a1972ffc50aef1c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structmanifest__file_1acbd780969f0924279a1972ffc50aef1c" kindref="member">largest_key_len</ref>;</highlight></codeline>
+<codeline lineno="17" refid="structmanifest__file_1a87019421a20431113ffb51347ce2e329" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structmanifest__file_1a87019421a20431113ffb51347ce2e329" kindref="member">file_size</ref>;</highlight></codeline>
+<codeline lineno="18" refid="structmanifest__file_1a7bc0b1e19e7244284a8d9ed76bd5263c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structmanifest__file" kindref="compound">manifest_file</ref>*<sp/><ref refid="structmanifest__file_1a7bc0b1e19e7244284a8d9ed76bd5263c" kindref="member">next</ref>;</highlight></codeline>
+<codeline lineno="19" refid="manifest_8h_1a9b7669d7128e8f85a99379eb1ffba3ed" refkind="member"><highlight class="normal">}<sp/><ref refid="manifest_8h_1a9b7669d7128e8f85a99379eb1ffba3ed" kindref="member">manifest_file_t</ref>;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21" refid="structmanifest" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structmanifest" kindref="compound">manifest</ref><sp/>{</highlight></codeline>
+<codeline lineno="22" refid="structmanifest_1a11440e860a7c980230450115b8f2e618" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structmanifest_1a11440e860a7c980230450115b8f2e618" kindref="member">dir_path</ref>;</highlight></codeline>
+<codeline lineno="23" refid="structmanifest_1a94c3b9ff936b8485c83969133de24735" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="manifest_8h_1a9b7669d7128e8f85a99379eb1ffba3ed" kindref="member">manifest_file_t</ref>*<sp/><ref refid="structmanifest_1a94c3b9ff936b8485c83969133de24735" kindref="member">files</ref>;</highlight></codeline>
+<codeline lineno="24" refid="structmanifest_1ab3664d7d3c29f06af49c544def50672c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>uint64_t<sp/><ref refid="structmanifest_1ab3664d7d3c29f06af49c544def50672c" kindref="member">next_file_id</ref>;</highlight></codeline>
+<codeline lineno="25" refid="structmanifest_1a382813c4ee57bd93b30ef9b4c6f89504" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>uint64_t<sp/><ref refid="structmanifest_1a382813c4ee57bd93b30ef9b4c6f89504" kindref="member">version</ref>;</highlight></codeline>
+<codeline lineno="26" refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" refkind="member"><highlight class="normal">}<sp/><ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref>;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref>*<sp/><ref refid="manifest_8h_1a4595c099070292074eecf62dc44f8e6e" kindref="member">manifest_open</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>dir_path);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="manifest_8h_1a5d1e760abe0a2988da14531d4431cd9a" kindref="member">manifest_close</ref>(<ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref>*<sp/>m);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" kindref="member">manifest_add_file</ref>(<ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref>*<sp/>m,<sp/>uint64_t<sp/>file_id,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>level,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>smallest_key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>sklen,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>largest_key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>lklen,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>file_size);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="manifest_8h_1ac1eb70471bbbeb6b1c92f6d6a56595fa" kindref="member">manifest_remove_file</ref>(<ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref>*<sp/>m,<sp/>uint64_t<sp/>file_id);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="manifest_8h_1acdf72e733f23ae5ca16a62fad50193f2" kindref="member">manifest_clear</ref>(<ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref>*<sp/>m);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="manifest_8h_1a1b49825fc2dafa1d29d1fea3f32df54f" kindref="member">manifest_list_files</ref>(<ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref>*<sp/>m,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>level,<sp/><ref refid="manifest_8h_1a9b7669d7128e8f85a99379eb1ffba3ed" kindref="member">manifest_file_t</ref>***<sp/>out_files,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>out_count);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal">uint64_t<sp/><ref refid="manifest_8h_1a1d46175cf2b2973de5508a455f6d9e9e" kindref="member">manifest_next_file_id</ref>(<ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref>*<sp/>m);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" kindref="member">manifest_sync</ref>(<ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref>*<sp/>m);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="manifest_8h_1aea56d11e385e679f5910da48e02f9a67" kindref="member">manifest_load</ref>(<ref refid="manifest_8h_1affd1aa638fd69c42b10bcdfc20808880" kindref="member">manifest_t</ref>*<sp/>m);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="include/manifest.h"/>
+  </compounddef>
+</doxygen>

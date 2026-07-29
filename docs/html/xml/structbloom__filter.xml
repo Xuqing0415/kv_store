@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structbloom__filter" kind="struct" language="C++" prot="public">
+    <compoundname>bloom_filter</compoundname>
+    <includes refid="bloom__filter_8h" local="no">bloom_filter.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" prot="public" static="no" mutable="no">
+        <type>uint8_t *</type>
+        <definition>uint8_t* bloom_filter::bits</definition>
+        <argsstring></argsstring>
+        <name>bits</name>
+        <qualifiedname>bloom_filter::bits</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/bloom_filter.h" line="8" column="13" bodyfile="include/bloom_filter.h" bodystart="8" bodyend="-1"/>
+        <referencedby refid="bloom__filter_8h_1a48c905101080a88dd96bbca3e547e676" compoundref="bloom__filter_8c" startline="61" endline="72">bloom_filter_add</referencedby>
+        <referencedby refid="bloom__filter_8h_1a9fc748da7f4da37755bc57336e296219" compoundref="bloom__filter_8c" startline="115" endline="145">bloom_filter_deserialize</referencedby>
+        <referencedby refid="bloom__filter_8h_1a84292d7cc1ce4dbd1b919e28f1716284" compoundref="bloom__filter_8c" startline="55" endline="59">bloom_filter_free</referencedby>
+        <referencedby refid="bloom__filter_8h_1a4fa96faf24a1a24fe8963e8fcd2d466e" compoundref="bloom__filter_8c" startline="74" endline="88">bloom_filter_may_contain</referencedby>
+        <referencedby refid="bloom__filter_8h_1a3380ad482d5857892418df5c6a3bd6c2" compoundref="bloom__filter_8c" startline="35" endline="53">bloom_filter_new</referencedby>
+        <referencedby refid="bloom__filter_8h_1aa115c2c21a26bfd8042c7e5fc2c9bf41" compoundref="bloom__filter_8c" startline="96" endline="113">bloom_filter_serialize</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t bloom_filter::bits_len</definition>
+        <argsstring></argsstring>
+        <name>bits_len</name>
+        <qualifiedname>bloom_filter::bits_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/bloom_filter.h" line="9" column="12" bodyfile="include/bloom_filter.h" bodystart="9" bodyend="-1"/>
+        <referencedby refid="bloom__filter_8h_1a48c905101080a88dd96bbca3e547e676" compoundref="bloom__filter_8c" startline="61" endline="72">bloom_filter_add</referencedby>
+        <referencedby refid="bloom__filter_8h_1a9fc748da7f4da37755bc57336e296219" compoundref="bloom__filter_8c" startline="115" endline="145">bloom_filter_deserialize</referencedby>
+        <referencedby refid="bloom__filter_8h_1a4fa96faf24a1a24fe8963e8fcd2d466e" compoundref="bloom__filter_8c" startline="74" endline="88">bloom_filter_may_contain</referencedby>
+        <referencedby refid="bloom__filter_8h_1a3380ad482d5857892418df5c6a3bd6c2" compoundref="bloom__filter_8c" startline="35" endline="53">bloom_filter_new</referencedby>
+        <referencedby refid="bloom__filter_8h_1aa115c2c21a26bfd8042c7e5fc2c9bf41" compoundref="bloom__filter_8c" startline="96" endline="113">bloom_filter_serialize</referencedby>
+        <referencedby refid="bloom__filter_8h_1ad41b29a3fd872e92012ec5b7b20783e1" compoundref="bloom__filter_8c" startline="90" endline="94">bloom_filter_serialized_size</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t bloom_filter::num_hash</definition>
+        <argsstring></argsstring>
+        <name>num_hash</name>
+        <qualifiedname>bloom_filter::num_hash</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/bloom_filter.h" line="10" column="12" bodyfile="include/bloom_filter.h" bodystart="10" bodyend="-1"/>
+        <referencedby refid="bloom__filter_8h_1a48c905101080a88dd96bbca3e547e676" compoundref="bloom__filter_8c" startline="61" endline="72">bloom_filter_add</referencedby>
+        <referencedby refid="bloom__filter_8h_1a9fc748da7f4da37755bc57336e296219" compoundref="bloom__filter_8c" startline="115" endline="145">bloom_filter_deserialize</referencedby>
+        <referencedby refid="bloom__filter_8h_1a4fa96faf24a1a24fe8963e8fcd2d466e" compoundref="bloom__filter_8c" startline="74" endline="88">bloom_filter_may_contain</referencedby>
+        <referencedby refid="bloom__filter_8h_1a3380ad482d5857892418df5c6a3bd6c2" compoundref="bloom__filter_8c" startline="35" endline="53">bloom_filter_new</referencedby>
+        <referencedby refid="bloom__filter_8h_1aa115c2c21a26bfd8042c7e5fc2c9bf41" compoundref="bloom__filter_8c" startline="96" endline="113">bloom_filter_serialize</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/bloom_filter.h" line="7" column="1" bodyfile="include/bloom_filter.h" bodystart="7" bodyend="11"/>
+    <listofallmembers>
+      <member refid="structbloom__filter_1ac60fbfee9ec195795beff9376a5a788e" prot="public" virt="non-virtual"><scope>bloom_filter</scope><name>bits</name></member>
+      <member refid="structbloom__filter_1a04cc0fef412251b1390c678bf3b8d8c8" prot="public" virt="non-virtual"><scope>bloom_filter</scope><name>bits_len</name></member>
+      <member refid="structbloom__filter_1a0974f94243b91c69b944ce7278be9eae" prot="public" virt="non-virtual"><scope>bloom_filter</scope><name>num_hash</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -16,12 +16,16 @@ if(MINGW)
 endif()
 
 option(BUILD_TESTS "Build tests" ON)
+option(USE_O_DIRECT "Use O_DIRECT to bypass page cache (reduces memory pressure on APU systems)" OFF)
 
 add_definitions(-D_FILE_OFFSET_BITS=64)
 
 # 参数扫描支持：通过 CMake 变量传递编译定义
 if(DEFINED KV_MEMTABLE_SIZE_LIMIT)
     add_definitions(-DMEMTABLE_SIZE_LIMIT=${KV_MEMTABLE_SIZE_LIMIT})
+endif()
+if(USE_O_DIRECT)
+    add_definitions(-DUSE_O_DIRECT)
 endif()
 if(DEFINED KV_SSTABLE_BLOCK_SIZE)
     add_definitions(-DSSTABLE_BLOCK_SIZE=${KV_SSTABLE_BLOCK_SIZE})

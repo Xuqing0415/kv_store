@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="dir_d44c64559bbebec7f509842c48db8b23" kind="dir">
+    <compoundname>include</compoundname>
+    <innerfile refid="bloom__filter_8h">bloom_filter.h</innerfile>
+    <innerfile refid="compression_8h">compression.h</innerfile>
+    <innerfile refid="kv__store_8h">kv_store.h</innerfile>
+    <innerfile refid="lru__cache_8h">lru_cache.h</innerfile>
+    <innerfile refid="manifest_8h">manifest.h</innerfile>
+    <innerfile refid="merge_8h">merge.h</innerfile>
+    <innerfile refid="metrics__server_8h">metrics_server.h</innerfile>
+    <innerfile refid="raft_8h">raft.h</innerfile>
+    <innerfile refid="resp__server_8h">resp_server.h</innerfile>
+    <innerfile refid="skiplist_8h">skiplist.h</innerfile>
+    <innerfile refid="sstable_8h">sstable.h</innerfile>
+    <innerfile refid="wal_8h">wal.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/"/>
+  </compounddef>
+</doxygen>

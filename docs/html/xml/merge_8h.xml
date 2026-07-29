@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="merge_8h" kind="file" language="C++">
+    <compoundname>merge.h</compoundname>
+    <includes local="no">stddef.h</includes>
+    <includes local="no">stdint.h</includes>
+    <includes refid="compression_8h" local="yes">compression.h</includes>
+    <includedby refid="kv__store_8c" local="yes">src/kv_store.c</includedby>
+    <includedby refid="merge_8c" local="yes">src/merge.c</includedby>
+    <incdepgraph>
+      <node id="4">
+        <label>compression.h</label>
+        <link refid="compression_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/merge.h</label>
+        <link refid="merge_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>stddef.h</label>
+      </node>
+      <node id="3">
+        <label>stdint.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>include/merge.h</label>
+        <link refid="merge_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/kv_store.c</label>
+        <link refid="kv__store_8c"/>
+      </node>
+      <node id="3">
+        <label>src/merge.c</label>
+        <link refid="merge_8c"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structmerge__context" prot="public">merge_context</innerclass>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="merge_8h_1add784659439a8dd6b1423406171414d3" prot="public" static="no">
+        <name>MAX_LEVELS</name>
+        <initializer>7</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="12" column="9" bodyfile="include/merge.h" bodystart="12" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1ad21f1d69050c1cc8bcf7e397b23c8982" compoundref="kv__store_8c" startline="743" endline="758">kv_force_merge</referencedby>
+        <referencedby refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" compoundref="kv__store_8c" startline="602" endline="733">kv_get</referencedby>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+        <referencedby refid="merge_8h_1ade2fd4d583fadd6da1dc63c0fec1e208" compoundref="merge_8c" startline="282" endline="317">merge_execute</referencedby>
+        <referencedby refid="merge_8h_1a151086cd64d064ca1a3d0b353f1b53fa" compoundref="merge_8c" startline="93" endline="137">merge_should_trigger</referencedby>
+        <referencedby refid="merge_8c_1a2c0c5111d2b8eefdf36b175c56cfa3c8" compoundref="merge_8c" startline="34" endline="67">merge_worker</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="merge_8h_1a3c7e09363ef4fba754bcee0512090a77" prot="public" static="no">
+        <name>L0_FILE_LIMIT</name>
+        <initializer>2  /* 降低到2，便于快速触发合并测试 */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="13" column="9" bodyfile="include/merge.h" bodystart="13" bodyend="-1"/>
+        <referencedby refid="merge_8h_1ade2fd4d583fadd6da1dc63c0fec1e208" compoundref="merge_8c" startline="282" endline="317">merge_execute</referencedby>
+        <referencedby refid="merge_8h_1a151086cd64d064ca1a3d0b353f1b53fa" compoundref="merge_8c" startline="93" endline="137">merge_should_trigger</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="merge_8h_1af373ee102861c5548f57b19b83d9d0d3" prot="public" static="no">
+        <name>L1_SIZE_LIMIT</name>
+        <initializer>(10 * 1024 * 1024)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="14" column="9" bodyfile="include/merge.h" bodystart="14" bodyend="-1"/>
+        <referencedby refid="merge_8h_1a151086cd64d064ca1a3d0b353f1b53fa" compoundref="merge_8c" startline="93" endline="137">merge_should_trigger</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" prot="public" static="no">
+        <type>struct <ref refid="structmerge__context" kindref="compound">merge_context</ref></type>
+        <definition>typedef struct merge_context merge_context_t</definition>
+        <argsstring></argsstring>
+        <name>merge_context_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="30" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="merge_8h_1ace6f39139e55e8eedfc3a58a9f1c12f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void merge_scheduler_start</definition>
+        <argsstring>(merge_context_t *ctx)</argsstring>
+        <name>merge_scheduler_start</name>
+        <param>
+          <type><ref refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" kindref="member">merge_context_t</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="32" column="6" bodyfile="src/merge.c" bodystart="69" bodyend="76" declfile="include/merge.h" declline="32" declcolumn="6"/>
+        <references refid="merge_8c_1a2c0c5111d2b8eefdf36b175c56cfa3c8" compoundref="merge_8c" startline="34" endline="67">merge_worker</references>
+        <references refid="structmerge__context_1a2763bff70283d88b3d97dc00e633e8ee" compoundref="merge_8h" startline="25">merge_context::stop</references>
+        <references refid="structmerge__context_1a92857c41f4d28c8e851927f28451cc3a" compoundref="merge_8h" startline="26">merge_context::thread</references>
+        <references refid="merge_8c_1ad954087e608668a7319ae8d56f3d9585" compoundref="merge_8c" startline="26">THREAD_CREATE</references>
+        <references refid="structmerge__context_1aeb07c40988e050b5630ccd6ad2f3241e" compoundref="merge_8h" startline="28">merge_context::thread_started</references>
+        <references refid="merge_8c_1a53ca774b0fc84afe282a5419d2d7239a" compoundref="merge_8c" startline="24">THREAD_TYPE</references>
+        <referencedby refid="kv__store_8h_1a1bf78b7e348906a983cbc68514d8aa5b" compoundref="kv__store_8c" startline="1301" endline="1440">kv_backup</referencedby>
+        <referencedby refid="kv__store_8h_1acd6d23c4b82ed9032006996b84cc6955" compoundref="kv__store_8c" startline="1518" endline="1617">kv_import_snapshot_files</referencedby>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+        <referencedby refid="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" compoundref="kv__store_8c" startline="435" endline="522">kv_open_raft</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="merge_8h_1acccd1c3ea9d5b2af1b1c32ed837de8c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void merge_scheduler_stop</definition>
+        <argsstring>(merge_context_t *ctx)</argsstring>
+        <name>merge_scheduler_stop</name>
+        <param>
+          <type><ref refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" kindref="member">merge_context_t</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="33" column="6" bodyfile="src/merge.c" bodystart="78" bodyend="82" declfile="include/merge.h" declline="33" declcolumn="6"/>
+        <references refid="structmerge__context_1a2763bff70283d88b3d97dc00e633e8ee" compoundref="merge_8h" startline="25">merge_context::stop</references>
+        <referencedby refid="kv__store_8h_1a1bf78b7e348906a983cbc68514d8aa5b" compoundref="kv__store_8c" startline="1301" endline="1440">kv_backup</referencedby>
+        <referencedby refid="kv__store_8h_1acd6d23c4b82ed9032006996b84cc6955" compoundref="kv__store_8c" startline="1518" endline="1617">kv_import_snapshot_files</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="merge_8h_1ab68b218fb4e410ba018a6523dab2cbaa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void merge_scheduler_join</definition>
+        <argsstring>(merge_context_t *ctx)</argsstring>
+        <name>merge_scheduler_join</name>
+        <param>
+          <type><ref refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" kindref="member">merge_context_t</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="34" column="6" bodyfile="src/merge.c" bodystart="84" bodyend="91" declfile="include/merge.h" declline="34" declcolumn="6"/>
+        <references refid="structmerge__context_1a2763bff70283d88b3d97dc00e633e8ee" compoundref="merge_8h" startline="25">merge_context::stop</references>
+        <references refid="structmerge__context_1a92857c41f4d28c8e851927f28451cc3a" compoundref="merge_8h" startline="26">merge_context::thread</references>
+        <references refid="merge_8c_1af4a4e49bfd86a70ccd6c3126742294d7" compoundref="merge_8c" startline="28">THREAD_CLOSE</references>
+        <references refid="merge_8c_1a32b707564bed59165e7c20f05c921f84" compoundref="merge_8c" startline="27">THREAD_JOIN</references>
+        <references refid="structmerge__context_1aeb07c40988e050b5630ccd6ad2f3241e" compoundref="merge_8h" startline="28">merge_context::thread_started</references>
+        <referencedby refid="kv__store_8h_1a1bf78b7e348906a983cbc68514d8aa5b" compoundref="kv__store_8c" startline="1301" endline="1440">kv_backup</referencedby>
+        <referencedby refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" compoundref="kv__store_8c" startline="524" endline="574">kv_close</referencedby>
+        <referencedby refid="kv__store_8h_1acd6d23c4b82ed9032006996b84cc6955" compoundref="kv__store_8c" startline="1518" endline="1617">kv_import_snapshot_files</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="merge_8h_1a151086cd64d064ca1a3d0b353f1b53fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int merge_should_trigger</definition>
+        <argsstring>(merge_context_t *ctx)</argsstring>
+        <name>merge_should_trigger</name>
+        <param>
+          <type><ref refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" kindref="member">merge_context_t</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="35" column="5" bodyfile="src/merge.c" bodystart="93" bodyend="137" declfile="include/merge.h" declline="35" declcolumn="5"/>
+        <references refid="structmanifest__file_1a87019421a20431113ffb51347ce2e329" compoundref="manifest_8h" startline="17">manifest_file::file_size</references>
+        <references refid="merge_8h_1a3c7e09363ef4fba754bcee0512090a77" compoundref="merge_8h" startline="13">L0_FILE_LIMIT</references>
+        <references refid="merge_8h_1af373ee102861c5548f57b19b83d9d0d3" compoundref="merge_8h" startline="14">L1_SIZE_LIMIT</references>
+        <references refid="structmerge__context_1adf808c35e51aa26fd571f3c4ba66625b" compoundref="merge_8h" startline="18">merge_context::manifest</references>
+        <references refid="manifest_8h_1a1b49825fc2dafa1d29d1fea3f32df54f" compoundref="manifest_8c" startline="126" endline="154">manifest_list_files</references>
+        <references refid="merge_8c_1a090bcbf8add2f9ed0b0a7b088178731b" compoundref="merge_8c" startline="30">MANIFEST_LOCK</references>
+        <references refid="merge_8c_1a4d0f8c40f9001f5ee2dd6d07996bb9cf" compoundref="merge_8c" startline="31">MANIFEST_UNLOCK</references>
+        <references refid="merge_8h_1add784659439a8dd6b1423406171414d3" compoundref="merge_8h" startline="12">MAX_LEVELS</references>
+        <referencedby refid="merge_8c_1a2c0c5111d2b8eefdf36b175c56cfa3c8" compoundref="merge_8c" startline="34" endline="67">merge_worker</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="merge_8h_1ade2fd4d583fadd6da1dc63c0fec1e208" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int merge_execute</definition>
+        <argsstring>(merge_context_t *ctx, int level)</argsstring>
+        <name>merge_execute</name>
+        <param>
+          <type><ref refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" kindref="member">merge_context_t</ref> *</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/merge.h" line="36" column="5" bodyfile="src/merge.c" bodystart="282" bodyend="317" declfile="include/merge.h" declline="36" declcolumn="5"/>
+        <references refid="merge_8h_1a3c7e09363ef4fba754bcee0512090a77" compoundref="merge_8h" startline="13">L0_FILE_LIMIT</references>
+        <references refid="structmerge__context_1adf808c35e51aa26fd571f3c4ba66625b" compoundref="merge_8h" startline="18">merge_context::manifest</references>
+        <references refid="manifest_8h_1a1b49825fc2dafa1d29d1fea3f32df54f" compoundref="manifest_8c" startline="126" endline="154">manifest_list_files</references>
+        <references refid="merge_8c_1a090bcbf8add2f9ed0b0a7b088178731b" compoundref="merge_8c" startline="30">MANIFEST_LOCK</references>
+        <references refid="merge_8c_1a4d0f8c40f9001f5ee2dd6d07996bb9cf" compoundref="merge_8c" startline="31">MANIFEST_UNLOCK</references>
+        <references refid="merge_8h_1add784659439a8dd6b1423406171414d3" compoundref="merge_8h" startline="12">MAX_LEVELS</references>
+        <references refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</references>
+        <referencedby refid="kv__store_8h_1ad21f1d69050c1cc8bcf7e397b23c8982" compoundref="kv__store_8c" startline="743" endline="758">kv_force_merge</referencedby>
+        <referencedby refid="merge_8c_1a2c0c5111d2b8eefdf36b175c56cfa3c8" compoundref="merge_8c" startline="34" endline="67">merge_worker</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>MERGE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MERGE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stddef.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdint.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="compression_8h" kindref="compound">compression.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;windows.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12" refid="merge_8h_1add784659439a8dd6b1423406171414d3" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MAX_LEVELS<sp/>7</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13" refid="merge_8h_1a3c7e09363ef4fba754bcee0512090a77" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>L0_FILE_LIMIT<sp/>2<sp/><sp/></highlight><highlight class="comment">/*<sp/>降低到2，便于快速触发合并测试<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14" refid="merge_8h_1af373ee102861c5548f57b19b83d9d0d3" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>L1_SIZE_LIMIT<sp/>(10<sp/>*<sp/>1024<sp/>*<sp/>1024)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16" refid="structmerge__context" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structmerge__context" kindref="compound">merge_context</ref><sp/>{</highlight></codeline>
+<codeline lineno="17" refid="structmerge__context_1ad892442b42d2a9867e74a082a3434d5c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structmerge__context_1ad892442b42d2a9867e74a082a3434d5c" kindref="member">dir_path</ref>;</highlight></codeline>
+<codeline lineno="18" refid="structmerge__context_1adf808c35e51aa26fd571f3c4ba66625b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/><ref refid="structmerge__context_1adf808c35e51aa26fd571f3c4ba66625b" kindref="member">manifest</ref>;</highlight></codeline>
+<codeline lineno="19" refid="structmerge__context_1a4a5de43ff8ff5c33ea78faf87f65043d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/><ref refid="structmerge__context_1a4a5de43ff8ff5c33ea78faf87f65043d" kindref="member">cache</ref>;</highlight></codeline>
+<codeline lineno="20" refid="structmerge__context_1a47eae201d539c86e28f26721deeaead5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/><ref refid="structmerge__context_1a47eae201d539c86e28f26721deeaead5" kindref="member">manifest_lock</ref>;</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/><sp/><sp/>#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">volatile</highlight><highlight class="normal"><sp/>LONG<sp/><ref refid="structmerge__context_1a2763bff70283d88b3d97dc00e633e8ee" kindref="member">stop</ref>;</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>HANDLE<sp/><ref refid="structmerge__context_1a92857c41f4d28c8e851927f28451cc3a" kindref="member">thread</ref>;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/><sp/><sp/>#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25" refid="structmerge__context_1a2763bff70283d88b3d97dc00e633e8ee" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">volatile</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structmerge__context_1a2763bff70283d88b3d97dc00e633e8ee" kindref="member">stop</ref>;</highlight></codeline>
+<codeline lineno="26" refid="structmerge__context_1a92857c41f4d28c8e851927f28451cc3a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>pthread_t<sp/><ref refid="structmerge__context_1a92857c41f4d28c8e851927f28451cc3a" kindref="member">thread</ref>;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/><sp/><sp/>#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28" refid="structmerge__context_1aeb07c40988e050b5630ccd6ad2f3241e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structmerge__context_1aeb07c40988e050b5630ccd6ad2f3241e" kindref="member">thread_started</ref>;</highlight></codeline>
+<codeline lineno="29" refid="structmerge__context_1a2a16a211f2b6e2094c93752d8b7738c5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45e" kindref="member">compression_type_t</ref><sp/><ref refid="structmerge__context_1a2a16a211f2b6e2094c93752d8b7738c5" kindref="member">compression_type</ref>;<sp/><sp/></highlight><highlight class="comment">/*<sp/>压缩算法类型<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30" refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" refkind="member"><highlight class="normal">}<sp/><ref refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" kindref="member">merge_context_t</ref>;</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="merge_8h_1ace6f39139e55e8eedfc3a58a9f1c12f8" kindref="member">merge_scheduler_start</ref>(<ref refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" kindref="member">merge_context_t</ref>*<sp/>ctx);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="merge_8h_1acccd1c3ea9d5b2af1b1c32ed837de8c1" kindref="member">merge_scheduler_stop</ref>(<ref refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" kindref="member">merge_context_t</ref>*<sp/>ctx);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="merge_8h_1ab68b218fb4e410ba018a6523dab2cbaa" kindref="member">merge_scheduler_join</ref>(<ref refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" kindref="member">merge_context_t</ref>*<sp/>ctx);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="merge_8h_1a151086cd64d064ca1a3d0b353f1b53fa" kindref="member">merge_should_trigger</ref>(<ref refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" kindref="member">merge_context_t</ref>*<sp/>ctx);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="merge_8h_1ade2fd4d583fadd6da1dc63c0fec1e208" kindref="member">merge_execute</ref>(<ref refid="merge_8h_1a53dd9b0ac83bb066c2b77b84293d5658" kindref="member">merge_context_t</ref>*<sp/>ctx,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>level);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="include/merge.h"/>
+  </compounddef>
+</doxygen>

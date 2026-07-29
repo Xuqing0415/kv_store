@@ -94,6 +94,10 @@
 
 KV Store 是一个用 C11 编写的轻量级嵌入式键值存储引擎，采用 LSM-Tree (Log-Structured Merge-Tree) 架构，集成 Raft 共识协议实现强一致集群复制，支持快照、压缩、Redis 兼容网络协议、Prometheus 监控等特性。
 
+<p align="center">
+  <strong>单机写入 50K+ ops/s | 随机读取 200K+ ops/s | 3 节点 Raft 集群 | 线性一致性保证</strong>
+</p>
+
 ```bash
 # Docker Compose 一键启动集群 + 监控
 docker-compose up -d
@@ -101,6 +105,27 @@ redis-cli -h 127.0.0.1 -p 6379 SET hello world
 
 # 访问 Grafana 仪表盘
 open http://localhost:3000  (admin / kvstore)
+```
+
+## 5 分钟快速演示
+
+```bash
+# 1. 编译
+mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release && cmake --build . -j$(nproc)
+
+# 2. 启动 3 节点 Raft 集群
+cd ../scripts && python test_cluster.py
+
+# 3. 写入数据，观察复制
+redis-cli -h 127.0.0.1 -p 6379 SET demo:hello "Hello Raft!"
+redis-cli -h 127.0.0.1 -p 6380 GET demo:hello   # 从 Follower 读到相同数据
+
+# 4. 模拟 Leader 故障转移
+# 杀掉 Leader 进程，1-3 秒后新 Leader 自动选出
+redis-cli -h 127.0.0.1 -p 6380 SET demo:failover "Still works!"
+
+# 5. 验证一致性
+python test_chaos_100k.py --no-kill  # 10 万条写入 + 一致性校验
 ```
 
 ## 特性
@@ -160,6 +185,18 @@ cmake --build . --config Release
 | `kv_raft`   | Raft 共识集群节点（3 节点强一致） |
 | `kv_chaos`  | 混沌测试（多线程混合负载） |
 | `libkv_store.a` | 静态库，可嵌入其他项目 |
+
+### 兼容性
+
+| 平台 | 编译器 | 状态 |
+|------|--------|------|
+| Ubuntu 20.04+ | GCC 9+ | 完全支持 |
+| CentOS 7+ / RHEL 8+ | GCC 9+ | 完全支持 |
+| macOS 11+ | Clang 13+ | 完全支持 |
+| Windows 10+ | MSVC 2019+ / MinGW-w64 | 完全支持 |
+| 锐龙 APU | GCC/Clang | [需系统调优](docs/APU_TUNING.md) |
+
+**依赖**：CMake >= 3.15、C11 编译器、Zstd（已内置）
 
 ### 运行测试
 
@@ -614,6 +651,65 @@ WAL 文件采用编号命名 `wal_000000.log`，每次 MemTable 刷盘后归档�
 └──────┴──────────┴──────────┴──────────┴──────────┘
 ```
 
+## 文档
+
+| 文档 | 说明 |
+|------|------|
+| [架构设计](docs/ARCHITECTURE.md) | 系统架构、数据流图、核心组件详解 |
+| [Raft 实现](docs/RAFT_IMPLEMENTATION.md) | Leader 选举、日志复制、快照机制 |
+| [性能调优](docs/PERFORMANCE_TUNING.md) | 参数扫描、编译优化、系统调优 |
+| [APU 调优](docs/APU_TUNING.md) | 锐龙 APU 平台稳定性指南 |
+| [API 文档](docs/html/index.html) | Doxygen 生成的 API 参考 |
+
+## Contributing
+
+欢迎贡献！请遵循以下流程：
+
+```bash
+# 1. Fork 并 Clone
+git clone https://github.com/Xuqing0415/kv_store.git
+cd kv_store
+
+# 2. 编译
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Debug
+cmake --build . -j$(nproc)
+
+# 3. 运行测试，确保全部通过
+ctest --output-on-failure
+
+# 4. 创建特性分支
+git checkout -b feature/my-feature
+
+# 5. 提交（遵循 Conventional Commits）
+git commit -m "feat: add new feature"
+git commit -m "fix: resolve memory leak in SSTable"
+git commit -m "docs: update README"
+
+# 6. 推送并创建 PR
+git push origin feature/my-feature
+```
+
+### 提交规范
+
+| 前缀 | 说明 |
+|------|------|
+| `feat:` | 新功能 |
+| `fix:` | Bug 修复 |
+| `docs:` | 文档更新 |
+| `test:` | 测试相关 |
+| `refactor:` | 代码重构 |
+| `perf:` | 性能优化 |
+| `chore:` | 构建/工具链 |
+
+### 代码风格
+
+- C11 标准，4 空格缩进
+- 函数命名：`snake_case`（如 `kv_store_open`）
+- 结构体命名：`snake_case_t`（如 `sstable_block_t`）
+- 头文件包含 `#pragma once` 风格（通过 `#ifndef` 守卫）
+- 所有公开 API 必须有注释
+
 ## 许可
 
-MIT License
+[MIT License](LICENSE)

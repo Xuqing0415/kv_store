@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structresp__client" kind="struct" language="C++" prot="public">
+    <compoundname>resp_client</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structresp__client_1ad2eecedb947cc1edb5a6aaa04b38ab71" prot="public" static="no" mutable="no">
+        <type><ref refid="resp__server_8c_1aff55fe551a9992a54ec54621c524d0a4" kindref="member">SOCKET</ref></type>
+        <definition>SOCKET resp_client::fd</definition>
+        <argsstring></argsstring>
+        <name>fd</name>
+        <qualifiedname>resp_client::fd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="481" column="12" bodyfile="src/resp_server.c" bodystart="481" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1a25ce0d89a4bc68339e6bd32c2b6a6f27" compoundref="resp__server_8c" startline="501" endline="613">resp_process_client</referencedby>
+        <referencedby refid="resp__server_8h_1aaac30d06a3381728bfc37b628f447709" compoundref="resp__server_8c" startline="779" endline="804">resp_server_free</referencedby>
+        <referencedby refid="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" compoundref="resp__server_8c" startline="686" endline="772">resp_server_run</referencedby>
+        <referencedby refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" compoundref="resp__server_8c" startline="619" endline="684">resp_server_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structresp__client_1ad862591400263bf81c7249406ae83b94" prot="public" static="no" mutable="no">
+        <type>char</type>
+        <definition>char resp_client::read_buf[RESP_IO_BUF_SIZE]</definition>
+        <argsstring>[RESP_IO_BUF_SIZE]</argsstring>
+        <name>read_buf</name>
+        <qualifiedname>resp_client::read_buf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="482" column="10" bodyfile="src/resp_server.c" bodystart="482" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1a25ce0d89a4bc68339e6bd32c2b6a6f27" compoundref="resp__server_8c" startline="501" endline="613">resp_process_client</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structresp__client_1ac973e9174e2466ba29374cd5e40ab534" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t resp_client::buf_pos</definition>
+        <argsstring></argsstring>
+        <name>buf_pos</name>
+        <qualifiedname>resp_client::buf_pos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="483" column="12" bodyfile="src/resp_server.c" bodystart="483" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1a25ce0d89a4bc68339e6bd32c2b6a6f27" compoundref="resp__server_8c" startline="501" endline="613">resp_process_client</referencedby>
+        <referencedby refid="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" compoundref="resp__server_8c" startline="686" endline="772">resp_server_run</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structresp__client_1a43415ddcc67fca82fe8cbdee97d593ae" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t resp_client::buf_len</definition>
+        <argsstring></argsstring>
+        <name>buf_len</name>
+        <qualifiedname>resp_client::buf_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="484" column="12" bodyfile="src/resp_server.c" bodystart="484" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1a25ce0d89a4bc68339e6bd32c2b6a6f27" compoundref="resp__server_8c" startline="501" endline="613">resp_process_client</referencedby>
+        <referencedby refid="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" compoundref="resp__server_8c" startline="686" endline="772">resp_server_run</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structresp__client_1acdf5c3a177a24c136ecf4e7885d71ff3" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int resp_client::active</definition>
+        <argsstring></argsstring>
+        <name>active</name>
+        <qualifiedname>resp_client::active</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="485" column="9" bodyfile="src/resp_server.c" bodystart="485" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1a25ce0d89a4bc68339e6bd32c2b6a6f27" compoundref="resp__server_8c" startline="501" endline="613">resp_process_client</referencedby>
+        <referencedby refid="resp__server_8h_1aaac30d06a3381728bfc37b628f447709" compoundref="resp__server_8c" startline="779" endline="804">resp_server_free</referencedby>
+        <referencedby refid="resp__server_8h_1a7f87cbe192edeb545e65008638033b3e" compoundref="resp__server_8c" startline="686" endline="772">resp_server_run</referencedby>
+        <referencedby refid="resp__server_8h_1aaa01c1da52cbdef6f792f364fd248b53" compoundref="resp__server_8c" startline="619" endline="684">resp_server_start</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/resp_server.c" line="480" column="1" bodyfile="src/resp_server.c" bodystart="480" bodyend="486"/>
+    <listofallmembers>
+      <member refid="structresp__client_1acdf5c3a177a24c136ecf4e7885d71ff3" prot="public" virt="non-virtual"><scope>resp_client</scope><name>active</name></member>
+      <member refid="structresp__client_1a43415ddcc67fca82fe8cbdee97d593ae" prot="public" virt="non-virtual"><scope>resp_client</scope><name>buf_len</name></member>
+      <member refid="structresp__client_1ac973e9174e2466ba29374cd5e40ab534" prot="public" virt="non-virtual"><scope>resp_client</scope><name>buf_pos</name></member>
+      <member refid="structresp__client_1ad2eecedb947cc1edb5a6aaa04b38ab71" prot="public" virt="non-virtual"><scope>resp_client</scope><name>fd</name></member>
+      <member refid="structresp__client_1ad862591400263bf81c7249406ae83b94" prot="public" virt="non-virtual"><scope>resp_client</scope><name>read_buf</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

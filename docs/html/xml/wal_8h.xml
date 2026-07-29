@@ -1,0 +1,637 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="wal_8h" kind="file" language="C++">
+    <compoundname>wal.h</compoundname>
+    <includes local="no">stddef.h</includes>
+    <includes local="no">stdio.h</includes>
+    <includedby refid="kv__store_8c" local="yes">src/kv_store.c</includedby>
+    <includedby refid="wal_8c" local="yes">src/wal.c</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>include/wal.h</label>
+        <link refid="wal_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>stddef.h</label>
+      </node>
+      <node id="3">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>include/wal.h</label>
+        <link refid="wal_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/kv_store.c</label>
+        <link refid="kv__store_8c"/>
+      </node>
+      <node id="3">
+        <label>src/wal.c</label>
+        <link refid="wal_8c"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structwal__record" prot="public">wal_record</innerclass>
+    <innerclass refid="structwal" prot="public">wal</innerclass>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="wal_8h_1aa15b4fe0e202b6ebd0ae43be10285f0a" prot="public" static="no">
+        <name>WAL_HEADER_SIZE</name>
+        <initializer>4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="7" column="9" bodyfile="include/wal.h" bodystart="7" bodyend="-1"/>
+        <referencedby refid="wal_8h_1a9720b41392ac7b53a127b741408d739e" compoundref="wal_8c" startline="396" endline="461">wal_replay</referencedby>
+        <referencedby refid="wal_8h_1ad67b92f852a478e80213df8eed7cbe68" compoundref="wal_8c" startline="345" endline="384">wal_write</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="wal_8h_1a7a81c5a6365c972a522a4901c1796bd4" prot="public" static="no">
+        <name>WAL_CRC_SIZE</name>
+        <initializer>4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="8" column="9" bodyfile="include/wal.h" bodystart="8" bodyend="-1"/>
+        <referencedby refid="wal_8h_1a9720b41392ac7b53a127b741408d739e" compoundref="wal_8c" startline="396" endline="461">wal_replay</referencedby>
+        <referencedby refid="wal_8h_1ad67b92f852a478e80213df8eed7cbe68" compoundref="wal_8c" startline="345" endline="384">wal_write</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="wal_8h_1aaa6bfbb087a090a7874618129691e2fd" prot="public" static="no">
+        <name>WAL_MAX_SIZE</name>
+        <initializer>(100 * 1024 * 1024)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="11" column="9" bodyfile="include/wal.h" bodystart="11" bodyend="-1"/>
+        <referencedby refid="wal_8h_1ad93f9f1fc01b4ee2ff51600666232420" compoundref="wal_8c" startline="132" endline="174">wal_mgr_open</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="wal_8h_1acde019f60a86690e5e7c215ea834432a" prot="public" static="no" strong="no">
+        <type></type>
+        <name>wal_record_type_t</name>
+        <enumvalue id="wal_8h_1acde019f60a86690e5e7c215ea834432aa346c2e7c5bf1cbe17173407092760d2b" prot="public">
+          <name>WAL_PUT</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="wal_8h_1acde019f60a86690e5e7c215ea834432aa2eb0703e10df97318518b5e711f8554b" prot="public">
+          <name>WAL_DELETE</name>
+          <initializer>= 2</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="13" column="1" bodyfile="include/wal.h" bodystart="13" bodyend="16"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="wal_8h_1a0117ba5560cea0a23f5a6e004f37178d" prot="public" static="no">
+        <type>struct <ref refid="structwal__record" kindref="compound">wal_record</ref></type>
+        <definition>typedef struct wal_record wal_record_t</definition>
+        <argsstring></argsstring>
+        <name>wal_record_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="24" column="14"/>
+      </memberdef>
+      <memberdef kind="typedef" id="wal_8h_1a5733299506ba005ee00b576ff668445c" prot="public" static="no">
+        <type>struct <ref refid="structwal" kindref="compound">wal</ref></type>
+        <definition>typedef struct wal wal_t</definition>
+        <argsstring></argsstring>
+        <name>wal_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="33" column="7"/>
+      </memberdef>
+      <memberdef kind="typedef" id="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" prot="public" static="no">
+        <type>struct <ref refid="structwal__mgr" kindref="compound">wal_mgr</ref></type>
+        <definition>typedef struct wal_mgr wal_mgr_t</definition>
+        <argsstring></argsstring>
+        <name>wal_mgr_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="45" column="22" bodyfile="include/wal.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="wal_8h_1a711953a17f21654bc2b8566e1d148f5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref> *</type>
+        <definition>wal_t * wal_open</definition>
+        <argsstring>(const char *path)</argsstring>
+        <name>wal_open</name>
+        <param>
+          <type>const char *</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="35" column="7" bodyfile="src/wal.c" bodystart="310" bodyend="333" declfile="include/wal.h" declline="35" declcolumn="7"/>
+        <references refid="structwal_1a47ba018f8e77f109bc1d336e2093b069" compoundref="wal_8h" startline="32">wal::bytes_since_sync</references>
+        <references refid="structwal_1adce7b9e3129a1d08467da8b6dd7bd81a" compoundref="wal_8h" startline="29">wal::file</references>
+        <references refid="structwal_1a23258501b2ee50d2eebca1e44485a2a3" compoundref="wal_8h" startline="30">wal::path</references>
+        <references refid="structwal_1a5b4bc2d813a14961679f5f41d36661bf" compoundref="wal_8h" startline="31">wal::sync_interval</references>
+        <referencedby refid="wal_8h_1a0477fda1593e9fefab6a8ba5f3cf3009" compoundref="wal_8c" startline="262" endline="296">wal_mgr_archive</referencedby>
+        <referencedby refid="wal_8h_1ad93f9f1fc01b4ee2ff51600666232420" compoundref="wal_8c" startline="132" endline="174">wal_mgr_open</referencedby>
+        <referencedby refid="wal_8h_1a484cd076aa5d6853f2072c792b60c39c" compoundref="wal_8c" startline="221" endline="260">wal_mgr_replay</referencedby>
+        <referencedby refid="wal_8h_1a66b27b1919547d721d0318540a63bc07" compoundref="wal_8c" startline="188" endline="214">wal_mgr_write</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1ab5c677761e13e05ab70cfa13782438fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void wal_close</definition>
+        <argsstring>(wal_t *w)</argsstring>
+        <name>wal_close</name>
+        <param>
+          <type><ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref> *</type>
+          <declname>w</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="36" column="6" bodyfile="src/wal.c" bodystart="335" bodyend="343" declfile="include/wal.h" declline="36" declcolumn="6"/>
+        <references refid="structwal_1adce7b9e3129a1d08467da8b6dd7bd81a" compoundref="wal_8h" startline="29">wal::file</references>
+        <references refid="structwal_1a23258501b2ee50d2eebca1e44485a2a3" compoundref="wal_8h" startline="30">wal::path</references>
+        <referencedby refid="wal_8h_1a0477fda1593e9fefab6a8ba5f3cf3009" compoundref="wal_8c" startline="262" endline="296">wal_mgr_archive</referencedby>
+        <referencedby refid="wal_8h_1a9a9c6ff1fb038110d3a09af89ec3c262" compoundref="wal_8c" startline="176" endline="186">wal_mgr_close</referencedby>
+        <referencedby refid="wal_8h_1a484cd076aa5d6853f2072c792b60c39c" compoundref="wal_8c" startline="221" endline="260">wal_mgr_replay</referencedby>
+        <referencedby refid="wal_8h_1a66b27b1919547d721d0318540a63bc07" compoundref="wal_8c" startline="188" endline="214">wal_mgr_write</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1ad67b92f852a478e80213df8eed7cbe68" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int wal_write</definition>
+        <argsstring>(wal_t *w, wal_record_type_t type, const char *key, size_t klen, const char *value, size_t vlen)</argsstring>
+        <name>wal_write</name>
+        <param>
+          <type><ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref> *</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type><ref refid="wal_8h_1acde019f60a86690e5e7c215ea834432a" kindref="member">wal_record_type_t</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="37" column="5" bodyfile="src/wal.c" bodystart="345" bodyend="384" declfile="include/wal.h" declline="37" declcolumn="5"/>
+        <references refid="structwal_1a47ba018f8e77f109bc1d336e2093b069" compoundref="wal_8h" startline="32">wal::bytes_since_sync</references>
+        <references refid="structwal_1adce7b9e3129a1d08467da8b6dd7bd81a" compoundref="wal_8h" startline="29">wal::file</references>
+        <references refid="structwal_1a5b4bc2d813a14961679f5f41d36661bf" compoundref="wal_8h" startline="31">wal::sync_interval</references>
+        <references refid="wal_8h_1a7a81c5a6365c972a522a4901c1796bd4" compoundref="wal_8h" startline="8">WAL_CRC_SIZE</references>
+        <references refid="wal_8h_1aa15b4fe0e202b6ebd0ae43be10285f0a" compoundref="wal_8h" startline="7">WAL_HEADER_SIZE</references>
+        <references refid="wal_8c_1a25837431920cf767bb8ef6a97a379a5c" compoundref="wal_8c" startline="386" endline="394">wal_sync</references>
+        <referencedby refid="wal_8h_1a66b27b1919547d721d0318540a63bc07" compoundref="wal_8c" startline="188" endline="214">wal_mgr_write</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1a25837431920cf767bb8ef6a97a379a5c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int wal_sync</definition>
+        <argsstring>(wal_t *w)</argsstring>
+        <name>wal_sync</name>
+        <param>
+          <type><ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref> *</type>
+          <declname>w</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="38" column="5" bodyfile="src/wal.c" bodystart="386" bodyend="394" declfile="include/wal.h" declline="38" declcolumn="5"/>
+        <references refid="structwal_1a47ba018f8e77f109bc1d336e2093b069" compoundref="wal_8h" startline="32">wal::bytes_since_sync</references>
+        <references refid="structwal_1adce7b9e3129a1d08467da8b6dd7bd81a" compoundref="wal_8h" startline="29">wal::file</references>
+        <referencedby refid="wal_8h_1afe75b1ecad079adc49f01bde36496b63" compoundref="wal_8c" startline="216" endline="219">wal_mgr_sync</referencedby>
+        <referencedby refid="wal_8h_1ad67b92f852a478e80213df8eed7cbe68" compoundref="wal_8c" startline="345" endline="384">wal_write</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1a9720b41392ac7b53a127b741408d739e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int wal_replay</definition>
+        <argsstring>(wal_t *w, int(*callback)(wal_record_t *record, void *arg), void *arg)</argsstring>
+        <name>wal_replay</name>
+        <param>
+          <type><ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref> *</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int(*)(<ref refid="wal_8h_1a0117ba5560cea0a23f5a6e004f37178d" kindref="member">wal_record_t</ref> *record, void *arg)</type>
+          <declname>callback</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>arg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="39" column="5" bodyfile="src/wal.c" bodystart="396" bodyend="461" declfile="include/wal.h" declline="39" declcolumn="5"/>
+        <references refid="structwal_1adce7b9e3129a1d08467da8b6dd7bd81a" compoundref="wal_8h" startline="29">wal::file</references>
+        <references refid="structwal__record_1a7a1107c98dc926c6ca594c524011f92c" compoundref="wal_8h" startline="20">wal_record::key</references>
+        <references refid="structwal__record_1ab4ddfea0df21cbff870803515b9e68bf" compoundref="wal_8h" startline="21">wal_record::key_len</references>
+        <references refid="structwal__record_1a7d097ccc0d025cbfbe2696f58af41569" compoundref="wal_8h" startline="19">wal_record::type</references>
+        <references refid="structwal__record_1adabb794af643d8bbf292ff89a041c433" compoundref="wal_8h" startline="22">wal_record::value</references>
+        <references refid="structwal__record_1a60d9b4903b746102df17e257ce4c8b38" compoundref="wal_8h" startline="23">wal_record::value_len</references>
+        <references refid="wal_8h_1a7a81c5a6365c972a522a4901c1796bd4" compoundref="wal_8h" startline="8">WAL_CRC_SIZE</references>
+        <references refid="wal_8h_1aa15b4fe0e202b6ebd0ae43be10285f0a" compoundref="wal_8h" startline="7">WAL_HEADER_SIZE</references>
+        <referencedby refid="wal_8h_1a484cd076aa5d6853f2072c792b60c39c" compoundref="wal_8c" startline="221" endline="260">wal_mgr_replay</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1a70589fa0e9257fb13f4e6f6c15c1402f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int wal_truncate</definition>
+        <argsstring>(wal_t *w, size_t offset)</argsstring>
+        <name>wal_truncate</name>
+        <param>
+          <type><ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref> *</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="40" column="5" bodyfile="src/wal.c" bodystart="463" bodyend="470" declfile="include/wal.h" declline="40" declcolumn="5"/>
+        <references refid="structwal_1adce7b9e3129a1d08467da8b6dd7bd81a" compoundref="wal_8h" startline="29">wal::file</references>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1ab68b30d13fe3cf226565b396ced72c5e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t wal_size</definition>
+        <argsstring>(wal_t *w)</argsstring>
+        <name>wal_size</name>
+        <param>
+          <type><ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref> *</type>
+          <declname>w</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="41" column="8" bodyfile="src/wal.c" bodystart="472" bodyend="478" declfile="include/wal.h" declline="41" declcolumn="8"/>
+        <references refid="structwal_1adce7b9e3129a1d08467da8b6dd7bd81a" compoundref="wal_8h" startline="29">wal::file</references>
+        <referencedby refid="wal_8h_1ac5ff9edb72952a6aea71b33053fb0d1a" compoundref="wal_8c" startline="298" endline="301">wal_mgr_active_size</referencedby>
+        <referencedby refid="wal_8h_1ad93f9f1fc01b4ee2ff51600666232420" compoundref="wal_8c" startline="132" endline="174">wal_mgr_open</referencedby>
+        <referencedby refid="wal_8h_1a66b27b1919547d721d0318540a63bc07" compoundref="wal_8c" startline="188" endline="214">wal_mgr_write</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1ad93f9f1fc01b4ee2ff51600666232420" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref> *</type>
+        <definition>wal_mgr_t * wal_mgr_open</definition>
+        <argsstring>(const char *dir_path)</argsstring>
+        <name>wal_mgr_open</name>
+        <param>
+          <type>const char *</type>
+          <declname>dir_path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="48" column="11" bodyfile="src/wal.c" bodystart="132" bodyend="174" declfile="include/wal.h" declline="48" declcolumn="11"/>
+        <references refid="structwal__mgr_1a8f6505b9a7a4054ba309a2400c1bd59c" compoundref="wal_8c" startline="38">wal_mgr::active</references>
+        <references refid="structwal__mgr_1a895374269c8fa2607fd4f431df14a903" compoundref="wal_8c" startline="39">wal_mgr::dir_path</references>
+        <references refid="structwal__mgr_1a35a42650afbcee4b719dd48cccb6fe3c" compoundref="wal_8c" startline="41">wal_mgr::max_size</references>
+        <references refid="structwal__mgr_1a598541596a12248c713be5e804eaa77a" compoundref="wal_8c" startline="40">wal_mgr::seq</references>
+        <references refid="wal_8h_1aaa6bfbb087a090a7874618129691e2fd" compoundref="wal_8h" startline="11">WAL_MAX_SIZE</references>
+        <references refid="wal_8c_1a700880de35c88964f2ab31175d453c3d" compoundref="wal_8c" startline="45" endline="48">wal_mgr_make_path</references>
+        <references refid="wal_8c_1a81f5b4a7b4f65c3a8e3a768577d31466" compoundref="wal_8c" startline="51" endline="111">wal_mgr_scan_dir</references>
+        <references refid="wal_8c_1a711953a17f21654bc2b8566e1d148f5b" compoundref="wal_8c" startline="310" endline="333">wal_open</references>
+        <references refid="wal_8h_1ab68b30d13fe3cf226565b396ced72c5e" compoundref="wal_8c" startline="472" endline="478">wal_size</references>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1a9a9c6ff1fb038110d3a09af89ec3c262" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void wal_mgr_close</definition>
+        <argsstring>(wal_mgr_t *wm)</argsstring>
+        <name>wal_mgr_close</name>
+        <param>
+          <type><ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref> *</type>
+          <declname>wm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="51" column="6" bodyfile="src/wal.c" bodystart="176" bodyend="186" declfile="include/wal.h" declline="51" declcolumn="6"/>
+        <references refid="structwal__mgr_1a8f6505b9a7a4054ba309a2400c1bd59c" compoundref="wal_8c" startline="38">wal_mgr::active</references>
+        <references refid="structwal__mgr_1a895374269c8fa2607fd4f431df14a903" compoundref="wal_8c" startline="39">wal_mgr::dir_path</references>
+        <references refid="wal_8c_1ab5c677761e13e05ab70cfa13782438fb" compoundref="wal_8c" startline="335" endline="343">wal_close</references>
+        <referencedby refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" compoundref="kv__store_8c" startline="524" endline="574">kv_close</referencedby>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+        <referencedby refid="kv__store_8h_1a94193faa792b1170826e90d4cee43f7b" compoundref="kv__store_8c" startline="1249" endline="1258">kv_set_raft_mode</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1a66b27b1919547d721d0318540a63bc07" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int wal_mgr_write</definition>
+        <argsstring>(wal_mgr_t *wm, wal_record_type_t type, const char *key, size_t klen, const char *value, size_t vlen)</argsstring>
+        <name>wal_mgr_write</name>
+        <param>
+          <type><ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref> *</type>
+          <declname>wm</declname>
+        </param>
+        <param>
+          <type><ref refid="wal_8h_1acde019f60a86690e5e7c215ea834432a" kindref="member">wal_record_type_t</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="54" column="5" bodyfile="src/wal.c" bodystart="188" bodyend="214" declfile="include/wal.h" declline="54" declcolumn="5"/>
+        <references refid="structwal__mgr_1a8f6505b9a7a4054ba309a2400c1bd59c" compoundref="wal_8c" startline="38">wal_mgr::active</references>
+        <references refid="structwal__mgr_1a35a42650afbcee4b719dd48cccb6fe3c" compoundref="wal_8c" startline="41">wal_mgr::max_size</references>
+        <references refid="structwal__mgr_1a598541596a12248c713be5e804eaa77a" compoundref="wal_8c" startline="40">wal_mgr::seq</references>
+        <references refid="wal_8c_1ab5c677761e13e05ab70cfa13782438fb" compoundref="wal_8c" startline="335" endline="343">wal_close</references>
+        <references refid="wal_8c_1a700880de35c88964f2ab31175d453c3d" compoundref="wal_8c" startline="45" endline="48">wal_mgr_make_path</references>
+        <references refid="wal_8c_1a711953a17f21654bc2b8566e1d148f5b" compoundref="wal_8c" startline="310" endline="333">wal_open</references>
+        <references refid="wal_8c_1ab68b30d13fe3cf226565b396ced72c5e" compoundref="wal_8c" startline="472" endline="478">wal_size</references>
+        <references refid="wal_8c_1ad67b92f852a478e80213df8eed7cbe68" compoundref="wal_8c" startline="345" endline="384">wal_write</references>
+        <referencedby refid="kv__store_8h_1a25deb538aeb44468c7ae4c71aee2d150" compoundref="kv__store_8c" startline="770" endline="795">kv_delete</referencedby>
+        <referencedby refid="kv__store_8h_1acbc27bec469af3563081723fc01faeac" compoundref="kv__store_8c" startline="576" endline="600">kv_put</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1afe75b1ecad079adc49f01bde36496b63" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int wal_mgr_sync</definition>
+        <argsstring>(wal_mgr_t *wm)</argsstring>
+        <name>wal_mgr_sync</name>
+        <param>
+          <type><ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref> *</type>
+          <declname>wm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="57" column="5" bodyfile="src/wal.c" bodystart="216" bodyend="219" declfile="include/wal.h" declline="57" declcolumn="5"/>
+        <references refid="structwal__mgr_1a8f6505b9a7a4054ba309a2400c1bd59c" compoundref="wal_8c" startline="38">wal_mgr::active</references>
+        <references refid="wal_8c_1a25837431920cf767bb8ef6a97a379a5c" compoundref="wal_8c" startline="386" endline="394">wal_sync</references>
+        <referencedby refid="kv__store_8h_1a1bf78b7e348906a983cbc68514d8aa5b" compoundref="kv__store_8c" startline="1301" endline="1440">kv_backup</referencedby>
+        <referencedby refid="kv__store_8h_1a079779f022f5168123b13074e95f3bdd" compoundref="kv__store_8c" startline="735" endline="741">kv_sync</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1a484cd076aa5d6853f2072c792b60c39c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int wal_mgr_replay</definition>
+        <argsstring>(wal_mgr_t *wm, int(*callback)(wal_record_t *record, void *arg), void *arg)</argsstring>
+        <name>wal_mgr_replay</name>
+        <param>
+          <type><ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref> *</type>
+          <declname>wm</declname>
+        </param>
+        <param>
+          <type>int(*)(<ref refid="wal_8h_1a0117ba5560cea0a23f5a6e004f37178d" kindref="member">wal_record_t</ref> *record, void *arg)</type>
+          <declname>callback</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>arg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="60" column="5" bodyfile="src/wal.c" bodystart="221" bodyend="260" declfile="include/wal.h" declline="60" declcolumn="5"/>
+        <references refid="structwal__mgr_1a895374269c8fa2607fd4f431df14a903" compoundref="wal_8c" startline="39">wal_mgr::dir_path</references>
+        <references refid="wal_8c_1ab5c677761e13e05ab70cfa13782438fb" compoundref="wal_8c" startline="335" endline="343">wal_close</references>
+        <references refid="wal_8c_1a700880de35c88964f2ab31175d453c3d" compoundref="wal_8c" startline="45" endline="48">wal_mgr_make_path</references>
+        <references refid="wal_8c_1a81f5b4a7b4f65c3a8e3a768577d31466" compoundref="wal_8c" startline="51" endline="111">wal_mgr_scan_dir</references>
+        <references refid="wal_8c_1a711953a17f21654bc2b8566e1d148f5b" compoundref="wal_8c" startline="310" endline="333">wal_open</references>
+        <references refid="wal_8c_1a9720b41392ac7b53a127b741408d739e" compoundref="wal_8c" startline="396" endline="461">wal_replay</references>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1a0477fda1593e9fefab6a8ba5f3cf3009" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int wal_mgr_archive</definition>
+        <argsstring>(wal_mgr_t *wm)</argsstring>
+        <name>wal_mgr_archive</name>
+        <param>
+          <type><ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref> *</type>
+          <declname>wm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="63" column="5" bodyfile="src/wal.c" bodystart="262" bodyend="296" declfile="include/wal.h" declline="63" declcolumn="5"/>
+        <references refid="structwal__mgr_1a8f6505b9a7a4054ba309a2400c1bd59c" compoundref="wal_8c" startline="38">wal_mgr::active</references>
+        <references refid="structwal__mgr_1a598541596a12248c713be5e804eaa77a" compoundref="wal_8c" startline="40">wal_mgr::seq</references>
+        <references refid="wal_8c_1ab5c677761e13e05ab70cfa13782438fb" compoundref="wal_8c" startline="335" endline="343">wal_close</references>
+        <references refid="wal_8c_1a553dc7d35ee9f96b037182a05a170de6" compoundref="wal_8c" startline="114" endline="130">wal_mgr_delete_all_old</references>
+        <references refid="wal_8c_1a700880de35c88964f2ab31175d453c3d" compoundref="wal_8c" startline="45" endline="48">wal_mgr_make_path</references>
+        <references refid="wal_8c_1a711953a17f21654bc2b8566e1d148f5b" compoundref="wal_8c" startline="310" endline="333">wal_open</references>
+        <referencedby refid="kv__store_8c_1a5f0bfcd3bf571aa044ff2d5ef7d435ca" compoundref="kv__store_8c" startline="195" endline="290">kv_flush_memtable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1ac5ff9edb72952a6aea71b33053fb0d1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t wal_mgr_active_size</definition>
+        <argsstring>(wal_mgr_t *wm)</argsstring>
+        <name>wal_mgr_active_size</name>
+        <param>
+          <type><ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref> *</type>
+          <declname>wm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="66" column="8" bodyfile="src/wal.c" bodystart="298" bodyend="301" declfile="include/wal.h" declline="66" declcolumn="8"/>
+        <references refid="structwal__mgr_1a8f6505b9a7a4054ba309a2400c1bd59c" compoundref="wal_8c" startline="38">wal_mgr::active</references>
+        <references refid="wal_8c_1ab68b30d13fe3cf226565b396ced72c5e" compoundref="wal_8c" startline="472" endline="478">wal_size</references>
+      </memberdef>
+      <memberdef kind="function" id="wal_8h_1a44252d75b4ebf1ac54ab6eef0195af1f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int wal_mgr_seq</definition>
+        <argsstring>(wal_mgr_t *wm)</argsstring>
+        <name>wal_mgr_seq</name>
+        <param>
+          <type><ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref> *</type>
+          <declname>wm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="69" column="5" bodyfile="src/wal.c" bodystart="303" bodyend="306" declfile="include/wal.h" declline="69" declcolumn="5"/>
+        <references refid="structwal__mgr_1a598541596a12248c713be5e804eaa77a" compoundref="wal_8c" startline="40">wal_mgr::seq</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>WAL_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>WAL_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stddef.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7" refid="wal_8h_1aa15b4fe0e202b6ebd0ae43be10285f0a" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>WAL_HEADER_SIZE<sp/>4</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8" refid="wal_8h_1a7a81c5a6365c972a522a4901c1796bd4" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>WAL_CRC_SIZE<sp/>4</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>WAL<sp/>滚动阈值：100MB<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11" refid="wal_8h_1aaa6bfbb087a090a7874618129691e2fd" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>WAL_MAX_SIZE<sp/>(100<sp/>*<sp/>1024<sp/>*<sp/>1024)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13" refid="wal_8h_1acde019f60a86690e5e7c215ea834432a" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="14" refid="wal_8h_1acde019f60a86690e5e7c215ea834432aa346c2e7c5bf1cbe17173407092760d2b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="wal_8h_1acde019f60a86690e5e7c215ea834432aa346c2e7c5bf1cbe17173407092760d2b" kindref="member">WAL_PUT</ref><sp/>=<sp/>1,</highlight></codeline>
+<codeline lineno="15" refid="wal_8h_1acde019f60a86690e5e7c215ea834432aa2eb0703e10df97318518b5e711f8554b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="wal_8h_1acde019f60a86690e5e7c215ea834432aa2eb0703e10df97318518b5e711f8554b" kindref="member">WAL_DELETE</ref><sp/>=<sp/>2,</highlight></codeline>
+<codeline lineno="16"><highlight class="normal">}<sp/><ref refid="wal_8h_1acde019f60a86690e5e7c215ea834432a" kindref="member">wal_record_type_t</ref>;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18" refid="structwal__record" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structwal__record" kindref="compound">wal_record</ref><sp/>{</highlight></codeline>
+<codeline lineno="19" refid="structwal__record_1a7d097ccc0d025cbfbe2696f58af41569" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="wal_8h_1acde019f60a86690e5e7c215ea834432a" kindref="member">wal_record_type_t</ref><sp/><ref refid="structwal__record_1a7d097ccc0d025cbfbe2696f58af41569" kindref="member">type</ref>;</highlight></codeline>
+<codeline lineno="20" refid="structwal__record_1a7a1107c98dc926c6ca594c524011f92c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structwal__record_1a7a1107c98dc926c6ca594c524011f92c" kindref="member">key</ref>;</highlight></codeline>
+<codeline lineno="21" refid="structwal__record_1ab4ddfea0df21cbff870803515b9e68bf" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structwal__record_1ab4ddfea0df21cbff870803515b9e68bf" kindref="member">key_len</ref>;</highlight></codeline>
+<codeline lineno="22" refid="structwal__record_1adabb794af643d8bbf292ff89a041c433" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structwal__record_1adabb794af643d8bbf292ff89a041c433" kindref="member">value</ref>;</highlight></codeline>
+<codeline lineno="23" refid="structwal__record_1a60d9b4903b746102df17e257ce4c8b38" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structwal__record_1a60d9b4903b746102df17e257ce4c8b38" kindref="member">value_len</ref>;</highlight></codeline>
+<codeline lineno="24" refid="wal_8h_1a0117ba5560cea0a23f5a6e004f37178d" refkind="member"><highlight class="normal">}<sp/><ref refid="wal_8h_1a0117ba5560cea0a23f5a6e004f37178d" kindref="member">wal_record_t</ref>;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>=====<sp/>底层<sp/>WAL<sp/>文件操作（保留向后兼容）<sp/>=====<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28" refid="structwal" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structwal" kindref="compound">wal</ref><sp/>{</highlight></codeline>
+<codeline lineno="29" refid="structwal_1adce7b9e3129a1d08467da8b6dd7bd81a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>FILE*<sp/><ref refid="structwal_1adce7b9e3129a1d08467da8b6dd7bd81a" kindref="member">file</ref>;</highlight></codeline>
+<codeline lineno="30" refid="structwal_1a23258501b2ee50d2eebca1e44485a2a3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structwal_1a23258501b2ee50d2eebca1e44485a2a3" kindref="member">path</ref>;</highlight></codeline>
+<codeline lineno="31" refid="structwal_1a5b4bc2d813a14961679f5f41d36661bf" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structwal_1a5b4bc2d813a14961679f5f41d36661bf" kindref="member">sync_interval</ref>;</highlight></codeline>
+<codeline lineno="32" refid="structwal_1a47ba018f8e77f109bc1d336e2093b069" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structwal_1a47ba018f8e77f109bc1d336e2093b069" kindref="member">bytes_since_sync</ref>;</highlight></codeline>
+<codeline lineno="33" refid="wal_8h_1a5733299506ba005ee00b576ff668445c" refkind="member"><highlight class="normal">}<sp/><ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref>;</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref>*<sp/><ref refid="wal_8h_1a711953a17f21654bc2b8566e1d148f5b" kindref="member">wal_open</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>path);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1ab5c677761e13e05ab70cfa13782438fb" kindref="member">wal_close</ref>(<ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref>*<sp/>w);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1ad67b92f852a478e80213df8eed7cbe68" kindref="member">wal_write</ref>(<ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref>*<sp/>w,<sp/><ref refid="wal_8h_1acde019f60a86690e5e7c215ea834432a" kindref="member">wal_record_type_t</ref><sp/>type,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>value,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>vlen);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1a25837431920cf767bb8ef6a97a379a5c" kindref="member">wal_sync</ref>(<ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref>*<sp/>w);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1a9720b41392ac7b53a127b741408d739e" kindref="member">wal_replay</ref>(<ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref>*<sp/>w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>(*callback)(<ref refid="wal_8h_1a0117ba5560cea0a23f5a6e004f37178d" kindref="member">wal_record_t</ref>*<sp/>record,<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/>arg),<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/>arg);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1a70589fa0e9257fb13f4e6f6c15c1402f" kindref="member">wal_truncate</ref>(<ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref>*<sp/>w,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>offset);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1ab68b30d13fe3cf226565b396ced72c5e" kindref="member">wal_size</ref>(<ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref>*<sp/>w);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>=====<sp/>WAL<sp/>管理器：滚动与归档<sp/>=====<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45" refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structwal__mgr" kindref="compound">wal_mgr</ref><sp/><ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref>;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>打开<sp/>WAL<sp/>管理器：扫描目录中已有<sp/>WAL<sp/>文件，打开最新一个（或创建新文件）<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref>*<sp/><ref refid="wal_8h_1ad93f9f1fc01b4ee2ff51600666232420" kindref="member">wal_mgr_open</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="structwal__mgr_1a895374269c8fa2607fd4f431df14a903" kindref="member">dir_path</ref>);</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>关闭<sp/>WAL<sp/>管理器<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1a9a9c6ff1fb038110d3a09af89ec3c262" kindref="member">wal_mgr_close</ref>(<ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref>*<sp/>wm);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>写入<sp/>WAL<sp/>记录，超过阈值自动滚动到新文件<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1a66b27b1919547d721d0318540a63bc07" kindref="member">wal_mgr_write</ref>(<ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref>*<sp/>wm,<sp/><ref refid="wal_8h_1acde019f60a86690e5e7c215ea834432a" kindref="member">wal_record_type_t</ref><sp/>type,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>value,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>vlen);</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>同步当前<sp/>WAL<sp/>到磁盘<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1afe75b1ecad079adc49f01bde36496b63" kindref="member">wal_mgr_sync</ref>(<ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref>*<sp/>wm);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>重放所有<sp/>WAL<sp/>文件（按序号顺序），用于崩溃恢复<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1a484cd076aa5d6853f2072c792b60c39c" kindref="member">wal_mgr_replay</ref>(<ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref>*<sp/>wm,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>(*callback)(<ref refid="wal_8h_1a0117ba5560cea0a23f5a6e004f37178d" kindref="member">wal_record_t</ref>*<sp/>record,<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/>arg),<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/>arg);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>归档：MemTable<sp/>刷盘后调用，删除旧<sp/>WAL<sp/>文件，创建新文件<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1a0477fda1593e9fefab6a8ba5f3cf3009" kindref="member">wal_mgr_archive</ref>(<ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref>*<sp/>wm);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>获取当前活跃<sp/>WAL<sp/>文件大小<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1ac5ff9edb72952a6aea71b33053fb0d1a" kindref="member">wal_mgr_active_size</ref>(<ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref>*<sp/>wm);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>获取当前<sp/>WAL<sp/>序列号<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="wal_8h_1a44252d75b4ebf1ac54ab6eef0195af1f" kindref="member">wal_mgr_seq</ref>(<ref refid="wal_8h_1a252c02d2e280340c58177c3c9729bb6a" kindref="member">wal_mgr_t</ref>*<sp/>wm);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="include/wal.h"/>
+  </compounddef>
+</doxygen>

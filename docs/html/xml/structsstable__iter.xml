@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structsstable__iter" kind="struct" language="C++" prot="public">
+    <compoundname>sstable_iter</compoundname>
+    <includes refid="sstable_8h" local="no">sstable.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsstable__iter_1ad4abcbdf85c6e564530431b0c6f272ea" prot="public" static="no" mutable="no">
+        <type><ref refid="sstable_8h_1a1c392352e0e6b1575f736995111ee7d3" kindref="member">sstable_t</ref> *</type>
+        <definition>sstable_t* sstable_iter::sst</definition>
+        <argsstring></argsstring>
+        <name>sst</name>
+        <qualifiedname>sstable_iter::sst</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="50" column="15" bodyfile="include/sstable.h" bodystart="50" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+        <referencedby refid="sstable_8h_1a82d6818722a409b88cf1d0210511c95d" compoundref="sstable_8c" startline="836" endline="856">sstable_new_iterator</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__iter_1a0992bdc8ebf7693fb34ee3059c106d1d" prot="public" static="no" mutable="no">
+        <type><ref refid="sstable_8h_1a493fac1cf27fcba05d1356866b233c94" kindref="member">sstable_block_t</ref> *</type>
+        <definition>sstable_block_t* sstable_iter::current_block</definition>
+        <argsstring></argsstring>
+        <name>current_block</name>
+        <qualifiedname>sstable_iter::current_block</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="51" column="21" bodyfile="include/sstable.h" bodystart="51" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1a1cc4e5a8a06b9356c83e20dc4a74d7ec" compoundref="sstable_8c" startline="858" endline="866">sstable_iter_free</referencedby>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+        <referencedby refid="sstable_8h_1a82d6818722a409b88cf1d0210511c95d" compoundref="sstable_8c" startline="836" endline="856">sstable_new_iterator</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__iter_1a8f5b9c87fc982be79372406fa525a7e2" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t sstable_iter::block_offset</definition>
+        <argsstring></argsstring>
+        <name>block_offset</name>
+        <qualifiedname>sstable_iter::block_offset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="52" column="12" bodyfile="include/sstable.h" bodystart="52" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1a82d6818722a409b88cf1d0210511c95d" compoundref="sstable_8c" startline="836" endline="856">sstable_new_iterator</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__iter_1a982e56967bc9a782671fd606abe33e87" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t sstable_iter::entry_offset</definition>
+        <argsstring></argsstring>
+        <name>entry_offset</name>
+        <qualifiedname>sstable_iter::entry_offset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="53" column="12" bodyfile="include/sstable.h" bodystart="53" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+        <referencedby refid="sstable_8h_1a82d6818722a409b88cf1d0210511c95d" compoundref="sstable_8c" startline="836" endline="856">sstable_new_iterator</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__iter_1ac47025e8734b03fe9e4cf73ee09c4258" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int sstable_iter::eof</definition>
+        <argsstring></argsstring>
+        <name>eof</name>
+        <qualifiedname>sstable_iter::eof</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="54" column="9" bodyfile="include/sstable.h" bodystart="54" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+        <referencedby refid="sstable_8h_1a82d6818722a409b88cf1d0210511c95d" compoundref="sstable_8c" startline="836" endline="856">sstable_new_iterator</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__iter_1aaf7e7c3f517f280c179c5fe7d5e87e05" prot="public" static="no" mutable="no">
+        <type>char</type>
+        <definition>char sstable_iter::prev_key[SSTABLE_PREV_KEY_CAPACITY]</definition>
+        <argsstring>[SSTABLE_PREV_KEY_CAPACITY]</argsstring>
+        <name>prev_key</name>
+        <qualifiedname>sstable_iter::prev_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="55" column="10" bodyfile="include/sstable.h" bodystart="55" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+        <referencedby refid="sstable_8h_1a82d6818722a409b88cf1d0210511c95d" compoundref="sstable_8c" startline="836" endline="856">sstable_new_iterator</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__iter_1a1dbf22c123f068d28f5ee48920f085cd" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t sstable_iter::prev_len</definition>
+        <argsstring></argsstring>
+        <name>prev_len</name>
+        <qualifiedname>sstable_iter::prev_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/sstable.h" line="56" column="12" bodyfile="include/sstable.h" bodystart="56" bodyend="-1"/>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+        <referencedby refid="sstable_8h_1a82d6818722a409b88cf1d0210511c95d" compoundref="sstable_8c" startline="836" endline="856">sstable_new_iterator</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>sstable</label>
+        <link refid="structsstable"/>
+      </node>
+      <node id="3">
+        <label>sstable_block</label>
+        <link refid="structsstable__block"/>
+      </node>
+      <node id="1">
+        <label>sstable_iter</label>
+        <link refid="structsstable__iter"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>sst</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>current_block</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/sstable.h" line="49" column="1" bodyfile="include/sstable.h" bodystart="49" bodyend="57"/>
+    <listofallmembers>
+      <member refid="structsstable__iter_1a8f5b9c87fc982be79372406fa525a7e2" prot="public" virt="non-virtual"><scope>sstable_iter</scope><name>block_offset</name></member>
+      <member refid="structsstable__iter_1a0992bdc8ebf7693fb34ee3059c106d1d" prot="public" virt="non-virtual"><scope>sstable_iter</scope><name>current_block</name></member>
+      <member refid="structsstable__iter_1a982e56967bc9a782671fd606abe33e87" prot="public" virt="non-virtual"><scope>sstable_iter</scope><name>entry_offset</name></member>
+      <member refid="structsstable__iter_1ac47025e8734b03fe9e4cf73ee09c4258" prot="public" virt="non-virtual"><scope>sstable_iter</scope><name>eof</name></member>
+      <member refid="structsstable__iter_1aaf7e7c3f517f280c179c5fe7d5e87e05" prot="public" virt="non-virtual"><scope>sstable_iter</scope><name>prev_key</name></member>
+      <member refid="structsstable__iter_1a1dbf22c123f068d28f5ee48920f085cd" prot="public" virt="non-virtual"><scope>sstable_iter</scope><name>prev_len</name></member>
+      <member refid="structsstable__iter_1ad4abcbdf85c6e564530431b0c6f272ea" prot="public" virt="non-virtual"><scope>sstable_iter</scope><name>sst</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

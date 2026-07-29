@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structsstable__entry" kind="struct" language="C++" prot="public">
+    <compoundname>sstable_entry</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsstable__entry_1ae0a0dcdf7a5237534f3479b891f7a4ef" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t sstable_entry::shared_len</definition>
+        <argsstring></argsstring>
+        <name>shared_len</name>
+        <qualifiedname>sstable_entry::shared_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/sstable.c" line="18" column="12" bodyfile="src/sstable.c" bodystart="18" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1ace616d80b4fe31bcc08d4def7d127d96" compoundref="sstable_8c" startline="370" endline="476">sstable_block_lookup</referencedby>
+        <referencedby refid="sstable_8c_1a309a12241d60b6c36c6690253f071c08" compoundref="sstable_8c" startline="310" endline="368">sstable_entry_decode</referencedby>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__entry_1a930a6b993293a72c1c6ce8fad8523345" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t sstable_entry::unshared_len</definition>
+        <argsstring></argsstring>
+        <name>unshared_len</name>
+        <qualifiedname>sstable_entry::unshared_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/sstable.c" line="19" column="12" bodyfile="src/sstable.c" bodystart="19" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1ace616d80b4fe31bcc08d4def7d127d96" compoundref="sstable_8c" startline="370" endline="476">sstable_block_lookup</referencedby>
+        <referencedby refid="sstable_8c_1a309a12241d60b6c36c6690253f071c08" compoundref="sstable_8c" startline="310" endline="368">sstable_entry_decode</referencedby>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__entry_1abafd4347cf5c625f526719e846419448" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t sstable_entry::value_len</definition>
+        <argsstring></argsstring>
+        <name>value_len</name>
+        <qualifiedname>sstable_entry::value_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/sstable.c" line="20" column="12" bodyfile="src/sstable.c" bodystart="20" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1ace616d80b4fe31bcc08d4def7d127d96" compoundref="sstable_8c" startline="370" endline="476">sstable_block_lookup</referencedby>
+        <referencedby refid="sstable_8c_1a309a12241d60b6c36c6690253f071c08" compoundref="sstable_8c" startline="310" endline="368">sstable_entry_decode</referencedby>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__entry_1a02f36a7cac18bd38f5c320bc1a40b31a" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* sstable_entry::key</definition>
+        <argsstring></argsstring>
+        <name>key</name>
+        <qualifiedname>sstable_entry::key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/sstable.c" line="21" column="10" bodyfile="src/sstable.c" bodystart="21" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1ace616d80b4fe31bcc08d4def7d127d96" compoundref="sstable_8c" startline="370" endline="476">sstable_block_lookup</referencedby>
+        <referencedby refid="sstable_8c_1a309a12241d60b6c36c6690253f071c08" compoundref="sstable_8c" startline="310" endline="368">sstable_entry_decode</referencedby>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsstable__entry_1a7b1655bba328129d49523993fe5084de" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* sstable_entry::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>sstable_entry::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/sstable.c" line="22" column="10" bodyfile="src/sstable.c" bodystart="22" bodyend="-1"/>
+        <referencedby refid="sstable_8c_1ace616d80b4fe31bcc08d4def7d127d96" compoundref="sstable_8c" startline="370" endline="476">sstable_block_lookup</referencedby>
+        <referencedby refid="sstable_8c_1a309a12241d60b6c36c6690253f071c08" compoundref="sstable_8c" startline="310" endline="368">sstable_entry_decode</referencedby>
+        <referencedby refid="sstable_8h_1af01fdaf4e00026504eacb37c059c2f3a" compoundref="sstable_8c" startline="868" endline="951">sstable_iter_next</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/sstable.c" line="17" column="1" bodyfile="src/sstable.c" bodystart="17" bodyend="23"/>
+    <listofallmembers>
+      <member refid="structsstable__entry_1a02f36a7cac18bd38f5c320bc1a40b31a" prot="public" virt="non-virtual"><scope>sstable_entry</scope><name>key</name></member>
+      <member refid="structsstable__entry_1ae0a0dcdf7a5237534f3479b891f7a4ef" prot="public" virt="non-virtual"><scope>sstable_entry</scope><name>shared_len</name></member>
+      <member refid="structsstable__entry_1a930a6b993293a72c1c6ce8fad8523345" prot="public" virt="non-virtual"><scope>sstable_entry</scope><name>unshared_len</name></member>
+      <member refid="structsstable__entry_1a7b1655bba328129d49523993fe5084de" prot="public" virt="non-virtual"><scope>sstable_entry</scope><name>value</name></member>
+      <member refid="structsstable__entry_1abafd4347cf5c625f526719e846419448" prot="public" virt="non-virtual"><scope>sstable_entry</scope><name>value_len</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

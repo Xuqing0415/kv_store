@@ -41,7 +41,7 @@ static THREAD_RET merge_worker(void* arg) {
         #ifdef _WIN32
         LONG stop_flag = InterlockedCompareExchange(&ctx->stop, 0, 0);
         #else
-        volatile int stop_flag = ctx->stop;
+        int stop_flag = __atomic_load_n(&ctx->stop, __ATOMIC_RELAXED);
         #endif
         
         if (stop_flag) {

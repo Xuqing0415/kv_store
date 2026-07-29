@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structraft__log__entry__t" kind="struct" language="C++" prot="public">
+    <compoundname>raft_log_entry_t</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structraft__log__entry__t_1a9580f22e82e55d651a6a4799334c06dc" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t raft_log_entry_t::term</definition>
+        <argsstring></argsstring>
+        <name>term</name>
+        <qualifiedname>raft_log_entry_t::term</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/raft.c" line="114" column="14" bodyfile="src/raft.c" bodystart="114" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft_8c_1a1198d0c6dd9fc1de4657acf4c800a9d3" compoundref="raft_8c" startline="1109" endline="1152">raft_candidate_start_election</referencedby>
+        <referencedby refid="raft_8c_1a5b53819a7a8947be4941f6850ee94e12" compoundref="raft_8c" startline="758" endline="961">raft_handle_append_request</referencedby>
+        <referencedby refid="raft_8c_1a3f6523350031eb1f328f0011813f5925" compoundref="raft_8c" startline="964" endline="1038">raft_handle_append_response</referencedby>
+        <referencedby refid="raft_8c_1ab78a5008c76cbf9542f2cd2398ffe0c0" compoundref="raft_8c" startline="1155" endline="1237">raft_handle_propose_request</referencedby>
+        <referencedby refid="raft_8c_1a6bd51b7a081091de0f102953557d2524" compoundref="raft_8c" startline="1041" endline="1106">raft_leader_send_heartbeat</referencedby>
+        <referencedby refid="raft_8c_1a19b5a60286c58085ead4b9449279e6ff" compoundref="raft_8c" startline="639" endline="652">raft_log_is_up_to_date</referencedby>
+        <referencedby refid="raft_8c_1aa970144eb6cba57c82d324583399668a" compoundref="raft_8c" startline="296" endline="437">raft_log_load</referencedby>
+        <referencedby refid="raft_8c_1aac754d062a8d33953c5303b0b971ad2b" compoundref="raft_8c" startline="238" endline="294">raft_log_save</referencedby>
+        <referencedby refid="raft_8h_1aee59798c5da5f030e0de76ac5219f65e" compoundref="raft_8c" startline="1515" endline="1618">raft_propose</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+        <referencedby refid="raft_8h_1a9269abb79a4f8d590a6d10a27423c6f2" compoundref="raft_8c" startline="2082" endline="2175">raft_snapshot_create</referencedby>
+        <referencedby refid="raft_8c_1a450c00a492f26f8c1a2f8540c17d88fc" compoundref="raft_8c" startline="479" endline="517">rpc_send_append_request</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__log__entry__t_1a72a781a6a247e4cafed8024f5264e701" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t raft_log_entry_t::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>raft_log_entry_t::index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/raft.c" line="115" column="14" bodyfile="src/raft.c" bodystart="115" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft_8c_1a53b219c95852da66bf0de448edebb4d5" compoundref="raft_8c" startline="608" endline="636">raft_become_leader</referencedby>
+        <referencedby refid="raft_8c_1a1198d0c6dd9fc1de4657acf4c800a9d3" compoundref="raft_8c" startline="1109" endline="1152">raft_candidate_start_election</referencedby>
+        <referencedby refid="raft_8c_1a1d6417e23b06ece8096e30c245161fce" compoundref="raft_8c" startline="1246" endline="1373">raft_event_loop</referencedby>
+        <referencedby refid="raft_8c_1a5b53819a7a8947be4941f6850ee94e12" compoundref="raft_8c" startline="758" endline="961">raft_handle_append_request</referencedby>
+        <referencedby refid="raft_8c_1a3f6523350031eb1f328f0011813f5925" compoundref="raft_8c" startline="964" endline="1038">raft_handle_append_response</referencedby>
+        <referencedby refid="raft_8c_1ab78a5008c76cbf9542f2cd2398ffe0c0" compoundref="raft_8c" startline="1155" endline="1237">raft_handle_propose_request</referencedby>
+        <referencedby refid="raft_8c_1ab27598559bf4b590cb2c39e9dc7c5eda" compoundref="raft_8c" startline="1792" endline="1916">raft_handle_snapshot_chunk</referencedby>
+        <referencedby refid="raft_8c_1a92f6d290a9681067d1ca69a9687b17c9" compoundref="raft_8c" startline="1705" endline="1789">raft_handle_snapshot_request</referencedby>
+        <referencedby refid="raft_8c_1a6bd51b7a081091de0f102953557d2524" compoundref="raft_8c" startline="1041" endline="1106">raft_leader_send_heartbeat</referencedby>
+        <referencedby refid="raft_8c_1a19b5a60286c58085ead4b9449279e6ff" compoundref="raft_8c" startline="639" endline="652">raft_log_is_up_to_date</referencedby>
+        <referencedby refid="raft_8c_1aa970144eb6cba57c82d324583399668a" compoundref="raft_8c" startline="296" endline="437">raft_log_load</referencedby>
+        <referencedby refid="raft_8c_1aac754d062a8d33953c5303b0b971ad2b" compoundref="raft_8c" startline="238" endline="294">raft_log_save</referencedby>
+        <referencedby refid="raft_8h_1aee59798c5da5f030e0de76ac5219f65e" compoundref="raft_8c" startline="1515" endline="1618">raft_propose</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+        <referencedby refid="raft_8h_1a9269abb79a4f8d590a6d10a27423c6f2" compoundref="raft_8c" startline="2082" endline="2175">raft_snapshot_create</referencedby>
+        <referencedby refid="raft_8c_1a450c00a492f26f8c1a2f8540c17d88fc" compoundref="raft_8c" startline="479" endline="517">rpc_send_append_request</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__log__entry__t_1a218eccba17dad981772d497ecdf7ab6c" prot="public" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t raft_log_entry_t::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>raft_log_entry_t::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/raft.c" line="116" column="14" bodyfile="src/raft.c" bodystart="116" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft_8c_1a5b53819a7a8947be4941f6850ee94e12" compoundref="raft_8c" startline="758" endline="961">raft_handle_append_request</referencedby>
+        <referencedby refid="raft_8c_1ab78a5008c76cbf9542f2cd2398ffe0c0" compoundref="raft_8c" startline="1155" endline="1237">raft_handle_propose_request</referencedby>
+        <referencedby refid="raft_8c_1aa970144eb6cba57c82d324583399668a" compoundref="raft_8c" startline="296" endline="437">raft_log_load</referencedby>
+        <referencedby refid="raft_8c_1aac754d062a8d33953c5303b0b971ad2b" compoundref="raft_8c" startline="238" endline="294">raft_log_save</referencedby>
+        <referencedby refid="raft_8h_1aee59798c5da5f030e0de76ac5219f65e" compoundref="raft_8c" startline="1515" endline="1618">raft_propose</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+        <referencedby refid="raft_8c_1a450c00a492f26f8c1a2f8540c17d88fc" compoundref="raft_8c" startline="479" endline="517">rpc_send_append_request</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__log__entry__t_1a64ab09732cd532257199334512413c7f" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t raft_log_entry_t::key_len</definition>
+        <argsstring></argsstring>
+        <name>key_len</name>
+        <qualifiedname>raft_log_entry_t::key_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/raft.c" line="117" column="14" bodyfile="src/raft.c" bodystart="117" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft_8c_1a5b53819a7a8947be4941f6850ee94e12" compoundref="raft_8c" startline="758" endline="961">raft_handle_append_request</referencedby>
+        <referencedby refid="raft_8c_1ab78a5008c76cbf9542f2cd2398ffe0c0" compoundref="raft_8c" startline="1155" endline="1237">raft_handle_propose_request</referencedby>
+        <referencedby refid="raft_8c_1ae6a105ffa540570080f1bab78e7bf0d1" compoundref="raft_8c" startline="199" endline="201">raft_log_entry_size</referencedby>
+        <referencedby refid="raft_8c_1aa970144eb6cba57c82d324583399668a" compoundref="raft_8c" startline="296" endline="437">raft_log_load</referencedby>
+        <referencedby refid="raft_8c_1aac754d062a8d33953c5303b0b971ad2b" compoundref="raft_8c" startline="238" endline="294">raft_log_save</referencedby>
+        <referencedby refid="raft_8h_1aee59798c5da5f030e0de76ac5219f65e" compoundref="raft_8c" startline="1515" endline="1618">raft_propose</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+        <referencedby refid="raft_8c_1a450c00a492f26f8c1a2f8540c17d88fc" compoundref="raft_8c" startline="479" endline="517">rpc_send_append_request</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__log__entry__t_1a0f22beedea31359c9dfb45c012af382d" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* raft_log_entry_t::key</definition>
+        <argsstring></argsstring>
+        <name>key</name>
+        <qualifiedname>raft_log_entry_t::key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/raft.c" line="118" column="13" bodyfile="src/raft.c" bodystart="118" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft_8h_1a74f2bed3179b362494c113f569b62fa0" compoundref="raft_8c" startline="1432" endline="1457">raft_destroy</referencedby>
+        <referencedby refid="raft_8c_1a5b53819a7a8947be4941f6850ee94e12" compoundref="raft_8c" startline="758" endline="961">raft_handle_append_request</referencedby>
+        <referencedby refid="raft_8c_1ab78a5008c76cbf9542f2cd2398ffe0c0" compoundref="raft_8c" startline="1155" endline="1237">raft_handle_propose_request</referencedby>
+        <referencedby refid="raft_8c_1ab27598559bf4b590cb2c39e9dc7c5eda" compoundref="raft_8c" startline="1792" endline="1916">raft_handle_snapshot_chunk</referencedby>
+        <referencedby refid="raft_8c_1a92f6d290a9681067d1ca69a9687b17c9" compoundref="raft_8c" startline="1705" endline="1789">raft_handle_snapshot_request</referencedby>
+        <referencedby refid="raft_8c_1aa970144eb6cba57c82d324583399668a" compoundref="raft_8c" startline="296" endline="437">raft_log_load</referencedby>
+        <referencedby refid="raft_8c_1aac754d062a8d33953c5303b0b971ad2b" compoundref="raft_8c" startline="238" endline="294">raft_log_save</referencedby>
+        <referencedby refid="raft_8h_1aee59798c5da5f030e0de76ac5219f65e" compoundref="raft_8c" startline="1515" endline="1618">raft_propose</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+        <referencedby refid="raft_8h_1a9269abb79a4f8d590a6d10a27423c6f2" compoundref="raft_8c" startline="2082" endline="2175">raft_snapshot_create</referencedby>
+        <referencedby refid="raft_8c_1a450c00a492f26f8c1a2f8540c17d88fc" compoundref="raft_8c" startline="479" endline="517">rpc_send_append_request</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__log__entry__t_1a5b85ab92aae30ee8bf2c8b1fba93b461" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t raft_log_entry_t::value_len</definition>
+        <argsstring></argsstring>
+        <name>value_len</name>
+        <qualifiedname>raft_log_entry_t::value_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/raft.c" line="119" column="14" bodyfile="src/raft.c" bodystart="119" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft_8c_1a5b53819a7a8947be4941f6850ee94e12" compoundref="raft_8c" startline="758" endline="961">raft_handle_append_request</referencedby>
+        <referencedby refid="raft_8c_1ab78a5008c76cbf9542f2cd2398ffe0c0" compoundref="raft_8c" startline="1155" endline="1237">raft_handle_propose_request</referencedby>
+        <referencedby refid="raft_8c_1ae6a105ffa540570080f1bab78e7bf0d1" compoundref="raft_8c" startline="199" endline="201">raft_log_entry_size</referencedby>
+        <referencedby refid="raft_8c_1aa970144eb6cba57c82d324583399668a" compoundref="raft_8c" startline="296" endline="437">raft_log_load</referencedby>
+        <referencedby refid="raft_8c_1aac754d062a8d33953c5303b0b971ad2b" compoundref="raft_8c" startline="238" endline="294">raft_log_save</referencedby>
+        <referencedby refid="raft_8h_1aee59798c5da5f030e0de76ac5219f65e" compoundref="raft_8c" startline="1515" endline="1618">raft_propose</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+        <referencedby refid="raft_8c_1a450c00a492f26f8c1a2f8540c17d88fc" compoundref="raft_8c" startline="479" endline="517">rpc_send_append_request</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structraft__log__entry__t_1aa47fc807fc627a5f83947d2974182af6" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* raft_log_entry_t::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>raft_log_entry_t::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/raft.c" line="120" column="13" bodyfile="src/raft.c" bodystart="120" bodyend="-1"/>
+        <referencedby refid="raft_8c_1af635b6f4cbb4b1f0ed6990f829f7b1a5" compoundref="raft_8c" startline="655" endline="682">raft_apply_committed</referencedby>
+        <referencedby refid="raft_8h_1a74f2bed3179b362494c113f569b62fa0" compoundref="raft_8c" startline="1432" endline="1457">raft_destroy</referencedby>
+        <referencedby refid="raft_8c_1a5b53819a7a8947be4941f6850ee94e12" compoundref="raft_8c" startline="758" endline="961">raft_handle_append_request</referencedby>
+        <referencedby refid="raft_8c_1ab78a5008c76cbf9542f2cd2398ffe0c0" compoundref="raft_8c" startline="1155" endline="1237">raft_handle_propose_request</referencedby>
+        <referencedby refid="raft_8c_1ab27598559bf4b590cb2c39e9dc7c5eda" compoundref="raft_8c" startline="1792" endline="1916">raft_handle_snapshot_chunk</referencedby>
+        <referencedby refid="raft_8c_1a92f6d290a9681067d1ca69a9687b17c9" compoundref="raft_8c" startline="1705" endline="1789">raft_handle_snapshot_request</referencedby>
+        <referencedby refid="raft_8c_1aa970144eb6cba57c82d324583399668a" compoundref="raft_8c" startline="296" endline="437">raft_log_load</referencedby>
+        <referencedby refid="raft_8c_1aac754d062a8d33953c5303b0b971ad2b" compoundref="raft_8c" startline="238" endline="294">raft_log_save</referencedby>
+        <referencedby refid="raft_8h_1aee59798c5da5f030e0de76ac5219f65e" compoundref="raft_8c" startline="1515" endline="1618">raft_propose</referencedby>
+        <referencedby refid="raft_8h_1a1dcf0302148c471262655f880ca981ef" compoundref="raft_8c" startline="2232" endline="2274">raft_replay_committed</referencedby>
+        <referencedby refid="raft_8h_1a9269abb79a4f8d590a6d10a27423c6f2" compoundref="raft_8c" startline="2082" endline="2175">raft_snapshot_create</referencedby>
+        <referencedby refid="raft_8c_1a450c00a492f26f8c1a2f8540c17d88fc" compoundref="raft_8c" startline="479" endline="517">rpc_send_append_request</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/raft.c" line="113" column="1" bodyfile="src/raft.c" bodystart="113" bodyend="121"/>
+    <listofallmembers>
+      <member refid="structraft__log__entry__t_1a72a781a6a247e4cafed8024f5264e701" prot="public" virt="non-virtual"><scope>raft_log_entry_t</scope><name>index</name></member>
+      <member refid="structraft__log__entry__t_1a0f22beedea31359c9dfb45c012af382d" prot="public" virt="non-virtual"><scope>raft_log_entry_t</scope><name>key</name></member>
+      <member refid="structraft__log__entry__t_1a64ab09732cd532257199334512413c7f" prot="public" virt="non-virtual"><scope>raft_log_entry_t</scope><name>key_len</name></member>
+      <member refid="structraft__log__entry__t_1a9580f22e82e55d651a6a4799334c06dc" prot="public" virt="non-virtual"><scope>raft_log_entry_t</scope><name>term</name></member>
+      <member refid="structraft__log__entry__t_1a218eccba17dad981772d497ecdf7ab6c" prot="public" virt="non-virtual"><scope>raft_log_entry_t</scope><name>type</name></member>
+      <member refid="structraft__log__entry__t_1aa47fc807fc627a5f83947d2974182af6" prot="public" virt="non-virtual"><scope>raft_log_entry_t</scope><name>value</name></member>
+      <member refid="structraft__log__entry__t_1a5b85ab92aae30ee8bf2c8b1fba93b461" prot="public" virt="non-virtual"><scope>raft_log_entry_t</scope><name>value_len</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

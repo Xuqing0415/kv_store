@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structresp__reply__t" kind="struct" language="C++" prot="public">
+    <compoundname>resp_reply_t</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structresp__reply__t_1a3ea3f713c63279e5ecff468e0ada05ba" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* resp_reply_t::buf</definition>
+        <argsstring></argsstring>
+        <name>buf</name>
+        <qualifiedname>resp_reply_t::buf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="228" column="10" bodyfile="src/resp_server.c" bodystart="228" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1a25ce0d89a4bc68339e6bd32c2b6a6f27" compoundref="resp__server_8c" startline="501" endline="613">resp_process_client</referencedby>
+        <referencedby refid="resp__server_8c_1a3da9c660d53aa97bb5ff54fe732310c3" compoundref="resp__server_8c" startline="252" endline="263">resp_reply_append</referencedby>
+        <referencedby refid="resp__server_8c_1a9fcaa234c8b9a1c0619489e1a2e0b8be" compoundref="resp__server_8c" startline="246" endline="250">resp_reply_free</referencedby>
+        <referencedby refid="resp__server_8c_1adb9cdefcde0f4e434eb83a2688e569dd" compoundref="resp__server_8c" startline="233" endline="244">resp_reply_new</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structresp__reply__t_1a46a1a779368c53e55deb3dc0f7e32b9a" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t resp_reply_t::len</definition>
+        <argsstring></argsstring>
+        <name>len</name>
+        <qualifiedname>resp_reply_t::len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="229" column="12" bodyfile="src/resp_server.c" bodystart="229" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1a25ce0d89a4bc68339e6bd32c2b6a6f27" compoundref="resp__server_8c" startline="501" endline="613">resp_process_client</referencedby>
+        <referencedby refid="resp__server_8c_1a3da9c660d53aa97bb5ff54fe732310c3" compoundref="resp__server_8c" startline="252" endline="263">resp_reply_append</referencedby>
+        <referencedby refid="resp__server_8c_1adb9cdefcde0f4e434eb83a2688e569dd" compoundref="resp__server_8c" startline="233" endline="244">resp_reply_new</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structresp__reply__t_1ae3fa059af28cee76b775adaa066ed714" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t resp_reply_t::capacity</definition>
+        <argsstring></argsstring>
+        <name>capacity</name>
+        <qualifiedname>resp_reply_t::capacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/resp_server.c" line="230" column="12" bodyfile="src/resp_server.c" bodystart="230" bodyend="-1"/>
+        <referencedby refid="resp__server_8c_1a3da9c660d53aa97bb5ff54fe732310c3" compoundref="resp__server_8c" startline="252" endline="263">resp_reply_append</referencedby>
+        <referencedby refid="resp__server_8c_1adb9cdefcde0f4e434eb83a2688e569dd" compoundref="resp__server_8c" startline="233" endline="244">resp_reply_new</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/resp_server.c" line="227" column="1" bodyfile="src/resp_server.c" bodystart="227" bodyend="231"/>
+    <listofallmembers>
+      <member refid="structresp__reply__t_1a3ea3f713c63279e5ecff468e0ada05ba" prot="public" virt="non-virtual"><scope>resp_reply_t</scope><name>buf</name></member>
+      <member refid="structresp__reply__t_1ae3fa059af28cee76b775adaa066ed714" prot="public" virt="non-virtual"><scope>resp_reply_t</scope><name>capacity</name></member>
+      <member refid="structresp__reply__t_1a46a1a779368c53e55deb3dc0f7e32b9a" prot="public" virt="non-virtual"><scope>resp_reply_t</scope><name>len</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

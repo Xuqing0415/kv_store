@@ -1,0 +1,1128 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="kv__store_8h" kind="file" language="C++">
+    <compoundname>kv_store.h</compoundname>
+    <includes local="no">stddef.h</includes>
+    <includedby refid="metrics__server_8h" local="yes">include/metrics_server.h</includedby>
+    <includedby refid="resp__server_8h" local="yes">include/resp_server.h</includedby>
+    <includedby refid="chaos__test_8c" local="yes">src/chaos_test.c</includedby>
+    <includedby refid="kv__store_8c" local="yes">src/kv_store.c</includedby>
+    <includedby refid="main_8c" local="yes">src/main.c</includedby>
+    <includedby refid="raft__node_8c" local="yes">src/raft_node.c</includedby>
+    <includedby refid="server__main_8c" local="yes">src/server_main.c</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>include/kv_store.h</label>
+        <link refid="kv__store_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>stddef.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>include/kv_store.h</label>
+        <link refid="kv__store_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>include/metrics_server.h</label>
+        <link refid="metrics__server_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>include/resp_server.h</label>
+        <link refid="resp__server_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>src/chaos_test.c</label>
+        <link refid="chaos__test_8c"/>
+      </node>
+      <node id="9">
+        <label>src/kv_store.c</label>
+        <link refid="kv__store_8c"/>
+      </node>
+      <node id="10">
+        <label>src/main.c</label>
+        <link refid="main_8c"/>
+      </node>
+      <node id="3">
+        <label>src/metrics_server.c</label>
+        <link refid="metrics__server_8c"/>
+      </node>
+      <node id="4">
+        <label>src/raft_node.c</label>
+        <link refid="raft__node_8c"/>
+      </node>
+      <node id="7">
+        <label>src/resp_server.c</label>
+        <link refid="resp__server_8c"/>
+      </node>
+      <node id="5">
+        <label>src/server_main.c</label>
+        <link refid="server__main_8c"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structkv__metrics__snapshot__t" prot="public">kv_metrics_snapshot_t</innerclass>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="kv__store_8h_1a6b603275988d9a80b018dfcb972414ff" prot="public" static="no">
+        <name>MEMTABLE_SIZE_LIMIT</name>
+        <initializer>(256 * 1024)  /* 256KB，便于快速触发刷盘测试 */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="7" column="9" bodyfile="include/kv_store.h" bodystart="7" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a25deb538aeb44468c7ae4c71aee2d150" compoundref="kv__store_8c" startline="770" endline="795">kv_delete</referencedby>
+        <referencedby refid="kv__store_8h_1af413577282967b31d11bf81ed0e3d67f" compoundref="kv__store_8c" startline="1280" endline="1299">kv_delete_internal</referencedby>
+        <referencedby refid="kv__store_8h_1acbc27bec469af3563081723fc01faeac" compoundref="kv__store_8c" startline="576" endline="600">kv_put</referencedby>
+        <referencedby refid="kv__store_8h_1a6229c7a21ba8826a95cdfa1c5f49fe0d" compoundref="kv__store_8c" startline="1260" endline="1278">kv_put_internal</referencedby>
+        <referencedby refid="kv__store_8c_1a64a4332e0d8f62b0701651f61e73bc5f" compoundref="kv__store_8c" startline="292" endline="322">kv_switch_memtable</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" prot="public" static="no">
+        <type>struct <ref refid="structkv__store" kindref="compound">kv_store</ref></type>
+        <definition>typedef struct kv_store kv_store_t</definition>
+        <argsstring></argsstring>
+        <name>kv_store_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="10" column="23" bodyfile="include/kv_store.h" bodystart="10" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" prot="public" static="no">
+        <type>struct <ref refid="structkv__iter" kindref="compound">kv_iter</ref></type>
+        <definition>typedef struct kv_iter kv_iter_t</definition>
+        <argsstring></argsstring>
+        <name>kv_iter_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="11" column="22" bodyfile="include/kv_store.h" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="kv__store_8h_1ac716d77176102ea3172a069079a588f5" prot="public" static="no">
+        <type>struct <ref refid="structkv__snapshot" kindref="compound">kv_snapshot</ref></type>
+        <definition>typedef struct kv_snapshot kv_snapshot_t</definition>
+        <argsstring></argsstring>
+        <name>kv_snapshot_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="12" column="26" bodyfile="include/kv_store.h" bodystart="12" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="kv__store_8h_1a4a4257e72aaf47f862a8ad28319a4946" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void kv_metrics_snapshot</definition>
+        <argsstring>(kv_store_t *db, kv_metrics_snapshot_t *out)</argsstring>
+        <name>kv_metrics_snapshot</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <param>
+          <type><ref refid="structkv__metrics__snapshot__t" kindref="compound">kv_metrics_snapshot_t</ref> *</type>
+          <declname>out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="25" column="6" bodyfile="src/kv_store.c" bodystart="760" bodyend="768" declfile="include/kv_store.h" declline="25" declcolumn="6"/>
+        <references refid="kv__store_8c_1aa7a0137aaafd2e1e41b24362c69ff23e" compoundref="kv__store_8c" startline="44">ATOMIC_READ64</references>
+        <references refid="structkv__metrics__snapshot__t_1aa027e706a684186d1d32b81d1006d51c" compoundref="kv__store_8h" startline="21">kv_metrics_snapshot_t::compactions_total</references>
+        <references refid="structkv__store_1a438276c33b0217e046da5366aba06f9c" compoundref="kv__store_8c" startline="70">kv_store::compactions_total</references>
+        <references refid="structkv__metrics__snapshot__t_1a43829a8959a5a177d785cb4f782d31e0" compoundref="kv__store_8h" startline="19">kv_metrics_snapshot_t::deletes_total</references>
+        <references refid="structkv__store_1a9e5f5b667953ea4d420bb27d876bebd6" compoundref="kv__store_8c" startline="68">kv_store::deletes_total</references>
+        <references refid="structkv__metrics__snapshot__t_1a360475943bfca7646269cddb2fdc01d3" compoundref="kv__store_8h" startline="18">kv_metrics_snapshot_t::get_misses_total</references>
+        <references refid="structkv__store_1a4a0693535c2be7dd6d6d2090d6464107" compoundref="kv__store_8c" startline="67">kv_store::get_misses_total</references>
+        <references refid="structkv__metrics__snapshot__t_1ae4c8a90c64ae167996b0ddb06e208ea5" compoundref="kv__store_8h" startline="17">kv_metrics_snapshot_t::gets_total</references>
+        <references refid="structkv__store_1a822fb153b3b6c433cc12224e7fd58f60" compoundref="kv__store_8c" startline="66">kv_store::gets_total</references>
+        <references refid="structkv__metrics__snapshot__t_1adb84911b03395532f17e5639fb4af420" compoundref="kv__store_8h" startline="16">kv_metrics_snapshot_t::puts_total</references>
+        <references refid="structkv__store_1a3dfda6774e6bbb285f65b15a3a165c58" compoundref="kv__store_8c" startline="65">kv_store::puts_total</references>
+        <references refid="structkv__metrics__snapshot__t_1ab76c467770418c5e6325d445b71a8806" compoundref="kv__store_8h" startline="20">kv_metrics_snapshot_t::scans_total</references>
+        <references refid="structkv__store_1a7754db00f8fa9c37a69a465d4b68330f" compoundref="kv__store_8c" startline="69">kv_store::scans_total</references>
+        <referencedby refid="metrics__server_8c_1a3d67963f152b21379cd157e13c198ff0" compoundref="metrics__server_8c" startline="113" endline="228">metrics_build_response</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+        <definition>kv_store_t * kv_open</definition>
+        <argsstring>(const char *dir_path)</argsstring>
+        <name>kv_open</name>
+        <param>
+          <type>const char *</type>
+          <declname>dir_path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="27" column="12" bodyfile="src/kv_store.c" bodystart="324" bodyend="430" declfile="include/kv_store.h" declline="27" declcolumn="12"/>
+        <references refid="structkv__store_1ace6a6033b6d6020ddcd95c90f7782b4d" compoundref="kv__store_8c" startline="85">kv_store::apu_compat_mode</references>
+        <references refid="structkv__store_1a00635dd862f667e9991257f445e15d56" compoundref="kv__store_8c" startline="53">kv_store::block_cache</references>
+        <references refid="structmerge__context_1a4a5de43ff8ff5c33ea78faf87f65043d" compoundref="merge_8h" startline="19">merge_context::cache</references>
+        <references refid="structkv__store_1a438276c33b0217e046da5366aba06f9c" compoundref="kv__store_8c" startline="70">kv_store::compactions_total</references>
+        <references refid="structkv__store_1afa089aacf7c986f162029da3f56685e3" compoundref="kv__store_8c" startline="62">kv_store::compression_type</references>
+        <references refid="structmerge__context_1a2a16a211f2b6e2094c93752d8b7738c5" compoundref="merge_8h" startline="29">merge_context::compression_type</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" compoundref="compression_8h" startline="10">COMPRESSION_ZSTD</references>
+        <references refid="structkv__store_1a9e5f5b667953ea4d420bb27d876bebd6" compoundref="kv__store_8c" startline="68">kv_store::deletes_total</references>
+        <references refid="structkv__store_1a2e54b7053626ae983cfcbf96f28315b5" compoundref="kv__store_8c" startline="48">kv_store::dir_path</references>
+        <references refid="structmerge__context_1ad892442b42d2a9867e74a082a3434d5c" compoundref="merge_8h" startline="17">merge_context::dir_path</references>
+        <references refid="structkv__store_1a4a0693535c2be7dd6d6d2090d6464107" compoundref="kv__store_8c" startline="67">kv_store::get_misses_total</references>
+        <references refid="structkv__store_1a822fb153b3b6c433cc12224e7fd58f60" compoundref="kv__store_8c" startline="66">kv_store::gets_total</references>
+        <references refid="structkv__store_1a7bfb253424c20169e27949f052e69138" compoundref="kv__store_8c" startline="50">kv_store::immutable_memtable</references>
+        <references refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" compoundref="lru__cache_8c" startline="99" endline="125">lru_cache_new</references>
+        <references refid="structkv__store_1a68bc92f7a5e8fed9c0bf7a61e6280247" compoundref="kv__store_8c" startline="77">kv_store::maintenance_started</references>
+        <references refid="structkv__store_1a76975d892b956df3051aed30a9bc7ae3" compoundref="kv__store_8c" startline="81">kv_store::maintenance_thread</references>
+        <references refid="kv__store_8c_1ad8a1e35142cf227b5d95940067071768" compoundref="kv__store_8c" startline="112" endline="180">maintenance_thread_func</references>
+        <references refid="structkv__store_1af9c2c046188a4f8532294be708ed1d56" compoundref="kv__store_8c" startline="52">kv_store::manifest</references>
+        <references refid="structmerge__context_1adf808c35e51aa26fd571f3c4ba66625b" compoundref="merge_8h" startline="18">merge_context::manifest</references>
+        <references refid="structkv__store_1a9b504925a9845676a1b9960623c5ae70" compoundref="kv__store_8c" startline="59">kv_store::manifest_lock</references>
+        <references refid="structmerge__context_1a47eae201d539c86e28f26721deeaead5" compoundref="merge_8h" startline="20">merge_context::manifest_lock</references>
+        <references refid="manifest_8h_1a4595c099070292074eecf62dc44f8e6e" compoundref="manifest_8c" startline="30" endline="49">manifest_open</references>
+        <references refid="structkv__store_1a76e8d113e78c53b84c321047220e6ad5" compoundref="kv__store_8c" startline="49">kv_store::memtable</references>
+        <references refid="structkv__store_1aebf5e5fa3c14ab2015c98347f21b7946" compoundref="kv__store_8c" startline="61">kv_store::memtable_size</references>
+        <references refid="structkv__store_1a37ee7038aaeeee1f72ccf4482781906b" compoundref="kv__store_8c" startline="54">kv_store::merge_ctx</references>
+        <references refid="merge_8h_1ace6f39139e55e8eedfc3a58a9f1c12f8" compoundref="merge_8c" startline="69" endline="76">merge_scheduler_start</references>
+        <references refid="structkv__store_1a3dfda6774e6bbb285f65b15a3a165c58" compoundref="kv__store_8c" startline="65">kv_store::puts_total</references>
+        <references refid="structkv__store_1a81a930662563e4a7cf07ce5b45b26080" compoundref="kv__store_8c" startline="73">kv_store::raft_mode</references>
+        <references refid="structkv__store_1acc91eafde39a2d7c9f52265b16313883" compoundref="kv__store_8c" startline="55">kv_store::rwlock</references>
+        <references refid="kv__store_8c_1a0a9115ab507c05c46cbf98fe80ce5993" compoundref="kv__store_8c" startline="36">RWLOCK_INIT</references>
+        <references refid="structkv__store_1a7754db00f8fa9c37a69a465d4b68330f" compoundref="kv__store_8c" startline="69">kv_store::scans_total</references>
+        <references refid="skiplist_8h_1ad0ef6f9599f0b74f97cb73db8c9405d6" compoundref="skiplist_8c" startline="112" endline="125">skiplist_free</references>
+        <references refid="skiplist_8h_1a5d6378cf1c76e34c78429d1383807457" compoundref="skiplist_8c" startline="83" endline="110">skiplist_new</references>
+        <references refid="structmerge__context_1a2763bff70283d88b3d97dc00e633e8ee" compoundref="merge_8h" startline="25">merge_context::stop</references>
+        <references refid="structkv__store_1a5f13af743b1a9f9a3d13fe098b510a7c" compoundref="kv__store_8c" startline="76">kv_store::stop_maintenance</references>
+        <references refid="structmerge__context_1aeb07c40988e050b5630ccd6ad2f3241e" compoundref="merge_8h" startline="28">merge_context::thread_started</references>
+        <references refid="structkv__store_1a6c2bee175ce10a510db94166d4e497c0" compoundref="kv__store_8c" startline="51">kv_store::wal_mgr</references>
+        <references refid="wal_8h_1a9a9c6ff1fb038110d3a09af89ec3c262" compoundref="wal_8c" startline="176" endline="186">wal_mgr_close</references>
+        <references refid="wal_8h_1ad93f9f1fc01b4ee2ff51600666232420" compoundref="wal_8c" startline="132" endline="174">wal_mgr_open</references>
+        <references refid="wal_8h_1a484cd076aa5d6853f2072c792b60c39c" compoundref="wal_8c" startline="221" endline="260">wal_mgr_replay</references>
+        <references refid="kv__store_8c_1a85fffac7def48d02ad97b8fb585ba0f8" compoundref="kv__store_8c" startline="182" endline="193">wal_replay_callback</references>
+        <referencedby refid="kv__store_8h_1aae7426a44a76277fe48e8f928c73ae22" compoundref="kv__store_8c" startline="1442" endline="1504">kv_restore</referencedby>
+        <referencedby refid="main_8c_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="main_8c" startline="103" endline="184">main</referencedby>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="main_8c_1a035fbbf5ce226a67e296e28c99054732" compoundref="main_8c" startline="30" endline="101">run_test</referencedby>
+        <referencedby refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" compoundref="chaos__test_8c" startline="249" endline="300">verify_data_integrity</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+        <definition>kv_store_t * kv_open_raft</definition>
+        <argsstring>(const char *dir_path)</argsstring>
+        <name>kv_open_raft</name>
+        <param>
+          <type>const char *</type>
+          <declname>dir_path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="28" column="12" bodyfile="src/kv_store.c" bodystart="435" bodyend="522" declfile="include/kv_store.h" declline="28" declcolumn="12"/>
+        <references refid="structkv__store_1ace6a6033b6d6020ddcd95c90f7782b4d" compoundref="kv__store_8c" startline="85">kv_store::apu_compat_mode</references>
+        <references refid="structkv__store_1a00635dd862f667e9991257f445e15d56" compoundref="kv__store_8c" startline="53">kv_store::block_cache</references>
+        <references refid="structmerge__context_1a4a5de43ff8ff5c33ea78faf87f65043d" compoundref="merge_8h" startline="19">merge_context::cache</references>
+        <references refid="structkv__store_1a438276c33b0217e046da5366aba06f9c" compoundref="kv__store_8c" startline="70">kv_store::compactions_total</references>
+        <references refid="structkv__store_1afa089aacf7c986f162029da3f56685e3" compoundref="kv__store_8c" startline="62">kv_store::compression_type</references>
+        <references refid="structmerge__context_1a2a16a211f2b6e2094c93752d8b7738c5" compoundref="merge_8h" startline="29">merge_context::compression_type</references>
+        <references refid="compression_8h_1a9f7c649f1c3c5760f6284639739eb45eac62f3df14c0d2ac93fb1158f5e8629e2" compoundref="compression_8h" startline="10">COMPRESSION_ZSTD</references>
+        <references refid="structkv__store_1a9e5f5b667953ea4d420bb27d876bebd6" compoundref="kv__store_8c" startline="68">kv_store::deletes_total</references>
+        <references refid="structkv__store_1a2e54b7053626ae983cfcbf96f28315b5" compoundref="kv__store_8c" startline="48">kv_store::dir_path</references>
+        <references refid="structmerge__context_1ad892442b42d2a9867e74a082a3434d5c" compoundref="merge_8h" startline="17">merge_context::dir_path</references>
+        <references refid="structkv__store_1a4a0693535c2be7dd6d6d2090d6464107" compoundref="kv__store_8c" startline="67">kv_store::get_misses_total</references>
+        <references refid="structkv__store_1a822fb153b3b6c433cc12224e7fd58f60" compoundref="kv__store_8c" startline="66">kv_store::gets_total</references>
+        <references refid="structkv__store_1a7bfb253424c20169e27949f052e69138" compoundref="kv__store_8c" startline="50">kv_store::immutable_memtable</references>
+        <references refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" compoundref="lru__cache_8c" startline="99" endline="125">lru_cache_new</references>
+        <references refid="structkv__store_1a68bc92f7a5e8fed9c0bf7a61e6280247" compoundref="kv__store_8c" startline="77">kv_store::maintenance_started</references>
+        <references refid="structkv__store_1a76975d892b956df3051aed30a9bc7ae3" compoundref="kv__store_8c" startline="81">kv_store::maintenance_thread</references>
+        <references refid="kv__store_8c_1ad8a1e35142cf227b5d95940067071768" compoundref="kv__store_8c" startline="112" endline="180">maintenance_thread_func</references>
+        <references refid="structkv__store_1af9c2c046188a4f8532294be708ed1d56" compoundref="kv__store_8c" startline="52">kv_store::manifest</references>
+        <references refid="structmerge__context_1adf808c35e51aa26fd571f3c4ba66625b" compoundref="merge_8h" startline="18">merge_context::manifest</references>
+        <references refid="structkv__store_1a9b504925a9845676a1b9960623c5ae70" compoundref="kv__store_8c" startline="59">kv_store::manifest_lock</references>
+        <references refid="structmerge__context_1a47eae201d539c86e28f26721deeaead5" compoundref="merge_8h" startline="20">merge_context::manifest_lock</references>
+        <references refid="manifest_8h_1a4595c099070292074eecf62dc44f8e6e" compoundref="manifest_8c" startline="30" endline="49">manifest_open</references>
+        <references refid="structkv__store_1a76e8d113e78c53b84c321047220e6ad5" compoundref="kv__store_8c" startline="49">kv_store::memtable</references>
+        <references refid="structkv__store_1aebf5e5fa3c14ab2015c98347f21b7946" compoundref="kv__store_8c" startline="61">kv_store::memtable_size</references>
+        <references refid="structkv__store_1a37ee7038aaeeee1f72ccf4482781906b" compoundref="kv__store_8c" startline="54">kv_store::merge_ctx</references>
+        <references refid="merge_8h_1ace6f39139e55e8eedfc3a58a9f1c12f8" compoundref="merge_8c" startline="69" endline="76">merge_scheduler_start</references>
+        <references refid="structkv__store_1a3dfda6774e6bbb285f65b15a3a165c58" compoundref="kv__store_8c" startline="65">kv_store::puts_total</references>
+        <references refid="structkv__store_1a81a930662563e4a7cf07ce5b45b26080" compoundref="kv__store_8c" startline="73">kv_store::raft_mode</references>
+        <references refid="structkv__store_1acc91eafde39a2d7c9f52265b16313883" compoundref="kv__store_8c" startline="55">kv_store::rwlock</references>
+        <references refid="kv__store_8c_1a0a9115ab507c05c46cbf98fe80ce5993" compoundref="kv__store_8c" startline="36">RWLOCK_INIT</references>
+        <references refid="structkv__store_1a7754db00f8fa9c37a69a465d4b68330f" compoundref="kv__store_8c" startline="69">kv_store::scans_total</references>
+        <references refid="skiplist_8h_1ad0ef6f9599f0b74f97cb73db8c9405d6" compoundref="skiplist_8c" startline="112" endline="125">skiplist_free</references>
+        <references refid="skiplist_8h_1a5d6378cf1c76e34c78429d1383807457" compoundref="skiplist_8c" startline="83" endline="110">skiplist_new</references>
+        <references refid="structmerge__context_1a2763bff70283d88b3d97dc00e633e8ee" compoundref="merge_8h" startline="25">merge_context::stop</references>
+        <references refid="structkv__store_1a5f13af743b1a9f9a3d13fe098b510a7c" compoundref="kv__store_8c" startline="76">kv_store::stop_maintenance</references>
+        <references refid="structmerge__context_1aeb07c40988e050b5630ccd6ad2f3241e" compoundref="merge_8h" startline="28">merge_context::thread_started</references>
+        <references refid="structkv__store_1a6c2bee175ce10a510db94166d4e497c0" compoundref="kv__store_8c" startline="51">kv_store::wal_mgr</references>
+        <referencedby refid="raft__node_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="raft__node_8c" startline="563" endline="843">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void kv_close</definition>
+        <argsstring>(kv_store_t *db)</argsstring>
+        <name>kv_close</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="29" column="6" bodyfile="src/kv_store.c" bodystart="524" bodyend="574" declfile="include/kv_store.h" declline="29" declcolumn="6"/>
+        <references refid="structkv__store_1a00635dd862f667e9991257f445e15d56" compoundref="kv__store_8c" startline="53">kv_store::block_cache</references>
+        <references refid="structkv__store_1a2e54b7053626ae983cfcbf96f28315b5" compoundref="kv__store_8c" startline="48">kv_store::dir_path</references>
+        <references refid="structkv__store_1a7bfb253424c20169e27949f052e69138" compoundref="kv__store_8c" startline="50">kv_store::immutable_memtable</references>
+        <references refid="kv__store_8c_1a5f0bfcd3bf571aa044ff2d5ef7d435ca" compoundref="kv__store_8c" startline="195" endline="290">kv_flush_memtable</references>
+        <references refid="lru__cache_8h_1a5dce8063dde908934862ea5c798bfafc" compoundref="lru__cache_8c" startline="127" endline="145">lru_cache_free</references>
+        <references refid="structkv__store_1a68bc92f7a5e8fed9c0bf7a61e6280247" compoundref="kv__store_8c" startline="77">kv_store::maintenance_started</references>
+        <references refid="structkv__store_1a76975d892b956df3051aed30a9bc7ae3" compoundref="kv__store_8c" startline="81">kv_store::maintenance_thread</references>
+        <references refid="structkv__store_1af9c2c046188a4f8532294be708ed1d56" compoundref="kv__store_8c" startline="52">kv_store::manifest</references>
+        <references refid="manifest_8h_1a5d1e760abe0a2988da14531d4431cd9a" compoundref="manifest_8c" startline="51" endline="57">manifest_close</references>
+        <references refid="structkv__store_1a9b504925a9845676a1b9960623c5ae70" compoundref="kv__store_8c" startline="59">kv_store::manifest_lock</references>
+        <references refid="structkv__store_1a76e8d113e78c53b84c321047220e6ad5" compoundref="kv__store_8c" startline="49">kv_store::memtable</references>
+        <references refid="structkv__store_1a37ee7038aaeeee1f72ccf4482781906b" compoundref="kv__store_8c" startline="54">kv_store::merge_ctx</references>
+        <references refid="merge_8h_1ab68b218fb4e410ba018a6523dab2cbaa" compoundref="merge_8c" startline="84" endline="91">merge_scheduler_join</references>
+        <references refid="structkv__store_1acc91eafde39a2d7c9f52265b16313883" compoundref="kv__store_8c" startline="55">kv_store::rwlock</references>
+        <references refid="kv__store_8c_1a9c46e1d1c2404905191a4aa08a13dbde" compoundref="kv__store_8c" startline="41">RWLOCK_DESTROY</references>
+        <references refid="skiplist_8h_1ac2a15e084bef7929745da71371ed44b9" compoundref="skiplist_8c" startline="232" endline="235">skiplist_count</references>
+        <references refid="skiplist_8h_1ad0ef6f9599f0b74f97cb73db8c9405d6" compoundref="skiplist_8c" startline="112" endline="125">skiplist_free</references>
+        <references refid="structkv__store_1a5f13af743b1a9f9a3d13fe098b510a7c" compoundref="kv__store_8c" startline="76">kv_store::stop_maintenance</references>
+        <references refid="structkv__store_1a6c2bee175ce10a510db94166d4e497c0" compoundref="kv__store_8c" startline="51">kv_store::wal_mgr</references>
+        <references refid="wal_8h_1a9a9c6ff1fb038110d3a09af89ec3c262" compoundref="wal_8c" startline="176" endline="186">wal_mgr_close</references>
+        <referencedby refid="main_8c_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="main_8c" startline="103" endline="184">main</referencedby>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="main_8c_1a035fbbf5ce226a67e296e28c99054732" compoundref="main_8c" startline="30" endline="101">run_test</referencedby>
+        <referencedby refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" compoundref="chaos__test_8c" startline="249" endline="300">verify_data_integrity</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1acbc27bec469af3563081723fc01faeac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int kv_put</definition>
+        <argsstring>(kv_store_t *db, const char *key, size_t klen, const char *val, size_t vlen)</argsstring>
+        <name>kv_put</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>val</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="30" column="5" bodyfile="src/kv_store.c" bodystart="576" bodyend="600" declfile="include/kv_store.h" declline="30" declcolumn="5"/>
+        <references refid="kv__store_8c_1a857284a9412265313aac398a13d12d76" compoundref="kv__store_8c" startline="43">ATOMIC_INC64</references>
+        <references refid="kv__store_8c_1a64a4332e0d8f62b0701651f61e73bc5f" compoundref="kv__store_8c" startline="292" endline="322">kv_switch_memtable</references>
+        <references refid="structkv__store_1a76e8d113e78c53b84c321047220e6ad5" compoundref="kv__store_8c" startline="49">kv_store::memtable</references>
+        <references refid="structkv__store_1aebf5e5fa3c14ab2015c98347f21b7946" compoundref="kv__store_8c" startline="61">kv_store::memtable_size</references>
+        <references refid="kv__store_8h_1a6b603275988d9a80b018dfcb972414ff" compoundref="kv__store_8h" startline="7">MEMTABLE_SIZE_LIMIT</references>
+        <references refid="structkv__store_1a3dfda6774e6bbb285f65b15a3a165c58" compoundref="kv__store_8c" startline="65">kv_store::puts_total</references>
+        <references refid="structkv__store_1a81a930662563e4a7cf07ce5b45b26080" compoundref="kv__store_8c" startline="73">kv_store::raft_mode</references>
+        <references refid="structkv__store_1acc91eafde39a2d7c9f52265b16313883" compoundref="kv__store_8c" startline="55">kv_store::rwlock</references>
+        <references refid="kv__store_8c_1abe92ac75caa6a1f54aaf583898590528" compoundref="kv__store_8c" startline="40">RWLOCK_UNLOCK_W</references>
+        <references refid="kv__store_8c_1a1b81e157d6903f0ed1b692d381d259a2" compoundref="kv__store_8c" startline="38">RWLOCK_WRLOCK</references>
+        <references refid="skiplist_8h_1a5c78e1b0aab013dd35b7ab8015fa1c6a" compoundref="skiplist_8c" startline="127" endline="178">skiplist_insert</references>
+        <references refid="structkv__store_1a6c2bee175ce10a510db94166d4e497c0" compoundref="kv__store_8c" startline="51">kv_store::wal_mgr</references>
+        <references refid="wal_8h_1a66b27b1919547d721d0318540a63bc07" compoundref="wal_8c" startline="188" endline="214">wal_mgr_write</references>
+        <references refid="wal_8h_1acde019f60a86690e5e7c215ea834432aa346c2e7c5bf1cbe17173407092760d2b" compoundref="wal_8h" startline="14">WAL_PUT</references>
+        <referencedby refid="resp__server_8c_1a8784f129826b747a72256c7098f2488d" compoundref="resp__server_8c" startline="332" endline="350">cmd_set</referencedby>
+        <referencedby refid="chaos__test_8c_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="chaos__test_8c" startline="314" endline="426">main</referencedby>
+        <referencedby refid="main_8c_1a035fbbf5ce226a67e296e28c99054732" compoundref="main_8c" startline="30" endline="101">run_test</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int kv_get</definition>
+        <argsstring>(kv_store_t *db, const char *key, size_t klen, char **out_val, size_t *out_vlen)</argsstring>
+        <name>kv_get</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>char **</type>
+          <declname>out_val</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>out_vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="31" column="5" bodyfile="src/kv_store.c" bodystart="602" bodyend="733" declfile="include/kv_store.h" declline="31" declcolumn="5"/>
+        <references refid="kv__store_8c_1a857284a9412265313aac398a13d12d76" compoundref="kv__store_8c" startline="43">ATOMIC_INC64</references>
+        <references refid="structkv__store_1a00635dd862f667e9991257f445e15d56" compoundref="kv__store_8c" startline="53">kv_store::block_cache</references>
+        <references refid="structkv__store_1a2e54b7053626ae983cfcbf96f28315b5" compoundref="kv__store_8c" startline="48">kv_store::dir_path</references>
+        <references refid="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" compoundref="manifest_8h" startline="11">manifest_file::file_id</references>
+        <references refid="structkv__store_1a4a0693535c2be7dd6d6d2090d6464107" compoundref="kv__store_8c" startline="67">kv_store::get_misses_total</references>
+        <references refid="structkv__store_1a822fb153b3b6c433cc12224e7fd58f60" compoundref="kv__store_8c" startline="66">kv_store::gets_total</references>
+        <references refid="structkv__store_1a7bfb253424c20169e27949f052e69138" compoundref="kv__store_8c" startline="50">kv_store::immutable_memtable</references>
+        <references refid="structkv__store_1af9c2c046188a4f8532294be708ed1d56" compoundref="kv__store_8c" startline="52">kv_store::manifest</references>
+        <references refid="manifest_8h_1a1b49825fc2dafa1d29d1fea3f32df54f" compoundref="manifest_8c" startline="126" endline="154">manifest_list_files</references>
+        <references refid="structkv__store_1a9b504925a9845676a1b9960623c5ae70" compoundref="kv__store_8c" startline="59">kv_store::manifest_lock</references>
+        <references refid="merge_8h_1add784659439a8dd6b1423406171414d3" compoundref="merge_8h" startline="12">MAX_LEVELS</references>
+        <references refid="structkv__store_1a76e8d113e78c53b84c321047220e6ad5" compoundref="kv__store_8c" startline="49">kv_store::memtable</references>
+        <references refid="structkv__store_1acc91eafde39a2d7c9f52265b16313883" compoundref="kv__store_8c" startline="55">kv_store::rwlock</references>
+        <references refid="kv__store_8c_1afa09c70b971b3f4aebeb216803fd6010" compoundref="kv__store_8c" startline="37">RWLOCK_RDLOCK</references>
+        <references refid="kv__store_8c_1aa644442c78391cfa61009d07abf0d2a2" compoundref="kv__store_8c" startline="39">RWLOCK_UNLOCK</references>
+        <references refid="skiplist_8h_1a7f3d6a7d2523ed2412a196eb8e65adb9" compoundref="skiplist_8c" startline="180" endline="209">skiplist_lookup</references>
+        <references refid="sstable_8h_1a8f7511d759e436cff50fdb79f8173647" compoundref="sstable_8c" startline="730" endline="741">sstable_close</references>
+        <references refid="sstable_8h_1ac461806936e04fd48217cbd0cbdbc7b9" compoundref="sstable_8c" startline="743" endline="834">sstable_lookup</references>
+        <references refid="sstable_8h_1a3d2d335d8d676a87f6d8524b14b5f513" compoundref="sstable_8c" startline="647" endline="728">sstable_open</references>
+        <referencedby refid="resp__server_8c_1ae0ab318620fdd3607fa2d6f939c598b6" compoundref="resp__server_8c" startline="388" endline="405">cmd_exists</referencedby>
+        <referencedby refid="resp__server_8c_1a8ddf724b4519dc008cbd33375badd27d" compoundref="resp__server_8c" startline="352" endline="370">cmd_get</referencedby>
+        <referencedby refid="main_8c_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="main_8c" startline="103" endline="184">main</referencedby>
+        <referencedby refid="main_8c_1a035fbbf5ce226a67e296e28c99054732" compoundref="main_8c" startline="30" endline="101">run_test</referencedby>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+        <referencedby refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" compoundref="chaos__test_8c" startline="249" endline="300">verify_data_integrity</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a25deb538aeb44468c7ae4c71aee2d150" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int kv_delete</definition>
+        <argsstring>(kv_store_t *db, const char *key, size_t klen)</argsstring>
+        <name>kv_delete</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="32" column="5" bodyfile="src/kv_store.c" bodystart="770" bodyend="795" declfile="include/kv_store.h" declline="32" declcolumn="5"/>
+        <references refid="kv__store_8c_1a857284a9412265313aac398a13d12d76" compoundref="kv__store_8c" startline="43">ATOMIC_INC64</references>
+        <references refid="structkv__store_1a9e5f5b667953ea4d420bb27d876bebd6" compoundref="kv__store_8c" startline="68">kv_store::deletes_total</references>
+        <references refid="kv__store_8c_1a64a4332e0d8f62b0701651f61e73bc5f" compoundref="kv__store_8c" startline="292" endline="322">kv_switch_memtable</references>
+        <references refid="structkv__store_1a76e8d113e78c53b84c321047220e6ad5" compoundref="kv__store_8c" startline="49">kv_store::memtable</references>
+        <references refid="structkv__store_1aebf5e5fa3c14ab2015c98347f21b7946" compoundref="kv__store_8c" startline="61">kv_store::memtable_size</references>
+        <references refid="kv__store_8h_1a6b603275988d9a80b018dfcb972414ff" compoundref="kv__store_8h" startline="7">MEMTABLE_SIZE_LIMIT</references>
+        <references refid="structkv__store_1a81a930662563e4a7cf07ce5b45b26080" compoundref="kv__store_8c" startline="73">kv_store::raft_mode</references>
+        <references refid="structkv__store_1acc91eafde39a2d7c9f52265b16313883" compoundref="kv__store_8c" startline="55">kv_store::rwlock</references>
+        <references refid="kv__store_8c_1abe92ac75caa6a1f54aaf583898590528" compoundref="kv__store_8c" startline="40">RWLOCK_UNLOCK_W</references>
+        <references refid="kv__store_8c_1a1b81e157d6903f0ed1b692d381d259a2" compoundref="kv__store_8c" startline="38">RWLOCK_WRLOCK</references>
+        <references refid="skiplist_8h_1a5c78e1b0aab013dd35b7ab8015fa1c6a" compoundref="skiplist_8c" startline="127" endline="178">skiplist_insert</references>
+        <references refid="wal_8h_1acde019f60a86690e5e7c215ea834432aa2eb0703e10df97318518b5e711f8554b" compoundref="wal_8h" startline="15">WAL_DELETE</references>
+        <references refid="structkv__store_1a6c2bee175ce10a510db94166d4e497c0" compoundref="kv__store_8c" startline="51">kv_store::wal_mgr</references>
+        <references refid="wal_8h_1a66b27b1919547d721d0318540a63bc07" compoundref="wal_8c" startline="188" endline="214">wal_mgr_write</references>
+        <referencedby refid="resp__server_8c_1aabc41c695153d5d0e4e04e500eef24dd" compoundref="resp__server_8c" startline="372" endline="386">cmd_del</referencedby>
+        <referencedby refid="resp__server_8c_1a3ce4b4f1a612d8cb69f7498e1f986bf3" compoundref="resp__server_8c" startline="425" endline="440">cmd_flushdb</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a079779f022f5168123b13074e95f3bdd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int kv_sync</definition>
+        <argsstring>(kv_store_t *db)</argsstring>
+        <name>kv_sync</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="33" column="5" bodyfile="src/kv_store.c" bodystart="735" bodyend="741" declfile="include/kv_store.h" declline="33" declcolumn="5"/>
+        <references refid="structkv__store_1a6c2bee175ce10a510db94166d4e497c0" compoundref="kv__store_8c" startline="51">kv_store::wal_mgr</references>
+        <references refid="wal_8h_1afe75b1ecad079adc49f01bde36496b63" compoundref="wal_8c" startline="216" endline="219">wal_mgr_sync</references>
+        <referencedby refid="resp__server_8c_1a8a30410d4a54e5f68eb601cbeffcac69" compoundref="resp__server_8c" startline="463" endline="469">cmd_save</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1ad21f1d69050c1cc8bcf7e397b23c8982" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int kv_force_merge</definition>
+        <argsstring>(kv_store_t *db)</argsstring>
+        <name>kv_force_merge</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="34" column="5" bodyfile="src/kv_store.c" bodystart="743" bodyend="758" declfile="include/kv_store.h" declline="34" declcolumn="5"/>
+        <references refid="kv__store_8c_1a857284a9412265313aac398a13d12d76" compoundref="kv__store_8c" startline="43">ATOMIC_INC64</references>
+        <references refid="structkv__store_1a438276c33b0217e046da5366aba06f9c" compoundref="kv__store_8c" startline="70">kv_store::compactions_total</references>
+        <references refid="merge_8h_1add784659439a8dd6b1423406171414d3" compoundref="merge_8h" startline="12">MAX_LEVELS</references>
+        <references refid="structkv__store_1a37ee7038aaeeee1f72ccf4482781906b" compoundref="kv__store_8c" startline="54">kv_store::merge_ctx</references>
+        <references refid="merge_8h_1ade2fd4d583fadd6da1dc63c0fec1e208" compoundref="merge_8c" startline="282" endline="317">merge_execute</references>
+        <referencedby refid="main_8c_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="main_8c" startline="103" endline="184">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" kindref="member">kv_iter_t</ref> *</type>
+        <definition>kv_iter_t * kv_scan</definition>
+        <argsstring>(kv_store_t *db, const char *start, size_t slen, const char *end, size_t elen)</argsstring>
+        <name>kv_scan</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>start</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>slen</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>elen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="35" column="11" bodyfile="src/kv_store.c" bodystart="865" bodyend="952" declfile="include/kv_store.h" declline="35" declcolumn="11"/>
+        <references refid="kv__store_8c_1a857284a9412265313aac398a13d12d76" compoundref="kv__store_8c" startline="43">ATOMIC_INC64</references>
+        <references refid="structkv__iter_1a2ccf506fdd6178dc89a935af58f8b85d" compoundref="kv__store_8c" startline="89">kv_iter::db</references>
+        <references refid="structkv__store_1a2e54b7053626ae983cfcbf96f28315b5" compoundref="kv__store_8c" startline="48">kv_store::dir_path</references>
+        <references refid="structkv__iter_1aa4f3c95fe20c64b85c50f3280affd250" compoundref="kv__store_8c" startline="95">kv_iter::end_key</references>
+        <references refid="structkv__iter_1af5c786d4d1b7ede04a53394ec0d27e44" compoundref="kv__store_8c" startline="96">kv_iter::end_len</references>
+        <references refid="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" compoundref="manifest_8h" startline="11">manifest_file::file_id</references>
+        <references refid="structkv__store_1a7bfb253424c20169e27949f052e69138" compoundref="kv__store_8c" startline="50">kv_store::immutable_memtable</references>
+        <references refid="kv__store_8c_1a4342798ef6a43d3044b8606f4a75cab7" compoundref="kv__store_8c" startline="969" endline="983">kv_iter_free</references>
+        <references refid="structkv__store_1af9c2c046188a4f8532294be708ed1d56" compoundref="kv__store_8c" startline="52">kv_store::manifest</references>
+        <references refid="manifest_8h_1a1b49825fc2dafa1d29d1fea3f32df54f" compoundref="manifest_8c" startline="126" endline="154">manifest_list_files</references>
+        <references refid="structkv__store_1a9b504925a9845676a1b9960623c5ae70" compoundref="kv__store_8c" startline="59">kv_store::manifest_lock</references>
+        <references refid="merge_8h_1add784659439a8dd6b1423406171414d3" compoundref="merge_8h" startline="12">MAX_LEVELS</references>
+        <references refid="structkv__store_1a76e8d113e78c53b84c321047220e6ad5" compoundref="kv__store_8c" startline="49">kv_store::memtable</references>
+        <references refid="kv__store_8c_1a53a89a56b0e348ee3bbc645e3d26dd87" compoundref="kv__store_8c" startline="799" endline="829">merge_skiplist_into</references>
+        <references refid="kv__store_8c_1adfb68e9ae72026e3f95fd86cf2ca5205" compoundref="kv__store_8c" startline="833" endline="863">merge_sstable_into</references>
+        <references refid="structkv__iter_1a47e058d2979e5bae753dc32a0167dbef" compoundref="kv__store_8c" startline="91">kv_iter::merged</references>
+        <references refid="structkv__iter_1a3ffbe2e25417779d9e6b4b74c2738208" compoundref="kv__store_8c" startline="92">kv_iter::merged_iter</references>
+        <references refid="structkv__store_1acc91eafde39a2d7c9f52265b16313883" compoundref="kv__store_8c" startline="55">kv_store::rwlock</references>
+        <references refid="kv__store_8c_1afa09c70b971b3f4aebeb216803fd6010" compoundref="kv__store_8c" startline="37">RWLOCK_RDLOCK</references>
+        <references refid="kv__store_8c_1aa644442c78391cfa61009d07abf0d2a2" compoundref="kv__store_8c" startline="39">RWLOCK_UNLOCK</references>
+        <references refid="structkv__store_1a7754db00f8fa9c37a69a465d4b68330f" compoundref="kv__store_8c" startline="69">kv_store::scans_total</references>
+        <references refid="skiplist_8h_1a5d6378cf1c76e34c78429d1383807457" compoundref="skiplist_8c" startline="83" endline="110">skiplist_new</references>
+        <references refid="skiplist_8h_1a51455706e22b354dbe6334120f72c1e4" compoundref="skiplist_8c" startline="242" endline="250">skiplist_new_iterator</references>
+        <references refid="sstable_8h_1a8f7511d759e436cff50fdb79f8173647" compoundref="sstable_8c" startline="730" endline="741">sstable_close</references>
+        <references refid="sstable_8h_1a3d2d335d8d676a87f6d8524b14b5f513" compoundref="sstable_8c" startline="647" endline="728">sstable_open</references>
+        <references refid="structkv__iter_1af05bad722f9cb2fdb9da46f90a6d9d67" compoundref="kv__store_8c" startline="93">kv_iter::start_key</references>
+        <references refid="structkv__iter_1a59dfa81d41b3ffd8e43d8e2c90f9b3b1" compoundref="kv__store_8c" startline="94">kv_iter::start_len</references>
+        <referencedby refid="resp__server_8c_1adadbc28ae8ce6ee6c752fa8ca280fa59" compoundref="resp__server_8c" startline="407" endline="423">cmd_dbsize</referencedby>
+        <referencedby refid="resp__server_8c_1a3ce4b4f1a612d8cb69f7498e1f986bf3" compoundref="resp__server_8c" startline="425" endline="440">cmd_flushdb</referencedby>
+        <referencedby refid="main_8c_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="main_8c" startline="103" endline="184">main</referencedby>
+        <referencedby refid="main_8c_1a035fbbf5ce226a67e296e28c99054732" compoundref="main_8c" startline="30" endline="101">run_test</referencedby>
+        <referencedby refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" compoundref="chaos__test_8c" startline="249" endline="300">verify_data_integrity</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a8e50eecfcbf98705fc5ffd81b7ac139b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int kv_iter_next</definition>
+        <argsstring>(kv_iter_t *iter, char **key, size_t *klen, char **val, size_t *vlen)</argsstring>
+        <name>kv_iter_next</name>
+        <param>
+          <type><ref refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" kindref="member">kv_iter_t</ref> *</type>
+          <declname>iter</declname>
+        </param>
+        <param>
+          <type>char **</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>char **</type>
+          <declname>val</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="36" column="5" bodyfile="src/kv_store.c" bodystart="954" bodyend="967" declfile="include/kv_store.h" declline="36" declcolumn="5"/>
+        <references refid="structkv__iter_1a3ffbe2e25417779d9e6b4b74c2738208" compoundref="kv__store_8c" startline="92">kv_iter::merged_iter</references>
+        <references refid="skiplist_8h_1a69dfbcd76ad2fa6f4da01ec99119d64a" compoundref="skiplist_8c" startline="258" endline="290">skiplist_iter_next</references>
+        <referencedby refid="resp__server_8c_1adadbc28ae8ce6ee6c752fa8ca280fa59" compoundref="resp__server_8c" startline="407" endline="423">cmd_dbsize</referencedby>
+        <referencedby refid="resp__server_8c_1a3ce4b4f1a612d8cb69f7498e1f986bf3" compoundref="resp__server_8c" startline="425" endline="440">cmd_flushdb</referencedby>
+        <referencedby refid="main_8c_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="main_8c" startline="103" endline="184">main</referencedby>
+        <referencedby refid="main_8c_1a035fbbf5ce226a67e296e28c99054732" compoundref="main_8c" startline="30" endline="101">run_test</referencedby>
+        <referencedby refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" compoundref="chaos__test_8c" startline="249" endline="300">verify_data_integrity</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a4342798ef6a43d3044b8606f4a75cab7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void kv_iter_free</definition>
+        <argsstring>(kv_iter_t *iter)</argsstring>
+        <name>kv_iter_free</name>
+        <param>
+          <type><ref refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" kindref="member">kv_iter_t</ref> *</type>
+          <declname>iter</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="37" column="6" bodyfile="src/kv_store.c" bodystart="969" bodyend="983" declfile="include/kv_store.h" declline="37" declcolumn="6"/>
+        <references refid="structkv__iter_1aa4f3c95fe20c64b85c50f3280affd250" compoundref="kv__store_8c" startline="95">kv_iter::end_key</references>
+        <references refid="structkv__iter_1a47e058d2979e5bae753dc32a0167dbef" compoundref="kv__store_8c" startline="91">kv_iter::merged</references>
+        <references refid="structkv__iter_1a3ffbe2e25417779d9e6b4b74c2738208" compoundref="kv__store_8c" startline="92">kv_iter::merged_iter</references>
+        <references refid="skiplist_8h_1ad0ef6f9599f0b74f97cb73db8c9405d6" compoundref="skiplist_8c" startline="112" endline="125">skiplist_free</references>
+        <references refid="skiplist_8h_1a2e0f3f6c1dc4c0caf4c6f6c0da91158b" compoundref="skiplist_8c" startline="252" endline="256">skiplist_iter_free</references>
+        <references refid="structkv__iter_1af05bad722f9cb2fdb9da46f90a6d9d67" compoundref="kv__store_8c" startline="93">kv_iter::start_key</references>
+        <referencedby refid="resp__server_8c_1adadbc28ae8ce6ee6c752fa8ca280fa59" compoundref="resp__server_8c" startline="407" endline="423">cmd_dbsize</referencedby>
+        <referencedby refid="resp__server_8c_1a3ce4b4f1a612d8cb69f7498e1f986bf3" compoundref="resp__server_8c" startline="425" endline="440">cmd_flushdb</referencedby>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+        <referencedby refid="main_8c_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="main_8c" startline="103" endline="184">main</referencedby>
+        <referencedby refid="main_8c_1a035fbbf5ce226a67e296e28c99054732" compoundref="main_8c" startline="30" endline="101">run_test</referencedby>
+        <referencedby refid="chaos__test_8c_1a8c4f1747313fbe2d92801e1be4d78ad0" compoundref="chaos__test_8c" startline="249" endline="300">verify_data_integrity</referencedby>
+        <referencedby refid="chaos__test_8c_1a4e02a2b6ef758a5880b64d8b4ce7f1af" compoundref="chaos__test_8c" startline="69" endline="141">worker_thread</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="kv__store_8h_1ac716d77176102ea3172a069079a588f5" kindref="member">kv_snapshot_t</ref> *</type>
+        <definition>kv_snapshot_t * kv_snapshot_create</definition>
+        <argsstring>(kv_store_t *db)</argsstring>
+        <name>kv_snapshot_create</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="40" column="15" bodyfile="src/kv_store.c" bodystart="1014" bodyend="1073" declfile="include/kv_store.h" declline="40" declcolumn="15"/>
+        <references refid="structkv__snapshot_1a01000e86f86f2bffc64fe9ce8ac110d4" compoundref="kv__store_8c" startline="1002">kv_snapshot::block_cache</references>
+        <references refid="structkv__snapshot_1a5e65f361ae30fc69557d025e287bc135" compoundref="kv__store_8c" startline="999">kv_snapshot::dir_path</references>
+        <references refid="structkv__store_1a2e54b7053626ae983cfcbf96f28315b5" compoundref="kv__store_8c" startline="48">kv_store::dir_path</references>
+        <references refid="structkv__snapshot_1a7d2bb9816a49bb391475e370e8136298" compoundref="kv__store_8c" startline="1001">kv_snapshot::file_count</references>
+        <references refid="structkv__snapshot_1a3644b23d43fdce2697778e3f0e3c7d73" compoundref="kv__store_8c" startline="1000">kv_snapshot::files</references>
+        <references refid="structmanifest__file_1a6ea1361b547d1f6cdc992b5c0a65dd25" compoundref="manifest_8h" startline="15">manifest_file::largest_key</references>
+        <references refid="structmanifest__file_1acbd780969f0924279a1972ffc50aef1c" compoundref="manifest_8h" startline="16">manifest_file::largest_key_len</references>
+        <references refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" compoundref="lru__cache_8c" startline="99" endline="125">lru_cache_new</references>
+        <references refid="structkv__store_1af9c2c046188a4f8532294be708ed1d56" compoundref="kv__store_8c" startline="52">kv_store::manifest</references>
+        <references refid="manifest_8h_1a1b49825fc2dafa1d29d1fea3f32df54f" compoundref="manifest_8c" startline="126" endline="154">manifest_list_files</references>
+        <references refid="structkv__store_1a9b504925a9845676a1b9960623c5ae70" compoundref="kv__store_8c" startline="59">kv_store::manifest_lock</references>
+        <references refid="structmanifest__file_1aba49690d903d266c1a66cd4407dafdcf" compoundref="manifest_8h" startline="13">manifest_file::smallest_key</references>
+        <references refid="structmanifest__file_1addb4eec8ec5a1b26381cb2e7f5afc139" compoundref="manifest_8h" startline="14">manifest_file::smallest_key_len</references>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int kv_snapshot_get</definition>
+        <argsstring>(kv_snapshot_t *snap, const char *key, size_t klen, char **out_val, size_t *out_vlen)</argsstring>
+        <name>kv_snapshot_get</name>
+        <param>
+          <type><ref refid="kv__store_8h_1ac716d77176102ea3172a069079a588f5" kindref="member">kv_snapshot_t</ref> *</type>
+          <declname>snap</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>char **</type>
+          <declname>out_val</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>out_vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="41" column="5" bodyfile="src/kv_store.c" bodystart="1091" bodyend="1130" declfile="include/kv_store.h" declline="41" declcolumn="5"/>
+        <references refid="structkv__snapshot_1a01000e86f86f2bffc64fe9ce8ac110d4" compoundref="kv__store_8c" startline="1002">kv_snapshot::block_cache</references>
+        <references refid="structkv__snapshot_1a5e65f361ae30fc69557d025e287bc135" compoundref="kv__store_8c" startline="999">kv_snapshot::dir_path</references>
+        <references refid="structkv__snapshot_1a7d2bb9816a49bb391475e370e8136298" compoundref="kv__store_8c" startline="1001">kv_snapshot::file_count</references>
+        <references refid="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" compoundref="manifest_8h" startline="11">manifest_file::file_id</references>
+        <references refid="structkv__snapshot_1a3644b23d43fdce2697778e3f0e3c7d73" compoundref="kv__store_8c" startline="1000">kv_snapshot::files</references>
+        <references refid="structmanifest__file_1a6ea1361b547d1f6cdc992b5c0a65dd25" compoundref="manifest_8h" startline="15">manifest_file::largest_key</references>
+        <references refid="structmanifest__file_1acbd780969f0924279a1972ffc50aef1c" compoundref="manifest_8h" startline="16">manifest_file::largest_key_len</references>
+        <references refid="structmanifest__file_1ad44ca515be7a7088af22b9fed2b6706d" compoundref="manifest_8h" startline="12">manifest_file::level</references>
+        <references refid="merge_8h_1add784659439a8dd6b1423406171414d3" compoundref="merge_8h" startline="12">MAX_LEVELS</references>
+        <references refid="structmanifest__file_1aba49690d903d266c1a66cd4407dafdcf" compoundref="manifest_8h" startline="13">manifest_file::smallest_key</references>
+        <references refid="structmanifest__file_1addb4eec8ec5a1b26381cb2e7f5afc139" compoundref="manifest_8h" startline="14">manifest_file::smallest_key_len</references>
+        <references refid="kv__store_8c_1aeda1b1b5ee820a3d624fccaa52505514" compoundref="kv__store_8c" startline="1005" endline="1012">snap_compare_keys</references>
+        <references refid="sstable_8h_1a8f7511d759e436cff50fdb79f8173647" compoundref="sstable_8c" startline="730" endline="741">sstable_close</references>
+        <references refid="sstable_8h_1ac461806936e04fd48217cbd0cbdbc7b9" compoundref="sstable_8c" startline="743" endline="834">sstable_lookup</references>
+        <references refid="sstable_8h_1a3d2d335d8d676a87f6d8524b14b5f513" compoundref="sstable_8c" startline="647" endline="728">sstable_open</references>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" kindref="member">kv_iter_t</ref> *</type>
+        <definition>kv_iter_t * kv_snapshot_scan</definition>
+        <argsstring>(kv_snapshot_t *snap, const char *start, size_t slen, const char *end, size_t elen)</argsstring>
+        <name>kv_snapshot_scan</name>
+        <param>
+          <type><ref refid="kv__store_8h_1ac716d77176102ea3172a069079a588f5" kindref="member">kv_snapshot_t</ref> *</type>
+          <declname>snap</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>start</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>slen</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>elen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="42" column="11" bodyfile="src/kv_store.c" bodystart="1132" bodyend="1183" declfile="include/kv_store.h" declline="42" declcolumn="11"/>
+        <references refid="structkv__iter_1a2ccf506fdd6178dc89a935af58f8b85d" compoundref="kv__store_8c" startline="89">kv_iter::db</references>
+        <references refid="structkv__snapshot_1a5e65f361ae30fc69557d025e287bc135" compoundref="kv__store_8c" startline="999">kv_snapshot::dir_path</references>
+        <references refid="structkv__iter_1aa4f3c95fe20c64b85c50f3280affd250" compoundref="kv__store_8c" startline="95">kv_iter::end_key</references>
+        <references refid="structkv__iter_1af5c786d4d1b7ede04a53394ec0d27e44" compoundref="kv__store_8c" startline="96">kv_iter::end_len</references>
+        <references refid="structkv__snapshot_1a7d2bb9816a49bb391475e370e8136298" compoundref="kv__store_8c" startline="1001">kv_snapshot::file_count</references>
+        <references refid="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" compoundref="manifest_8h" startline="11">manifest_file::file_id</references>
+        <references refid="structkv__snapshot_1a3644b23d43fdce2697778e3f0e3c7d73" compoundref="kv__store_8c" startline="1000">kv_snapshot::files</references>
+        <references refid="kv__store_8c_1a4342798ef6a43d3044b8606f4a75cab7" compoundref="kv__store_8c" startline="969" endline="983">kv_iter_free</references>
+        <references refid="structmanifest__file_1ad44ca515be7a7088af22b9fed2b6706d" compoundref="manifest_8h" startline="12">manifest_file::level</references>
+        <references refid="merge_8h_1add784659439a8dd6b1423406171414d3" compoundref="merge_8h" startline="12">MAX_LEVELS</references>
+        <references refid="kv__store_8c_1adfb68e9ae72026e3f95fd86cf2ca5205" compoundref="kv__store_8c" startline="833" endline="863">merge_sstable_into</references>
+        <references refid="structkv__iter_1a47e058d2979e5bae753dc32a0167dbef" compoundref="kv__store_8c" startline="91">kv_iter::merged</references>
+        <references refid="structkv__iter_1a3ffbe2e25417779d9e6b4b74c2738208" compoundref="kv__store_8c" startline="92">kv_iter::merged_iter</references>
+        <references refid="skiplist_8h_1a5d6378cf1c76e34c78429d1383807457" compoundref="skiplist_8c" startline="83" endline="110">skiplist_new</references>
+        <references refid="skiplist_8h_1a51455706e22b354dbe6334120f72c1e4" compoundref="skiplist_8c" startline="242" endline="250">skiplist_new_iterator</references>
+        <references refid="sstable_8h_1a8f7511d759e436cff50fdb79f8173647" compoundref="sstable_8c" startline="730" endline="741">sstable_close</references>
+        <references refid="sstable_8h_1a3d2d335d8d676a87f6d8524b14b5f513" compoundref="sstable_8c" startline="647" endline="728">sstable_open</references>
+        <references refid="structkv__iter_1af05bad722f9cb2fdb9da46f90a6d9d67" compoundref="kv__store_8c" startline="93">kv_iter::start_key</references>
+        <references refid="structkv__iter_1a59dfa81d41b3ffd8e43d8e2c90f9b3b1" compoundref="kv__store_8c" startline="94">kv_iter::start_len</references>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a2e4e48206e3052f91933404bebd4c296" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void kv_snapshot_free</definition>
+        <argsstring>(kv_snapshot_t *snap)</argsstring>
+        <name>kv_snapshot_free</name>
+        <param>
+          <type><ref refid="kv__store_8h_1ac716d77176102ea3172a069079a588f5" kindref="member">kv_snapshot_t</ref> *</type>
+          <declname>snap</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="43" column="6" bodyfile="src/kv_store.c" bodystart="1075" bodyend="1089" declfile="include/kv_store.h" declline="43" declcolumn="6"/>
+        <references refid="structkv__snapshot_1a01000e86f86f2bffc64fe9ce8ac110d4" compoundref="kv__store_8c" startline="1002">kv_snapshot::block_cache</references>
+        <references refid="structkv__snapshot_1a5e65f361ae30fc69557d025e287bc135" compoundref="kv__store_8c" startline="999">kv_snapshot::dir_path</references>
+        <references refid="structkv__snapshot_1a7d2bb9816a49bb391475e370e8136298" compoundref="kv__store_8c" startline="1001">kv_snapshot::file_count</references>
+        <references refid="structkv__snapshot_1a3644b23d43fdce2697778e3f0e3c7d73" compoundref="kv__store_8c" startline="1000">kv_snapshot::files</references>
+        <references refid="structmanifest__file_1a6ea1361b547d1f6cdc992b5c0a65dd25" compoundref="manifest_8h" startline="15">manifest_file::largest_key</references>
+        <references refid="lru__cache_8h_1a5dce8063dde908934862ea5c798bfafc" compoundref="lru__cache_8c" startline="127" endline="145">lru_cache_free</references>
+        <references refid="structmanifest__file_1aba49690d903d266c1a66cd4407dafdcf" compoundref="manifest_8h" startline="13">manifest_file::smallest_key</references>
+        <referencedby refid="chaos__test_8c_1aa28c8e526df1ab81046b6e16da617d19" compoundref="chaos__test_8c" startline="143" endline="207">snapshot_thread</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a1bf78b7e348906a983cbc68514d8aa5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int kv_backup</definition>
+        <argsstring>(kv_store_t *db, const char *backup_dir)</argsstring>
+        <name>kv_backup</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>backup_dir</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="46" column="5" bodyfile="src/kv_store.c" bodystart="1301" bodyend="1440" declfile="include/kv_store.h" declline="46" declcolumn="5"/>
+        <references refid="kv__store_8c_1a590c15fc0628ad27cc671df3a1674599" compoundref="kv__store_8c" startline="1220" endline="1243">copy_file</references>
+        <references refid="structkv__store_1a2e54b7053626ae983cfcbf96f28315b5" compoundref="kv__store_8c" startline="48">kv_store::dir_path</references>
+        <references refid="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" compoundref="manifest_8h" startline="11">manifest_file::file_id</references>
+        <references refid="structkv__store_1a7bfb253424c20169e27949f052e69138" compoundref="kv__store_8c" startline="50">kv_store::immutable_memtable</references>
+        <references refid="kv__store_8c_1a5f0bfcd3bf571aa044ff2d5ef7d435ca" compoundref="kv__store_8c" startline="195" endline="290">kv_flush_memtable</references>
+        <references refid="structkv__store_1af9c2c046188a4f8532294be708ed1d56" compoundref="kv__store_8c" startline="52">kv_store::manifest</references>
+        <references refid="manifest_8h_1a4903c2bdf4f7dd0820d1769eeda94365" compoundref="manifest_8h" startline="7">MANIFEST_FILE_NAME</references>
+        <references refid="manifest_8h_1a1b49825fc2dafa1d29d1fea3f32df54f" compoundref="manifest_8c" startline="126" endline="154">manifest_list_files</references>
+        <references refid="structkv__store_1a9b504925a9845676a1b9960623c5ae70" compoundref="kv__store_8c" startline="59">kv_store::manifest_lock</references>
+        <references refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</references>
+        <references refid="manifest_8h_1ab49f63f5e4d157647ad33306c58a8c67" compoundref="manifest_8h" startline="8">MANIFEST_TMP_FILE_NAME</references>
+        <references refid="structkv__store_1a76e8d113e78c53b84c321047220e6ad5" compoundref="kv__store_8c" startline="49">kv_store::memtable</references>
+        <references refid="structkv__store_1aebf5e5fa3c14ab2015c98347f21b7946" compoundref="kv__store_8c" startline="61">kv_store::memtable_size</references>
+        <references refid="structkv__store_1a37ee7038aaeeee1f72ccf4482781906b" compoundref="kv__store_8c" startline="54">kv_store::merge_ctx</references>
+        <references refid="merge_8h_1ab68b218fb4e410ba018a6523dab2cbaa" compoundref="merge_8c" startline="84" endline="91">merge_scheduler_join</references>
+        <references refid="merge_8h_1ace6f39139e55e8eedfc3a58a9f1c12f8" compoundref="merge_8c" startline="69" endline="76">merge_scheduler_start</references>
+        <references refid="merge_8h_1acccd1c3ea9d5b2af1b1c32ed837de8c1" compoundref="merge_8c" startline="78" endline="82">merge_scheduler_stop</references>
+        <references refid="kv__store_8c_1a5dc9747f3352c100eb908f7d3617d11d" compoundref="kv__store_8c" startline="1188" endline="1217">mkdir_recursive</references>
+        <references refid="structkv__store_1acc91eafde39a2d7c9f52265b16313883" compoundref="kv__store_8c" startline="55">kv_store::rwlock</references>
+        <references refid="kv__store_8c_1abe92ac75caa6a1f54aaf583898590528" compoundref="kv__store_8c" startline="40">RWLOCK_UNLOCK_W</references>
+        <references refid="kv__store_8c_1a1b81e157d6903f0ed1b692d381d259a2" compoundref="kv__store_8c" startline="38">RWLOCK_WRLOCK</references>
+        <references refid="skiplist_8h_1ac2a15e084bef7929745da71371ed44b9" compoundref="skiplist_8c" startline="232" endline="235">skiplist_count</references>
+        <references refid="skiplist_8h_1a5d6378cf1c76e34c78429d1383807457" compoundref="skiplist_8c" startline="83" endline="110">skiplist_new</references>
+        <references refid="structkv__store_1a6c2bee175ce10a510db94166d4e497c0" compoundref="kv__store_8c" startline="51">kv_store::wal_mgr</references>
+        <references refid="wal_8h_1afe75b1ecad079adc49f01bde36496b63" compoundref="wal_8c" startline="216" endline="219">wal_mgr_sync</references>
+        <referencedby refid="raft__node_8c_1a43079a05b06d465ff498e340913cf2e8" compoundref="raft__node_8c" startline="39" endline="342">raft_snapshot_to_kv</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1aae7426a44a76277fe48e8f928c73ae22" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+        <definition>kv_store_t * kv_restore</definition>
+        <argsstring>(const char *backup_dir, const char *target_dir)</argsstring>
+        <name>kv_restore</name>
+        <param>
+          <type>const char *</type>
+          <declname>backup_dir</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>target_dir</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="47" column="12" bodyfile="src/kv_store.c" bodystart="1442" bodyend="1504" declfile="include/kv_store.h" declline="47" declcolumn="12"/>
+        <references refid="kv__store_8c_1a590c15fc0628ad27cc671df3a1674599" compoundref="kv__store_8c" startline="1220" endline="1243">copy_file</references>
+        <references refid="kv__store_8c_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</references>
+        <references refid="manifest_8h_1a4903c2bdf4f7dd0820d1769eeda94365" compoundref="manifest_8h" startline="7">MANIFEST_FILE_NAME</references>
+        <references refid="manifest_8h_1ab49f63f5e4d157647ad33306c58a8c67" compoundref="manifest_8h" startline="8">MANIFEST_TMP_FILE_NAME</references>
+        <references refid="kv__store_8c_1a5dc9747f3352c100eb908f7d3617d11d" compoundref="kv__store_8c" startline="1188" endline="1217">mkdir_recursive</references>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1acd6d23c4b82ed9032006996b84cc6955" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int kv_import_snapshot_files</definition>
+        <argsstring>(kv_store_t *db, const char *snapshot_data_dir)</argsstring>
+        <name>kv_import_snapshot_files</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>snapshot_data_dir</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="50" column="5" bodyfile="src/kv_store.c" bodystart="1518" bodyend="1617" declfile="include/kv_store.h" declline="50" declcolumn="5"/>
+        <references refid="kv__store_8c_1a590c15fc0628ad27cc671df3a1674599" compoundref="kv__store_8c" startline="1220" endline="1243">copy_file</references>
+        <references refid="structkv__store_1a2e54b7053626ae983cfcbf96f28315b5" compoundref="kv__store_8c" startline="48">kv_store::dir_path</references>
+        <references refid="structkv__store_1a7bfb253424c20169e27949f052e69138" compoundref="kv__store_8c" startline="50">kv_store::immutable_memtable</references>
+        <references refid="kv__store_8c_1a5f0bfcd3bf571aa044ff2d5ef7d435ca" compoundref="kv__store_8c" startline="195" endline="290">kv_flush_memtable</references>
+        <references refid="structkv__store_1af9c2c046188a4f8532294be708ed1d56" compoundref="kv__store_8c" startline="52">kv_store::manifest</references>
+        <references refid="manifest_8h_1acdf72e733f23ae5ca16a62fad50193f2" compoundref="manifest_8c" startline="115" endline="124">manifest_clear</references>
+        <references refid="manifest_8h_1a4903c2bdf4f7dd0820d1769eeda94365" compoundref="manifest_8h" startline="7">MANIFEST_FILE_NAME</references>
+        <references refid="manifest_8h_1aea56d11e385e679f5910da48e02f9a67" compoundref="manifest_8c" startline="206" endline="267">manifest_load</references>
+        <references refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</references>
+        <references refid="manifest_8h_1ab49f63f5e4d157647ad33306c58a8c67" compoundref="manifest_8h" startline="8">MANIFEST_TMP_FILE_NAME</references>
+        <references refid="structkv__store_1a76e8d113e78c53b84c321047220e6ad5" compoundref="kv__store_8c" startline="49">kv_store::memtable</references>
+        <references refid="structkv__store_1aebf5e5fa3c14ab2015c98347f21b7946" compoundref="kv__store_8c" startline="61">kv_store::memtable_size</references>
+        <references refid="structkv__store_1a37ee7038aaeeee1f72ccf4482781906b" compoundref="kv__store_8c" startline="54">kv_store::merge_ctx</references>
+        <references refid="merge_8h_1ab68b218fb4e410ba018a6523dab2cbaa" compoundref="merge_8c" startline="84" endline="91">merge_scheduler_join</references>
+        <references refid="merge_8h_1ace6f39139e55e8eedfc3a58a9f1c12f8" compoundref="merge_8c" startline="69" endline="76">merge_scheduler_start</references>
+        <references refid="merge_8h_1acccd1c3ea9d5b2af1b1c32ed837de8c1" compoundref="merge_8c" startline="78" endline="82">merge_scheduler_stop</references>
+        <references refid="structkv__store_1acc91eafde39a2d7c9f52265b16313883" compoundref="kv__store_8c" startline="55">kv_store::rwlock</references>
+        <references refid="kv__store_8c_1abe92ac75caa6a1f54aaf583898590528" compoundref="kv__store_8c" startline="40">RWLOCK_UNLOCK_W</references>
+        <references refid="kv__store_8c_1a1b81e157d6903f0ed1b692d381d259a2" compoundref="kv__store_8c" startline="38">RWLOCK_WRLOCK</references>
+        <references refid="skiplist_8h_1ac2a15e084bef7929745da71371ed44b9" compoundref="skiplist_8c" startline="232" endline="235">skiplist_count</references>
+        <references refid="skiplist_8h_1a5d6378cf1c76e34c78429d1383807457" compoundref="skiplist_8c" startline="83" endline="110">skiplist_new</references>
+        <referencedby refid="raft__node_8c_1a70f2d4308586277ae9cef5cfc9e7f7e6" compoundref="raft__node_8c" startline="347" endline="474">raft_restore_from_kv</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a94193faa792b1170826e90d4cee43f7b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void kv_set_raft_mode</definition>
+        <argsstring>(kv_store_t *db, int enabled)</argsstring>
+        <name>kv_set_raft_mode</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="56" column="6" bodyfile="src/kv_store.c" bodystart="1249" bodyend="1258" declfile="include/kv_store.h" declline="56" declcolumn="6"/>
+        <references refid="structkv__store_1a81a930662563e4a7cf07ce5b45b26080" compoundref="kv__store_8c" startline="73">kv_store::raft_mode</references>
+        <references refid="structkv__store_1a6c2bee175ce10a510db94166d4e497c0" compoundref="kv__store_8c" startline="51">kv_store::wal_mgr</references>
+        <references refid="wal_8h_1a9a9c6ff1fb038110d3a09af89ec3c262" compoundref="wal_8c" startline="176" endline="186">wal_mgr_close</references>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1a6229c7a21ba8826a95cdfa1c5f49fe0d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int kv_put_internal</definition>
+        <argsstring>(kv_store_t *db, const char *key, size_t klen, const char *val, size_t vlen)</argsstring>
+        <name>kv_put_internal</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>val</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="59" column="5" bodyfile="src/kv_store.c" bodystart="1260" bodyend="1278" declfile="include/kv_store.h" declline="59" declcolumn="5"/>
+        <references refid="kv__store_8c_1a857284a9412265313aac398a13d12d76" compoundref="kv__store_8c" startline="43">ATOMIC_INC64</references>
+        <references refid="kv__store_8c_1a64a4332e0d8f62b0701651f61e73bc5f" compoundref="kv__store_8c" startline="292" endline="322">kv_switch_memtable</references>
+        <references refid="structkv__store_1a76e8d113e78c53b84c321047220e6ad5" compoundref="kv__store_8c" startline="49">kv_store::memtable</references>
+        <references refid="structkv__store_1aebf5e5fa3c14ab2015c98347f21b7946" compoundref="kv__store_8c" startline="61">kv_store::memtable_size</references>
+        <references refid="kv__store_8h_1a6b603275988d9a80b018dfcb972414ff" compoundref="kv__store_8h" startline="7">MEMTABLE_SIZE_LIMIT</references>
+        <references refid="structkv__store_1a3dfda6774e6bbb285f65b15a3a165c58" compoundref="kv__store_8c" startline="65">kv_store::puts_total</references>
+        <references refid="structkv__store_1acc91eafde39a2d7c9f52265b16313883" compoundref="kv__store_8c" startline="55">kv_store::rwlock</references>
+        <references refid="kv__store_8c_1abe92ac75caa6a1f54aaf583898590528" compoundref="kv__store_8c" startline="40">RWLOCK_UNLOCK_W</references>
+        <references refid="kv__store_8c_1a1b81e157d6903f0ed1b692d381d259a2" compoundref="kv__store_8c" startline="38">RWLOCK_WRLOCK</references>
+        <references refid="skiplist_8h_1a5c78e1b0aab013dd35b7ab8015fa1c6a" compoundref="skiplist_8c" startline="127" endline="178">skiplist_insert</references>
+        <referencedby refid="raft__node_8c_1a036c77cd3d9e063df2822e1dc524bafc" compoundref="raft__node_8c" startline="24" endline="34">raft_apply_to_kv</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="kv__store_8h_1af413577282967b31d11bf81ed0e3d67f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int kv_delete_internal</definition>
+        <argsstring>(kv_store_t *db, const char *key, size_t klen)</argsstring>
+        <name>kv_delete_internal</name>
+        <param>
+          <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+          <declname>db</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/kv_store.h" line="60" column="5" bodyfile="src/kv_store.c" bodystart="1280" bodyend="1299" declfile="include/kv_store.h" declline="60" declcolumn="5"/>
+        <references refid="kv__store_8c_1a857284a9412265313aac398a13d12d76" compoundref="kv__store_8c" startline="43">ATOMIC_INC64</references>
+        <references refid="structkv__store_1a9e5f5b667953ea4d420bb27d876bebd6" compoundref="kv__store_8c" startline="68">kv_store::deletes_total</references>
+        <references refid="kv__store_8c_1a64a4332e0d8f62b0701651f61e73bc5f" compoundref="kv__store_8c" startline="292" endline="322">kv_switch_memtable</references>
+        <references refid="structkv__store_1a76e8d113e78c53b84c321047220e6ad5" compoundref="kv__store_8c" startline="49">kv_store::memtable</references>
+        <references refid="structkv__store_1aebf5e5fa3c14ab2015c98347f21b7946" compoundref="kv__store_8c" startline="61">kv_store::memtable_size</references>
+        <references refid="kv__store_8h_1a6b603275988d9a80b018dfcb972414ff" compoundref="kv__store_8h" startline="7">MEMTABLE_SIZE_LIMIT</references>
+        <references refid="structkv__store_1acc91eafde39a2d7c9f52265b16313883" compoundref="kv__store_8c" startline="55">kv_store::rwlock</references>
+        <references refid="kv__store_8c_1abe92ac75caa6a1f54aaf583898590528" compoundref="kv__store_8c" startline="40">RWLOCK_UNLOCK_W</references>
+        <references refid="kv__store_8c_1a1b81e157d6903f0ed1b692d381d259a2" compoundref="kv__store_8c" startline="38">RWLOCK_WRLOCK</references>
+        <references refid="skiplist_8h_1a5c78e1b0aab013dd35b7ab8015fa1c6a" compoundref="skiplist_8c" startline="127" endline="178">skiplist_insert</references>
+        <referencedby refid="raft__node_8c_1a036c77cd3d9e063df2822e1dc524bafc" compoundref="raft__node_8c" startline="24" endline="34">raft_apply_to_kv</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>KV_STORE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>KV_STORE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stddef.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>MEMTABLE_SIZE_LIMIT</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7" refid="kv__store_8h_1a6b603275988d9a80b018dfcb972414ff" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MEMTABLE_SIZE_LIMIT<sp/>(256<sp/>*<sp/>1024)<sp/><sp/></highlight><highlight class="comment">/*<sp/>256KB，便于快速触发刷盘测试<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10" refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structkv__store" kindref="compound">kv_store</ref><sp/><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>;</highlight></codeline>
+<codeline lineno="11" refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structkv__iter" kindref="compound">kv_iter</ref><sp/><ref refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" kindref="member">kv_iter_t</ref>;</highlight></codeline>
+<codeline lineno="12" refid="kv__store_8h_1ac716d77176102ea3172a069079a588f5" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structkv__snapshot" kindref="compound">kv_snapshot</ref><sp/><ref refid="kv__store_8h_1ac716d77176102ea3172a069079a588f5" kindref="member">kv_snapshot_t</ref>;</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>指标快照（供<sp/>Prometheus<sp/>metrics<sp/>读取）<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15" refid="structkv__metrics__snapshot__t" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="16" refid="structkv__metrics__snapshot__t_1adb84911b03395532f17e5639fb4af420" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structkv__metrics__snapshot__t_1adb84911b03395532f17e5639fb4af420" kindref="member">puts_total</ref>;</highlight></codeline>
+<codeline lineno="17" refid="structkv__metrics__snapshot__t_1ae4c8a90c64ae167996b0ddb06e208ea5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structkv__metrics__snapshot__t_1ae4c8a90c64ae167996b0ddb06e208ea5" kindref="member">gets_total</ref>;</highlight></codeline>
+<codeline lineno="18" refid="structkv__metrics__snapshot__t_1a360475943bfca7646269cddb2fdc01d3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structkv__metrics__snapshot__t_1a360475943bfca7646269cddb2fdc01d3" kindref="member">get_misses_total</ref>;</highlight></codeline>
+<codeline lineno="19" refid="structkv__metrics__snapshot__t_1a43829a8959a5a177d785cb4f782d31e0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structkv__metrics__snapshot__t_1a43829a8959a5a177d785cb4f782d31e0" kindref="member">deletes_total</ref>;</highlight></codeline>
+<codeline lineno="20" refid="structkv__metrics__snapshot__t_1ab76c467770418c5e6325d445b71a8806" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structkv__metrics__snapshot__t_1ab76c467770418c5e6325d445b71a8806" kindref="member">scans_total</ref>;</highlight></codeline>
+<codeline lineno="21" refid="structkv__metrics__snapshot__t_1aa027e706a684186d1d32b81d1006d51c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structkv__metrics__snapshot__t_1aa027e706a684186d1d32b81d1006d51c" kindref="member">compactions_total</ref>;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal">}<sp/><ref refid="structkv__metrics__snapshot__t" kindref="compound">kv_metrics_snapshot_t</ref>;</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>获取指标计数器快照（线程安全）<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a4a4257e72aaf47f862a8ad28319a4946" kindref="member">kv_metrics_snapshot</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db,<sp/><ref refid="structkv__metrics__snapshot__t" kindref="compound">kv_metrics_snapshot_t</ref>*<sp/>out);</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/><ref refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" kindref="member">kv_open</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>dir_path);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/><ref refid="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" kindref="member">kv_open_raft</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>dir_path);<sp/><sp/></highlight><highlight class="comment">/*<sp/>Raft<sp/>模式：不创建<sp/>WAL<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" kindref="member">kv_close</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1acbc27bec469af3563081723fc01faeac" kindref="member">kv_put</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>val,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>vlen);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" kindref="member">kv_get</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">**<sp/>out_val,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>out_vlen);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a25deb538aeb44468c7ae4c71aee2d150" kindref="member">kv_delete</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a079779f022f5168123b13074e95f3bdd" kindref="member">kv_sync</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1ad21f1d69050c1cc8bcf7e397b23c8982" kindref="member">kv_force_merge</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><ref refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" kindref="member">kv_iter_t</ref>*<sp/><ref refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" kindref="member">kv_scan</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>start,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>slen,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>end,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>elen);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a8e50eecfcbf98705fc5ffd81b7ac139b" kindref="member">kv_iter_next</ref>(<ref refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" kindref="member">kv_iter_t</ref>*<sp/>iter,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">**<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>klen,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">**<sp/>val,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>vlen);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a4342798ef6a43d3044b8606f4a75cab7" kindref="member">kv_iter_free</ref>(<ref refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" kindref="member">kv_iter_t</ref>*<sp/>iter);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>快照：固定时间点只读视图，用于备份和重复读场景<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><ref refid="kv__store_8h_1ac716d77176102ea3172a069079a588f5" kindref="member">kv_snapshot_t</ref>*<sp/><ref refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" kindref="member">kv_snapshot_create</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" kindref="member">kv_snapshot_get</ref>(<ref refid="kv__store_8h_1ac716d77176102ea3172a069079a588f5" kindref="member">kv_snapshot_t</ref>*<sp/>snap,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">**<sp/>out_val,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>out_vlen);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><ref refid="kv__store_8h_1ab2670b36d0dbe14ba11ee22f5aefafed" kindref="member">kv_iter_t</ref>*<sp/><ref refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" kindref="member">kv_snapshot_scan</ref>(<ref refid="kv__store_8h_1ac716d77176102ea3172a069079a588f5" kindref="member">kv_snapshot_t</ref>*<sp/>snap,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>start,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>slen,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>end,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>elen);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a2e4e48206e3052f91933404bebd4c296" kindref="member">kv_snapshot_free</ref>(<ref refid="kv__store_8h_1ac716d77176102ea3172a069079a588f5" kindref="member">kv_snapshot_t</ref>*<sp/>snap);</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>备份与恢复：在线热备，刷盘后复制所有数据文件到备份目录<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a1bf78b7e348906a983cbc68514d8aa5b" kindref="member">kv_backup</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>backup_dir);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/><ref refid="kv__store_8h_1aae7426a44a76277fe48e8f928c73ae22" kindref="member">kv_restore</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>backup_dir,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>target_dir);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>快照导入：将快照目录中的<sp/>SSTable<sp/>文件高效导入到当前数据库<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1acd6d23c4b82ed9032006996b84cc6955" kindref="member">kv_import_snapshot_files</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>snapshot_data_dir);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>===<sp/>Raft<sp/>模式：禁用<sp/>WAL，由<sp/>Raft<sp/>日志统一持久化<sp/>===<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>启用<sp/>Raft<sp/>模式：kv_put/kv_delete<sp/>不再写<sp/>WAL，恢复时跳过<sp/>WAL<sp/>重放</highlight></codeline>
+<codeline lineno="55"><highlight class="comment"><sp/>*<sp/>必须在<sp/>kv_open<sp/>之后、任何写操作之前调用<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a94193faa792b1170826e90d4cee43f7b" kindref="member">kv_set_raft_mode</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>enabled);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>内部写入（无<sp/>WAL）：供<sp/>Raft<sp/>状态机<sp/>apply<sp/>使用<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1a6229c7a21ba8826a95cdfa1c5f49fe0d" kindref="member">kv_put_internal</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>val,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>vlen);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="kv__store_8h_1af413577282967b31d11bf81ed0e3d67f" kindref="member">kv_delete_internal</ref>(<ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref>*<sp/>db,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="include/kv_store.h"/>
+  </compounddef>
+</doxygen>

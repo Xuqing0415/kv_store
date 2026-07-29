@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structmetrics__server" kind="struct" language="C++" prot="public">
+    <compoundname>metrics_server</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structmetrics__server_1ae2486d82a6326d6c6e00ff4b0756cf6f" prot="public" static="no" mutable="no">
+        <type><ref refid="metrics__server_8c_1aff55fe551a9992a54ec54621c524d0a4" kindref="member">SOCKET</ref></type>
+        <definition>SOCKET metrics_server::listen_fd</definition>
+        <argsstring></argsstring>
+        <name>listen_fd</name>
+        <qualifiedname>metrics_server::listen_fd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/metrics_server.c" line="38" column="12" bodyfile="src/metrics_server.c" bodystart="38" bodyend="-1"/>
+        <referencedby refid="metrics__server_8h_1a60405df12a195e134c42609c3dc2eb09" compoundref="metrics__server_8c" startline="411" endline="427">metrics_server_free</referencedby>
+        <referencedby refid="metrics__server_8h_1a1a8a794cc3ca3ebdbb57ae18086c1775" compoundref="metrics__server_8c" startline="356" endline="404">metrics_server_run</referencedby>
+        <referencedby refid="metrics__server_8h_1a20476f764a5c417e3115581567a31252" compoundref="metrics__server_8c" startline="292" endline="354">metrics_server_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmetrics__server_1a7f7e013703848d269840391305972bd8" prot="public" static="no" mutable="no">
+        <type><ref refid="kv__store_8h_1a02c655c992654f63bd58f08f168ef95c" kindref="member">kv_store_t</ref> *</type>
+        <definition>kv_store_t* metrics_server::db</definition>
+        <argsstring></argsstring>
+        <name>db</name>
+        <qualifiedname>metrics_server::db</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/metrics_server.c" line="39" column="16" bodyfile="src/metrics_server.c" bodystart="39" bodyend="-1"/>
+        <referencedby refid="metrics__server_8c_1a3d67963f152b21379cd157e13c198ff0" compoundref="metrics__server_8c" startline="113" endline="228">metrics_build_response</referencedby>
+        <referencedby refid="metrics__server_8h_1a20476f764a5c417e3115581567a31252" compoundref="metrics__server_8c" startline="292" endline="354">metrics_server_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmetrics__server_1a18f188c4fbe46c1163876411b55ab3f3" prot="public" static="no" mutable="no">
+        <type><ref refid="metrics__server_8h_1aab6b3d36fa82c8372e9265233bb2395a" kindref="member">raft_t</ref> *</type>
+        <definition>raft_t* metrics_server::raft</definition>
+        <argsstring></argsstring>
+        <name>raft</name>
+        <qualifiedname>metrics_server::raft</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/metrics_server.c" line="40" column="16" bodyfile="src/metrics_server.c" bodystart="40" bodyend="-1"/>
+        <referencedby refid="metrics__server_8c_1a3d67963f152b21379cd157e13c198ff0" compoundref="metrics__server_8c" startline="113" endline="228">metrics_build_response</referencedby>
+        <referencedby refid="metrics__server_8h_1a20476f764a5c417e3115581567a31252" compoundref="metrics__server_8c" startline="292" endline="354">metrics_server_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmetrics__server_1ab80cf49276b0a5cf603c3b5554c723d9" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int metrics_server::running</definition>
+        <argsstring></argsstring>
+        <name>running</name>
+        <qualifiedname>metrics_server::running</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/metrics_server.c" line="41" column="9" bodyfile="src/metrics_server.c" bodystart="41" bodyend="-1"/>
+        <referencedby refid="metrics__server_8h_1a1a8a794cc3ca3ebdbb57ae18086c1775" compoundref="metrics__server_8c" startline="356" endline="404">metrics_server_run</referencedby>
+        <referencedby refid="metrics__server_8h_1a20476f764a5c417e3115581567a31252" compoundref="metrics__server_8c" startline="292" endline="354">metrics_server_start</referencedby>
+        <referencedby refid="metrics__server_8h_1a2fd5d4484ae5eaaea76f71866350c84c" compoundref="metrics__server_8c" startline="406" endline="409">metrics_server_stop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmetrics__server_1a4dfe4bc651c059935530838ff1a3d365" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* metrics_server::host</definition>
+        <argsstring></argsstring>
+        <name>host</name>
+        <qualifiedname>metrics_server::host</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/metrics_server.c" line="42" column="10" bodyfile="src/metrics_server.c" bodystart="42" bodyend="-1"/>
+        <referencedby refid="metrics__server_8h_1a60405df12a195e134c42609c3dc2eb09" compoundref="metrics__server_8c" startline="411" endline="427">metrics_server_free</referencedby>
+        <referencedby refid="metrics__server_8h_1a20476f764a5c417e3115581567a31252" compoundref="metrics__server_8c" startline="292" endline="354">metrics_server_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmetrics__server_1a70442e43f6269ac26f9c4835079ab4d4" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int metrics_server::port</definition>
+        <argsstring></argsstring>
+        <name>port</name>
+        <qualifiedname>metrics_server::port</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/metrics_server.c" line="43" column="9" bodyfile="src/metrics_server.c" bodystart="43" bodyend="-1"/>
+        <referencedby refid="metrics__server_8h_1a20476f764a5c417e3115581567a31252" compoundref="metrics__server_8c" startline="292" endline="354">metrics_server_start</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmetrics__server_1a6081c292fbb1ef335869251cfd4ef617" prot="public" static="no" mutable="no">
+        <type>time_t</type>
+        <definition>time_t metrics_server::start_time</definition>
+        <argsstring></argsstring>
+        <name>start_time</name>
+        <qualifiedname>metrics_server::start_time</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/metrics_server.c" line="44" column="12" bodyfile="src/metrics_server.c" bodystart="44" bodyend="-1"/>
+        <referencedby refid="metrics__server_8c_1a8dbf97dd7b8a28b34a5438d1609d5849" compoundref="metrics__server_8c" startline="249" endline="286">metrics_handle_connection</referencedby>
+        <referencedby refid="metrics__server_8h_1a20476f764a5c417e3115581567a31252" compoundref="metrics__server_8c" startline="292" endline="354">metrics_server_start</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>kv_store</label>
+        <link refid="structkv__store"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>immutable_memtable</edgelabel>
+          <edgelabel>memtable</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>wal_mgr</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>manifest</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>block_cache</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>merge_ctx</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>lru_cache</label>
+        <link refid="structlru__cache"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>head</edgelabel>
+          <edgelabel>table</edgelabel>
+          <edgelabel>tail</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>lru_node</label>
+        <link refid="structlru__node"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>next</edgelabel>
+          <edgelabel>prev</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>manifest</label>
+        <link refid="structmanifest"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>files</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>manifest_file</label>
+        <link refid="structmanifest__file"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>merge_context</label>
+        <link refid="structmerge__context"/>
+      </node>
+      <node id="1">
+        <label>metrics_server</label>
+        <link refid="structmetrics__server"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>db</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>raft</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>raft</label>
+        <link refid="structraft"/>
+        <childnode refid="13" relation="usage">
+          <edgelabel>cfg</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>log</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>apply_fn</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>leader_peer</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>raft_config_t</label>
+        <link refid="structraft__config__t"/>
+        <childnode refid="14" relation="usage">
+          <edgelabel>peers</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>raft_entry_t</label>
+        <link refid="structraft__entry__t"/>
+      </node>
+      <node id="15">
+        <label>raft_log_entry_t</label>
+        <link refid="structraft__log__entry__t"/>
+      </node>
+      <node id="14">
+        <label>raft_peer_t</label>
+        <link refid="structraft__peer__t"/>
+      </node>
+      <node id="3">
+        <label>skiplist</label>
+        <link refid="structskiplist"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>header</edgelabel>
+          <edgelabel>tail</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>skiplist_node</label>
+        <link refid="structskiplist__node"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>forward</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>wal</label>
+        <link refid="structwal"/>
+      </node>
+      <node id="5">
+        <label>wal_mgr</label>
+        <link refid="structwal__mgr"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>active</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/metrics_server.c" line="37" column="1" bodyfile="src/metrics_server.c" bodystart="37" bodyend="48"/>
+    <listofallmembers>
+      <member refid="structmetrics__server_1a7f7e013703848d269840391305972bd8" prot="public" virt="non-virtual"><scope>metrics_server</scope><name>db</name></member>
+      <member refid="structmetrics__server_1a4dfe4bc651c059935530838ff1a3d365" prot="public" virt="non-virtual"><scope>metrics_server</scope><name>host</name></member>
+      <member refid="structmetrics__server_1ae2486d82a6326d6c6e00ff4b0756cf6f" prot="public" virt="non-virtual"><scope>metrics_server</scope><name>listen_fd</name></member>
+      <member refid="structmetrics__server_1a70442e43f6269ac26f9c4835079ab4d4" prot="public" virt="non-virtual"><scope>metrics_server</scope><name>port</name></member>
+      <member refid="structmetrics__server_1a18f188c4fbe46c1163876411b55ab3f3" prot="public" virt="non-virtual"><scope>metrics_server</scope><name>raft</name></member>
+      <member refid="structmetrics__server_1ab80cf49276b0a5cf603c3b5554c723d9" prot="public" virt="non-virtual"><scope>metrics_server</scope><name>running</name></member>
+      <member refid="structmetrics__server_1a6081c292fbb1ef335869251cfd4ef617" prot="public" virt="non-virtual"><scope>metrics_server</scope><name>start_time</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

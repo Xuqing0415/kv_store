@@ -1,0 +1,25 @@
+var structkv__store =
+[
+    [ "apu_compat_mode", "structkv__store.html#ace6a6033b6d6020ddcd95c90f7782b4d", null ],
+    [ "block_cache", "structkv__store.html#a00635dd862f667e9991257f445e15d56", null ],
+    [ "compactions_total", "structkv__store.html#a438276c33b0217e046da5366aba06f9c", null ],
+    [ "compression_type", "structkv__store.html#afa089aacf7c986f162029da3f56685e3", null ],
+    [ "deletes_total", "structkv__store.html#a9e5f5b667953ea4d420bb27d876bebd6", null ],
+    [ "dir_path", "structkv__store.html#a2e54b7053626ae983cfcbf96f28315b5", null ],
+    [ "get_misses_total", "structkv__store.html#a4a0693535c2be7dd6d6d2090d6464107", null ],
+    [ "gets_total", "structkv__store.html#a822fb153b3b6c433cc12224e7fd58f60", null ],
+    [ "immutable_memtable", "structkv__store.html#a7bfb253424c20169e27949f052e69138", null ],
+    [ "maintenance_started", "structkv__store.html#a68bc92f7a5e8fed9c0bf7a61e6280247", null ],
+    [ "maintenance_thread", "structkv__store.html#a76975d892b956df3051aed30a9bc7ae3", null ],
+    [ "manifest", "structkv__store.html#af9c2c046188a4f8532294be708ed1d56", null ],
+    [ "manifest_lock", "structkv__store.html#a9b504925a9845676a1b9960623c5ae70", null ],
+    [ "memtable", "structkv__store.html#a76e8d113e78c53b84c321047220e6ad5", null ],
+    [ "memtable_size", "structkv__store.html#aebf5e5fa3c14ab2015c98347f21b7946", null ],
+    [ "merge_ctx", "structkv__store.html#a37ee7038aaeeee1f72ccf4482781906b", null ],
+    [ "puts_total", "structkv__store.html#a3dfda6774e6bbb285f65b15a3a165c58", null ],
+    [ "raft_mode", "structkv__store.html#a81a930662563e4a7cf07ce5b45b26080", null ],
+    [ "rwlock", "structkv__store.html#acc91eafde39a2d7c9f52265b16313883", null ],
+    [ "scans_total", "structkv__store.html#a7754db00f8fa9c37a69a465d4b68330f", null ],
+    [ "stop_maintenance", "structkv__store.html#a5f13af743b1a9f9a3d13fe098b510a7c", null ],
+    [ "wal_mgr", "structkv__store.html#a6c2bee175ce10a510db94166d4e497c0", null ]
+];

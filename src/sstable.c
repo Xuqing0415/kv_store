@@ -9,6 +9,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef _WIN32
+#include <fcntl.h>
+#include <unistd.h>
+#endif
+
 typedef struct sstable_entry {
     size_t shared_len;
     size_t unshared_len;
@@ -624,6 +629,16 @@ int sstable_write(const char* path, uint64_t file_id, skiplist_t* memtable, comp
     
     fwrite(footer, 1, SSTABLE_FOOTER_SIZE, file);
     
+#ifndef _WIN32
+    /* 通知内核释放该文件的页缓存（减少 APU 平台内存压力） */
+    {
+        int fd = fileno(file);
+        if (fd >= 0) {
+            posix_fadvise(fd, 0, 0, POSIX_FADV_DONTNEED);
+        }
+    }
+#endif
+    
     fclose(file);
     
     return 0;
@@ -635,7 +650,23 @@ sstable_t* sstable_open(const char* path, uint64_t file_id) {
     sstable_t* sst = kv_malloc(sizeof(sstable_t));
     if (!sst) return NULL;
     
+#ifdef USE_O_DIRECT
+    /* 使用 O_DIRECT 绕过页缓存，减少 APU 平台内存压力。
+     * 要求：块大小 4KB 对齐，stdio 缓冲区与块边界对齐。
+     * 如果 O_DIRECT 打开失败，回退到普通模式。 */
+    {
+        int fd = open(path, O_RDONLY | O_DIRECT);
+        if (fd >= 0) {
+            sst->file = fdopen(fd, "rb");
+            if (!sst->file) { close(fd); }
+        }
+        if (fd < 0 || !sst->file) {
+            sst->file = fopen(path, "rb");
+        }
+    }
+#else
     sst->file = fopen(path, "rb");
+#endif
     if (!sst->file) {
         kv_free(sst);
         return NULL;

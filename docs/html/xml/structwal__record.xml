@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structwal__record" kind="struct" language="C++" prot="public">
+    <compoundname>wal_record</compoundname>
+    <includes refid="wal_8h" local="no">wal.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structwal__record_1a7d097ccc0d025cbfbe2696f58af41569" prot="public" static="no" mutable="no">
+        <type><ref refid="wal_8h_1acde019f60a86690e5e7c215ea834432a" kindref="member">wal_record_type_t</ref></type>
+        <definition>wal_record_type_t wal_record::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>wal_record::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="19" column="23" bodyfile="include/wal.h" bodystart="19" bodyend="-1"/>
+        <referencedby refid="wal_8h_1a9720b41392ac7b53a127b741408d739e" compoundref="wal_8c" startline="396" endline="461">wal_replay</referencedby>
+        <referencedby refid="kv__store_8c_1a85fffac7def48d02ad97b8fb585ba0f8" compoundref="kv__store_8c" startline="182" endline="193">wal_replay_callback</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structwal__record_1a7a1107c98dc926c6ca594c524011f92c" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* wal_record::key</definition>
+        <argsstring></argsstring>
+        <name>key</name>
+        <qualifiedname>wal_record::key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="20" column="10" bodyfile="include/wal.h" bodystart="20" bodyend="-1"/>
+        <referencedby refid="wal_8h_1a9720b41392ac7b53a127b741408d739e" compoundref="wal_8c" startline="396" endline="461">wal_replay</referencedby>
+        <referencedby refid="kv__store_8c_1a85fffac7def48d02ad97b8fb585ba0f8" compoundref="kv__store_8c" startline="182" endline="193">wal_replay_callback</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structwal__record_1ab4ddfea0df21cbff870803515b9e68bf" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t wal_record::key_len</definition>
+        <argsstring></argsstring>
+        <name>key_len</name>
+        <qualifiedname>wal_record::key_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="21" column="12" bodyfile="include/wal.h" bodystart="21" bodyend="-1"/>
+        <referencedby refid="wal_8h_1a9720b41392ac7b53a127b741408d739e" compoundref="wal_8c" startline="396" endline="461">wal_replay</referencedby>
+        <referencedby refid="kv__store_8c_1a85fffac7def48d02ad97b8fb585ba0f8" compoundref="kv__store_8c" startline="182" endline="193">wal_replay_callback</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structwal__record_1adabb794af643d8bbf292ff89a041c433" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* wal_record::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>wal_record::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="22" column="10" bodyfile="include/wal.h" bodystart="22" bodyend="-1"/>
+        <referencedby refid="wal_8h_1a9720b41392ac7b53a127b741408d739e" compoundref="wal_8c" startline="396" endline="461">wal_replay</referencedby>
+        <referencedby refid="kv__store_8c_1a85fffac7def48d02ad97b8fb585ba0f8" compoundref="kv__store_8c" startline="182" endline="193">wal_replay_callback</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structwal__record_1a60d9b4903b746102df17e257ce4c8b38" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t wal_record::value_len</definition>
+        <argsstring></argsstring>
+        <name>value_len</name>
+        <qualifiedname>wal_record::value_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/wal.h" line="23" column="12" bodyfile="include/wal.h" bodystart="23" bodyend="-1"/>
+        <referencedby refid="wal_8h_1a9720b41392ac7b53a127b741408d739e" compoundref="wal_8c" startline="396" endline="461">wal_replay</referencedby>
+        <referencedby refid="kv__store_8c_1a85fffac7def48d02ad97b8fb585ba0f8" compoundref="kv__store_8c" startline="182" endline="193">wal_replay_callback</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/wal.h" line="18" column="1" bodyfile="include/wal.h" bodystart="18" bodyend="24"/>
+    <listofallmembers>
+      <member refid="structwal__record_1a7a1107c98dc926c6ca594c524011f92c" prot="public" virt="non-virtual"><scope>wal_record</scope><name>key</name></member>
+      <member refid="structwal__record_1ab4ddfea0df21cbff870803515b9e68bf" prot="public" virt="non-virtual"><scope>wal_record</scope><name>key_len</name></member>
+      <member refid="structwal__record_1a7d097ccc0d025cbfbe2696f58af41569" prot="public" virt="non-virtual"><scope>wal_record</scope><name>type</name></member>
+      <member refid="structwal__record_1adabb794af643d8bbf292ff89a041c433" prot="public" virt="non-virtual"><scope>wal_record</scope><name>value</name></member>
+      <member refid="structwal__record_1a60d9b4903b746102df17e257ce4c8b38" prot="public" virt="non-virtual"><scope>wal_record</scope><name>value_len</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

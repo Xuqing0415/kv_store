@@ -28,6 +28,10 @@ typedef SRWLOCK RWLOCK;
 #include <pthread.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <sys/mman.h>
+#include <malloc.h>
+#include <fcntl.h>
+#include <unistd.h>
 typedef pthread_rwlock_t RWLOCK;
 #define RWLOCK_INIT(p) pthread_rwlock_init((p), NULL)
 #define RWLOCK_RDLOCK(p) pthread_rwlock_rdlock((p))
@@ -67,6 +71,18 @@ typedef struct kv_store {
 
     /* Raft 模式：禁用 WAL，由 Raft 日志统一持久化 */
     int raft_mode;
+
+    /* 维护线程：定期内存回收（malloc_trim + posix_fadvise） */
+    volatile int stop_maintenance;
+    int maintenance_started;
+#ifdef _WIN32
+    HANDLE maintenance_thread;
+#else
+    pthread_t maintenance_thread;
+#endif
+
+    /* APU 兼容模式：主动降低并发 I/O 深度，减少内存压力 */
+    int apu_compat_mode;
 } kv_store_t;
 
 typedef struct kv_iter {
@@ -86,6 +102,80 @@ static int kv_compare_keys(const char* a, size_t a_len, const char* b, size_t b_
     if (cmp != 0) return cmp;
     if (a_len < b_len) return -1;
     if (a_len > b_len) return 1;
+    return 0;
+}
+
+/* ===== 维护线程：定期内存回收（malloc_trim + posix_fadvise） ===== */
+#ifdef _WIN32
+static DWORD WINAPI maintenance_thread_func(LPVOID arg) {
+#else
+static void* maintenance_thread_func(void* arg) {
+#endif
+    kv_store_t* db = (kv_store_t*)arg;
+    printf("[MAINT] Maintenance thread started (apu_compat=%d)\n", db->apu_compat_mode);
+    int loop_count = 0;
+
+    while (!db->stop_maintenance) {
+        /* 每30秒执行一次，用1秒分片检查停止标志 */
+        int interval = db->apu_compat_mode ? 15 : 30;
+        for (int i = 0; i < interval && !db->stop_maintenance; i++) {
+#ifdef _WIN32
+            Sleep(1000);
+#else
+            sleep(1);
+#endif
+        }
+        if (db->stop_maintenance) break;
+
+        loop_count++;
+
+        /* 1. 释放堆内存碎片 */
+#ifdef _WIN32
+        HANDLE heap = GetProcessHeap();
+        HeapCompact(heap, 0);
+#else
+        malloc_trim(0);
+#endif
+
+        /* 2. 释放已刷盘 SSTable 的页缓存（仅 Linux） */
+        manifest_file_t** files = NULL;
+        size_t count = 0;
+
+#ifdef _WIN32
+        EnterCriticalSection(&db->manifest_lock);
+#else
+        pthread_mutex_lock(&db->manifest_lock);
+#endif
+
+        if (manifest_list_files(db->manifest, -1, &files, &count) == 0) {
+            char path[512];
+            for (size_t i = 0; i < count; i++) {
+                snprintf(path, sizeof(path), "%s/%llu.sst", db->dir_path,
+                         (unsigned long long)files[i]->file_id);
+#ifndef _WIN32
+                int fd = open(path, O_RDONLY);
+                if (fd >= 0) {
+                    /* 通知内核释放该文件的页缓存（已刷盘数据无需保留） */
+                    posix_fadvise(fd, 0, 0, POSIX_FADV_DONTNEED);
+                    close(fd);
+                }
+#endif
+            }
+            kv_free(files);
+        }
+
+#ifdef _WIN32
+        LeaveCriticalSection(&db->manifest_lock);
+#else
+        pthread_mutex_unlock(&db->manifest_lock);
+#endif
+
+        if (loop_count % 10 == 0) {
+            printf("[MAINT] Memory maintenance cycle #%d completed\n", loop_count);
+        }
+    }
+
+    printf("[MAINT] Maintenance thread stopped\n");
     return 0;
 }
 
@@ -304,6 +394,38 @@ kv_store_t* kv_open(const char* dir_path) {
     
     merge_scheduler_start(&db->merge_ctx);
     
+    /* 启动维护线程：定期内存回收 */
+    db->stop_maintenance = 0;
+    db->apu_compat_mode = 0;  /* 默认关闭，可通过环境变量 KV_APU_COMPAT=1 开启 */
+    db->maintenance_started = 1;
+#ifdef _WIN32
+    db->maintenance_thread = CreateThread(NULL, 0, maintenance_thread_func, db, 0, NULL);
+#else
+    /* APU 兼容模式检测：通过 /proc/cpuinfo 识别 AMD APU */
+    {
+        FILE* cpuinfo = fopen("/proc/cpuinfo", "r");
+        if (cpuinfo) {
+            char line[256];
+            int is_amd = 0, has_graphics = 0;
+            while (fgets(line, sizeof(line), cpuinfo)) {
+                if (strstr(line, "AuthenticAMD") || strstr(line, "AMD"))
+                    is_amd = 1;
+                if (strstr(line, "Graphics") || strstr(line, "apu") || strstr(line, "APU"))
+                    has_graphics = 1;
+            }
+            fclose(cpuinfo);
+            if (is_amd && has_graphics) {
+                db->apu_compat_mode = 1;
+                printf("[KV] AMD APU detected, enabling compatibility mode (reduced I/O depth)\n");
+            }
+        }
+        /* 也支持环境变量显式控制 */
+        const char* env = getenv("KV_APU_COMPAT");
+        if (env && atoi(env) == 1) db->apu_compat_mode = 1;
+    }
+    pthread_create(&db->maintenance_thread, NULL, maintenance_thread_func, db);
+#endif
+    
     return db;
 }
 
@@ -381,6 +503,20 @@ kv_store_t* kv_open_raft(const char* dir_path) {
     
     merge_scheduler_start(&db->merge_ctx);
     
+    /* 启动维护线程 */
+    db->stop_maintenance = 0;
+    db->apu_compat_mode = 0;
+    db->maintenance_started = 1;
+#ifdef _WIN32
+    db->maintenance_thread = CreateThread(NULL, 0, maintenance_thread_func, db, 0, NULL);
+#else
+    {
+        const char* env = getenv("KV_APU_COMPAT");
+        if (env && atoi(env) == 1) db->apu_compat_mode = 1;
+    }
+    pthread_create(&db->maintenance_thread, NULL, maintenance_thread_func, db);
+#endif
+    
     printf("[KV] Opened in Raft mode (no WAL) at %s\n", dir_path);
     return db;
 }
@@ -390,6 +526,18 @@ void kv_close(kv_store_t* db) {
     
     /* 先停止并等待 merge 后台线程退出，防止 use-after-free */
     merge_scheduler_join(&db->merge_ctx);
+    
+    /* 停止维护线程 */
+    if (db->maintenance_started) {
+        db->stop_maintenance = 1;
+#ifdef _WIN32
+        WaitForSingleObject(db->maintenance_thread, INFINITE);
+        CloseHandle(db->maintenance_thread);
+#else
+        pthread_join(db->maintenance_thread, NULL);
+#endif
+        db->maintenance_started = 0;
+    }
     
     if (db->immutable_memtable) {
         kv_flush_memtable(db);

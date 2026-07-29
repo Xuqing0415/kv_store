@@ -1,0 +1,38 @@
+var raft_8h =
+[
+    [ "raft_entry_t", "structraft__entry__t.html", "structraft__entry__t" ],
+    [ "raft_peer_t", "structraft__peer__t.html", "structraft__peer__t" ],
+    [ "raft_config_t", "structraft__config__t.html", "structraft__config__t" ],
+    [ "raft_snapshot_info_t", "structraft__snapshot__info__t.html", "structraft__snapshot__info__t" ],
+    [ "RAFT_ELECTION_TIMEOUT_MAX_MS", "raft_8h.html#ab185880cc2e365764d53ec3f844f3b13", null ],
+    [ "RAFT_ELECTION_TIMEOUT_MIN_MS", "raft_8h.html#a5f9e2bb78e5d809e2a734b0221d46bad", null ],
+    [ "RAFT_HEARTBEAT_INTERVAL_MS", "raft_8h.html#a5cf99a1e08b7fbb795b2250880daf148", null ],
+    [ "RAFT_MAX_NODES", "raft_8h.html#adc375d0adcfb23c2d6e1ca6a70a0b6f7", null ],
+    [ "RAFT_NODE_ID_LEN", "raft_8h.html#a82b2eb20a5f8b3062b33e51b78ef2d62", null ],
+    [ "RAFT_RPC_TIMEOUT_MS", "raft_8h.html#af76cf36ad1c2d298b7fd8bd6582dffcc", null ],
+    [ "RAFT_SNAPSHOT_LOG_SIZE_THRESHOLD", "raft_8h.html#a781c93da17486af83a5000ad494cb7e3", null ],
+    [ "RAFT_SNAPSHOT_LOG_THRESHOLD", "raft_8h.html#a98cf584adbdc166f61b410c8d0753ec3", null ],
+    [ "raft_apply_cb", "raft_8h.html#ad1ee59f4378dda37752bc4704888e59a", null ],
+    [ "raft_restore_cb", "raft_8h.html#a80f9aec38b8b2f4a3fdaa92f81e5b746", null ],
+    [ "raft_snapshot_cb", "raft_8h.html#a072456a8bd1bd0093beb23755822d1fc", null ],
+    [ "raft_role_t", "raft_8h.html#abba68c43a3f974db990f1479dfe1774f", [
+      [ "RAFT_FOLLOWER", "raft_8h.html#abba68c43a3f974db990f1479dfe1774fa92fe3101baabd72296609575c4ee8e31", null ],
+      [ "RAFT_CANDIDATE", "raft_8h.html#abba68c43a3f974db990f1479dfe1774fa34df1f9f657179c377f5ff5d0856cd1d", null ],
+      [ "RAFT_LEADER", "raft_8h.html#abba68c43a3f974db990f1479dfe1774fa72ab41edb3b963913ab9d5ff081067e3", null ]
+    ] ],
+    [ "raft_create", "raft_8h.html#aa477a36d092ca965bf16611e963ca1a0", null ],
+    [ "raft_destroy", "raft_8h.html#a74f2bed3179b362494c113f569b62fa0", null ],
+    [ "raft_get_leader_peer", "raft_8h.html#a8a946c1d8af4d6b18c3a65468e995c60", null ],
+    [ "raft_get_snapshot_info", "raft_8h.html#adaece4aeab4604ecc6da86fed88328a3", null ],
+    [ "raft_is_leader", "raft_8h.html#ae5dccc52482ea707813a3a071b398026", null ],
+    [ "raft_join", "raft_8h.html#ad43916d3f42bd5c40f853ffecc3329a7", null ],
+    [ "raft_needs_snapshot", "raft_8h.html#a26a42e61b97b090260c3971a36aae9e6", null ],
+    [ "raft_propose", "raft_8h.html#aee59798c5da5f030e0de76ac5219f65e", null ],
+    [ "raft_replay_committed", "raft_8h.html#a1dcf0302148c471262655f880ca981ef", null ],
+    [ "raft_role_str", "raft_8h.html#a475b283f841bfba4931270117fa9f613", null ],
+    [ "raft_snapshot_create", "raft_8h.html#a9269abb79a4f8d590a6d10a27423c6f2", null ],
+    [ "raft_snapshot_restore", "raft_8h.html#a03cae3d2dc6f61e2f5aa94731b08eac0", null ],
+    [ "raft_start", "raft_8h.html#a406810bf4a111817cfd2857c16fe7eb6", null ],
+    [ "raft_status", "raft_8h.html#acea91e0f725e4c8366ddf6faef2ceaef", null ],
+    [ "raft_stop", "raft_8h.html#a3db8453e00ceb833e94c94c3bbbfcca4", null ]
+];

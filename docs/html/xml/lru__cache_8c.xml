@@ -1,0 +1,745 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="lru__cache_8c" kind="file" language="C++">
+    <compoundname>lru_cache.c</compoundname>
+    <includes refid="lru__cache_8h" local="yes">lru_cache.h</includes>
+    <includes local="yes">mem.h</includes>
+    <includes local="no">stdint.h</includes>
+    <includes local="no">stdlib.h</includes>
+    <includes local="no">string.h</includes>
+    <incdepgraph>
+      <node id="2">
+        <label>lru_cache.h</label>
+        <link refid="lru__cache_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/lru_cache.c</label>
+        <link refid="lru__cache_8c"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>mem.h</label>
+      </node>
+      <node id="4">
+        <label>pthread.h</label>
+      </node>
+      <node id="3">
+        <label>stddef.h</label>
+      </node>
+      <node id="6">
+        <label>stdint.h</label>
+      </node>
+      <node id="7">
+        <label>stdlib.h</label>
+      </node>
+      <node id="8">
+        <label>string.h</label>
+      </node>
+    </incdepgraph>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>static size_t lru_hash</definition>
+        <argsstring>(const char *key, size_t len, size_t mask)</argsstring>
+        <name>lru_hash</name>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>len</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>mask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="7" column="15" bodyfile="src/lru_cache.c" bodystart="7" bodyend="14"/>
+        <referencedby refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" compoundref="lru__cache_8c" startline="80" endline="97">lru_add_to_head</referencedby>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+        <referencedby refid="lru__cache_8h_1a1304eae1bbb02da02f5f5e8a420847f7" compoundref="lru__cache_8c" startline="271" endline="310">lru_cache_remove</referencedby>
+        <referencedby refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="lru__cache_8c_1aa8f3d95378b0e0f3c43bc0265762db7a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>static size_t next_power_of_two</definition>
+        <argsstring>(size_t v)</argsstring>
+        <name>next_power_of_two</name>
+        <param>
+          <type>size_t</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="16" column="15" bodyfile="src/lru_cache.c" bodystart="16" bodyend="25"/>
+        <referencedby refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" compoundref="lru__cache_8c" startline="99" endline="125">lru_cache_new</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="lru__cache_8c_1a709b3af3a8d9827a024a5e86cca441ce" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref> *</type>
+        <definition>static lru_node_t * lru_node_new</definition>
+        <argsstring>(const char *key, size_t klen, const void *value, size_t vlen)</argsstring>
+        <name>lru_node_new</name>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="27" column="19" bodyfile="src/lru_cache.c" bodystart="27" bodyend="52"/>
+        <references refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" compoundref="lru__cache_8h" startline="13">lru_node::key</references>
+        <references refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" compoundref="lru__cache_8h" startline="14">lru_node::key_len</references>
+        <references refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" compoundref="lru__cache_8h" startline="18">lru_node::next</references>
+        <references refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" compoundref="lru__cache_8h" startline="17">lru_node::prev</references>
+        <references refid="structlru__node_1a00fe9107fe418081becf9a7631afc71c" compoundref="lru__cache_8h" startline="15">lru_node::value</references>
+        <references refid="structlru__node_1ab7babf275eb889a2a9743a4e8615b686" compoundref="lru__cache_8h" startline="16">lru_node::value_len</references>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void lru_node_free</definition>
+        <argsstring>(lru_node_t *node)</argsstring>
+        <name>lru_node_free</name>
+        <param>
+          <type><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref> *</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="54" column="13" bodyfile="src/lru_cache.c" bodystart="54" bodyend="59"/>
+        <references refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" compoundref="lru__cache_8h" startline="13">lru_node::key</references>
+        <references refid="structlru__node_1a00fe9107fe418081becf9a7631afc71c" compoundref="lru__cache_8h" startline="15">lru_node::value</references>
+        <referencedby refid="lru__cache_8h_1a5dce8063dde908934862ea5c798bfafc" compoundref="lru__cache_8c" startline="127" endline="145">lru_cache_free</referencedby>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a1304eae1bbb02da02f5f5e8a420847f7" compoundref="lru__cache_8c" startline="271" endline="310">lru_cache_remove</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void lru_remove</definition>
+        <argsstring>(lru_cache_t *cache, lru_node_t *node)</argsstring>
+        <name>lru_remove</name>
+        <param>
+          <type><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref> *</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref> *</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="61" column="13" bodyfile="src/lru_cache.c" bodystart="61" bodyend="78"/>
+        <references refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" compoundref="lru__cache_8h" startline="27">lru_cache::hash_mask</references>
+        <references refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" compoundref="lru__cache_8h" startline="22">lru_cache::head</references>
+        <references refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" compoundref="lru__cache_8h" startline="13">lru_node::key</references>
+        <references refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" compoundref="lru__cache_8h" startline="14">lru_node::key_len</references>
+        <references refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" compoundref="lru__cache_8c" startline="7" endline="14">lru_hash</references>
+        <references refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" compoundref="lru__cache_8h" startline="18">lru_node::next</references>
+        <references refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" compoundref="lru__cache_8h" startline="17">lru_node::prev</references>
+        <references refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" compoundref="lru__cache_8h" startline="24">lru_cache::table</references>
+        <references refid="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" compoundref="lru__cache_8h" startline="23">lru_cache::tail</references>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+        <referencedby refid="lru__cache_8h_1a1304eae1bbb02da02f5f5e8a420847f7" compoundref="lru__cache_8c" startline="271" endline="310">lru_cache_remove</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void lru_add_to_head</definition>
+        <argsstring>(lru_cache_t *cache, lru_node_t *node)</argsstring>
+        <name>lru_add_to_head</name>
+        <param>
+          <type><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref> *</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref> *</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="80" column="13" bodyfile="src/lru_cache.c" bodystart="80" bodyend="97"/>
+        <references refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" compoundref="lru__cache_8h" startline="27">lru_cache::hash_mask</references>
+        <references refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" compoundref="lru__cache_8h" startline="22">lru_cache::head</references>
+        <references refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" compoundref="lru__cache_8h" startline="13">lru_node::key</references>
+        <references refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" compoundref="lru__cache_8h" startline="14">lru_node::key_len</references>
+        <references refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" compoundref="lru__cache_8c" startline="7" endline="14">lru_hash</references>
+        <references refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" compoundref="lru__cache_8h" startline="18">lru_node::next</references>
+        <references refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" compoundref="lru__cache_8h" startline="17">lru_node::prev</references>
+        <references refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" compoundref="lru__cache_8h" startline="24">lru_cache::table</references>
+        <references refid="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" compoundref="lru__cache_8h" startline="23">lru_cache::tail</references>
+        <referencedby refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" compoundref="lru__cache_8c" startline="224" endline="269">lru_cache_insert</referencedby>
+        <referencedby refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" compoundref="lru__cache_8c" startline="147" endline="222">lru_cache_lookup</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="lru__cache_8c_1a0185a082105049d4dda4ceaed6e477da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref> *</type>
+        <definition>lru_cache_t * lru_cache_new</definition>
+        <argsstring>(size_t capacity)</argsstring>
+        <name>lru_cache_new</name>
+        <param>
+          <type>size_t</type>
+          <declname>capacity</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="99" column="13" bodyfile="src/lru_cache.c" bodystart="99" bodyend="125"/>
+        <references refid="structlru__cache_1ac826ac1f145df5bc953289a9cd784781" compoundref="lru__cache_8h" startline="25">lru_cache::capacity</references>
+        <references refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" compoundref="lru__cache_8h" startline="27">lru_cache::hash_mask</references>
+        <references refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" compoundref="lru__cache_8h" startline="22">lru_cache::head</references>
+        <references refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" compoundref="lru__cache_8h" startline="31">lru_cache::lock</references>
+        <references refid="lru__cache_8c_1aa8f3d95378b0e0f3c43bc0265762db7a" compoundref="lru__cache_8c" startline="16" endline="25">next_power_of_two</references>
+        <references refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" compoundref="lru__cache_8h" startline="26">lru_cache::size</references>
+        <references refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" compoundref="lru__cache_8h" startline="24">lru_cache::table</references>
+        <references refid="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" compoundref="lru__cache_8h" startline="23">lru_cache::tail</references>
+        <referencedby refid="kv__store_8h_1afdeec2951d4aa9243b10bf5efde52dd3" compoundref="kv__store_8c" startline="324" endline="430">kv_open</referencedby>
+        <referencedby refid="kv__store_8h_1ada50ce7a4c876e06800dcf3c429a062b" compoundref="kv__store_8c" startline="435" endline="522">kv_open_raft</referencedby>
+        <referencedby refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" compoundref="kv__store_8c" startline="1014" endline="1073">kv_snapshot_create</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="lru__cache_8c_1a5dce8063dde908934862ea5c798bfafc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void lru_cache_free</definition>
+        <argsstring>(lru_cache_t *cache)</argsstring>
+        <name>lru_cache_free</name>
+        <param>
+          <type><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref> *</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="127" column="6" bodyfile="src/lru_cache.c" bodystart="127" bodyend="145"/>
+        <references refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" compoundref="lru__cache_8h" startline="22">lru_cache::head</references>
+        <references refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" compoundref="lru__cache_8h" startline="31">lru_cache::lock</references>
+        <references refid="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" compoundref="lru__cache_8c" startline="54" endline="59">lru_node_free</references>
+        <references refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" compoundref="lru__cache_8h" startline="18">lru_node::next</references>
+        <references refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" compoundref="lru__cache_8h" startline="24">lru_cache::table</references>
+        <referencedby refid="kv__store_8h_1a57ec64b3c3b8531188954cd18e91074b" compoundref="kv__store_8c" startline="524" endline="574">kv_close</referencedby>
+        <referencedby refid="kv__store_8h_1a2e4e48206e3052f91933404bebd4c296" compoundref="kv__store_8c" startline="1075" endline="1089">kv_snapshot_free</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="lru__cache_8c_1a470e27cb20e54d209842e5d4c3184730" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int lru_cache_lookup</definition>
+        <argsstring>(lru_cache_t *cache, const char *key, size_t klen, void **out_value, size_t *out_vlen)</argsstring>
+        <name>lru_cache_lookup</name>
+        <param>
+          <type><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref> *</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>void **</type>
+          <declname>out_value</declname>
+        </param>
+        <param>
+          <type>size_t *</type>
+          <declname>out_vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="147" column="5" bodyfile="src/lru_cache.c" bodystart="147" bodyend="222"/>
+        <references refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" compoundref="lru__cache_8h" startline="27">lru_cache::hash_mask</references>
+        <references refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" compoundref="lru__cache_8h" startline="22">lru_cache::head</references>
+        <references refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" compoundref="lru__cache_8h" startline="13">lru_node::key</references>
+        <references refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" compoundref="lru__cache_8h" startline="14">lru_node::key_len</references>
+        <references refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" compoundref="lru__cache_8h" startline="31">lru_cache::lock</references>
+        <references refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" compoundref="lru__cache_8c" startline="80" endline="97">lru_add_to_head</references>
+        <references refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" compoundref="lru__cache_8c" startline="7" endline="14">lru_hash</references>
+        <references refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</references>
+        <references refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" compoundref="lru__cache_8h" startline="18">lru_node::next</references>
+        <references refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" compoundref="lru__cache_8h" startline="24">lru_cache::table</references>
+        <references refid="structlru__node_1a00fe9107fe418081becf9a7631afc71c" compoundref="lru__cache_8h" startline="15">lru_node::value</references>
+        <references refid="structlru__node_1ab7babf275eb889a2a9743a4e8615b686" compoundref="lru__cache_8h" startline="16">lru_node::value_len</references>
+        <referencedby refid="sstable_8c_1a67e017987a36b04ca62be6a9d8c79d20" compoundref="sstable_8c" startline="29" endline="93">sstable_read_block</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="lru__cache_8c_1ad6fa69eed0fa92a2ddd740977d2774f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int lru_cache_insert</definition>
+        <argsstring>(lru_cache_t *cache, const char *key, size_t klen, const void *value, size_t vlen)</argsstring>
+        <name>lru_cache_insert</name>
+        <param>
+          <type><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref> *</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="224" column="5" bodyfile="src/lru_cache.c" bodystart="224" bodyend="269"/>
+        <references refid="structlru__cache_1ac826ac1f145df5bc953289a9cd784781" compoundref="lru__cache_8h" startline="25">lru_cache::capacity</references>
+        <references refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" compoundref="lru__cache_8h" startline="27">lru_cache::hash_mask</references>
+        <references refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" compoundref="lru__cache_8h" startline="13">lru_node::key</references>
+        <references refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" compoundref="lru__cache_8h" startline="14">lru_node::key_len</references>
+        <references refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" compoundref="lru__cache_8h" startline="31">lru_cache::lock</references>
+        <references refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" compoundref="lru__cache_8c" startline="80" endline="97">lru_add_to_head</references>
+        <references refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" compoundref="lru__cache_8c" startline="7" endline="14">lru_hash</references>
+        <references refid="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" compoundref="lru__cache_8c" startline="54" endline="59">lru_node_free</references>
+        <references refid="lru__cache_8c_1a709b3af3a8d9827a024a5e86cca441ce" compoundref="lru__cache_8c" startline="27" endline="52">lru_node_new</references>
+        <references refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</references>
+        <references refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" compoundref="lru__cache_8h" startline="26">lru_cache::size</references>
+        <references refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" compoundref="lru__cache_8h" startline="24">lru_cache::table</references>
+        <references refid="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" compoundref="lru__cache_8h" startline="23">lru_cache::tail</references>
+        <referencedby refid="sstable_8c_1a67e017987a36b04ca62be6a9d8c79d20" compoundref="sstable_8c" startline="29" endline="93">sstable_read_block</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="lru__cache_8c_1a1304eae1bbb02da02f5f5e8a420847f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void lru_cache_remove</definition>
+        <argsstring>(lru_cache_t *cache, const char *key, size_t klen)</argsstring>
+        <name>lru_cache_remove</name>
+        <param>
+          <type><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref> *</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>klen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="271" column="6" bodyfile="src/lru_cache.c" bodystart="271" bodyend="310"/>
+        <references refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" compoundref="lru__cache_8h" startline="27">lru_cache::hash_mask</references>
+        <references refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" compoundref="lru__cache_8h" startline="13">lru_node::key</references>
+        <references refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" compoundref="lru__cache_8h" startline="14">lru_node::key_len</references>
+        <references refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" compoundref="lru__cache_8h" startline="31">lru_cache::lock</references>
+        <references refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" compoundref="lru__cache_8c" startline="7" endline="14">lru_hash</references>
+        <references refid="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" compoundref="lru__cache_8c" startline="54" endline="59">lru_node_free</references>
+        <references refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" compoundref="lru__cache_8c" startline="61" endline="78">lru_remove</references>
+        <references refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" compoundref="lru__cache_8h" startline="26">lru_cache::size</references>
+        <references refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" compoundref="lru__cache_8h" startline="24">lru_cache::table</references>
+      </memberdef>
+      <memberdef kind="function" id="lru__cache_8c_1a94a95dc94caad4d8ca9a5c41c1bfb7ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t lru_cache_size</definition>
+        <argsstring>(lru_cache_t *cache)</argsstring>
+        <name>lru_cache_size</name>
+        <param>
+          <type><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref> *</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/lru_cache.c" line="312" column="8" bodyfile="src/lru_cache.c" bodystart="312" bodyend="315"/>
+        <references refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" compoundref="lru__cache_8h" startline="26">lru_cache::size</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="lru__cache_8h" kindref="compound">lru_cache.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;mem.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdint.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdlib.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7" refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" kindref="member">lru_hash</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>len,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>mask)<sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/>uint32_t<sp/>h<sp/>=<sp/>0x811c9dc5;</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>len;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>h<sp/>^=<sp/>key[i];</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>h<sp/>*=<sp/>0x01000193;</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>h<sp/>&amp;<sp/>mask;</highlight></codeline>
+<codeline lineno="14"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16" refid="lru__cache_8c_1aa8f3d95378b0e0f3c43bc0265762db7a" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="lru__cache_8c_1aa8f3d95378b0e0f3c43bc0265762db7a" kindref="member">next_power_of_two</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>v)<sp/>{</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>v--;</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/>v<sp/>|=<sp/>v<sp/>&gt;&gt;<sp/>1;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>v<sp/>|=<sp/>v<sp/>&gt;&gt;<sp/>2;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>v<sp/>|=<sp/>v<sp/>&gt;&gt;<sp/>4;</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>v<sp/>|=<sp/>v<sp/>&gt;&gt;<sp/>8;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/>v<sp/>|=<sp/>v<sp/>&gt;&gt;<sp/>16;</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>v++;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>v;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27" refid="lru__cache_8c_1a709b3af3a8d9827a024a5e86cca441ce" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*<sp/><ref refid="lru__cache_8c_1a709b3af3a8d9827a024a5e86cca441ce" kindref="member">lru_node_new</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/>value,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>vlen)<sp/>{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*<sp/>node<sp/>=<sp/>kv_malloc(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>));</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!node)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>node-&gt;<ref refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" kindref="member">key</ref><sp/>=<sp/>kv_malloc(klen);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!node-&gt;<ref refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" kindref="member">key</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(node);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>memcpy(node-&gt;<ref refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" kindref="member">key</ref>,<sp/>key,<sp/>klen);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>node-&gt;<ref refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" kindref="member">key_len</ref><sp/>=<sp/>klen;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>node-&gt;<ref refid="structlru__node_1a00fe9107fe418081becf9a7631afc71c" kindref="member">value</ref><sp/>=<sp/>kv_malloc(vlen);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!node-&gt;<ref refid="structlru__node_1a00fe9107fe418081becf9a7631afc71c" kindref="member">value</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(node-&gt;<ref refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" kindref="member">key</ref>);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(node);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>memcpy(node-&gt;<ref refid="structlru__node_1a00fe9107fe418081becf9a7631afc71c" kindref="member">value</ref>,<sp/>value,<sp/>vlen);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>node-&gt;<ref refid="structlru__node_1ab7babf275eb889a2a9743a4e8615b686" kindref="member">value_len</ref><sp/>=<sp/>vlen;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>node-&gt;<ref refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" kindref="member">prev</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>node-&gt;<ref refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" kindref="member">next</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>node;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54" refid="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" kindref="member">lru_node_free</ref>(<ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*<sp/>node)<sp/>{</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!node)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>kv_free(node-&gt;<ref refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" kindref="member">key</ref>);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>kv_free(node-&gt;<ref refid="structlru__node_1a00fe9107fe418081becf9a7631afc71c" kindref="member">value</ref>);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>kv_free(node);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61" refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" kindref="member">lru_remove</ref>(<ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref>*<sp/>cache,<sp/><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*<sp/>node)<sp/>{</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(node-&gt;<ref refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" kindref="member">prev</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>node-&gt;<ref refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" kindref="member">prev</ref>-&gt;<ref refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" kindref="member">next</ref><sp/>=<sp/>node-&gt;<ref refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" kindref="member">next</ref>;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" kindref="member">head</ref><sp/>=<sp/>node-&gt;<ref refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" kindref="member">next</ref>;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(node-&gt;<ref refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" kindref="member">next</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>node-&gt;<ref refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" kindref="member">next</ref>-&gt;<ref refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" kindref="member">prev</ref><sp/>=<sp/>node-&gt;<ref refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" kindref="member">prev</ref>;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" kindref="member">tail</ref><sp/>=<sp/>node-&gt;<ref refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" kindref="member">prev</ref>;</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>idx<sp/>=<sp/><ref refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" kindref="member">lru_hash</ref>(node-&gt;<ref refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" kindref="member">key</ref>,<sp/>node-&gt;<ref refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" kindref="member">key_len</ref>,<sp/>cache-&gt;<ref refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" kindref="member">hash_mask</ref>);</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(cache-&gt;<ref refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" kindref="member">table</ref>[idx]<sp/>==<sp/>node)<sp/>{</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" kindref="member">table</ref>[idx]<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="78"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80" refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" kindref="member">lru_add_to_head</ref>(<ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref>*<sp/>cache,<sp/><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*<sp/>node)<sp/>{</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/>node-&gt;<ref refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" kindref="member">next</ref><sp/>=<sp/>cache-&gt;<ref refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" kindref="member">head</ref>;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>node-&gt;<ref refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" kindref="member">prev</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(cache-&gt;<ref refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" kindref="member">head</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" kindref="member">head</ref>-&gt;<ref refid="structlru__node_1a7da948acce25415fef6efe09c96dce26" kindref="member">prev</ref><sp/>=<sp/>node;</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" kindref="member">head</ref><sp/>=<sp/>node;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!cache-&gt;<ref refid="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" kindref="member">tail</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" kindref="member">tail</ref><sp/>=<sp/>node;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>idx<sp/>=<sp/><ref refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" kindref="member">lru_hash</ref>(node-&gt;<ref refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" kindref="member">key</ref>,<sp/>node-&gt;<ref refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" kindref="member">key_len</ref>,<sp/>cache-&gt;<ref refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" kindref="member">hash_mask</ref>);</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(cache-&gt;<ref refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" kindref="member">table</ref>[idx]<sp/>==<sp/>NULL)<sp/>{</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" kindref="member">table</ref>[idx]<sp/>=<sp/>node;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="97"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99" refid="lru__cache_8h_1a0185a082105049d4dda4ceaed6e477da" refkind="member"><highlight class="normal"><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref>*<sp/><ref refid="lru__cache_8c_1a0185a082105049d4dda4ceaed6e477da" kindref="member">lru_cache_new</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>capacity)<sp/>{</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(capacity<sp/>==<sp/>0)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref>*<sp/>cache<sp/>=<sp/>kv_malloc(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref>));</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!cache)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1ac826ac1f145df5bc953289a9cd784781" kindref="member">capacity</ref><sp/>=<sp/>capacity;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" kindref="member">size</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" kindref="member">head</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" kindref="member">tail</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>table_size<sp/>=<sp/><ref refid="lru__cache_8c_1aa8f3d95378b0e0f3c43bc0265762db7a" kindref="member">next_power_of_two</ref>(capacity);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" kindref="member">hash_mask</ref><sp/>=<sp/>table_size<sp/>-<sp/>1;</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" kindref="member">table</ref><sp/>=<sp/>kv_calloc(table_size,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(<ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*));</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!cache-&gt;<ref refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" kindref="member">table</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kv_free(cache);</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>NULL;</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/>InitializeCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/>pthread_mutex_init(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>,<sp/>NULL);</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>cache;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight></codeline>
+<codeline lineno="127" refid="lru__cache_8h_1a5dce8063dde908934862ea5c798bfafc" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="lru__cache_8c_1a5dce8063dde908934862ea5c798bfafc" kindref="member">lru_cache_free</ref>(<ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref>*<sp/>cache)<sp/>{</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!cache)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/>DeleteCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/>pthread_mutex_destroy(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*<sp/>node<sp/>=<sp/>cache-&gt;<ref refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" kindref="member">head</ref>;</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(node)<sp/>{</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*<sp/>next<sp/>=<sp/>node-&gt;<ref refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" kindref="member">next</ref>;</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" kindref="member">lru_node_free</ref>(node);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>node<sp/>=<sp/>next;</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/>kv_free(cache-&gt;<ref refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" kindref="member">table</ref>);</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>kv_free(cache);</highlight></codeline>
+<codeline lineno="145"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight></codeline>
+<codeline lineno="147" refid="lru__cache_8h_1a470e27cb20e54d209842e5d4c3184730" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="lru__cache_8c_1a470e27cb20e54d209842e5d4c3184730" kindref="member">lru_cache_lookup</ref>(<ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref>*<sp/>cache,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen,<sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">**<sp/>out_value,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">*<sp/>out_vlen)<sp/>{</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!cache<sp/>||<sp/>!key<sp/>||<sp/>klen<sp/>==<sp/>0<sp/>||<sp/>!out_value<sp/>||<sp/>!out_vlen)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/>EnterCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/>pthread_mutex_lock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>idx<sp/>=<sp/><ref refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" kindref="member">lru_hash</ref>(key,<sp/>klen,<sp/>cache-&gt;<ref refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" kindref="member">hash_mask</ref>);</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*<sp/>node<sp/>=<sp/>cache-&gt;<ref refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" kindref="member">table</ref>[idx];</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>先检查哈希表直接命中的节点<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(node<sp/>&amp;&amp;<sp/>node-&gt;<ref refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" kindref="member">key_len</ref><sp/>==<sp/>klen<sp/>&amp;&amp;<sp/>memcmp(node-&gt;<ref refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" kindref="member">key</ref>,<sp/>key,<sp/>klen)<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" kindref="member">lru_remove</ref>(cache,<sp/>node);</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" kindref="member">lru_add_to_head</ref>(cache,<sp/>node);</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*out_value<sp/>=<sp/>kv_malloc(node-&gt;<ref refid="structlru__node_1ab7babf275eb889a2a9743a4e8615b686" kindref="member">value_len</ref>);</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!*out_value)<sp/>{</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>LeaveCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pthread_mutex_unlock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>memcpy(*out_value,<sp/>node-&gt;<ref refid="structlru__node_1a00fe9107fe418081becf9a7631afc71c" kindref="member">value</ref>,<sp/>node-&gt;<ref refid="structlru__node_1ab7babf275eb889a2a9743a4e8615b686" kindref="member">value_len</ref>);</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*out_vlen<sp/>=<sp/>node-&gt;<ref refid="structlru__node_1ab7babf275eb889a2a9743a4e8615b686" kindref="member">value_len</ref>;</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="176"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>LeaveCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pthread_mutex_unlock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>哈希冲突：遍历链表查找匹配节点<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/>node<sp/>=<sp/>cache-&gt;<ref refid="structlru__cache_1a0fdb020b91d791758b516568d2fc23bf" kindref="member">head</ref>;</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(node)<sp/>{</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(node-&gt;<ref refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" kindref="member">key_len</ref><sp/>==<sp/>klen<sp/>&amp;&amp;<sp/>memcmp(node-&gt;<ref refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" kindref="member">key</ref>,<sp/>key,<sp/>klen)<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" kindref="member">lru_remove</ref>(cache,<sp/>node);</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" kindref="member">lru_add_to_head</ref>(cache,<sp/>node);</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*<sp/>更新哈希表指向该节点<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" kindref="member">table</ref>[idx]<sp/>=<sp/>node;</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*out_value<sp/>=<sp/>kv_malloc(node-&gt;<ref refid="structlru__node_1ab7babf275eb889a2a9743a4e8615b686" kindref="member">value_len</ref>);</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!*out_value)<sp/>{</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>LeaveCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pthread_mutex_unlock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>memcpy(*out_value,<sp/>node-&gt;<ref refid="structlru__node_1a00fe9107fe418081becf9a7631afc71c" kindref="member">value</ref>,<sp/>node-&gt;<ref refid="structlru__node_1ab7babf275eb889a2a9743a4e8615b686" kindref="member">value_len</ref>);</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*out_vlen<sp/>=<sp/>node-&gt;<ref refid="structlru__node_1ab7babf275eb889a2a9743a4e8615b686" kindref="member">value_len</ref>;</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="205"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>LeaveCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pthread_mutex_unlock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>node<sp/>=<sp/>node-&gt;<ref refid="structlru__node_1a41444a9f25d279ae4ca47ff719f6844c" kindref="member">next</ref>;</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="215"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/>LeaveCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/>pthread_mutex_unlock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="222"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="223"><highlight class="normal"></highlight></codeline>
+<codeline lineno="224" refid="lru__cache_8h_1ad6fa69eed0fa92a2ddd740977d2774f6" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="lru__cache_8c_1ad6fa69eed0fa92a2ddd740977d2774f6" kindref="member">lru_cache_insert</ref>(<ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref>*<sp/>cache,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal">*<sp/>value,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>vlen)<sp/>{</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!cache<sp/>||<sp/>!key<sp/>||<sp/>klen<sp/>==<sp/>0<sp/>||<sp/>!value)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="227"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/><sp/><sp/>EnterCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="229"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/>pthread_mutex_lock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="231"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>idx<sp/>=<sp/><ref refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" kindref="member">lru_hash</ref>(key,<sp/>klen,<sp/>cache-&gt;<ref refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" kindref="member">hash_mask</ref>);</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*<sp/>node<sp/>=<sp/>cache-&gt;<ref refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" kindref="member">table</ref>[idx];</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(node<sp/>&amp;&amp;<sp/>node-&gt;<ref refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" kindref="member">key_len</ref><sp/>==<sp/>klen<sp/>&amp;&amp;<sp/>memcmp(node-&gt;<ref refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" kindref="member">key</ref>,<sp/>key,<sp/>klen)<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="237"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" kindref="member">lru_remove</ref>(cache,<sp/>node);</highlight></codeline>
+<codeline lineno="238"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" kindref="member">lru_node_free</ref>(node);</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" kindref="member">size</ref>--;</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(cache-&gt;<ref refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" kindref="member">size</ref><sp/>&gt;=<sp/>cache-&gt;<ref refid="structlru__cache_1ac826ac1f145df5bc953289a9cd784781" kindref="member">capacity</ref><sp/>&amp;&amp;<sp/>cache-&gt;<ref refid="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" kindref="member">tail</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*<sp/>tail<sp/>=<sp/>cache-&gt;<ref refid="structlru__cache_1a90b425236a95aea6364bf6c84f75158b" kindref="member">tail</ref>;</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" kindref="member">lru_remove</ref>(cache,<sp/>tail);</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" kindref="member">lru_node_free</ref>(tail);</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" kindref="member">size</ref>--;</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/>node<sp/>=<sp/><ref refid="lru__cache_8c_1a709b3af3a8d9827a024a5e86cca441ce" kindref="member">lru_node_new</ref>(key,<sp/>klen,<sp/>value,<sp/>vlen);</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!node)<sp/>{</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="252"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>LeaveCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pthread_mutex_unlock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="256"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-1;</highlight></codeline>
+<codeline lineno="257"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="258"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="259"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a1fb836f71d9869a77d84d988e0213bb9" kindref="member">lru_add_to_head</ref>(cache,<sp/>node);</highlight></codeline>
+<codeline lineno="260"><highlight class="normal"><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" kindref="member">size</ref>++;</highlight></codeline>
+<codeline lineno="261"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="262"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="263"><highlight class="normal"><sp/><sp/><sp/><sp/>LeaveCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="264"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="265"><highlight class="normal"><sp/><sp/><sp/><sp/>pthread_mutex_unlock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="266"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="267"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="268"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="269"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="270"><highlight class="normal"></highlight></codeline>
+<codeline lineno="271" refid="lru__cache_8h_1a1304eae1bbb02da02f5f5e8a420847f7" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="lru__cache_8c_1a1304eae1bbb02da02f5f5e8a420847f7" kindref="member">lru_cache_remove</ref>(<ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref>*<sp/>cache,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>key,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>klen)<sp/>{</highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!cache<sp/>||<sp/>!key<sp/>||<sp/>klen<sp/>==<sp/>0)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="273"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="274"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="275"><highlight class="normal"><sp/><sp/><sp/><sp/>EnterCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="277"><highlight class="normal"><sp/><sp/><sp/><sp/>pthread_mutex_lock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="278"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>idx<sp/>=<sp/><ref refid="lru__cache_8c_1a8b2a3c6b29d1afd72f2c57ac16a1fbb2" kindref="member">lru_hash</ref>(key,<sp/>klen,<sp/>cache-&gt;<ref refid="structlru__cache_1a1b318b6def98a7165cad0772b1803f43" kindref="member">hash_mask</ref>);</highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="lru__cache_8h_1ae82beeef2ec3566a2ddf2dea73eebc01" kindref="member">lru_node_t</ref>*<sp/>node<sp/>=<sp/>cache-&gt;<ref refid="structlru__cache_1a1548fcfb2fda3b7e2e89d48618f2fa59" kindref="member">table</ref>[idx];</highlight></codeline>
+<codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!node)<sp/>{</highlight></codeline>
+<codeline lineno="284"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="285"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>LeaveCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="286"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pthread_mutex_unlock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="288"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="289"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="290"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="291"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="292"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(node-&gt;<ref refid="structlru__node_1aa79cf331d7fb114bbbf451da50333aff" kindref="member">key_len</ref><sp/>!=<sp/>klen<sp/>||<sp/>memcmp(node-&gt;<ref refid="structlru__node_1a6212333d77ae625f37c36dd7bedb399a" kindref="member">key</ref>,<sp/>key,<sp/>klen)<sp/>!=<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="293"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="294"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>LeaveCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="295"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="296"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pthread_mutex_unlock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="297"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="298"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="299"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="300"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="301"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a40de186e5502942172da523fbf582ac3" kindref="member">lru_remove</ref>(cache,<sp/>node);</highlight></codeline>
+<codeline lineno="302"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="lru__cache_8c_1a80078e91b6418d69dceb081b95a4a1ec" kindref="member">lru_node_free</ref>(node);</highlight></codeline>
+<codeline lineno="303"><highlight class="normal"><sp/><sp/><sp/><sp/>cache-&gt;<ref refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" kindref="member">size</ref>--;</highlight></codeline>
+<codeline lineno="304"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="305"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>_WIN32</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="306"><highlight class="normal"><sp/><sp/><sp/><sp/>LeaveCriticalSection(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="307"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="308"><highlight class="normal"><sp/><sp/><sp/><sp/>pthread_mutex_unlock(&amp;cache-&gt;<ref refid="structlru__cache_1adc506fb2a3ec220050de8a79b4087de5" kindref="member">lock</ref>);</highlight></codeline>
+<codeline lineno="309"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="310"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="311"><highlight class="normal"></highlight></codeline>
+<codeline lineno="312" refid="lru__cache_8h_1a94a95dc94caad4d8ca9a5c41c1bfb7ff" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="lru__cache_8c_1a94a95dc94caad4d8ca9a5c41c1bfb7ff" kindref="member">lru_cache_size</ref>(<ref refid="lru__cache_8h_1a5c82382ae500e89fb728cf51b2e2c111" kindref="member">lru_cache_t</ref>*<sp/>cache)<sp/>{</highlight></codeline>
+<codeline lineno="313"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!cache)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="314"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>cache-&gt;<ref refid="structlru__cache_1a8bc270d4f236837494849c441e63fb6e" kindref="member">size</ref>;</highlight></codeline>
+<codeline lineno="315"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/lru_cache.c"/>
+  </compounddef>
+</doxygen>

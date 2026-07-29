@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structwal__mgr" kind="struct" language="C++" prot="public">
+    <compoundname>wal_mgr</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structwal__mgr_1a8f6505b9a7a4054ba309a2400c1bd59c" prot="public" static="no" mutable="no">
+        <type><ref refid="wal_8h_1a5733299506ba005ee00b576ff668445c" kindref="member">wal_t</ref> *</type>
+        <definition>wal_t* wal_mgr::active</definition>
+        <argsstring></argsstring>
+        <name>active</name>
+        <qualifiedname>wal_mgr::active</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/wal.c" line="38" column="11" bodyfile="src/wal.c" bodystart="38" bodyend="-1"/>
+        <referencedby refid="wal_8h_1ac5ff9edb72952a6aea71b33053fb0d1a" compoundref="wal_8c" startline="298" endline="301">wal_mgr_active_size</referencedby>
+        <referencedby refid="wal_8h_1a0477fda1593e9fefab6a8ba5f3cf3009" compoundref="wal_8c" startline="262" endline="296">wal_mgr_archive</referencedby>
+        <referencedby refid="wal_8h_1a9a9c6ff1fb038110d3a09af89ec3c262" compoundref="wal_8c" startline="176" endline="186">wal_mgr_close</referencedby>
+        <referencedby refid="wal_8h_1ad93f9f1fc01b4ee2ff51600666232420" compoundref="wal_8c" startline="132" endline="174">wal_mgr_open</referencedby>
+        <referencedby refid="wal_8h_1afe75b1ecad079adc49f01bde36496b63" compoundref="wal_8c" startline="216" endline="219">wal_mgr_sync</referencedby>
+        <referencedby refid="wal_8h_1a66b27b1919547d721d0318540a63bc07" compoundref="wal_8c" startline="188" endline="214">wal_mgr_write</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structwal__mgr_1a895374269c8fa2607fd4f431df14a903" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* wal_mgr::dir_path</definition>
+        <argsstring></argsstring>
+        <name>dir_path</name>
+        <qualifiedname>wal_mgr::dir_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/wal.c" line="39" column="11" bodyfile="src/wal.c" bodystart="39" bodyend="-1"/>
+        <referencedby refid="wal_8h_1a9a9c6ff1fb038110d3a09af89ec3c262" compoundref="wal_8c" startline="176" endline="186">wal_mgr_close</referencedby>
+        <referencedby refid="wal_8c_1a553dc7d35ee9f96b037182a05a170de6" compoundref="wal_8c" startline="114" endline="130">wal_mgr_delete_all_old</referencedby>
+        <referencedby refid="wal_8c_1a700880de35c88964f2ab31175d453c3d" compoundref="wal_8c" startline="45" endline="48">wal_mgr_make_path</referencedby>
+        <referencedby refid="wal_8h_1ad93f9f1fc01b4ee2ff51600666232420" compoundref="wal_8c" startline="132" endline="174">wal_mgr_open</referencedby>
+        <referencedby refid="wal_8h_1a484cd076aa5d6853f2072c792b60c39c" compoundref="wal_8c" startline="221" endline="260">wal_mgr_replay</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structwal__mgr_1a598541596a12248c713be5e804eaa77a" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int wal_mgr::seq</definition>
+        <argsstring></argsstring>
+        <name>seq</name>
+        <qualifiedname>wal_mgr::seq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/wal.c" line="40" column="12" bodyfile="src/wal.c" bodystart="40" bodyend="-1"/>
+        <referencedby refid="wal_8h_1a0477fda1593e9fefab6a8ba5f3cf3009" compoundref="wal_8c" startline="262" endline="296">wal_mgr_archive</referencedby>
+        <referencedby refid="wal_8h_1ad93f9f1fc01b4ee2ff51600666232420" compoundref="wal_8c" startline="132" endline="174">wal_mgr_open</referencedby>
+        <referencedby refid="wal_8h_1a44252d75b4ebf1ac54ab6eef0195af1f" compoundref="wal_8c" startline="303" endline="306">wal_mgr_seq</referencedby>
+        <referencedby refid="wal_8h_1a66b27b1919547d721d0318540a63bc07" compoundref="wal_8c" startline="188" endline="214">wal_mgr_write</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structwal__mgr_1a35a42650afbcee4b719dd48cccb6fe3c" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t wal_mgr::max_size</definition>
+        <argsstring></argsstring>
+        <name>max_size</name>
+        <qualifiedname>wal_mgr::max_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/wal.c" line="41" column="12" bodyfile="src/wal.c" bodystart="41" bodyend="-1"/>
+        <referencedby refid="wal_8h_1ad93f9f1fc01b4ee2ff51600666232420" compoundref="wal_8c" startline="132" endline="174">wal_mgr_open</referencedby>
+        <referencedby refid="wal_8h_1a66b27b1919547d721d0318540a63bc07" compoundref="wal_8c" startline="188" endline="214">wal_mgr_write</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>wal</label>
+        <link refid="structwal"/>
+      </node>
+      <node id="1">
+        <label>wal_mgr</label>
+        <link refid="structwal__mgr"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>active</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/wal.c" line="37" column="1" bodyfile="src/wal.c" bodystart="37" bodyend="42"/>
+    <listofallmembers>
+      <member refid="structwal__mgr_1a8f6505b9a7a4054ba309a2400c1bd59c" prot="public" virt="non-virtual"><scope>wal_mgr</scope><name>active</name></member>
+      <member refid="structwal__mgr_1a895374269c8fa2607fd4f431df14a903" prot="public" virt="non-virtual"><scope>wal_mgr</scope><name>dir_path</name></member>
+      <member refid="structwal__mgr_1a35a42650afbcee4b719dd48cccb6fe3c" prot="public" virt="non-virtual"><scope>wal_mgr</scope><name>max_size</name></member>
+      <member refid="structwal__mgr_1a598541596a12248c713be5e804eaa77a" prot="public" virt="non-virtual"><scope>wal_mgr</scope><name>seq</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

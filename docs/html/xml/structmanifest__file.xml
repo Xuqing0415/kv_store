@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structmanifest__file" kind="struct" language="C++" prot="public">
+    <compoundname>manifest_file</compoundname>
+    <includes refid="manifest_8h" local="no">manifest.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t manifest_file::file_id</definition>
+        <argsstring></argsstring>
+        <name>file_id</name>
+        <qualifiedname>manifest_file::file_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="11" column="14" bodyfile="include/manifest.h" bodystart="11" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a1bf78b7e348906a983cbc68514d8aa5b" compoundref="kv__store_8c" startline="1301" endline="1440">kv_backup</referencedby>
+        <referencedby refid="kv__store_8h_1a8792c0e8b2f365f4653bc6bc2f537ce1" compoundref="kv__store_8c" startline="602" endline="733">kv_get</referencedby>
+        <referencedby refid="kv__store_8h_1a411331a8af805001b77c3d9011fea05f" compoundref="kv__store_8c" startline="865" endline="952">kv_scan</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+        <referencedby refid="kv__store_8c_1ad8a1e35142cf227b5d95940067071768" compoundref="kv__store_8c" startline="112" endline="180">maintenance_thread_func</referencedby>
+        <referencedby refid="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" compoundref="manifest_8c" startline="59" endline="94">manifest_add_file</referencedby>
+        <referencedby refid="manifest_8h_1ac1eb70471bbbeb6b1c92f6d6a56595fa" compoundref="manifest_8c" startline="96" endline="113">manifest_remove_file</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+        <referencedby refid="merge_8c_1a736110fbdade7046721de344f0c01edb" compoundref="merge_8c" startline="139" endline="280">merge_files</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmanifest__file_1ad44ca515be7a7088af22b9fed2b6706d" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int manifest_file::level</definition>
+        <argsstring></argsstring>
+        <name>level</name>
+        <qualifiedname>manifest_file::level</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="12" column="9" bodyfile="include/manifest.h" bodystart="12" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="kv__store_8h_1ad646d12cff3fd0922a09f41e4bf09c08" compoundref="kv__store_8c" startline="1132" endline="1183">kv_snapshot_scan</referencedby>
+        <referencedby refid="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" compoundref="manifest_8c" startline="59" endline="94">manifest_add_file</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmanifest__file_1aba49690d903d266c1a66cd4407dafdcf" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* manifest_file::smallest_key</definition>
+        <argsstring></argsstring>
+        <name>smallest_key</name>
+        <qualifiedname>manifest_file::smallest_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="13" column="10" bodyfile="include/manifest.h" bodystart="13" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" compoundref="kv__store_8c" startline="1014" endline="1073">kv_snapshot_create</referencedby>
+        <referencedby refid="kv__store_8h_1a2e4e48206e3052f91933404bebd4c296" compoundref="kv__store_8c" startline="1075" endline="1089">kv_snapshot_free</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" compoundref="manifest_8c" startline="59" endline="94">manifest_add_file</referencedby>
+        <referencedby refid="manifest_8c_1a18c37e329a8fedc6f0c324594b3099a7" compoundref="manifest_8c" startline="14" endline="19">manifest_file_free</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmanifest__file_1addb4eec8ec5a1b26381cb2e7f5afc139" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t manifest_file::smallest_key_len</definition>
+        <argsstring></argsstring>
+        <name>smallest_key_len</name>
+        <qualifiedname>manifest_file::smallest_key_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="14" column="12" bodyfile="include/manifest.h" bodystart="14" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" compoundref="kv__store_8c" startline="1014" endline="1073">kv_snapshot_create</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" compoundref="manifest_8c" startline="59" endline="94">manifest_add_file</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmanifest__file_1a6ea1361b547d1f6cdc992b5c0a65dd25" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* manifest_file::largest_key</definition>
+        <argsstring></argsstring>
+        <name>largest_key</name>
+        <qualifiedname>manifest_file::largest_key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="15" column="10" bodyfile="include/manifest.h" bodystart="15" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" compoundref="kv__store_8c" startline="1014" endline="1073">kv_snapshot_create</referencedby>
+        <referencedby refid="kv__store_8h_1a2e4e48206e3052f91933404bebd4c296" compoundref="kv__store_8c" startline="1075" endline="1089">kv_snapshot_free</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" compoundref="manifest_8c" startline="59" endline="94">manifest_add_file</referencedby>
+        <referencedby refid="manifest_8c_1a18c37e329a8fedc6f0c324594b3099a7" compoundref="manifest_8c" startline="14" endline="19">manifest_file_free</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmanifest__file_1acbd780969f0924279a1972ffc50aef1c" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t manifest_file::largest_key_len</definition>
+        <argsstring></argsstring>
+        <name>largest_key_len</name>
+        <qualifiedname>manifest_file::largest_key_len</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="16" column="12" bodyfile="include/manifest.h" bodystart="16" bodyend="-1"/>
+        <referencedby refid="kv__store_8h_1a244e18c68f2025fb02e4dcef89664120" compoundref="kv__store_8c" startline="1014" endline="1073">kv_snapshot_create</referencedby>
+        <referencedby refid="kv__store_8h_1a47bac0c7c40e9f50b42520a9a9855375" compoundref="kv__store_8c" startline="1091" endline="1130">kv_snapshot_get</referencedby>
+        <referencedby refid="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" compoundref="manifest_8c" startline="59" endline="94">manifest_add_file</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmanifest__file_1a87019421a20431113ffb51347ce2e329" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t manifest_file::file_size</definition>
+        <argsstring></argsstring>
+        <name>file_size</name>
+        <qualifiedname>manifest_file::file_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="17" column="12" bodyfile="include/manifest.h" bodystart="17" bodyend="-1"/>
+        <referencedby refid="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" compoundref="manifest_8c" startline="59" endline="94">manifest_add_file</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+        <referencedby refid="merge_8h_1a151086cd64d064ca1a3d0b353f1b53fa" compoundref="merge_8c" startline="93" endline="137">merge_should_trigger</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structmanifest__file_1a7bc0b1e19e7244284a8d9ed76bd5263c" prot="public" static="no" mutable="no">
+        <type>struct <ref refid="structmanifest__file" kindref="compound">manifest_file</ref> *</type>
+        <definition>struct manifest_file* manifest_file::next</definition>
+        <argsstring></argsstring>
+        <name>next</name>
+        <qualifiedname>manifest_file::next</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/manifest.h" line="18" column="25" bodyfile="include/manifest.h" bodystart="18" bodyend="-1"/>
+        <referencedby refid="manifest_8h_1a041012ed791e3968542a71e7b0e9a38b" compoundref="manifest_8c" startline="59" endline="94">manifest_add_file</referencedby>
+        <referencedby refid="manifest_8c_1a9e95da955abeeb636b25478cb635b2f7" compoundref="manifest_8c" startline="21" endline="28">manifest_files_free</referencedby>
+        <referencedby refid="manifest_8h_1a1b49825fc2dafa1d29d1fea3f32df54f" compoundref="manifest_8c" startline="126" endline="154">manifest_list_files</referencedby>
+        <referencedby refid="manifest_8h_1ac1eb70471bbbeb6b1c92f6d6a56595fa" compoundref="manifest_8c" startline="96" endline="113">manifest_remove_file</referencedby>
+        <referencedby refid="manifest_8h_1ab4358f0db7b88b220ecd1ef233e428cc" compoundref="manifest_8c" startline="161" endline="204">manifest_sync</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>manifest_file</label>
+        <link refid="structmanifest__file"/>
+        <childnode refid="1" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/manifest.h" line="10" column="1" bodyfile="include/manifest.h" bodystart="10" bodyend="19"/>
+    <listofallmembers>
+      <member refid="structmanifest__file_1a4ce68933213fb3df4230df318bb4adf1" prot="public" virt="non-virtual"><scope>manifest_file</scope><name>file_id</name></member>
+      <member refid="structmanifest__file_1a87019421a20431113ffb51347ce2e329" prot="public" virt="non-virtual"><scope>manifest_file</scope><name>file_size</name></member>
+      <member refid="structmanifest__file_1a6ea1361b547d1f6cdc992b5c0a65dd25" prot="public" virt="non-virtual"><scope>manifest_file</scope><name>largest_key</name></member>
+      <member refid="structmanifest__file_1acbd780969f0924279a1972ffc50aef1c" prot="public" virt="non-virtual"><scope>manifest_file</scope><name>largest_key_len</name></member>
+      <member refid="structmanifest__file_1ad44ca515be7a7088af22b9fed2b6706d" prot="public" virt="non-virtual"><scope>manifest_file</scope><name>level</name></member>
+      <member refid="structmanifest__file_1a7bc0b1e19e7244284a8d9ed76bd5263c" prot="public" virt="non-virtual"><scope>manifest_file</scope><name>next</name></member>
+      <member refid="structmanifest__file_1aba49690d903d266c1a66cd4407dafdcf" prot="public" virt="non-virtual"><scope>manifest_file</scope><name>smallest_key</name></member>
+      <member refid="structmanifest__file_1addb4eec8ec5a1b26381cb2e7f5afc139" prot="public" virt="non-virtual"><scope>manifest_file</scope><name>smallest_key_len</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
