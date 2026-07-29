@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
 #endif
 
     if (metrics_port > 0) {
-        if (metrics_server_start(&g_metrics_server, host, metrics_port, db) != 0) {
+        if (metrics_server_start(&g_metrics_server, host, metrics_port, db, NULL) != 0) {
             fprintf(stderr, "WARNING: Failed to start metrics server on port %d\n", metrics_port);
             g_metrics_server = NULL;
         } else {
