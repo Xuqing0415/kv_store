@@ -21,6 +21,9 @@ typedef SRWLOCK RWLOCK;
 #define RWLOCK_UNLOCK(p) ReleaseSRWLockShared((p))
 #define RWLOCK_UNLOCK_W(p) ReleaseSRWLockExclusive((p))
 #define RWLOCK_DESTROY(p) ((void)(p))
+/* 原子操作：递增 long long */
+#define ATOMIC_INC64(var) InterlockedIncrement64(&(var))
+#define ATOMIC_READ64(var) InterlockedExchangeAdd64(&(var), 0)
 #else
 #include <pthread.h>
 typedef pthread_rwlock_t RWLOCK;
@@ -30,13 +33,16 @@ typedef pthread_rwlock_t RWLOCK;
 #define RWLOCK_UNLOCK(p) pthread_rwlock_unlock((p))
 #define RWLOCK_UNLOCK_W(p) pthread_rwlock_unlock((p))
 #define RWLOCK_DESTROY(p) pthread_rwlock_destroy((p))
+/* 原子操作：递增 long long */
+#define ATOMIC_INC64(var) __atomic_fetch_add(&(var), 1, __ATOMIC_RELAXED)
+#define ATOMIC_READ64(var) __atomic_load_n(&(var), __ATOMIC_RELAXED)
 #endif
 
 typedef struct kv_store {
     char* dir_path;
     skiplist_t* memtable;
     skiplist_t* immutable_memtable;
-    wal_t* wal;
+    wal_mgr_t* wal_mgr;
     manifest_t* manifest;
     lru_cache_t* block_cache;
     merge_context_t merge_ctx;
@@ -47,6 +53,15 @@ typedef struct kv_store {
     pthread_mutex_t manifest_lock;
     #endif
     size_t memtable_size;
+    compression_type_t compression_type;  /* 压缩算法：zstd / lz4 / none */
+
+    /* metrics counters */
+    long long puts_total;
+    long long gets_total;
+    long long get_misses_total;
+    long long deletes_total;
+    long long scans_total;
+    long long compactions_total;
 } kv_store_t;
 
 typedef struct kv_iter {
@@ -93,7 +108,7 @@ static int kv_flush_memtable(kv_store_t* db) {
     
     snprintf(path, sizeof(path), "%s/%llu.sst", db->dir_path, (unsigned long long)file_id);
     
-    if (sstable_write(path, file_id, db->immutable_memtable) != 0) {
+    if (sstable_write(path, file_id, db->immutable_memtable, db->compression_type) != 0) {
         printf("[FLUSH] ERROR: Failed to write SSTable %s\n", path);
         return -1;
     }
@@ -144,15 +159,12 @@ static int kv_flush_memtable(kv_store_t* db) {
     skiplist_free(db->immutable_memtable);
     db->immutable_memtable = NULL;
     
-    if (db->wal) {
-        wal_close(db->wal);
+    /* 归档旧 WAL（数据已安全写入 SSTable），创建新 WAL */
+    if (db->wal_mgr) {
+        wal_mgr_archive(db->wal_mgr);
     }
     
-    char wal_path[512];
-    snprintf(wal_path, sizeof(wal_path), "%s/wal.log", db->dir_path);
-    db->wal = wal_open(wal_path);
-    
-    printf("[FLUSH] MemTable flushed successfully, new WAL opened\n");
+    printf("[FLUSH] MemTable flushed successfully, WAL archived & new WAL opened\n");
     return 0;
 }
 
@@ -215,19 +227,26 @@ kv_store_t* kv_open(const char* dir_path) {
     
     db->immutable_memtable = NULL;
     db->memtable_size = 0;
+    db->compression_type = COMPRESSION_ZSTD;  /* 默认使用 zstd */
     
-    char wal_path[512];
-    snprintf(wal_path, sizeof(wal_path), "%s/wal.log", dir_path);
-    db->wal = wal_open(wal_path);
+    /* 初始化指标计数器 */
+    db->puts_total = 0;
+    db->gets_total = 0;
+    db->get_misses_total = 0;
+    db->deletes_total = 0;
+    db->scans_total = 0;
+    db->compactions_total = 0;
     
-    if (db->wal) {
-        wal_replay(db->wal, wal_replay_callback, db);
+    db->wal_mgr = wal_mgr_open(dir_path);
+    
+    if (db->wal_mgr) {
+        wal_mgr_replay(db->wal_mgr, wal_replay_callback, db);
     }
     
     db->manifest = manifest_open(dir_path);
     if (!db->manifest) {
         skiplist_free(db->memtable);
-        wal_close(db->wal);
+        wal_mgr_close(db->wal_mgr);
         kv_free(db->dir_path);
         kv_free(db);
         return NULL;
@@ -241,6 +260,7 @@ kv_store_t* kv_open(const char* dir_path) {
     db->merge_ctx.manifest_lock = &db->manifest_lock;
     db->merge_ctx.stop = 0;
     db->merge_ctx.thread_started = 0;
+    db->merge_ctx.compression_type = db->compression_type;
     
     RWLOCK_INIT(&db->rwlock);
     
@@ -276,8 +296,8 @@ void kv_close(kv_store_t* db) {
         skiplist_free(db->memtable);
     }
     
-    if (db->wal) {
-        wal_close(db->wal);
+    if (db->wal_mgr) {
+        wal_mgr_close(db->wal_mgr);
     }
     
     manifest_close(db->manifest);
@@ -300,12 +320,14 @@ int kv_put(kv_store_t* db, const char* key, size_t klen, const char* val, size_t
     
     RWLOCK_WRLOCK(&db->rwlock);
     
-    if (db->wal) {
-        wal_write(db->wal, WAL_PUT, key, klen, val, vlen);
+    if (db->wal_mgr) {
+        wal_mgr_write(db->wal_mgr, WAL_PUT, key, klen, val, vlen);
     }
     
     skiplist_insert(db->memtable, key, klen, val, vlen);
     db->memtable_size += klen + vlen;
+    
+    ATOMIC_INC64(db->puts_total);
     
     if (db->memtable_size >= MEMTABLE_SIZE_LIMIT) {
         RWLOCK_UNLOCK_W(&db->rwlock);
@@ -319,7 +341,10 @@ int kv_put(kv_store_t* db, const char* key, size_t klen, const char* val, size_t
 }
 
 int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t* out_vlen) {
-    if (!db || !key || klen == 0 || !out_val || !out_vlen) return -1;
+    if (!db || !key || klen == 0 || !out_val || !out_vlen) {
+        ATOMIC_INC64(db->get_misses_total);
+        return -1;
+    }
     
     RWLOCK_RDLOCK(&db->rwlock);
     
@@ -333,11 +358,13 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
         *out_val = value;
         *out_vlen = vlen;
         RWLOCK_UNLOCK(&db->rwlock);
+        ATOMIC_INC64(db->gets_total);
         return 0;
     }
     if (ret == -2) {
         /* tombstone found in MemTable, key is deleted */
         RWLOCK_UNLOCK(&db->rwlock);
+        ATOMIC_INC64(db->get_misses_total);
         return -1;
     }
     
@@ -347,11 +374,13 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
             *out_val = value;
             *out_vlen = vlen;
             RWLOCK_UNLOCK(&db->rwlock);
+            ATOMIC_INC64(db->gets_total);
             return 0;
         }
         if (ret == -2) {
             /* tombstone found in Immutable MemTable */
             RWLOCK_UNLOCK(&db->rwlock);
+            ATOMIC_INC64(db->get_misses_total);
             return -1;
         }
     }
@@ -379,6 +408,7 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
         #else
         pthread_mutex_unlock(&db->manifest_lock);
         #endif
+        ATOMIC_INC64(db->get_misses_total);
         return -1;
     }
     
@@ -414,6 +444,7 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
                 }
                 kv_free(files_copy);
                 kv_free(files);
+                ATOMIC_INC64(db->gets_total);
                 return 0;
             }
             if (sst_ret == -2) {
@@ -424,6 +455,7 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
                 }
                 kv_free(files_copy);
                 kv_free(files);
+                ATOMIC_INC64(db->get_misses_total);
                 return -1;
             }
             
@@ -437,19 +469,22 @@ int kv_get(kv_store_t* db, const char* key, size_t klen, char** out_val, size_t*
     kv_free(files_copy);
     kv_free(files);
     
+    ATOMIC_INC64(db->get_misses_total);
     return -1;
 }
 
 int kv_sync(kv_store_t* db) {
     if (!db) return -1;
-    if (db->wal) {
-        return wal_sync(db->wal);
+    if (db->wal_mgr) {
+        return wal_mgr_sync(db->wal_mgr);
     }
     return -1;
 }
 
 int kv_force_merge(kv_store_t* db) {
     if (!db) return -1;
+    
+    ATOMIC_INC64(db->compactions_total);
     
     printf("[MERGE] Force merge triggered by user, running levels 0..%d\n", MAX_LEVELS - 2);
     fflush(stdout);
@@ -463,18 +498,30 @@ int kv_force_merge(kv_store_t* db) {
     return 0;
 }
 
+void kv_metrics_snapshot(kv_store_t* db, kv_metrics_snapshot_t* out) {
+    if (!db || !out) return;
+    out->puts_total        = ATOMIC_READ64(db->puts_total);
+    out->gets_total        = ATOMIC_READ64(db->gets_total);
+    out->get_misses_total  = ATOMIC_READ64(db->get_misses_total);
+    out->deletes_total     = ATOMIC_READ64(db->deletes_total);
+    out->scans_total       = ATOMIC_READ64(db->scans_total);
+    out->compactions_total = ATOMIC_READ64(db->compactions_total);
+}
+
 int kv_delete(kv_store_t* db, const char* key, size_t klen) {
     if (!db || !key || klen == 0) return -1;
     
     RWLOCK_WRLOCK(&db->rwlock);
     
-    if (db->wal) {
-        wal_write(db->wal, WAL_DELETE, key, klen, NULL, 0);
+    if (db->wal_mgr) {
+        wal_mgr_write(db->wal_mgr, WAL_DELETE, key, klen, NULL, 0);
     }
     
     /* 使用 tombstone 插入（vlen=0）替代 delete，确保 tombstone 能持久化到 SSTable */
     skiplist_insert(db->memtable, key, klen, NULL, 0);
     db->memtable_size += klen;
+    
+    ATOMIC_INC64(db->deletes_total);
     
     if (db->memtable_size >= MEMTABLE_SIZE_LIMIT) {
         RWLOCK_UNLOCK_W(&db->rwlock);
@@ -557,6 +604,8 @@ static void merge_sstable_into(skiplist_t* dst, sstable_t* sst,
 
 kv_iter_t* kv_scan(kv_store_t* db, const char* start, size_t slen, const char* end, size_t elen) {
     if (!db) return NULL;
+    
+    ATOMIC_INC64(db->scans_total);
     
     kv_iter_t* iter = kv_malloc(sizeof(kv_iter_t));
     if (!iter) return NULL;
@@ -871,4 +920,250 @@ kv_iter_t* kv_snapshot_scan(kv_snapshot_t* snap, const char* start, size_t slen,
 
     iter->merged_iter = skiplist_new_iterator(iter->merged);
     return iter;
+}
+
+/* ====================== 备份与恢复 ====================== */
+
+/* 递归创建目录（跨平台） */
+static int mkdir_recursive(const char* path) {
+    char tmp[512];
+    snprintf(tmp, sizeof(tmp), "%s", path);
+    size_t len = strlen(tmp);
+
+    /* 去掉末尾斜杠 */
+    if (len > 0 && (tmp[len - 1] == '/' || tmp[len - 1] == '\\')) {
+        tmp[len - 1] = '\0';
+    }
+
+    for (size_t i = 0; tmp[i]; i++) {
+        if (tmp[i] == '/' || tmp[i] == '\\') {
+            if (i == 0) continue;
+            char saved = tmp[i];
+            tmp[i] = '\0';
+#ifdef _WIN32
+            CreateDirectoryA(tmp, NULL);
+#else
+            mkdir(tmp, 0755);
+#endif
+            tmp[i] = saved;
+        }
+    }
+#ifdef _WIN32
+    CreateDirectoryA(tmp, NULL);
+#else
+    mkdir(tmp, 0755);
+#endif
+    return 0;
+}
+
+/* 复制文件：src → dst */
+static int copy_file(const char* src, const char* dst) {
+    FILE* fsrc = fopen(src, "rb");
+    if (!fsrc) return -1;
+
+    FILE* fdst = fopen(dst, "wb");
+    if (!fdst) {
+        fclose(fsrc);
+        return -1;
+    }
+
+    char buf[65536];  /* 64KB buffer */
+    size_t n;
+    while ((n = fread(buf, 1, sizeof(buf), fsrc)) > 0) {
+        if (fwrite(buf, 1, n, fdst) != n) {
+            fclose(fsrc);
+            fclose(fdst);
+            return -1;
+        }
+    }
+
+    fclose(fsrc);
+    fclose(fdst);
+    return 0;
+}
+
+int kv_backup(kv_store_t* db, const char* backup_dir) {
+    if (!db || !backup_dir) return -1;
+
+    printf("[BACKUP] Starting backup to %s...\n", backup_dir);
+
+    /* 1. 获取写锁，确保没有并发写入 */
+    RWLOCK_WRLOCK(&db->rwlock);
+
+    /* 2. 刷盘所有 MemTable：先切 active → immutable，再刷 immutable */
+    if (db->memtable && skiplist_count(db->memtable) > 0) {
+        db->immutable_memtable = db->memtable;
+        db->memtable = skiplist_new();
+        db->memtable_size = 0;
+    }
+
+    RWLOCK_UNLOCK_W(&db->rwlock);
+
+    /* 刷 immutable memtable 到 SSTable */
+    if (db->immutable_memtable) {
+        kv_flush_memtable(db);
+    }
+
+    /* 3. 同步 WAL */
+    if (db->wal_mgr) {
+        wal_mgr_sync(db->wal_mgr);
+    }
+
+    /* 4. 同步 Manifest */
+    manifest_sync(db->manifest);
+
+    /* 5. 停止 merge 调度器，等待后台合并完成 */
+    merge_scheduler_stop(&db->merge_ctx);
+    merge_scheduler_join(&db->merge_ctx);
+
+    /* 6. 创建备份目录 */
+    mkdir_recursive(backup_dir);
+
+    /* 7. 复制所有数据文件 */
+    char src_path[512], dst_path[512];
+    int errors = 0;
+
+    /* 复制 MANIFEST */
+    snprintf(src_path, sizeof(src_path), "%s/" MANIFEST_FILE_NAME, db->dir_path);
+    snprintf(dst_path, sizeof(dst_path), "%s/" MANIFEST_FILE_NAME, backup_dir);
+    if (copy_file(src_path, dst_path) != 0) {
+        printf("[BACKUP] WARNING: Failed to copy MANIFEST\n");
+        errors++;
+    }
+
+    /* 复制 MANIFEST.tmp（如果存在） */
+    snprintf(src_path, sizeof(src_path), "%s/" MANIFEST_TMP_FILE_NAME, db->dir_path);
+    snprintf(dst_path, sizeof(dst_path), "%s/" MANIFEST_TMP_FILE_NAME, backup_dir);
+    copy_file(src_path, dst_path);  /* 忽略错误，tmp 文件可能不存在 */
+
+    /* 复制 WAL 文件（使用新的编号命名） */
+    {
+        char wal_pattern[512];
+        snprintf(wal_pattern, sizeof(wal_pattern), "%s/wal_*.log", db->dir_path);
+
+#ifdef _WIN32
+        WIN32_FIND_DATAA fd;
+        HANDLE hFind = FindFirstFileA(wal_pattern, &fd);
+        if (hFind != INVALID_HANDLE_VALUE) {
+            do {
+                snprintf(src_path, sizeof(src_path), "%s/%s", db->dir_path, fd.cFileName);
+                snprintf(dst_path, sizeof(dst_path), "%s/%s", backup_dir, fd.cFileName);
+                if (copy_file(src_path, dst_path) != 0) {
+                    printf("[BACKUP] WARNING: Failed to copy WAL %s\n", fd.cFileName);
+                    errors++;
+                }
+            } while (FindNextFileA(hFind, &fd));
+            FindClose(hFind);
+        }
+#else
+        /* POSIX: 使用简单的 glob 模式 */
+        char cmd[1024];
+        snprintf(cmd, sizeof(cmd), "cp %s/wal_*.log %s/ 2>/dev/null", db->dir_path, backup_dir);
+        system(cmd);
+#endif
+    }
+
+    /* 复制所有 SSTable 文件 */
+    #ifdef _WIN32
+    EnterCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_lock(&db->manifest_lock);
+    #endif
+
+    manifest_file_t** files = NULL;
+    size_t file_count = 0;
+    if (manifest_list_files(db->manifest, -1, &files, &file_count) == 0) {
+        for (size_t i = 0; i < file_count; i++) {
+            snprintf(src_path, sizeof(src_path), "%s/%llu.sst", db->dir_path, (unsigned long long)files[i]->file_id);
+            snprintf(dst_path, sizeof(dst_path), "%s/%llu.sst", backup_dir, (unsigned long long)files[i]->file_id);
+            if (copy_file(src_path, dst_path) != 0) {
+                printf("[BACKUP] WARNING: Failed to copy SSTable %llu\n", (unsigned long long)files[i]->file_id);
+                errors++;
+            }
+        }
+        kv_free(files);
+    }
+
+    #ifdef _WIN32
+    LeaveCriticalSection(&db->manifest_lock);
+    #else
+    pthread_mutex_unlock(&db->manifest_lock);
+    #endif
+
+    printf("[BACKUP] Copied %zu SSTable files\n", file_count);
+
+    /* 8. 重新启动 merge 调度器 */
+    merge_scheduler_start(&db->merge_ctx);
+
+    if (errors > 0) {
+        printf("[BACKUP] Completed with %d errors\n", errors);
+        return -1;
+    }
+
+    printf("[BACKUP] Backup completed successfully to %s\n", backup_dir);
+    return 0;
+}
+
+kv_store_t* kv_restore(const char* backup_dir, const char* target_dir) {
+    if (!backup_dir || !target_dir) return NULL;
+
+    printf("[RESTORE] Restoring from %s to %s...\n", backup_dir, target_dir);
+
+    /* 1. 创建目标目录 */
+    mkdir_recursive(target_dir);
+
+    /* 2. 复制备份文件到目标目录 */
+    char src_path[512], dst_path[512];
+
+    /* MANIFEST */
+    snprintf(src_path, sizeof(src_path), "%s/" MANIFEST_FILE_NAME, backup_dir);
+    snprintf(dst_path, sizeof(dst_path), "%s/" MANIFEST_FILE_NAME, target_dir);
+    if (copy_file(src_path, dst_path) != 0) {
+        printf("[RESTORE] ERROR: Backup MANIFEST not found\n");
+        return NULL;
+    }
+
+    /* MANIFEST.tmp */
+    snprintf(src_path, sizeof(src_path), "%s/" MANIFEST_TMP_FILE_NAME, backup_dir);
+    snprintf(dst_path, sizeof(dst_path), "%s/" MANIFEST_TMP_FILE_NAME, target_dir);
+    copy_file(src_path, dst_path);  /* 忽略错误 */
+
+    /* WAL */
+    snprintf(src_path, sizeof(src_path), "%s/wal.log", backup_dir);
+    snprintf(dst_path, sizeof(dst_path), "%s/wal.log", target_dir);
+    copy_file(src_path, dst_path);  /* 忽略错误 */
+
+    /* 复制所有 .sst 文件 */
+    #ifdef _WIN32
+    WIN32_FIND_DATAA find_data;
+    HANDLE find_handle;
+    char search_pattern[512];
+    snprintf(search_pattern, sizeof(search_pattern), "%s/*.sst", backup_dir);
+    find_handle = FindFirstFileA(search_pattern, &find_data);
+    if (find_handle != INVALID_HANDLE_VALUE) {
+        do {
+            snprintf(src_path, sizeof(src_path), "%s/%s", backup_dir, find_data.cFileName);
+            snprintf(dst_path, sizeof(dst_path), "%s/%s", target_dir, find_data.cFileName);
+            copy_file(src_path, dst_path);
+        } while (FindNextFileA(find_handle, &find_data));
+        FindClose(find_handle);
+    }
+    #else
+    /* 使用 shell 通配符复制 */
+    char cmd[1024];
+    snprintf(cmd, sizeof(cmd), "cp %s/*.sst %s/ 2>/dev/null", backup_dir, target_dir);
+    system(cmd);
+    #endif
+
+    printf("[RESTORE] Files copied, opening database at %s...\n", target_dir);
+
+    /* 3. 打开恢复后的数据库 */
+    kv_store_t* db = kv_open(target_dir);
+    if (!db) {
+        printf("[RESTORE] ERROR: Failed to open restored database\n");
+        return NULL;
+    }
+
+    printf("[RESTORE] Database restored successfully\n");
+    return db;
 }

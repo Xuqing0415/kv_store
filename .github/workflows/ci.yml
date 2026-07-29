@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  # ===== Ubuntu (GCC + Clang) =====
+  ubuntu:
+    name: Ubuntu (${{ matrix.compiler }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake
+
+      - name: Configure (GCC)
+        if: matrix.compiler == 'gcc'
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON
+        env:
+          CC: gcc
+
+      - name: Configure (Clang)
+        if: matrix.compiler == 'clang'
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON
+        env:
+          CC: clang
+
+      - name: Build
+        run: cmake --build build -j$(nproc)
+
+      - name: Run Tests
+        run: cd build && ctest --output-on-failure -j$(nproc)
+
+      - name: Run Integration Test
+        run: ./build/kv_test
+
+  # ===== Windows (MSYS2 MinGW) =====
+  windows:
+    name: Windows (MinGW)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            base-devel
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-make
+
+      - name: Configure
+        run: cmake -B build -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON
+
+      - name: Build
+        run: cmake --build build -j$(nproc)
+
+      - name: Run Tests
+        run: cd build && ctest --output-on-failure -j$(nproc)
+
+      - name: Run Integration Test
+        run: ./build/kv_test
+
+  # ===== macOS (Clang) =====
+  macos:
+    name: macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON
+
+      - name: Build
+        run: cmake --build build -j$(sysctl -n hw.logicalcpu)
+
+      - name: Run Tests
+        run: cd build && ctest --output-on-failure -j$(sysctl -n hw.logicalcpu)
+
+      - name: Run Integration Test
+        run: ./build/kv_test

@@ -7,7 +7,8 @@
 /* 压缩算法类型 */
 typedef enum {
     COMPRESSION_NONE = 0,  /* 不压缩 */
-    COMPRESSION_ZSTD = 1,  /* zstd 压缩 */
+    COMPRESSION_ZSTD = 1,  /* zstd 压缩（高压缩比） */
+    COMPRESSION_LZ4  = 2,  /* LZ4 压缩（高速度） */
 } compression_type_t;
 
 /* 压缩数据块：compress(src, src_len) -> dst, dst_len
@@ -27,5 +28,8 @@ size_t compression_bound(compression_type_t type, size_t src_len);
 
 /* 返回压缩类型名称 */
 const char* compression_type_name(compression_type_t type);
+
+/* 从字符串解析压缩类型 */
+compression_type_t compression_type_from_name(const char* name);
 
 #endif /* COMPRESSION_H */

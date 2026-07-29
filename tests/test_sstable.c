@@ -23,7 +23,7 @@ TEST(sstable_write_read) {
     ASSERT_EQ(skiplist_insert(sl, "banana", 6, "fruit", 5), 0);
     ASSERT_EQ(skiplist_insert(sl, "cherry", 6, "fruit", 5), 0);
     
-    ASSERT_EQ(sstable_write(path, 1, sl), 0);
+    ASSERT_EQ(sstable_write(path, 1, sl, COMPRESSION_ZSTD), 0);
     skiplist_free(sl);
     
     sstable_t* sst = sstable_open(path, 1);
@@ -54,7 +54,7 @@ TEST(sstable_iter) {
     ASSERT_EQ(skiplist_insert(sl, "b", 1, "2", 1), 0);
     ASSERT_EQ(skiplist_insert(sl, "c", 1, "3", 1), 0);
     
-    ASSERT_EQ(sstable_write(path, 2, sl), 0);
+    ASSERT_EQ(sstable_write(path, 2, sl, COMPRESSION_ZSTD), 0);
     skiplist_free(sl);
     
     sstable_t* sst = sstable_open(path, 2);
@@ -105,7 +105,7 @@ TEST(sstable_multiple_entries) {
         ASSERT_EQ(skiplist_insert(sl, key, strlen(key), value, strlen(value)), 0);
     }
     
-    ASSERT_EQ(sstable_write(path, 3, sl), 0);
+    ASSERT_EQ(sstable_write(path, 3, sl, COMPRESSION_ZSTD), 0);
     skiplist_free(sl);
     
     sstable_t* sst = sstable_open(path, 3);

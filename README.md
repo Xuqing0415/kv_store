@@ -1,18 +1,31 @@
 # KV Store — 基于 LSM-Tree 的嵌入式键值存储引擎
 
-KV Store 是一个用 C11 编写的轻量级嵌入式键值存储引擎，采用 LSM-Tree (Log-Structured Merge-Tree) 架构，支持快照、压缩、Redis 兼容网络协议等特性。
+<p align="center">
+  <img src="docs/benchmark_throughput.png" alt="Performance Benchmark" width="48%">
+  <img src="docs/benchmark_param_impact.png" alt="Parameter Impact" width="48%">
+</p>
+
+KV Store 是一个用 C11 编写的轻量级嵌入式键值存储引擎，采用 LSM-Tree (Log-Structured Merge-Tree) 架构，支持快照、压缩、Raft 共识、Redis 兼容网络协议等特性。
+
+```bash
+# 一行命令体验
+docker run -p 6379:6379 -p 9090:9090 ghcr.io/yourname/kv_store:latest
+redis-cli -h 127.0.0.1 -p 6379 SET hello world
+```
 
 ## 特性
 
 - **LSM-Tree 存储架构**：MemTable（跳表） + SSTable（Sorted String Table）多层存储，写入性能优异
-- **WAL 日志**：Write-Ahead Log 保证数据持久性，支持崩溃恢复
+- **Raft 共识复制**：3 节点强一致集群，自动 Leader 选举 + 日志复制，写操作通过 Raft 提交保证一致性
+- **WAL 滚动与归档**：Write-Ahead Log 编号滚动（100MB 阈值），MemTable 刷盘后自动归档旧 WAL，崩溃恢复时按序重放
 - **Bloom Filter**：SSTable 级布隆过滤器，加速键不存在时的查找
 - **LRU 块缓存**：SSTable 数据块缓存，减少磁盘 I/O
 - **后台 Compaction**：自动多层合并，消除冗余数据和 Tombstone
 - **快照支持**：固定时间点的只读视图，适用于备份、一致性读等场景
-- **数据压缩**：SSTable 块级 Zstd 压缩，实测压缩率约 40%
+- **数据压缩**：SSTable 块级 Zstd / LZ4 压缩，Zstd 实测压缩率约 40%，LZ4 压缩速度 500MB/s+
 - **范围扫描**：支持按键范围有序遍历
 - **Redis RESP 协议服务器**：可以通过 redis-cli 直接访问，支持 SET/GET/DEL 等核心命令
+- **Prometheus Metrics**：`/metrics` HTTP 端点暴露 QPS、延迟、MemTable 大小、Compaction 次数等核心指标
 - **混沌测试**：多线程混合负载长时间运行，验证系统稳定性
 - **跨平台**：支持 Linux、macOS、Windows (MinGW/MSVC)
 
@@ -53,8 +66,9 @@ cmake --build . --config Release
 | 目标 | 说明 |
 |------|------|
 | `kv_test` | 集成测试（写入、读取、持久化验证） |
-| `kv_server` | Redis RESP 协议兼容服务器 |
-| `kv_chaos` | 混沌测试（多线程混合负载） |
+| `kv_server` | Redis RESP 协议兼容服务器 + Prometheus metrics |
+| `kv_raft`   | Raft 共识集群节点（3 节点强一致） |
+| `kv_chaos`  | 混沌测试（多线程混合负载） |
 | `libkv_store.a` | 静态库，可嵌入其他项目 |
 
 ### 运行测试
@@ -187,6 +201,76 @@ redis-cli -h 127.0.0.1 -p 6379
 | `FLUSHDB` | 清空当前数据库 |
 | `PING` | 连接测试 |
 
+## Raft 共识集群
+
+启动 3 节点 Raft 集群，实现强一致复制：
+
+```bash
+# 方式 1：使用启动脚本（Windows）
+cd scripts
+start_cluster.bat
+
+# 方式 2：手动启动 3 个节点
+# 终端 1 - Node 1
+./kv_raft --id node1 --raft-port 8001 --resp-port 6379 --metrics-port 9091 \
+    --peer node1:127.0.0.1:8001 --peer node2:127.0.0.1:8002 \
+    --peer node3:127.0.0.1:8003 --data-dir cluster/node1
+
+# 终端 2 - Node 2
+./kv_raft --id node2 --raft-port 8002 --resp-port 6380 --metrics-port 9092 \
+    --peer node1:127.0.0.1:8001 --peer node2:127.0.0.1:8002 \
+    --peer node3:127.0.0.1:8003 --data-dir cluster/node2
+
+# 终端 3 - Node 3
+./kv_raft --id node3 --raft-port 8003 --resp-port 6381 --metrics-port 9093 \
+    --peer node1:127.0.0.1:8001 --peer node2:127.0.0.1:8002 \
+    --peer node3:127.0.0.1:8003 --data-dir cluster/node3
+```
+
+集群启动后会自动选举 Leader（约 1-3 秒），写入 Leader 的数据会自动复制到 Follower：
+
+```bash
+# 写入 Leader（自动发现）
+redis-cli -h 127.0.0.1 -p 6379 SET cluster:hello world
+
+# 从任意节点读取（包括 Follower）
+redis-cli -h 127.0.0.1 -p 6380 GET cluster:hello
+# "world"
+
+# 运行集成测试
+python scripts/test_cluster.py
+```
+
+### Raft 集群架构
+
+```
+┌──────────────────────────────────────────────────────────┐
+│                     Client (redis-cli)                    │
+└──────┬────────────────────┬──────────────────┬───────────┘
+       │                    │                  │
+       ▼                    ▼                  ▼
+┌─────────────┐      ┌─────────────┐     ┌─────────────┐
+│   Node 1    │◄────►│   Node 2    │◄───►│   Node 3    │
+│  (Leader)   │ Raft │ (Follower)  │ Raft│ (Follower)  │
+│             │ RPC  │             │ RPC │             │
+│ RESP :6379  │      │ RESP :6380  │     │ RESP :6381  │
+│ Raft :8001  │      │ Raft :8002  │     │ Raft :8003  │
+│ Metrics:9091│      │ Metrics:9092│     │ Metrics:9093│
+│   ┌───┐     │      │   ┌───┐     │     │   ┌───┐     │
+│   │KV │     │      │   │KV │     │     │   │KV │     │
+│   │DB │     │      │   │DB │     │     │   │DB │     │
+│   └───┘     │      │   └───┘     │     │   └───┘     │
+└─────────────┘      └─────────────┘     └─────────────┘
+```
+
+### Raft 核心特性
+
+- **Leader 选举**：随机超时（150-300ms），自动选举，Term 机制防止脑裂
+- **日志复制**：写操作通过 AppendEntries RPC 复制到多数节点后提交
+- **持久化**：Raft 日志 + currentTerm + votedFor 持久化到磁盘，重启后恢复
+- **客户端重定向**：Follower 自动将写请求转发到 Leader
+- **状态机 apply**：committed 日志自动应用到 kv_store
+
 ## 混沌测试
 
 混沌测试通过多线程混合负载（50% PUT + 35% GET + 10% DELETE + 5% SCAN）长时间运行，验证系统稳定性：
@@ -265,7 +349,9 @@ kv_store/
 │   ├── lru_cache.h       #   LRU 缓存
 │   ├── merge.h           #   Compaction 合并
 │   ├── compression.h     #   压缩/解压接口
-│   └── resp_server.h     #   Redis RESP 服务器
+│   ├── raft.h            #   Raft 共识算法
+│   ├── resp_server.h     #   Redis RESP 服务器
+│   └── metrics_server.h  #   Prometheus metrics 端点
 ├── src/                  # 源文件
 │   ├── kv_store.c        #   核心存储引擎实现
 │   ├── sstable.c         #   SSTable 读写与压缩
@@ -276,8 +362,11 @@ kv_store/
 │   ├── lru_cache.c       #   LRU 缓存实现
 │   ├── merge.c           #   Compaction 实现
 │   ├── compression.c     #   压缩/解压封装
+│   ├── raft.c            #   Raft 核心实现（选举+日志复制+持久化）
+│   ├── raft_node.c       #   Raft 集群节点入口
 │   ├── resp_server.c     #   RESP 协议服务器
-│   ├── server_main.c     #   服务器入口
+│   ├── metrics_server.c  #   Prometheus metrics HTTP 服务器
+│   ├── server_main.c     #   单机服务器入口
 │   ├── main.c            #   集成测试入口
 │   └── chaos_test.c      #   混沌测试
 ├── util/                 # 工具库
@@ -285,6 +374,11 @@ kv_store/
 │   ├── crc32.h / crc32.c #   CRC32 校验
 │   ├── encoding.h / .c   #   二进制编码
 │   └── mutex.h           #   跨平台互斥锁
+├── scripts/              # 测试脚本
+│   ├── start_cluster.bat #   一键启动 3 节点集群
+│   ├── test_cluster.py   #   集群集成测试
+│   ├── param_sweep.py    #   参数扫描
+│   └── plot_benchmark.py #   性能图表生成
 ├── tests/                # 测试
 │   ├── test_kv_store.c   #   核心功能测试
 │   ├── test_sstable.c    #   SSTable 测试
@@ -326,6 +420,8 @@ kv_store/
 ```
 
 ### WAL 记录格式
+
+WAL 文件采用编号命名 `wal_000000.log`，每次 MemTable 刷盘后归档旧文件并创建新文件，超过 100MB 自动滚动。
 
 ```
 ┌──────┬──────────┬──────────┬──────────┬──────────┐

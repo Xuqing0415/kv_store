@@ -23,7 +23,7 @@ int main() {
     fflush(stdout);
     
     remove("./test_min.sst");
-    int ret = sstable_write("./test_min.sst", 1, sl);
+    int ret = sstable_write("./test_min.sst", 1, sl, COMPRESSION_ZSTD);
     printf("sstable_write returned: %d\n", ret);
     fflush(stdout);
     skiplist_free(sl);

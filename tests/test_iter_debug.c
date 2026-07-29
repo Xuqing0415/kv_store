@@ -30,7 +30,7 @@ int main() {
     }
     
     printf("Writing SSTable...\n");
-    int ret = sstable_write(path, 1, sl);
+    int ret = sstable_write(path, 1, sl, COMPRESSION_ZSTD);
     printf("sstable_write returned: %d\n", ret);
     skiplist_free(sl);
     
