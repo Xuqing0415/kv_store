@@ -137,7 +137,7 @@ static void* maintenance_thread_func(void* arg) {
         malloc_trim(0);
 #endif
 
-        /* 2. 释放已刷盘 SSTable 的页缓存（仅 Linux） */
+        /* 2. 释放已刷盘 SSTable 的页缓存（仅 Linux，限制每次最多 100 个文件） */
         manifest_file_t** files = NULL;
         size_t count = 0;
 
@@ -149,7 +149,8 @@ static void* maintenance_thread_func(void* arg) {
 
         if (manifest_list_files(db->manifest, -1, &files, &count) == 0) {
             char path[512];
-            for (size_t i = 0; i < count; i++) {
+            size_t limit = count < 100 ? count : 100;
+            for (size_t i = 0; i < limit; i++) {
                 snprintf(path, sizeof(path), "%s/%llu.sst", db->dir_path,
                          (unsigned long long)files[i]->file_id);
 #ifndef _WIN32
@@ -510,7 +511,25 @@ kv_store_t* kv_open_raft(const char* dir_path) {
 #ifdef _WIN32
     db->maintenance_thread = CreateThread(NULL, 0, maintenance_thread_func, db, 0, NULL);
 #else
+    /* APU 兼容模式检测：通过 /proc/cpuinfo 识别 AMD APU（与 kv_open 一致） */
     {
+        FILE* cpuinfo = fopen("/proc/cpuinfo", "r");
+        if (cpuinfo) {
+            char line[256];
+            int is_amd = 0, has_graphics = 0;
+            while (fgets(line, sizeof(line), cpuinfo)) {
+                if (strstr(line, "AuthenticAMD") || strstr(line, "AMD"))
+                    is_amd = 1;
+                if (strstr(line, "Graphics") || strstr(line, "apu") || strstr(line, "APU"))
+                    has_graphics = 1;
+            }
+            fclose(cpuinfo);
+            if (is_amd && has_graphics) {
+                db->apu_compat_mode = 1;
+                printf("[KV] AMD APU detected, enabling compatibility mode (reduced I/O depth)\n");
+            }
+        }
+        /* 也支持环境变量显式控制 */
         const char* env = getenv("KV_APU_COMPAT");
         if (env && atoi(env) == 1) db->apu_compat_mode = 1;
     }
@@ -765,6 +784,44 @@ void kv_metrics_snapshot(kv_store_t* db, kv_metrics_snapshot_t* out) {
     out->deletes_total     = ATOMIC_READ64(db->deletes_total);
     out->scans_total       = ATOMIC_READ64(db->scans_total);
     out->compactions_total = ATOMIC_READ64(db->compactions_total);
+}
+
+void kv_get_stats(kv_store_t* db, kv_stats_t* out) {
+    if (!db || !out) return;
+    memset(out, 0, sizeof(*out));
+
+    /* memtable 大小 */
+    RWLOCK_RDLOCK(&db->rwlock);
+    out->memtable_size = db->memtable_size;
+    if (db->immutable_memtable) {
+        /* 估算：immutable 中的条目也在等待刷盘 */
+        out->memtable_size += db->memtable_size / 2;
+    }
+    RWLOCK_UNLOCK(&db->rwlock);
+
+    /* SSTable 文件数量 */
+#ifdef _WIN32
+    EnterCriticalSection(&db->manifest_lock);
+#else
+    pthread_mutex_lock(&db->manifest_lock);
+#endif
+    manifest_file_t** files = NULL;
+    size_t count = 0;
+    if (manifest_list_files(db->manifest, -1, &files, &count) == 0) {
+        out->sstable_count = count;
+        kv_free(files);
+    }
+#ifdef _WIN32
+    LeaveCriticalSection(&db->manifest_lock);
+#else
+    pthread_mutex_unlock(&db->manifest_lock);
+#endif
+
+    /* 估算总 key 数量 */
+    out->total_keys = ATOMIC_READ64(db->puts_total) - ATOMIC_READ64(db->deletes_total);
+
+    /* WAL 状态 */
+    out->wal_enabled = (db->wal_mgr && !db->raft_mode) ? 1 : 0;
 }
 
 int kv_delete(kv_store_t* db, const char* key, size_t klen) {
