@@ -18,6 +18,30 @@ endif()
 option(BUILD_TESTS "Build tests" ON)
 option(USE_O_DIRECT "Use O_DIRECT to bypass page cache (reduces memory pressure on APU systems)" OFF)
 
+# --- 版本信息 ---
+# 从 Git 获取 commit hash
+find_package(Git QUIET)
+if(GIT_FOUND)
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE GIT_COMMIT_HASH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+    )
+else()
+    set(GIT_COMMIT_HASH "unknown")
+endif()
+
+if(NOT GIT_COMMIT_HASH)
+    set(GIT_COMMIT_HASH "unknown")
+endif()
+
+# 构建时间戳
+string(TIMESTAMP BUILD_TIMESTAMP "%Y-%m-%d %H:%M:%S")
+
+add_definitions(-DGIT_COMMIT_HASH="${GIT_COMMIT_HASH}")
+add_definitions(-DBUILD_TIMESTAMP="${BUILD_TIMESTAMP}")
 add_definitions(-D_FILE_OFFSET_BITS=64)
 
 # 参数扫描支持：通过 CMake 变量传递编译定义

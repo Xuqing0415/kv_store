@@ -50,7 +50,16 @@ static void print_usage(const char* prog) {
     printf("  -p <port>    Listen port (default: 6379)\n");
     printf("  -m <port>    Metrics HTTP port (default: 9090, 0 to disable)\n");
     printf("  -d <dir>     Data directory (default: ./data)\n");
+    printf("  --version    Show version info\n");
     printf("  --help       Show this help\n");
+}
+
+static void print_version(void) {
+    printf("kv_server (KV Store Redis-compatible Server)\n");
+    printf("  Version: 1.0.0\n");
+    printf("  Git Commit: " GIT_COMMIT_HASH "\n");
+    printf("  Build Time: " BUILD_TIMESTAMP "\n");
+    printf("  Compiler: " __VERSION__ "\n");
 }
 
 int main(int argc, char* argv[]) {
@@ -70,6 +79,9 @@ int main(int argc, char* argv[]) {
             data_dir = argv[++i];
         } else if (strcmp(argv[i], "--help") == 0) {
             print_usage(argv[0]);
+            return 0;
+        } else if (strcmp(argv[i], "--version") == 0) {
+            print_version();
             return 0;
         } else {
             fprintf(stderr, "Unknown option: %s\n", argv[i]);
