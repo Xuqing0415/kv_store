@@ -653,7 +653,7 @@ sstable_t* sstable_open(const char* path, uint64_t file_id) {
 #ifdef USE_O_DIRECT
     /* 使用 O_DIRECT 绕过页缓存，减少 APU 平台内存压力。
      * 要求：块大小 4KB 对齐，stdio 缓冲区与块边界对齐。
-     * 如果 O_DIRECT 打开失败，回退到普通模式。 */
+     * 如果 O_DIRECT 打开失败（EINVAL：文件系统不支持），回退到普通模式。 */
     {
         int fd = open(path, O_RDONLY | O_DIRECT);
         if (fd >= 0) {
@@ -661,6 +661,11 @@ sstable_t* sstable_open(const char* path, uint64_t file_id) {
             if (!sst->file) { close(fd); }
         }
         if (fd < 0 || !sst->file) {
+            if (fd < 0 && errno == EINVAL) {
+                printf("[SSTABLE] O_DIRECT not supported by filesystem, falling back to buffered I/O for %s\n", path);
+            } else if (fd < 0) {
+                printf("[SSTABLE] O_DIRECT open failed (errno=%d), falling back to buffered I/O for %s\n", errno, path);
+            }
             sst->file = fopen(path, "rb");
         }
     }

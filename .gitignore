@@ -13,6 +13,7 @@ cmake-build-release/
 .idea/
 test_db/
 test_kv_*/
+benchmark_db/
 cluster/
 example_db/
 example_backup_db/

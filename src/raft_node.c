@@ -480,6 +480,48 @@ static raft_t*          g_raft = NULL;
 static resp_server_t*   g_resp = NULL;
 static metrics_server_t* g_metrics = NULL;
 static kv_store_t*      g_db = NULL;
+static volatile int     g_running = 1;  /* 主循环控制标志 */
+
+/* RESP HEALTH 命令回调：提供 Raft 状态信息 */
+static int resp_health_raft_cb(void* ctx, char* buf, size_t buf_size) {
+    (void)ctx;
+    if (!g_raft || !buf || buf_size < 256) return -1;
+
+    uint64_t term;
+    raft_role_t role;
+    uint64_t commit_idx, last_applied;
+    size_t log_count;
+    raft_status(g_raft, &term, &role, &commit_idx, &last_applied, &log_count, NULL);
+
+    const char* role_str = "unknown";
+    switch (role) {
+        case RAFT_LEADER:    role_str = "leader";    break;
+        case RAFT_CANDIDATE: role_str = "candidate"; break;
+        case RAFT_FOLLOWER:  role_str = "follower";  break;
+        default:             break;
+    }
+
+    raft_snapshot_info_t snap_info;
+    uint64_t snap_idx = 0;
+    if (raft_get_snapshot_info(g_raft, &snap_info) == 0) {
+        snap_idx = snap_info.last_included_index;
+    }
+
+    return snprintf(buf, buf_size,
+        "role:%s\r\n"
+        "raft_term:%llu\r\n"
+        "raft_commit_index:%llu\r\n"
+        "raft_applied_index:%llu\r\n"
+        "raft_log_count:%zu\r\n"
+        "last_snapshot_index:%llu\r\n",
+        role_str,
+        (unsigned long long)term,
+        (unsigned long long)commit_idx,
+        (unsigned long long)last_applied,
+        log_count,
+        (unsigned long long)snap_idx
+    );
+}
 
 #ifdef _WIN32
 static HANDLE g_metrics_thread = NULL;
@@ -488,6 +530,7 @@ static HANDLE g_resp_thread = NULL;
 static BOOL WINAPI signal_handler(DWORD ctrl_type) {
     (void)ctrl_type;
     printf("\n[INFO] Shutting down...\n");
+    g_running = 0;
     if (g_resp) resp_server_stop(g_resp);
     if (g_metrics) metrics_server_stop(g_metrics);
     if (g_raft) raft_stop(g_raft);
@@ -512,6 +555,7 @@ static int g_resp_started = 0;
 static void signal_handler(int sig) {
     (void)sig;
     printf("\n[INFO] Shutting down...\n");
+    g_running = 0;
     if (g_resp) resp_server_stop(g_resp);
     if (g_metrics) metrics_server_stop(g_metrics);
     if (g_raft) raft_stop(g_raft);
@@ -541,6 +585,7 @@ static void print_usage(const char* prog) {
     printf("  --metrics-port <p> Prometheus metrics port (default: 9090, 0=disable)\n");
     printf("  --data-dir <dir>  Data directory (default: ./data)\n");
     printf("  --peer <spec>     Peer spec: node_id:host:port (repeatable)\n");
+    printf("  --version         Show version info\n");
     printf("  --help            Show this help\n\n");
     printf("Example (3-node cluster):\n");
     printf("  # Node 1\n");
@@ -555,6 +600,14 @@ static void print_usage(const char* prog) {
     printf("  %s --id node3 --raft-port 8003 --resp-port 6381 \\\n", prog);
     printf("     --peer node1:127.0.0.1:8001 --peer node2:127.0.0.1:8002 \\\n");
     printf("     --peer node3:127.0.0.1:8003 --data-dir ./cluster/node3\n");
+}
+
+static void print_version(void) {
+    printf("kv_raft (KV Store Raft Cluster Node)\n");
+    printf("  Version: 1.0.0\n");
+    printf("  Git Commit: " GIT_COMMIT_HASH "\n");
+    printf("  Build Time: " BUILD_TIMESTAMP "\n");
+    printf("  Compiler: " __VERSION__ "\n");
 }
 
 /* ================================================================
@@ -608,6 +661,9 @@ int main(int argc, char* argv[]) {
             num_peers++;
         } else if (strcmp(argv[i], "--help") == 0) {
             print_usage(argv[0]);
+            return 0;
+        } else if (strcmp(argv[i], "--version") == 0) {
+            print_version();
             return 0;
         } else {
             fprintf(stderr, "Unknown option: %s\n", argv[i]);
@@ -755,6 +811,8 @@ int main(int argc, char* argv[]) {
     if (resp_server_start(&g_resp, "0.0.0.0", resp_port, g_db) != 0) {
         fprintf(stderr, "Failed to start RESP server on port %d\n", resp_port);
     } else {
+        /* 设置健康检查回调，使 HEALTH 命令返回 Raft 状态 */
+        resp_server_set_health_cb(g_resp, resp_health_raft_cb, NULL);
 #ifdef _WIN32
         g_resp_thread = CreateThread(NULL, 0, resp_thread_func, g_resp, 0, NULL);
 #else
@@ -799,8 +857,7 @@ int main(int argc, char* argv[]) {
     printf("========================================\n\n");
 
     /* 主线程等待（直到信号停止） */
-    while (g_raft) {
-        raft_status(g_raft, NULL, NULL, NULL, NULL, NULL, NULL);
+    while (g_running) {
 #ifdef _WIN32
         Sleep(1000);
 #else

@@ -245,6 +245,77 @@ static int metrics_build_404(char* buf, size_t buf_capacity, size_t* out_len) {
     return 0;
 }
 
+/* 构建 /health JSON 响应 */
+static int metrics_build_health(metrics_server_t* server, char* buf, size_t buf_capacity, size_t* out_len) {
+    kv_stats_t stats;
+    kv_get_stats(server->db, &stats);
+
+    /* 获取 Raft 状态 */
+    const char* role_str = "standalone";
+    uint64_t raft_term = 0;
+    uint64_t raft_commit = 0;
+    uint64_t raft_applied = 0;
+    uint64_t raft_snapshot_idx = 0;
+
+    if (server->raft) {
+        raft_role_t role;
+        size_t log_count;
+        raft_status(server->raft, &raft_term, &role, &raft_commit, &raft_applied, &log_count, NULL);
+        switch (role) {
+            case RAFT_LEADER:    role_str = "leader";    break;
+            case RAFT_CANDIDATE: role_str = "candidate"; break;
+            case RAFT_FOLLOWER:  role_str = "follower";  break;
+            default:             role_str = "unknown";   break;
+        }
+
+        raft_snapshot_info_t snap_info;
+        if (raft_get_snapshot_info(server->raft, &snap_info) == 0) {
+            raft_snapshot_idx = snap_info.last_included_index;
+        }
+    }
+
+    char body[1024];
+    int body_len = snprintf(body, sizeof(body),
+        "{"
+        "\"status\":\"ok\","
+        "\"role\":\"%s\","
+        "\"raft_term\":%llu,"
+        "\"raft_commit_index\":%llu,"
+        "\"raft_applied_index\":%llu,"
+        "\"last_snapshot_index\":%llu,"
+        "\"memtable_size\":%zu,"
+        "\"sstable_count\":%zu,"
+        "\"total_keys\":%zu,"
+        "\"wal_enabled\":%d"
+        "}",
+        role_str,
+        (unsigned long long)raft_term,
+        (unsigned long long)raft_commit,
+        (unsigned long long)raft_applied,
+        (unsigned long long)raft_snapshot_idx,
+        stats.memtable_size,
+        stats.sstable_count,
+        stats.total_keys,
+        stats.wal_enabled
+    );
+
+    int written = snprintf(buf, buf_capacity,
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: application/json\r\n"
+        "Content-Length: %d\r\n"
+        "\r\n"
+        "%s",
+        body_len, body
+    );
+
+    if (written < 0 || (size_t)written >= buf_capacity) {
+        return -1;
+    }
+
+    *out_len = (size_t)written;
+    return 0;
+}
+
 /* 处理单个 HTTP 连接 */
 static void metrics_handle_connection(metrics_server_t* server, SOCKET client_fd) {
     char buf[HTTP_BUF_SIZE];
@@ -267,9 +338,14 @@ static void metrics_handle_connection(metrics_server_t* server, SOCKET client_fd
     char resp[METRICS_BUF_SIZE];
     size_t resp_len = 0;
 
-    /* 只处理 GET /metrics */
+    /* 处理 /metrics 和 /health */
     if (strcmp(method, "GET") == 0 && strcmp(path, "/metrics") == 0) {
         if (metrics_build_response(server, server->start_time, resp, sizeof(resp), &resp_len) != 0) {
+            close_socket(client_fd);
+            return;
+        }
+    } else if (strcmp(method, "GET") == 0 && strcmp(path, "/health") == 0) {
+        if (metrics_build_health(server, resp, sizeof(resp), &resp_len) != 0) {
             close_socket(client_fd);
             return;
         }

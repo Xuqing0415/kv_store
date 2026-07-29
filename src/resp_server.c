@@ -492,10 +492,44 @@ struct resp_server {
     int running;
     char* host;
     int port;
+    resp_health_cb health_cb;   /* 健康检查回调 */
+    void* health_cb_ctx;         /* 回调上下文 */
 #ifdef _WIN32
     int wsock_initialized;
 #endif
 };
+
+/* HEALTH 命令处理（需要完整的 struct resp_server 定义） */
+static int cmd_health(kv_store_t* db, resp_reply_t* r, resp_value_t* cmd, resp_server_t* server) {
+    (void)cmd;
+    /* 构建健康检查响应 */
+    kv_stats_t stats;
+    kv_get_stats(db, &stats);
+
+    char health[1024];
+    int len = snprintf(health, sizeof(health),
+        "# KV Store Health\r\n"
+        "status:ok\r\n"
+        "memtable_size:%zu\r\n"
+        "sstable_count:%zu\r\n"
+        "total_keys:%zu\r\n"
+        "wal_enabled:%d\r\n",
+        stats.memtable_size,
+        stats.sstable_count,
+        stats.total_keys,
+        stats.wal_enabled
+    );
+
+    /* 如果有 Raft 健康检查回调，追加 Raft 状态 */
+    if (server->health_cb && len + 1 < (int)sizeof(health)) {
+        int raft_len = server->health_cb(server->health_cb_ctx, health + len, sizeof(health) - (size_t)len - 1);
+        if (raft_len > 0) {
+            len += raft_len;
+        }
+    }
+
+    return resp_make_bulk_string(r, health, (size_t)len);
+}
 
 /* 处理客户端请求 */
 static void resp_process_client(resp_server_t* server, resp_client_t* client) {
@@ -582,6 +616,8 @@ static void resp_process_client(resp_server_t* server, resp_client_t* client) {
             cmd_flushdb(server->db, reply, cmd);
         } else if (strcmp(cmd_name, "info") == 0) {
             cmd_info(server->db, reply, cmd);
+        } else if (strcmp(cmd_name, "health") == 0) {
+            cmd_health(server->db, reply, cmd, server);
         } else if (strcmp(cmd_name, "quit") == 0) {
             cmd_quit(reply, cmd);
         } else if (strcmp(cmd_name, "save") == 0) {
@@ -627,6 +663,8 @@ int resp_server_start(resp_server_t** out_server, const char* host, int port, kv
     server->running = 0;
     server->host = kv_strdup(host ? host : "127.0.0.1");
     server->port = port;
+    server->health_cb = NULL;
+    server->health_cb_ctx = NULL;
 
 #ifdef _WIN32
     WSADATA wsa_data;
@@ -681,6 +719,12 @@ int resp_server_start(resp_server_t** out_server, const char* host, int port, kv
     printf("[RESP] Server listening on %s:%d\n", server->host, server->port);
     *out_server = server;
     return 0;
+}
+
+void resp_server_set_health_cb(resp_server_t* server, resp_health_cb cb, void* ctx) {
+    if (!server) return;
+    server->health_cb = cb;
+    server->health_cb_ctx = ctx;
 }
 
 void resp_server_run(resp_server_t* server) {
