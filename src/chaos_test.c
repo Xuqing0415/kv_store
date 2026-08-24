@@ -327,11 +327,23 @@ int main(int argc, char* argv[]) {
             threads = atoi(argv[++i]);
         } else if (strcmp(argv[i], "--clean") == 0) {
             cleanup_data_dir();
+        } else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+            printf(
+                "Usage: kv_chaos [options]\n"
+                "  -d <dir>     Data directory (default: ./chaos_test_db)\n"
+                "  -t <secs>    Test duration in seconds (default: %d)\n"
+                "  -n <num>     Number of worker threads, 1-16 (default: %d)\n"
+                "  --clean      Clean the data directory before running\n"
+                "  -h, --help   Show this help\n",
+                TEST_DURATION, NUM_THREADS);
+            return 0;
         }
     }
 
     if (threads < 1) threads = 1;
     if (threads > 16) threads = 16;
+
+    printf("[CHAOS] data_dir=%s duration=%d sec threads=%d\n", g_data_dir, duration, threads);
 
     print_stats_header();
 
