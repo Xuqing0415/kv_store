@@ -2,6 +2,7 @@
 #define RESP_SERVER_H
 
 #include "kv_store.h"
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,6 +21,17 @@ typedef int (*resp_health_cb)(void* ctx, char* buf, size_t buf_size);
 
 /* 服务器句柄 */
 typedef struct resp_server resp_server_t;
+
+/* Raft 写提议函数指针（由 raft_node.c 注入 raft_propose，避免 resp_server
+ * 在单机模式（kv_server）下链接 raft.c 产生未解析符号）。
+ * 返回 0 表示提议已提交成功，非 0 表示失败。 */
+typedef int (*resp_raft_propose_fn)(void* raft, uint8_t type,
+                                    const char* key, size_t key_len,
+                                    const char* value, size_t value_len);
+
+/* 设置 Raft 句柄与写提议函数，启用集群写复制模式。
+ * 启用后 SET/DEL 经提议函数复制；raft 为 NULL 表示单机模式（直接写本地）。 */
+void resp_server_set_raft(resp_server_t* server, void* raft, resp_raft_propose_fn propose_fn);
 
 /* 启动 RESP 服务器，返回 0 成功，-1 失败 */
 int resp_server_start(resp_server_t** out_server, const char* host, int port, kv_store_t* db);

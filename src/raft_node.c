@@ -813,6 +813,8 @@ int main(int argc, char* argv[]) {
     } else {
         /* 设置健康检查回调，使 HEALTH 命令返回 Raft 状态 */
         resp_server_set_health_cb(g_resp, resp_health_raft_cb, NULL);
+        /* 启用 Raft 写复制：SET/DEL 经 raft_propose 复制到集群 */
+        resp_server_set_raft(g_resp, g_raft, (resp_raft_propose_fn)raft_propose);
 #ifdef _WIN32
         g_resp_thread = CreateThread(NULL, 0, resp_thread_func, g_resp, 0, NULL);
 #else

@@ -28,6 +28,35 @@
 #endif
 
 /* ================================================================
+ * 数据结构（提前定义，供命令处理函数使用）
+ * ================================================================ */
+
+typedef struct resp_client {
+    SOCKET fd;
+    char read_buf[RESP_IO_BUF_SIZE];
+    size_t buf_pos;
+    size_t buf_len;
+    int active;
+} resp_client_t;
+
+struct resp_server {
+    SOCKET listen_fd;
+    kv_store_t* db;
+    resp_client_t clients[RESP_MAX_CLIENTS];
+    int running;
+    char* host;
+    int port;
+    resp_health_cb health_cb;   /* 健康检查回调 */
+    void* health_cb_ctx;         /* 回调上下文 */
+    void* raft;                  /* Raft 句柄（NULL 表示单机模式） */
+    resp_raft_propose_fn raft_propose_fn; /* Raft 写提议函数（由 raft_node 注入） */
+    int raft_mode;               /* 1=Raft 集群模式（写操作经 raft_propose 复制） */
+#ifdef _WIN32
+    int wsock_initialized;
+#endif
+};
+
+/* ================================================================
  * RESP 协议解析
  * ================================================================ */
 
@@ -329,7 +358,7 @@ static int cmd_ping(resp_reply_t* r, resp_value_t* cmd) {
     return resp_make_pong(r);
 }
 
-static int cmd_set(kv_store_t* db, resp_reply_t* r, resp_value_t* cmd) {
+static int cmd_set(resp_server_t* server, resp_reply_t* r, resp_value_t* cmd) {
     if (cmd->count < 3) {
         return resp_make_error(r, "wrong number of arguments for 'SET'");
     }
@@ -340,7 +369,18 @@ static int cmd_set(kv_store_t* db, resp_reply_t* r, resp_value_t* cmd) {
         return resp_make_error(r, "invalid value");
     }
 
-    int ret = kv_put(db,
+    /* Raft 集群模式：写操作经提议函数复制到多数派后再返回 */
+    if (server->raft_mode && server->raft && server->raft_propose_fn) {
+        int rc = server->raft_propose_fn(server->raft, 0 /* PUT */,
+            cmd->elements[1]->str, cmd->elements[1]->len,
+            cmd->elements[2]->str, cmd->elements[2]->len);
+        if (rc != 0) {
+            return resp_make_error(r, "ERR cluster not ready or propose failed");
+        }
+        return resp_make_ok(r);
+    }
+
+    int ret = kv_put(server->db,
         cmd->elements[1]->str, cmd->elements[1]->len,
         cmd->elements[2]->str, cmd->elements[2]->len);
     if (ret != 0) {
@@ -369,20 +409,180 @@ static int cmd_get(kv_store_t* db, resp_reply_t* r, resp_value_t* cmd) {
     return rv;
 }
 
-static int cmd_del(kv_store_t* db, resp_reply_t* r, resp_value_t* cmd) {
+static int cmd_del(resp_server_t* server, resp_reply_t* r, resp_value_t* cmd) {
     if (cmd->count < 2) {
         return resp_make_error(r, "wrong number of arguments for 'DEL'");
+    }
+
+    /* Raft 集群模式：每个 key 的删除各自经提议函数复制 */
+    if (server->raft_mode && server->raft && server->raft_propose_fn) {
+        int deleted = 0;
+        for (size_t i = 1; i < cmd->count; i++) {
+            if (cmd->elements[i]->type == RESP_BULK && cmd->elements[i]->str) {
+                if (server->raft_propose_fn(server->raft, 1 /* DELETE */,
+                        cmd->elements[i]->str, cmd->elements[i]->len, NULL, 0) == 0) {
+                    deleted++;
+                }
+            }
+        }
+        return resp_make_integer(r, deleted);
     }
 
     int deleted = 0;
     for (size_t i = 1; i < cmd->count; i++) {
         if (cmd->elements[i]->type == RESP_BULK && cmd->elements[i]->str) {
-            if (kv_delete(db, cmd->elements[i]->str, cmd->elements[i]->len) == 0) {
+            if (kv_delete(server->db, cmd->elements[i]->str, cmd->elements[i]->len) == 0) {
                 deleted++;
             }
         }
     }
     return resp_make_integer(r, deleted);
+}
+
+/* 通配符匹配（Redis KEYS 风格）：* 匹配任意序列，? 匹配单个字符 */
+static int resp_glob_match(const char* pat, size_t plen, const char* str, size_t slen) {
+    size_t p = 0, s = 0;
+    size_t star = (size_t)-1, mark = 0;
+    while (s < slen) {
+        if (p < plen && (pat[p] == '?' || pat[p] == str[s])) {
+            p++; s++;
+        } else if (p < plen && pat[p] == '*') {
+            star = p++;
+            mark = s;
+        } else if (star != (size_t)-1) {
+            p = star + 1;
+            s = ++mark;
+        } else {
+            return 0;
+        }
+    }
+    while (p < plen && pat[p] == '*') p++;
+    return p == plen;
+}
+
+/* KEYS pattern：返回所有匹配通配符的 key */
+static int cmd_keys(kv_store_t* db, resp_reply_t* r, resp_value_t* cmd) {
+    if (cmd->count < 2 || cmd->elements[1]->type != RESP_BULK || !cmd->elements[1]->str) {
+        return resp_make_error(r, "wrong number of arguments for 'KEYS'");
+    }
+    const char* pat = cmd->elements[1]->str;
+    size_t plen = cmd->elements[1]->len;
+
+    /* 第一遍：统计匹配数量 */
+    int n = 0;
+    kv_iter_t* it = kv_scan(db, NULL, 0, NULL, 0);
+    if (!it) return resp_make_error(r, "scan failed");
+    char* k = NULL; size_t kl = 0; char* v = NULL; size_t vl = 0;
+    while (kv_iter_next(it, &k, &kl, &v, &vl) == 0) {
+        if (resp_glob_match(pat, plen, k, kl)) n++;
+        kv_free(k); kv_free(v); k = NULL; v = NULL;
+    }
+    kv_iter_free(it);
+
+    /* 第二遍：输出数组 */
+    char hdr[32];
+    int hl = snprintf(hdr, sizeof(hdr), "*%d\r\n", n);
+    resp_reply_append(r, hdr, (size_t)hl);
+
+    it = kv_scan(db, NULL, 0, NULL, 0);
+    if (it) {
+        while (kv_iter_next(it, &k, &kl, &v, &vl) == 0) {
+            if (resp_glob_match(pat, plen, k, kl)) {
+                char bh[32];
+                int bl = snprintf(bh, sizeof(bh), "$%zu\r\n", kl);
+                resp_reply_append(r, bh, (size_t)bl);
+                resp_reply_append(r, k, kl);
+                resp_reply_append(r, "\r\n", 2);
+            }
+            kv_free(k); kv_free(v); k = NULL; v = NULL;
+        }
+        kv_iter_free(it);
+    }
+    return 0;
+}
+
+/* SCAN cursor [COUNT n]：增量遍历所有 key。
+ * 返回 [next_cursor, [key...]]；cursor=0 表示遍历结束。
+ * 说明：本实现以"已返回偏移量"作为游标（简单线性游标，非 Redis 哈希游标）。 */
+static int cmd_scan(kv_store_t* db, resp_reply_t* r, resp_value_t* cmd) {
+    if (cmd->count < 2 || cmd->elements[1]->type != RESP_BULK || !cmd->elements[1]->str) {
+        return resp_make_error(r, "wrong number of arguments for 'SCAN'");
+    }
+    long long cursor = atoll(cmd->elements[1]->str);
+    if (cursor < 0) cursor = 0;
+    long long count = 10;
+
+    /* 解析可选 COUNT 参数（大小写不敏感） */
+    for (size_t i = 2; i + 1 < cmd->count; i += 2) {
+        if (cmd->elements[i]->type == RESP_BULK && cmd->elements[i]->str &&
+            cmd->elements[i+1]->type == RESP_BULK && cmd->elements[i+1]->str) {
+            const char* opt = cmd->elements[i]->str;
+            size_t olen = cmd->elements[i]->len;
+            if (olen == 5 && (opt[0] == 'c' || opt[0] == 'C') &&
+                (opt[1] == 'o' || opt[1] == 'O') &&
+                (opt[2] == 'u' || opt[2] == 'U') &&
+                (opt[3] == 'n' || opt[3] == 'N') &&
+                (opt[4] == 't' || opt[4] == 'T')) {
+                count = atoll(cmd->elements[i+1]->str);
+                if (count <= 0) count = 10;
+                if (count > 1000) count = 1000;
+            }
+        }
+    }
+
+    kv_iter_t* it = kv_scan(db, NULL, 0, NULL, 0);
+    if (!it) return resp_make_error(r, "scan failed");
+    char* k = NULL; size_t kl = 0; char* v = NULL; size_t vl = 0;
+
+    /* 跳过 cursor 个 key（线性游标 = 已扫描偏移） */
+    long long skipped = 0;
+    while (skipped < cursor && kv_iter_next(it, &k, &kl, &v, &vl) == 0) {
+        skipped++;
+        kv_free(k); kv_free(v); k = NULL; v = NULL;
+    }
+
+    /* 收集最多 count 个 key */
+    struct { char* key; size_t klen; } collected[1000];
+    long long n = 0;
+    while (n < count && kv_iter_next(it, &k, &kl, &v, &vl) == 0) {
+        collected[n].key = kv_malloc(kl);
+        if (collected[n].key) memcpy(collected[n].key, k, kl);
+        collected[n].klen = kl;
+        n++;
+        kv_free(k); kv_free(v); k = NULL; v = NULL;
+    }
+    /* 探测是否还有剩余 */
+    int has_more = 0;
+    if (kv_iter_next(it, &k, &kl, &v, &vl) == 0) {
+        has_more = 1;
+        kv_free(k); kv_free(v);
+    }
+    kv_iter_free(it);
+
+    long long next_cursor = has_more ? (cursor + n) : 0;
+
+    /* 输出 [next_cursor, [keys...]] */
+    resp_reply_append(r, "*2\r\n", 4);
+    char num[32];
+    int nl = snprintf(num, sizeof(num), "%lld", next_cursor);
+    resp_reply_append(r, "$", 1);
+    char lenbuf[32];
+    int ll = snprintf(lenbuf, sizeof(lenbuf), "%d", nl);
+    resp_reply_append(r, lenbuf, (size_t)ll);
+    resp_reply_append(r, "\r\n", 2);
+    resp_reply_append(r, num, (size_t)nl);
+    resp_reply_append(r, "\r\n", 2);
+
+    nl = snprintf(num, sizeof(num), "*%lld\r\n", n);
+    resp_reply_append(r, num, (size_t)nl);
+    for (long long i = 0; i < n; i++) {
+        int bl = snprintf(num, sizeof(num), "$%zu\r\n", collected[i].klen);
+        resp_reply_append(r, num, (size_t)bl);
+        resp_reply_append(r, collected[i].key, collected[i].klen);
+        resp_reply_append(r, "\r\n", 2);
+        kv_free(collected[i].key);
+    }
+    return 0;
 }
 
 static int cmd_exists(kv_store_t* db, resp_reply_t* r, resp_value_t* cmd) {
@@ -472,32 +672,6 @@ static int cmd_bgsave(kv_store_t* db, resp_reply_t* r, resp_value_t* cmd) {
     /* 同步执行（简化实现） */
     return cmd_save(db, r, cmd);
 }
-
-/* ================================================================
- * 客户端连接管理
- * ================================================================ */
-
-typedef struct resp_client {
-    SOCKET fd;
-    char read_buf[RESP_IO_BUF_SIZE];
-    size_t buf_pos;
-    size_t buf_len;
-    int active;
-} resp_client_t;
-
-struct resp_server {
-    SOCKET listen_fd;
-    kv_store_t* db;
-    resp_client_t clients[RESP_MAX_CLIENTS];
-    int running;
-    char* host;
-    int port;
-    resp_health_cb health_cb;   /* 健康检查回调 */
-    void* health_cb_ctx;         /* 回调上下文 */
-#ifdef _WIN32
-    int wsock_initialized;
-#endif
-};
 
 /* HEALTH 命令处理（需要完整的 struct resp_server 定义） */
 static int cmd_health(kv_store_t* db, resp_reply_t* r, resp_value_t* cmd, resp_server_t* server) {
@@ -603,13 +777,17 @@ static void resp_process_client(resp_server_t* server, resp_client_t* client) {
         if (strcmp(cmd_name, "ping") == 0) {
             cmd_ping(reply, cmd);
         } else if (strcmp(cmd_name, "set") == 0) {
-            cmd_set(server->db, reply, cmd);
+            cmd_set(server, reply, cmd);
         } else if (strcmp(cmd_name, "get") == 0) {
             cmd_get(server->db, reply, cmd);
         } else if (strcmp(cmd_name, "del") == 0) {
-            cmd_del(server->db, reply, cmd);
+            cmd_del(server, reply, cmd);
         } else if (strcmp(cmd_name, "exists") == 0) {
             cmd_exists(server->db, reply, cmd);
+        } else if (strcmp(cmd_name, "keys") == 0) {
+            cmd_keys(server->db, reply, cmd);
+        } else if (strcmp(cmd_name, "scan") == 0) {
+            cmd_scan(server->db, reply, cmd);
         } else if (strcmp(cmd_name, "dbsize") == 0) {
             cmd_dbsize(server->db, reply, cmd);
         } else if (strcmp(cmd_name, "flushdb") == 0) {
@@ -665,6 +843,9 @@ int resp_server_start(resp_server_t** out_server, const char* host, int port, kv
     server->port = port;
     server->health_cb = NULL;
     server->health_cb_ctx = NULL;
+    server->raft = NULL;
+    server->raft_propose_fn = NULL;
+    server->raft_mode = 0;
 
 #ifdef _WIN32
     WSADATA wsa_data;
@@ -725,6 +906,15 @@ void resp_server_set_health_cb(resp_server_t* server, resp_health_cb cb, void* c
     if (!server) return;
     server->health_cb = cb;
     server->health_cb_ctx = ctx;
+}
+
+/* 设置 Raft 句柄与写提议函数，启用集群写复制模式。
+ * 启用后，SET/DEL 经提议函数复制到集群；raft 为 NULL 则直接写本地（单机模式）。 */
+void resp_server_set_raft(resp_server_t* server, void* raft, resp_raft_propose_fn propose_fn) {
+    if (!server) return;
+    server->raft = raft;
+    server->raft_propose_fn = propose_fn;
+    server->raft_mode = (raft != NULL && propose_fn != NULL);
 }
 
 void resp_server_run(resp_server_t* server) {
