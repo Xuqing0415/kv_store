@@ -159,6 +159,13 @@ static int sstable_block_build(sstable_block_t* block, skiplist_iter_t* iter, ch
         size_t entry_size = header_len + unshared_len + vlen;
         if (offset + entry_size + 8 > SSTABLE_BLOCK_SIZE) {
             /* 当前条目放不下，保存到溢出参数供下一个块作为首条记录 */
+            /* 修复幽灵重启点：若最后一个重启点刚好记录在当前偏移（它指向本就不存在的
+             * 后续条目，即块恰好在一个重启区间边界处填满），删除该重启点。
+             * 否则二分查找会定位到这个空位置，导致该块尾部条目（含墓碑）全部查不到，
+             * 表现为"数据丢失/已删除 key 复活"。 */
+            if (restart_count > 1 && restart_points[restart_count - 1] == (uint32_t)offset) {
+                restart_count--;
+            }
             *overflow_key = key;
             *overflow_klen = klen;
             *overflow_value = value;
