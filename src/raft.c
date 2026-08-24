@@ -89,6 +89,8 @@
 #define RAFT_MAX_MSG_SIZE      (1024 * 1024)  /* 1MB */
 #define RAFT_MAX_LOG_ENTRIES   10000
 #define RAFT_SNAPSHOT_CHUNK_SIZE  (512 * 1024)  /* 512KB per chunk */
+#define RAFT_CONNECT_TIMEOUT_MS 100  /* 非阻塞 connect 超时（毫秒） */
+#define RAFT_REPL_POLL_MS      5   /* 复制/提案工作线程轮询间隔 */
 
 /* 前向声明 */
 static void raft_handle_snapshot_request(raft_t* r, SOCKET fd, uint8_t* data, size_t data_len);
@@ -96,6 +98,9 @@ static void raft_handle_snapshot_response(raft_t* r, int peer_index, uint8_t* da
 static void raft_handle_snapshot_chunk(raft_t* r, SOCKET fd, uint8_t* data, size_t data_len);
 static void raft_leader_send_snapshot(raft_t* r, int peer_index);
 static void raft_update_election_timeout(raft_t* r, int election_succeeded);
+static void raft_repl_send_once(raft_t* r, int peer_index);
+static void raft_repl_kick_all(raft_t* r);
+static void raft_propose_enqueue(raft_t* r, SOCKET fd, uint8_t* msg, size_t msg_len);
 int raft_snapshot_create(raft_t* r);
 
 /* --- 简单网络字节序辅助 --- */
@@ -142,6 +147,13 @@ static int raft_log_load(raft_t* r);
 /* ================================================================
  * Raft 节点结构
  * ================================================================ */
+
+typedef struct {
+    SOCKET fd;
+    uint8_t* msg;
+    size_t msg_len;
+} raft_propose_job_t;
+
 struct raft {
     /* 配置 */
     raft_config_t cfg;
@@ -180,6 +192,32 @@ struct raft {
     thread_t    thread;
     mutex_t     mutex;
     int         election_running;   /* 选举线程进行中标志（防止重复发起） */
+    /* 异步复制工作线程（每个 follower 一个）：心跳/日志复制/快照收发在后台线程
+     * 执行，事件循环线程绝不阻塞在 outbound recv 上，避免同步 recv 饿死 accept */
+    struct {
+        thread_t    thread;
+        int         running;         /* 线程已创建并存活 */
+        int         kick;            /* 有新的日志需要立即复制（propose 后置位） */
+        uint64_t    last_send_ms;    /* 上次发送心跳/AppendEntries 的时间 */
+    } repl[RAFT_MAX_NODES];
+    struct raft_repl_ctx {
+        raft_t*     r;
+        int         peer_index;
+    } repl_ctx[RAFT_MAX_NODES];
+
+    /* Propose 请求工作线程 + 任务队列：事件循环只入队，处理（含提交等待）
+     * 在工作线程内完成，避免阻塞事件循环 */
+    raft_propose_job_t* propose_queue;
+    size_t      propose_q_head;
+    size_t      propose_q_tail;
+    size_t      propose_q_cap;
+    mutex_t     propose_q_mutex;
+    thread_t    propose_thread;
+    int         propose_thread_running;
+    int         propose_stop;        /* raft_destroy 中事件循环退出后置位，工作线程据此退出 */
+
+    /* 日志持久化互斥：raft_log_save 可能被事件循环 / propose 线程 / 选举线程并发调用 */
+    mutex_t     log_mutex;
 
     /* 独立 PRNG 状态：不用全局 rand()（skiplist 等其他模块会 srand(time(NULL))
      * 重置全局种子，导致多进程随机序列完全相同、选举永不分叉） */
@@ -270,8 +308,14 @@ static int raft_log_save(raft_t* r) {
     char path[512];
     snprintf(path, sizeof(path), "%s/raft_log", r->cfg.data_dir);
 
+    /* 串行化日志文件写入：事件循环 / propose 线程 / 选举线程可能并发保存 */
+    MUTEX_LOCK(&r->log_mutex);
+
     FILE* f = fopen(path, "wb");
-    if (!f) return -1;
+    if (!f) {
+        MUTEX_UNLOCK(&r->log_mutex);
+        return -1;
+    }
 
     /* 写入 magic + version */
     uint32_t magic = RAFT_LOG_MAGIC;
@@ -321,6 +365,7 @@ static int raft_log_save(raft_t* r) {
     }
 
     fclose(f);
+    MUTEX_UNLOCK(&r->log_mutex);
     return 0;
 }
 
@@ -615,15 +660,63 @@ static SOCKET raft_connect_peer(raft_peer_t* peer) {
     addr.sin_port = htons((unsigned short)peer->port);
     addr.sin_addr.s_addr = inet_addr(peer->host);
 
-    /* 设置超时 */
+    /* 非阻塞 connect + select 超时：对已下线节点快速失败，避免阻塞数秒饿死选举/心跳 */
+#ifdef _WIN32
+    u_long nonblock = 1;
+    ioctlsocket(fd, FIONBIO, &nonblock);
+#else
+    int flags = fcntl(fd, F_GETFL, 0);
+    fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+#endif
+
+    int ret = connect(fd, (struct sockaddr*)&addr, sizeof(addr));
+    if (ret == SOCKET_ERROR) {
+#ifdef _WIN32
+        int connect_err = WSAGetLastError();
+        if (connect_err != WSAEWOULDBLOCK && connect_err != WSAEINPROGRESS) {
+            close_socket(fd);
+            return INVALID_SOCKET;
+        }
+#else
+        int connect_err = errno;
+        if (connect_err != EINPROGRESS && connect_err != EWOULDBLOCK) {
+            close_socket(fd);
+            return INVALID_SOCKET;
+        }
+#endif
+        fd_set wfds;
+        FD_ZERO(&wfds);
+        FD_SET(fd, &wfds);
+        struct timeval tv;
+        tv.tv_sec = RAFT_CONNECT_TIMEOUT_MS / 1000;
+        tv.tv_usec = (RAFT_CONNECT_TIMEOUT_MS % 1000) * 1000;
+        if (select((int)fd + 1, NULL, &wfds, NULL, &tv) <= 0) {
+            close_socket(fd);
+            return INVALID_SOCKET;
+        }
+        int soerr = 0;
+#ifdef _WIN32
+        int soerr_len = sizeof(soerr);
+#else
+        socklen_t soerr_len = sizeof(soerr);
+#endif
+        if (getsockopt(fd, SOL_SOCKET, SO_ERROR, (char*)&soerr, &soerr_len) != 0 || soerr != 0) {
+            close_socket(fd);
+            return INVALID_SOCKET;
+        }
+    }
+
+#ifdef _WIN32
+    nonblock = 0;
+    ioctlsocket(fd, FIONBIO, &nonblock);
+#else
+    fcntl(fd, F_SETFL, flags);
+#endif
+
+    /* 设置收发超时 */
     int timeout = RAFT_RPC_TIMEOUT_MS;
     setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&timeout, sizeof(timeout));
     setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, (const char*)&timeout, sizeof(timeout));
-
-    if (connect(fd, (struct sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR) {
-        close_socket(fd);
-        return INVALID_SOCKET;
-    }
     return fd;
 }
 
@@ -644,8 +737,6 @@ static void raft_become_candidate(raft_t* r) {
     r->current_term++;
     r->votes_received = 1; /* vote for self */
     snprintf(r->voted_for, sizeof(r->voted_for), "%s", r->cfg.node_id);
-    r->election_timeout_ms = RAFT_ELECTION_TIMEOUT_MIN_MS +
-        (raft_rand(r) % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
     r->last_heartbeat_ms = thread_time_ms(); /* 重置选举计时器 */
     printf("[RAFT] %s -> CANDIDATE (term=%llu, timeout=%llums)\n",
            r->cfg.node_id, (unsigned long long)r->current_term,
@@ -680,7 +771,12 @@ static void raft_become_leader(raft_t* r) {
     r->leader_known = 1;
 
     /* 立即发送心跳 */
-    r->last_election_ms = 0; /* 触发立即发送 */
+    /* 立即发送心跳：唤醒各 follower 的复制工作线程（调用时已持有 mutex） */
+    for (int i = 0; i < r->cfg.num_peers; i++) {
+        if (i == self_idx) continue;
+        r->repl[i].kick = 1;
+        r->repl[i].last_send_ms = 0;
+    }
 }
 
 /* 检查自身日志是否至少和 candidate 一样新 */
@@ -1125,83 +1221,116 @@ static void raft_handle_append_response(raft_t* r, int peer_index, uint8_t* data
 }
 
 /* Leader 发送心跳 / 日志复制 */
-static void raft_leader_send_heartbeat(raft_t* r) {
-    int self_idx = raft_self_index(r);
-    uint64_t prev_idx, prev_term;
+static void raft_repl_send_once(raft_t* r, int peer_index) {
+    if (peer_index < 0 || peer_index >= r->cfg.num_peers) return;
 
-    for (int i = 0; i < r->cfg.num_peers; i++) {
-        if (i == self_idx) continue;
+    uint64_t term, leader_commit, prev_idx, prev_term;
+    raft_log_entry_t send_entries[128];
+    int n_send = 0;
 
-        /* 准备发送的日志条目 */
-        uint64_t next = r->next_index[i];
+    MUTEX_LOCK(&r->mutex);
+    if (r->role != RAFT_LEADER) {
+        MUTEX_UNLOCK(&r->mutex);
+        return;
+    }
 
-        /* 如果 follower 落后太多（next_index <= snapshot_index），发送快照 */
-        if (r->snapshot_index > 0 && next <= r->snapshot_index) {
-            raft_leader_send_snapshot(r, i);
-            continue;
-        }
+    uint64_t next = r->next_index[peer_index];
 
-        prev_idx = next - 1;
-        prev_term = 0;
+    /* 如果 follower 落后太多（next_index <= snapshot_index），发送快照 */
+    if (r->snapshot_index > 0 && next <= r->snapshot_index) {
+        MUTEX_UNLOCK(&r->mutex);
+        raft_leader_send_snapshot(r, peer_index);
+        return;
+    }
 
-        if (prev_idx > 0) {
-            /* 如果 prev_idx 正好是快照索引，使用快照的 term */
-            if (r->snapshot_index > 0 && prev_idx == r->snapshot_index) {
-                prev_term = r->snapshot_term;
-            } else {
-                for (size_t j = 0; j < r->log_count; j++) {
-                    if (r->log[j].index == prev_idx) {
-                        prev_term = r->log[j].term;
-                        break;
-                    }
+    prev_idx = next - 1;
+    prev_term = 0;
+
+    if (prev_idx > 0) {
+        /* 如果 prev_idx 正好是快照索引，使用快照的 term */
+        if (r->snapshot_index > 0 && prev_idx == r->snapshot_index) {
+            prev_term = r->snapshot_term;
+        } else {
+            for (size_t j = 0; j < r->log_count; j++) {
+                if (r->log[j].index == prev_idx) {
+                    prev_term = r->log[j].term;
+                    break;
                 }
             }
         }
-
-        /* 收集要发送的日志 */
-        raft_log_entry_t send_entries[128];
-        int n_send = 0;
-        uint64_t send_idx = next;
-        for (size_t j = 0; j < r->log_count && n_send < 128; j++) {
-            if (r->log[j].index >= send_idx) {
-                send_entries[n_send++] = r->log[j];
-                send_idx++;
-            }
-        }
-
-        SOCKET fd = raft_connect_peer(&r->cfg.peers[i]);
-        if (fd == INVALID_SOCKET) {
-            continue;
-        }
-
-        rpc_send_append_request(fd, r->current_term, r->cfg.node_id,
-                                 prev_idx, prev_term, send_entries, n_send,
-                                 r->commit_index);
-
-        /* 读取响应 */
-        uint32_t resp_len = 0;
-        int ret = recv(fd, (char*)&resp_len, 4, 0);
-        if (ret == 4) {
-            uint8_t resp_buf[256];
-            int total = recv(fd, (char*)resp_buf, (int)resp_len, 0);
-            if (total == (int)resp_len) {
-                raft_handle_append_response(r, i, resp_buf, resp_len);
-            }
-        }
-        close_socket(fd);
     }
+
+    /* 收集要发送的日志（深拷贝 key/value，防止发送期间日志被截断释放） */
+    uint64_t send_idx = next;
+    for (size_t j = 0; j < r->log_count && n_send < 128; j++) {
+        if (r->log[j].index >= send_idx) {
+            raft_log_entry_t* e = &r->log[j];
+            send_entries[n_send] = *e;
+            send_entries[n_send].key = kv_malloc(e->key_len);
+            if (!send_entries[n_send].key) break;
+            memcpy(send_entries[n_send].key, e->key, e->key_len);
+            send_entries[n_send].value = e->value_len ? kv_malloc(e->value_len) : NULL;
+            if (e->value_len && !send_entries[n_send].value) {
+                kv_free(send_entries[n_send].key);
+                break;
+            }
+            if (e->value_len) {
+                memcpy(send_entries[n_send].value, e->value, e->value_len);
+            }
+            n_send++;
+            send_idx++;
+        }
+    }
+
+    term = r->current_term;
+    leader_commit = r->commit_index;
+    MUTEX_UNLOCK(&r->mutex);
+
+    SOCKET fd = raft_connect_peer(&r->cfg.peers[peer_index]);
+    if (fd == INVALID_SOCKET) {
+        for (int k = 0; k < n_send; k++) {
+            kv_free(send_entries[k].key);
+            kv_free(send_entries[k].value);
+        }
+        return;
+    }
+
+    rpc_send_append_request(fd, term, r->cfg.node_id,
+                             prev_idx, prev_term, send_entries, n_send,
+                             leader_commit);
+
+    for (int k = 0; k < n_send; k++) {
+        kv_free(send_entries[k].key);
+        kv_free(send_entries[k].value);
+    }
+
+    /* 读取响应（阻塞发生在后台线程，不影响事件循环） */
+    uint32_t resp_len = 0;
+    int ret = recv(fd, (char*)&resp_len, 4, 0);
+    if (ret == 4) {
+        uint8_t resp_buf[256];
+        int total = recv(fd, (char*)resp_buf, (int)resp_len, 0);
+        if (total == (int)resp_len) {
+            raft_handle_append_response(r, peer_index, resp_buf, resp_len);
+        }
+    }
+    close_socket(fd);
 }
 
-/* Candidate 发起选举。
- * 注意：本函数运行在独立线程中（raft_election_thread）——事件循环线程绝不能
- * 同步等待投票响应，否则多个 Candidate 同时选举时会互相饿死（对端的投票请求
- * 依赖它自己的事件循环处理，而该线程正阻塞在 recv 上），集群永远选不出 Leader。 */
+/* 唤醒所有 follower 的复制工作线程立即发送一次（非阻塞，事件循环调用） */
+static void raft_repl_kick_all(raft_t* r) {
+    MUTEX_LOCK(&r->mutex);
+    for (int i = 0; i < r->cfg.num_peers; i++) {
+        if (i == raft_self_index(r)) continue;
+        r->repl[i].kick = 1;
+    }
+    MUTEX_UNLOCK(&r->mutex);
+}
+
 static void raft_candidate_start_election(raft_t* r) {
     /* 持锁快照共享状态，网络 IO 在锁外进行 */
     MUTEX_LOCK(&r->mutex);
     r->votes_received = 1; /* vote for self */
-    r->election_timeout_ms = RAFT_ELECTION_TIMEOUT_MIN_MS +
-        (raft_rand(r) % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
     r->last_heartbeat_ms = thread_time_ms(); /* 重置计时器 */
 
     uint64_t last_log_idx;
@@ -1270,6 +1399,7 @@ static void* raft_election_thread(void* arg) {
 /* 处理客户端 Propose 请求 */
 static void raft_handle_propose_request(raft_t* r, SOCKET fd, uint8_t* data, size_t data_len) {
     size_t off = 0;
+    off++; /* skip RPC type */
     if (off + 1 > data_len) return;
     uint8_t cmd_type = data[off++];
     if (off + 8 > data_len) return;
@@ -1333,7 +1463,7 @@ static void raft_handle_propose_request(raft_t* r, SOCKET fd, uint8_t* data, siz
     raft_log_save(r);
 
     /* 发送 AppendEntries 给所有 follower */
-    raft_leader_send_heartbeat(r);
+    raft_repl_kick_all(r);
 
     /* 等待提交 */
     int max_wait = 100; /* 最多等待 100ms */
@@ -1351,6 +1481,120 @@ static void raft_handle_propose_request(raft_t* r, SOCKET fd, uint8_t* data, siz
 
     rpc_send_propose_response(fd, r->current_term, 0, NULL, NULL, 0);
 }
+
+/* ================================================================
+ * 后台工作线程（复制 + Propose 处理）
+ * ================================================================ */
+
+/* 每个 follower 一个复制工作线程：轮询等待，作为 Leader 时发送心跳/日志
+ * 复制/快照并读取响应。阻塞 I/O 只发生在这里，事件循环只负责 accept 和入队。 */
+#ifdef _WIN32
+static DWORD WINAPI raft_repl_worker_thread(LPVOID arg) {
+#else
+static void* raft_repl_worker_thread(void* arg) {
+#endif
+    struct raft_repl_ctx* ctx = (struct raft_repl_ctx*)arg;
+    raft_t* r = ctx->r;
+    int peer_index = ctx->peer_index;
+
+    while (r->running) {
+        int due = 0;
+        MUTEX_LOCK(&r->mutex);
+        if (r->role == RAFT_LEADER && peer_index != raft_self_index(r)) {
+            uint64_t now = thread_time_ms();
+            if (r->repl[peer_index].kick ||
+                now - r->repl[peer_index].last_send_ms >= RAFT_HEARTBEAT_INTERVAL_MS) {
+                due = 1;
+                r->repl[peer_index].kick = 0;
+                r->repl[peer_index].last_send_ms = now;
+            }
+        }
+        MUTEX_UNLOCK(&r->mutex);
+
+        if (due) {
+            raft_repl_send_once(r, peer_index);
+        }
+
+        thread_sleep_ms(RAFT_REPL_POLL_MS);
+    }
+    return 0;
+}
+
+/* 将 propose 请求交给工作线程处理（非阻塞；成功后 fd/msg 所有权转移给队列） */
+static void raft_propose_enqueue(raft_t* r, SOCKET fd, uint8_t* msg, size_t msg_len) {
+    raft_propose_job_t* job = kv_malloc(sizeof(raft_propose_job_t));
+    if (!job) {
+        close_socket(fd);
+        kv_free(msg);
+        return;
+    }
+    job->fd = fd;
+    job->msg = msg;
+    job->msg_len = msg_len;
+
+    MUTEX_LOCK(&r->propose_q_mutex);
+    if ((r->propose_q_tail + 1) % r->propose_q_cap == r->propose_q_head) {
+        /* 队列满：扩容 */
+        size_t new_cap = r->propose_q_cap * 2;
+        raft_propose_job_t* tmp = kv_malloc(new_cap * sizeof(raft_propose_job_t));
+        if (!tmp) {
+            MUTEX_UNLOCK(&r->propose_q_mutex);
+            close_socket(fd);
+            kv_free(msg);
+            kv_free(job);
+            return;
+        }
+        size_t n = 0;
+        for (size_t i = r->propose_q_head; i != r->propose_q_tail; i = (i + 1) % r->propose_q_cap) {
+            tmp[n++] = r->propose_queue[i];
+        }
+        r->propose_q_head = 0;
+        r->propose_q_tail = n;
+        r->propose_q_cap = new_cap;
+        kv_free(r->propose_queue);
+        r->propose_queue = tmp;
+    }
+    r->propose_queue[r->propose_q_tail] = *job;
+    r->propose_q_tail = (r->propose_q_tail + 1) % r->propose_q_cap;
+    MUTEX_UNLOCK(&r->propose_q_mutex);
+    kv_free(job);
+}
+
+/* propose 工作线程：串行处理 propose 请求（含等待提交），不阻塞事件循环 */
+#ifdef _WIN32
+static DWORD WINAPI raft_propose_worker_thread(LPVOID arg) {
+#else
+static void* raft_propose_worker_thread(void* arg) {
+#endif
+    raft_t* r = (raft_t*)arg;
+
+    for (;;) {
+        raft_propose_job_t job;
+        memset(&job, 0, sizeof(job));
+        int got = 0;
+
+        MUTEX_LOCK(&r->propose_q_mutex);
+        if (r->propose_q_head != r->propose_q_tail) {
+            job = r->propose_queue[r->propose_q_head];
+            r->propose_q_head = (r->propose_q_head + 1) % r->propose_q_cap;
+            got = 1;
+        } else if (r->propose_stop) {
+            MUTEX_UNLOCK(&r->propose_q_mutex);
+            break;
+        }
+        MUTEX_UNLOCK(&r->propose_q_mutex);
+
+        if (got) {
+            raft_handle_propose_request(r, job.fd, job.msg, job.msg_len);
+            kv_free(job.msg);
+            close_socket(job.fd);
+        } else {
+            thread_sleep_ms(RAFT_REPL_POLL_MS);
+        }
+    }
+    return 0;
+}
+
 
 /* ================================================================
  * 主事件循环
@@ -1413,11 +1657,11 @@ static void* raft_event_loop(void* arg) {
 
         /* --- Leader 心跳 --- */
         if (r->role == RAFT_LEADER) {
-            if (now - r->last_election_ms >= RAFT_HEARTBEAT_INTERVAL_MS) {
-                r->last_election_ms = now;
-                MUTEX_UNLOCK(&r->mutex);
-                raft_leader_send_heartbeat(r);
-                MUTEX_LOCK(&r->mutex);
+            for (int i = 0; i < r->cfg.num_peers; i++) {
+                if (i == raft_self_index(r)) continue;
+                if (now - r->repl[i].last_send_ms >= RAFT_HEARTBEAT_INTERVAL_MS) {
+                    r->repl[i].kick = 1;
+                }
             }
 
             /* 自动触发快照（周期性：日志积累超过阈值即触发） */
@@ -1466,7 +1710,10 @@ static void* raft_event_loop(void* arg) {
                             raft_handle_append_request(r, client_fd, msg, msg_len);
                             break;
                         case RAFT_RPC_PROPOSE_REQ:
-                            raft_handle_propose_request(r, client_fd, msg, msg_len);
+                            /* 交给 propose 工作线程处理（非阻塞），fd/msg 所有权转移 */
+                            raft_propose_enqueue(r, client_fd, msg, msg_len);
+                            msg = NULL;
+                            client_fd = INVALID_SOCKET;
                             break;
                         case RAFT_RPC_SNAPSHOT_REQ:
                             raft_handle_snapshot_request(r, client_fd, msg, msg_len);
@@ -1480,7 +1727,7 @@ static void* raft_event_loop(void* arg) {
                     }
                     kv_free(msg);
                 }
-                close_socket(client_fd);
+                if (client_fd != INVALID_SOCKET) close_socket(client_fd);
             }
         }
     }
@@ -1553,6 +1800,8 @@ raft_t* raft_create(raft_config_t* cfg, void* state_machine, raft_apply_cb apply
 
     MUTEX_INIT(&r->mutex);
     MUTEX_INIT(&r->propose_mutex);
+    MUTEX_INIT(&r->propose_q_mutex);
+    MUTEX_INIT(&r->log_mutex);
 
     r->listen_fd = INVALID_SOCKET;
 
@@ -1563,6 +1812,23 @@ void raft_destroy(raft_t* r) {
     if (!r) return;
     raft_stop(r);
     raft_join(r);
+    /* 事件循环已退出，不会再向队列投递 propose 任务；通知工作线程处理完剩余任务后退出 */
+    MUTEX_LOCK(&r->propose_q_mutex);
+    r->propose_stop = 1;
+    MUTEX_UNLOCK(&r->propose_q_mutex);
+    /* 等待复制工作线程退出（可能阻塞在 recv，最迟 RPC 超时后退出） */
+    for (int i = 0; i < RAFT_MAX_NODES; i++) {
+        if (r->repl[i].running) {
+            thread_join(r->repl[i].thread);
+            r->repl[i].running = 0;
+        }
+    }
+
+    /* 等待 propose 工作线程退出（先处理完队列中的剩余请求） */
+    if (r->propose_thread_running) {
+        thread_join(r->propose_thread);
+        r->propose_thread_running = 0;
+    }
 
     /* 等待选举线程退出（最长约 2 秒，覆盖 RPC 超时），防止 use-after-free */
     for (int i = 0; i < 100 && r->election_running; i++) {
@@ -1586,8 +1852,11 @@ void raft_destroy(raft_t* r) {
     kv_free(r->log);
     kv_free(r->next_index);
     kv_free(r->match_index);
+    kv_free(r->propose_queue);
     MUTEX_DESTROY(&r->mutex);
     MUTEX_DESTROY(&r->propose_mutex);
+    MUTEX_DESTROY(&r->propose_q_mutex);
+    MUTEX_DESTROY(&r->log_mutex);
     kv_free(r);
 }
 
@@ -1626,10 +1895,38 @@ int raft_start(raft_t* r) {
 
     printf("[RAFT] %s listening on port %d\n", r->cfg.node_id, r->cfg.listen_port);
 
+    /* 初始化 propose 任务队列 */
+    r->propose_q_cap = 64;
+    r->propose_q_head = 0;
+    r->propose_q_tail = 0;
+    r->propose_queue = kv_malloc(r->propose_q_cap * sizeof(*r->propose_queue));
+    if (!r->propose_queue) {
+        close_socket(r->listen_fd);
+        r->listen_fd = INVALID_SOCKET;
+        return -1;
+    }
+
     if (thread_create(&r->thread, raft_event_loop, r) != 0) {
         close_socket(r->listen_fd);
         r->listen_fd = INVALID_SOCKET;
         return -1;
+    }
+
+    /* 启动异步复制工作线程（每个 follower 一个）：心跳/日志复制/快照收发在
+     * 后台线程执行，事件循环绝不阻塞在 outbound recv 上 */
+    int repl_self = raft_self_index(r);
+    for (int i = 0; i < r->cfg.num_peers; i++) {
+        if (i == repl_self) continue;
+        r->repl_ctx[i].r = r;
+        r->repl_ctx[i].peer_index = i;
+        if (thread_create(&r->repl[i].thread, raft_repl_worker_thread, &r->repl_ctx[i]) == 0) {
+            r->repl[i].running = 1;
+        }
+    }
+
+    /* 启动 propose 工作线程 */
+    if (thread_create(&r->propose_thread, raft_propose_worker_thread, r) == 0) {
+        r->propose_thread_running = 1;
     }
 
     return 0;
@@ -1655,12 +1952,15 @@ int raft_propose(raft_t* r, uint8_t type, const char* key, size_t key_len,
 
     if (r->role != RAFT_LEADER) {
         if (r->leader_known) {
-            /* 转发到 Leader */
-            SOCKET fd = raft_connect_peer(&r->leader_peer);
-            if (fd == INVALID_SOCKET) {
-                MUTEX_UNLOCK(&r->mutex);
-                return -1;
-            }
+            /* forward to leader: snapshot under lock, all network IO outside
+               the lock so blocking recv cannot starve event loop/repl threads */
+            raft_peer_t leader_peer;
+            memcpy(&leader_peer, &r->leader_peer, sizeof(leader_peer));
+            MUTEX_UNLOCK(&r->mutex);
+
+            SOCKET fd = raft_connect_peer(&leader_peer);
+            int result = -1;
+            if (fd == INVALID_SOCKET) return -1;
 
             uint8_t buf[4096];
             size_t off = 0;
@@ -1676,31 +1976,31 @@ int raft_propose(raft_t* r, uint8_t type, const char* key, size_t key_len,
             send(fd, (const char*)&total, 4, 0);
             send(fd, (const char*)buf, (int)off, 0);
 
-            /* 读取响应 */
+            /* read response */
             uint32_t resp_len = 0;
             int ret = recv(fd, (char*)&resp_len, 4, 0);
-            int result = -1;
             if (ret == 4 && resp_len > 0) {
                 uint8_t* resp = kv_malloc(resp_len);
                 int total_bytes = recv(fd, (char*)resp, (int)resp_len, 0);
                 if (total_bytes == (int)resp_len && resp_len >= 10) {
-                    /* 检查是否成功 */
                     int success = resp[9] != 0;
                     if (success) result = 0;
                     else {
-                        /* 如果响应中有新的 leader 信息，更新 */
+                        /* response may carry redirect to the current leader */
                         uint32_t lid_len = read_u32(resp + 10);
                         if (lid_len > 0 && lid_len < RAFT_NODE_ID_LEN && 14 + lid_len <= resp_len) {
-                            memcpy(r->leader_peer.id, resp + 14, lid_len);
-                            r->leader_peer.id[lid_len] = '\0';
                             uint32_t host_off = (uint32_t)(14 + lid_len);
                             if (host_off + 4 <= resp_len) {
                                 uint32_t host_len = read_u32(resp + host_off);
                                 if (host_len > 0 && host_len < 64 && host_off + 4 + host_len + 4 <= resp_len) {
+                                    MUTEX_LOCK(&r->mutex);
+                                    memcpy(r->leader_peer.id, resp + 14, lid_len);
+                                    r->leader_peer.id[lid_len] = '\0';
                                     memcpy(r->leader_peer.host, resp + host_off + 4, host_len);
                                     r->leader_peer.host[host_len] = '\0';
                                     r->leader_peer.port = (int)read_u32(resp + host_off + 4 + host_len);
                                     r->leader_known = 1;
+                                    MUTEX_UNLOCK(&r->mutex);
                                 }
                             }
                         }
@@ -1709,7 +2009,6 @@ int raft_propose(raft_t* r, uint8_t type, const char* key, size_t key_len,
                 kv_free(resp);
             }
             close_socket(fd);
-            MUTEX_UNLOCK(&r->mutex);
             return result;
         }
         MUTEX_UNLOCK(&r->mutex);
@@ -1747,7 +2046,7 @@ int raft_propose(raft_t* r, uint8_t type, const char* key, size_t key_len,
     raft_log_save(r);
 
     /* 复制到 followers */
-    raft_leader_send_heartbeat(r);
+    raft_repl_kick_all(r);
 
     return 0;
 }
