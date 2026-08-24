@@ -26,6 +26,13 @@
         return *t ? 0 : -1;
     }
     static void thread_join(thread_t t) { WaitForSingleObject(t, INFINITE); CloseHandle(t); }
+    /* 分离线程：不需要 join，结束后自动回收（Windows 关闭句柄不影响线程运行） */
+    static int thread_create_detached(DWORD WINAPI (*fn)(LPVOID), void* arg) {
+        HANDLE h = CreateThread(NULL, 0, fn, arg, 0, NULL);
+        if (!h) return -1;
+        CloseHandle(h);
+        return 0;
+    }
 #else
     #include <sys/socket.h>
     #include <sys/select.h>
@@ -56,6 +63,13 @@
         return pthread_create(t, NULL, fn, arg);
     }
     static void thread_join(thread_t t) { pthread_join(t, NULL); }
+    /* 分离线程：不需要 join，结束后自动回收 */
+    static int thread_create_detached(void* (*fn)(void*), void* arg) {
+        pthread_t tid;
+        if (pthread_create(&tid, NULL, fn, arg) != 0) return -1;
+        pthread_detach(tid);
+        return 0;
+    }
 #endif
 
 /* ================================================================
@@ -165,6 +179,11 @@ struct raft {
     /* 线程 */
     thread_t    thread;
     mutex_t     mutex;
+    int         election_running;   /* 选举线程进行中标志（防止重复发起） */
+
+    /* 独立 PRNG 状态：不用全局 rand()（skiplist 等其他模块会 srand(time(NULL))
+     * 重置全局种子，导致多进程随机序列完全相同、选举永不分叉） */
+    uint64_t    rng_state;
 
     /* 当前 Leader peer（用于重定向） */
     raft_peer_t leader_peer;
@@ -195,6 +214,17 @@ struct raft {
         FILE*    file;             /* 临时文件句柄 */
     } snap_chunk_state;
 };
+
+/* --- 独立 PRNG（xorshift64*）：每个 raft 实例独立种子，避免全局 rand() 被
+ * 其他模块（skiplist 的 srand(time(NULL))）重置后多进程序列相同 --- */
+static inline uint64_t raft_rand(raft_t* r) {
+    uint64_t x = r->rng_state;
+    x ^= x >> 12;
+    x ^= x << 25;
+    x ^= x >> 27;
+    r->rng_state = x;
+    return x * 0x2545F4914F6CDD1DULL;
+}
 
 /* --- 辅助：计算日志条目大小 --- */
 static size_t raft_log_entry_size(raft_log_entry_t* e) {
@@ -473,10 +503,9 @@ static int rpc_send_vote_request(SOCKET fd, uint64_t term, const char* candidate
     write_u64(buf + off, last_log_idx); off += 8;
     write_u64(buf + off, last_log_term); off += 8;
 
-    /* 发送长度前缀 + 数据 */
+    /* 发送长度前缀 + 数据（长度前缀用主机字节序，与接收端 recv(&msg_len) 一致） */
     uint32_t total = (uint32_t)off;
-    write_u32(buf + 2048 - 4, total);
-    send(fd, (const char*)buf + 2048 - 4, 4, 0);
+    send(fd, (const char*)&total, 4, 0);
     send(fd, (const char*)buf, (int)off, 0);
     return 0;
 }
@@ -488,8 +517,7 @@ static int rpc_send_vote_response(SOCKET fd, uint64_t term, int granted) {
     write_u64(buf + 1, term);
     buf[9] = (uint8_t)(granted ? 1 : 0);
     uint32_t total = 10;
-    write_u32(buf + 10, total);
-    send(fd, (const char*)buf + 10, 4, 0);
+    send(fd, (const char*)&total, 4, 0);
     send(fd, (const char*)buf, 10, 0);
     return 0;
 }
@@ -545,8 +573,7 @@ static int rpc_send_append_response(SOCKET fd, uint64_t term, int success, uint6
     write_u64(buf + 10, last_idx);
     buf[18] = (uint8_t)(need_snapshot ? 1 : 0);
     uint32_t total = 19;
-    write_u32(buf + 19, total);
-    send(fd, (const char*)buf + 19, 4, 0);
+    send(fd, (const char*)&total, 4, 0);
     send(fd, (const char*)buf, 19, 0);
     return 0;
 }
@@ -618,7 +645,8 @@ static void raft_become_candidate(raft_t* r) {
     r->votes_received = 1; /* vote for self */
     snprintf(r->voted_for, sizeof(r->voted_for), "%s", r->cfg.node_id);
     r->election_timeout_ms = RAFT_ELECTION_TIMEOUT_MIN_MS +
-        (rand() % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
+        (raft_rand(r) % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
+    r->last_heartbeat_ms = thread_time_ms(); /* 重置选举计时器 */
     printf("[RAFT] %s -> CANDIDATE (term=%llu, timeout=%llums)\n",
            r->cfg.node_id, (unsigned long long)r->current_term,
            (unsigned long long)r->election_timeout_ms);
@@ -682,7 +710,7 @@ static void raft_update_election_timeout(raft_t* r, int election_succeeded) {
         consecutive_timeouts = 0;
         last_election_reset_ms = now;
         r->election_timeout_ms = RAFT_ELECTION_TIMEOUT_MIN_MS +
-            (rand() % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
+            (raft_rand(r) % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
         return;
     }
 
@@ -703,10 +731,10 @@ static void raft_update_election_timeout(raft_t* r, int election_succeeded) {
         int adj_min = base_min * scale;
         int adj_max = base_max * scale;
         if (adj_max > 5000) adj_max = 5000;  /* 上限 5 秒 */
-        r->election_timeout_ms = adj_min + (rand() % (adj_max - adj_min));
+        r->election_timeout_ms = adj_min + (raft_rand(r) % (adj_max - adj_min));
     } else {
         r->election_timeout_ms = RAFT_ELECTION_TIMEOUT_MIN_MS +
-            (rand() % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
+            (raft_rand(r) % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
     }
 }
 
@@ -742,8 +770,8 @@ static void raft_apply_committed(raft_t* r) {
 
 /* 处理 RequestVote */
 static void raft_handle_vote_request(raft_t* r, SOCKET fd, uint8_t* data, size_t data_len) {
-    if (data_len < 21) return;
-    size_t off = 0;
+    if (data_len < 29) return;  /* type(1)+term(8)+id_len(4)+idx(8)+term(8) */
+    size_t off = 1; /* skip type（消息第 0 字节是 RPC 类型，之前漏跳导致解析错位、投票请求被静默丢弃） */
     uint64_t term = read_u64(data + off); off += 8;
     uint32_t id_len = read_u32(data + off); off += 4;
     if (off + id_len > data_len) return;
@@ -1164,11 +1192,16 @@ static void raft_leader_send_heartbeat(raft_t* r) {
     }
 }
 
-/* Candidate 发起选举 */
+/* Candidate 发起选举。
+ * 注意：本函数运行在独立线程中（raft_election_thread）——事件循环线程绝不能
+ * 同步等待投票响应，否则多个 Candidate 同时选举时会互相饿死（对端的投票请求
+ * 依赖它自己的事件循环处理，而该线程正阻塞在 recv 上），集群永远选不出 Leader。 */
 static void raft_candidate_start_election(raft_t* r) {
+    /* 持锁快照共享状态，网络 IO 在锁外进行 */
+    MUTEX_LOCK(&r->mutex);
     r->votes_received = 1; /* vote for self */
     r->election_timeout_ms = RAFT_ELECTION_TIMEOUT_MIN_MS +
-        (rand() % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
+        (raft_rand(r) % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
     r->last_heartbeat_ms = thread_time_ms(); /* 重置计时器 */
 
     uint64_t last_log_idx;
@@ -1184,14 +1217,22 @@ static void raft_candidate_start_election(raft_t* r) {
         last_log_term = 0;
     }
 
+    uint64_t term = r->current_term;
+    char node_id[RAFT_NODE_ID_LEN];
+    snprintf(node_id, sizeof(node_id), "%s", r->cfg.node_id);
+    raft_peer_t peers[RAFT_MAX_NODES];
+    int num_peers = r->cfg.num_peers;
+    memcpy(peers, r->cfg.peers, (size_t)num_peers * sizeof(raft_peer_t));
     int self_idx = raft_self_index(r);
-    for (int i = 0; i < r->cfg.num_peers; i++) {
+    MUTEX_UNLOCK(&r->mutex);
+
+    for (int i = 0; i < num_peers; i++) {
         if (i == self_idx) continue;
 
-        SOCKET fd = raft_connect_peer(&r->cfg.peers[i]);
+        SOCKET fd = raft_connect_peer(&peers[i]);
         if (fd == INVALID_SOCKET) continue;
 
-        rpc_send_vote_request(fd, r->current_term, r->cfg.node_id,
+        rpc_send_vote_request(fd, term, node_id,
                                last_log_idx, last_log_term);
 
         /* 读取响应 */
@@ -1207,7 +1248,23 @@ static void raft_candidate_start_election(raft_t* r) {
         close_socket(fd);
     }
 
+    MUTEX_LOCK(&r->mutex);
     raft_log_save(r);
+    MUTEX_UNLOCK(&r->mutex);
+}
+
+/* 选举线程包装：结束后清除运行标志 */
+#ifdef _WIN32
+static DWORD WINAPI raft_election_thread(LPVOID arg) {
+#else
+static void* raft_election_thread(void* arg) {
+#endif
+    raft_t* r = (raft_t*)arg;
+    raft_candidate_start_election(r);
+    MUTEX_LOCK(&r->mutex);
+    r->election_running = 0;
+    MUTEX_UNLOCK(&r->mutex);
+    return 0;
 }
 
 /* 处理客户端 Propose 请求 */
@@ -1335,12 +1392,22 @@ static void* raft_event_loop(void* arg) {
 
         MUTEX_LOCK(&r->mutex);
 
-        /* --- 选举超时检查 --- */
-        if (r->role != RAFT_LEADER) {
+        /* --- 选举超时：无进行中选举则立即发起（独立线程，避免阻塞 RPC 收发）--- */
+        if (r->role != RAFT_LEADER && !r->election_running) {
             if (now - r->last_heartbeat_ms >= r->election_timeout_ms) {
                 raft_update_election_timeout(r, 0);  /* 选举超时，动态调整 */
                 raft_become_candidate(r);
                 raft_log_save(r);
+                r->election_running = 1;
+                MUTEX_UNLOCK(&r->mutex);
+                if (thread_create_detached(raft_election_thread, r) != 0) {
+                    /* 线程创建失败：退回同步执行 */
+                    raft_candidate_start_election(r);
+                    MUTEX_LOCK(&r->mutex);
+                    r->election_running = 0;
+                    MUTEX_UNLOCK(&r->mutex);
+                }
+                continue;  /* 本轮回合跳过 accept，下一轮处理连接 */
             }
         }
 
@@ -1373,16 +1440,6 @@ static void* raft_event_loop(void* arg) {
                     raft_snapshot_create(r);
                     MUTEX_LOCK(&r->mutex);
                 }
-            }
-        }
-
-        /* --- Candidate 发起选举 --- */
-        if (r->role == RAFT_CANDIDATE) {
-            /* 选举在超时触发时已经发起 */
-            if (now - r->last_heartbeat_ms >= r->election_timeout_ms) {
-                MUTEX_UNLOCK(&r->mutex);
-                raft_candidate_start_election(r);
-                MUTEX_LOCK(&r->mutex);
             }
         }
 
@@ -1454,8 +1511,21 @@ raft_t* raft_create(raft_config_t* cfg, void* state_machine, raft_apply_cb apply
     r->running = 0;
     r->leader_known = 0;
 
+    /* 播种独立 PRNG：确保各节点选举超时不同步。
+     * 用 node_id 哈希 + 时间戳 + 指针做种子，保证不同节点的随机序列显著不同，
+     * 从而避免三节点同时竞选、互相拒票的 split-vote 死循环。
+     * 注意：不能用全局 srand/rand()——skiplist 等其他模块会 srand(time(NULL))
+     * 重置全局种子，导致多进程在同一秒启动时随机序列完全相同。 */
+    {
+        unsigned seed = 0;
+        for (const char* p = cfg->node_id; *p; p++) seed = seed * 31u + (unsigned char)(*p);
+        seed ^= (unsigned)((uintptr_t)r) ^ (unsigned)thread_time_ms();
+        r->rng_state = (uint64_t)seed | 1ULL;  /* 非零种子 */
+        if (r->rng_state == 1) r->rng_state = 0x9E3779B97F4A7C15ULL;
+    }
+
     r->election_timeout_ms = RAFT_ELECTION_TIMEOUT_MIN_MS +
-        (rand() % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
+        (raft_rand(r) % (RAFT_ELECTION_TIMEOUT_MAX_MS - RAFT_ELECTION_TIMEOUT_MIN_MS));
     r->last_heartbeat_ms = thread_time_ms();
     r->last_election_ms = 0;
 
@@ -1493,6 +1563,11 @@ void raft_destroy(raft_t* r) {
     if (!r) return;
     raft_stop(r);
     raft_join(r);
+
+    /* 等待选举线程退出（最长约 2 秒，覆盖 RPC 超时），防止 use-after-free */
+    for (int i = 0; i < 100 && r->election_running; i++) {
+        thread_sleep_ms(20);
+    }
 
     if (r->listen_fd != INVALID_SOCKET) close_socket(r->listen_fd);
 
@@ -1755,8 +1830,7 @@ static int rpc_send_snapshot_response(SOCKET fd, uint64_t term, int success) {
     write_u64(buf + 1, term);
     buf[9] = (uint8_t)(success ? 1 : 0);
     uint32_t total = 10;
-    write_u32(buf + 10, total);
-    send(fd, (const char*)buf + 10, 4, 0);
+    send(fd, (const char*)&total, 4, 0);
     send(fd, (const char*)buf, 10, 0);
     return 0;
 }
