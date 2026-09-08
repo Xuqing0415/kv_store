@@ -23,6 +23,6 @@ example_backup/
 *.log
 *.tmp
 *.sst
-*.txt
+/*.txt
 debug_*.c
 sweep_results.csv
